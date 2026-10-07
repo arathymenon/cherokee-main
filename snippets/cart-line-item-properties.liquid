@@ -1,0 +1,43 @@
+<!-- snippet: cart-line-item-properties -->
+{%- comment -%}
+  Renders custom line item properties (excludes `_`-prefixed properties used
+  for internal metadata such as set group ids). Outputs nothing when no
+  visible property exists, so that an enclosing `empty:hidden` wrapper can
+  hide cleanly.
+
+  Accepts:
+  - line_item: {Object}
+{%- endcomment -%}
+
+{%- liquid
+  assign has_visible_property = false
+  for property in line_item.properties
+    assign first_char = property.first | slice: 0
+    if property.last != blank and first_char != '_'
+      assign has_visible_property = true
+      break
+    endif
+  endfor
+-%}
+
+{%- if has_visible_property -%}
+  <dl>
+    {%- for property in line_item.properties -%}
+      {%- assign first_char = property.first | slice: 0 -%}
+      {%- if property.last != blank and first_char != '_' -%}
+        <div class="mt-[0.125rem]">
+          <dt class="inline">{{ property.first | escape }}:</dt>
+          <dd class="inline">
+            {%- if property.last contains '/uploads/' -%}
+              <a href="{{ property.last }}" class="link" target="_blank">
+                {{ property.last | split: '/' | last | escape }}
+              </a>
+            {%- else -%}
+              {{ property.last | escape }}
+            {%- endif -%}
+          </dd>
+        </div>
+      {%- endif -%}
+    {%- endfor -%}
+  </dl>
+{%- endif -%}

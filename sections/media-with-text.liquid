@@ -1,0 +1,263 @@
+<!-- section: media-with-text -->
+
+{%- liquid
+  assign s = section.settings
+
+  assign section_padding = ''
+  if s.add_padding
+    assign section_padding = 'py-md px-gutter'
+  endif
+
+  assign grid_max_width = ''
+  if s.use_max_width
+    assign grid_max_width = 'max-w-container mx-auto'
+  endif
+
+  assign image_order_class = ''
+  if s.image_position == 'right'
+    assign image_order_class = 'lg:order-last'
+  endif
+
+  assign media_rounded = ''
+  if s.add_padding
+    assign media_rounded = 'rounded-theme'
+  endif
+
+  assign text_padding = 'px-lg'
+  if s.add_padding
+    if s.image_position == 'right'
+      assign text_padding = 'lg:pl-md lg:pr-lg'
+    else
+      assign text_padding = 'lg:pl-lg lg:pr-md'
+    endif
+  endif
+
+  assign video = s.video
+  assign mp4_src = ''
+  if video.sources != blank
+    for source in video.sources
+      if source.url contains 'mp4'
+        assign mp4_src = source.url
+        break
+      endif
+    endfor
+  endif
+  assign has_video = false
+  if mp4_src != blank
+    assign has_video = true
+  endif
+  assign video_poster = video.preview_image
+-%}
+
+<section class="color-{{ s.color_scheme }}">
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-0 {{ grid_max_width }} {{ section_padding }}">
+
+    {% #  Media (video or image)  %}
+    <div class="{{ image_order_class }}">
+      {% if has_video %}
+        <div class="overflow-hidden {{ media_rounded }} aspect-[4/5]">
+          <video
+            class="w-full h-full object-cover"
+            autoplay
+            playsinline
+            muted
+            loop
+            preload="metadata"
+            poster="{{ video_poster | image_url: width: 1200 }}"
+            type="video/mp4"
+            src="{{ mp4_src }}"></video>
+        </div>
+      {% elsif s.image != blank %}
+        <div class="overflow-hidden {{ media_rounded }}">
+          {%- capture content -%}
+            {{- s.image | image_url: width: 1200 | image_tag:
+              class: 'w-full h-full object-cover',
+              loading: 'lazy',
+              sizes: '(min-width: 1024px) 50vw, 100vw',
+              widths: '400, 600, 800, 1000, 1200'
+            -}}
+          {%- endcapture -%}
+          {%- render 'media-loader', content: content, show_skeleton: true -%}
+        </div>
+      {% else %}
+        <div class="overflow-hidden {{ media_rounded }}">
+          {{ 'lifestyle-2' | placeholder_svg_tag: 'w-full h-full object-cover' }}
+        </div>
+      {% endif %}
+    </div>
+
+    {% #  Text content  %}
+    <div class="flex items-center {{ text_padding }}">
+      <div class="py-md flex flex-col gap-4">
+
+        {% if s.eyebrow != blank %}
+          <p class="fs-eyebrow text-pretty">
+            {{ s.eyebrow | escape }}
+          </p>
+        {% endif %}
+
+        {% if s.content_image != blank %}
+          {% capture content_image_style %}max-height: {{ s.content_image_max_height }}px;{% endcapture %}
+          {{ s.content_image
+            | image_url: width: 480
+            | image_tag:
+                loading: 'lazy',
+                widths: '180, 240, 360, 480',
+                class: 'w-auto self-start',
+                style: content_image_style
+          }}
+        {% endif %}
+
+        {% if s.heading != blank %}
+          <div
+            role="heading"
+            aria-level="2"
+            class="fs-display-2 text-pretty">
+            {{ s.heading | escape }}
+          </div>
+        {% endif %}
+
+        {% if s.richtext != blank %}
+          <div class="rte text-pretty max-w-[560px]">{{ s.richtext }}</div>
+        {% endif %}
+
+        {% if s.button_text != blank %}
+          <div class="pt-2">
+            <a class="{{ s.button_style }}" href="{{ s.button_link }}">
+              {{ s.button_text | escape }}
+            </a>
+          </div>
+        {% endif %}
+
+      </div>
+    </div>
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Media with Text",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "add_padding",
+      "label": "Add padding",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "use_max_width",
+      "label": "Use container max-width",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "image_position",
+      "label": "Desktop media position",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "header",
+      "content": "Media",
+      "info": "Video takes priority over image when both are provided."
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "video",
+      "id": "video",
+      "label": "Video"
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow"
+    },
+    {
+      "type": "image_picker",
+      "id": "content_image",
+      "label": "Image",
+      "info": "Renders between eyebrow and heading (e.g. logo)"
+    },
+    {
+      "type": "range",
+      "id": "content_image_max_height",
+      "label": "Image max height",
+      "min": 40,
+      "max": 200,
+      "step": 5,
+      "default": 65,
+      "unit": "px"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "richtext",
+      "label": "Text"
+    },
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "select",
+      "id": "button_style",
+      "label": "Button style",
+      "options": [
+        { "value": "button", "label": "Primary" },
+        { "value": "button button-secondary", "label": "Secondary" },
+        { "value": "button button-outline-black", "label": "Outline black" },
+        { "value": "button button-outline-white", "label": "Outline white" },
+        { "value": "arrow-button", "label": "Arrow" },
+        { "value": "underline-button", "label": "Underline" }
+      ],
+      "default": "button"
+    }
+  ],
+  "blocks": [],
+  "presets": [
+    {
+      "name": "Media with Text",
+      "category": "Media & Content"
+    }
+  ],
+  "disabled_on": {
+    "groups": ["*"]
+  }
+}
+{% endschema %}

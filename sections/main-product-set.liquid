@@ -1,0 +1,280 @@
+<!-- section: main-product-set -->
+{%- liquid
+  assign s = section.settings
+  assign base_id = 'main-product-set-' | append: section.id
+
+  assign components = product.metafields.bundle.products.value
+
+  assign wrapper_description = product.description
+  if wrapper_description != blank
+    assign wrapper_description_text = wrapper_description | strip_html | strip
+    if wrapper_description_text == ''
+      assign wrapper_description = blank
+    endif
+  endif
+-%}
+
+<product-set-group
+  set-id="{{ product.id }}"
+  set-title="{{ product.title | escape }}"
+  set-handle="{{ product.handle | escape }}">
+  {%- render 'breadcrumbs' -%}
+
+  <div class="max-w-container mx-auto lg:pl-gutter lg:pb-md">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-0">
+      {%- # Left column: wrapper lifestyle gallery -%}
+      <div>
+        {%- # Sale badge — hidden until both components are fully picked; -%}
+        {%- # <product-set-group> reveals it when a selected component variant -%}
+        {%- # is flagged on sale (meta.sale), mirroring a standard PDP. -%}
+        {%- capture set_sale_badge -%}
+          <span
+            data-product-set-sale-badge
+            hidden
+            class="badge badge-sale inline-block py-1 px-2 rounded-[2px] text-nowrap">
+            {{- 'products.product.badges.sale' | t -}}
+          </span>
+        {%- endcapture -%}
+        {%- render 'product-gallery',
+          product: product,
+          variant: product.selected_or_first_available_variant,
+          extra_badges: set_sale_badge
+        -%}
+      </div>
+
+      {%- # Right column: Product Meta -%}
+      <div class="py-md px-gutter lg:px-lg">
+        <div class="max-w-[480px] mx-auto">
+
+          {%- # Wrapper info -%}
+          <div class="flex flex-col gap-2">
+            {%- render 'product-meta-collection', product: product, class: 'inline-block' -%}
+
+            <div
+              role="heading"
+              aria-level="1"
+              class="font-body text-xl font-medium normal-case">
+              {%- render 'product-title', product: product -%}
+            </div>
+
+            {%- liquid
+              # Combined range from the sub-products only (never the wrapper
+              # price). Lowest = sum of each component's cheapest variant;
+              # highest = sum of each component's priciest variant.
+              assign set_price_min = 0
+              assign set_price_max = 0
+              if components and components.size > 0
+                for component in components
+                  assign set_price_min = set_price_min | plus: component.price_min
+                  assign set_price_max = set_price_max | plus: component.price_max
+                endfor
+              endif
+            -%}
+            <div class="font-medium">
+              {%- # Fresh: combined range, shown until both components are fully picked -%}
+              <div data-product-set-price-fresh>
+                {%- if set_price_max > set_price_min -%}
+                  <span class="font-medium fs-body-lg">{{- set_price_min | money -}}&ndash;{{- set_price_max | money -}}</span>
+                {%- else -%}
+                  <span class="font-medium fs-body-lg">{{- set_price_min | money -}}</span>
+                {%- endif -%}
+              </div>
+              {%- # Complete: selected total (+ strike-through), populated by <product-set-group> -%}
+              <div data-product-set-price-complete hidden></div>
+            </div>
+
+            {% if current_variant.metafields.meta.clearance.value == true %}
+              <p class="inline-block fs-body-sm py-2xs px-xs self-start
+                  bg-[#FFEBEB] text-red-error rounded-theme-sm">
+                {{ 'products.product.clearance_message' | t }}
+              </p>
+            {% endif %}
+          </div>
+
+          {%- # Wrapper short description -%}
+          {%- if wrapper_description != blank -%}
+            <div class="mt-4">
+              <rte-content class="block rte">
+                {{ wrapper_description }}
+              </rte-content>
+            </div>
+          {%- endif -%}
+
+          {%- # Component cards -%}
+          {%- if components and components.size > 0 -%}
+            <div class="">
+              {%- for component in components -%}
+                {%- liquid
+                  # Server can't know which size/inseam the shopper picked
+                  # (SAPI strips option_values); <product-fetcher> owns pick
+                  # state and <product-set-group> decides completion. The
+                  # server only supplies a display/thumbnail variant + price.
+                  if component.has_only_default_variant
+                    assign current_variant = component.variants[0]
+                  else
+                    assign current_variant = component.selected_or_first_available_variant
+                  endif
+                  assign gallery_variant = current_variant
+                -%}
+                {%- render 'product-set-item',
+                  product: component,
+                  current_variant: current_variant,
+                  gallery_variant: gallery_variant,
+                  collection_context: collection
+                -%}
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
+
+          {%- # Single ATC -%}
+          <div class="mt-6">
+            <button
+              type="button"
+              data-product-set-atc
+              disabled
+              class="group/atc button button-primary w-full">
+              <span class="group-[:not([disabled])]/atc:hidden">
+                {{- 'products.product.select_size' | t -}}
+              </span>
+              <span class="hidden group-[:not([disabled])]/atc:inline-flex group-[[processing]]/atc:hidden items-center gap-3">
+                <span class="inline-flex items-center [&_svg]:size-4">
+                  {{- 'icon-bag.svg' | inline_asset_content -}}
+                </span>
+                {{- 'products.product.add_to_cart' | t -}}
+              </span>
+              <span class="hidden group-[[processing]]/atc:inline-flex animate-[fade-in_0.3s] items-center">
+                <span
+                  class="size-3 border border-transparent border-l-current animate-spin rounded-full inline-block me-2"></span>
+                {{- 'products.product.adding_to_cart' | t -}}
+              </span>
+            </button>
+          </div>
+
+          {%- # Incentives -%}
+          {%- if s.incentive_1_image
+            or s.incentive_1_text
+            or s.incentive_2_image
+            or s.incentive_2_text
+          -%}
+            <div class="grid grid-cols-1 lg:grid-cols-2 mt-6 rounded-theme-sm overflow-hidden bg-grey-light-blue px-4 lg:px-0 lg:py-2xs mb-6">
+              {%- if s.incentive_1_image or s.incentive_1_text -%}
+                <div class="flex items-center lg:justify-center gap-2 border-b lg:border-b-0 lg:border-r border-[var(--color-grey)] py-2xs lg:px-4">
+                  {%- if s.incentive_1_image -%}
+                    <div class="size-6 shrink-0">
+                      {{-
+                        s.incentive_1_image
+                        | image_url: width: 80
+                        | image_tag: class: 'size-full', loading: 'lazy'
+                      -}}
+                    </div>
+                  {%- endif -%}
+                  {%- if s.incentive_1_text -%}
+                    <span class="fs-body-sm">{{ s.incentive_1_text }}</span>
+                  {%- endif -%}
+                </div>
+              {%- endif -%}
+              {%- if s.incentive_2_image or s.incentive_2_text -%}
+                <div class="flex items-center lg:justify-center gap-2 py-2xs lg:px-4">
+                  {%- if s.incentive_2_image -%}
+                    <div class="size-6 shrink-0">
+                      {{-
+                        s.incentive_2_image
+                        | image_url: width: 80
+                        | image_tag: class: 'size-full', loading: 'lazy'
+                      -}}
+                    </div>
+                  {%- endif -%}
+                  {%- if s.incentive_2_text -%}
+                    <span class="fs-body-sm">{{ s.incentive_2_text }}</span>
+                  {%- endif -%}
+                </div>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+
+          {%- # Accordions (Details / Shipping / Materials) -%}
+          {%- if product.metafields.meta.longDescription != blank -%}
+            <accordion-block>
+              <details class="group/accordion-item">
+                <summary class="flex justify-between items-center py-4 cursor-pointer">
+                  <span>Details</span>
+                </summary>
+                <rte-content class="block rte pb-4">
+                  {{ product.metafields.meta.longDescription | metafield_tag }}
+                </rte-content>
+              </details>
+            </accordion-block>
+          {%- endif -%}
+
+          {%- if product.metafields.meta.shipping != blank -%}
+            <accordion-block>
+              <details class="group/accordion-item">
+                <summary class="flex justify-between items-center py-4 cursor-pointer">
+                  <span>Shipping & Returns</span>
+                </summary>
+                <rte-content class="block rte pb-4">
+                  {{ product.metafields.meta.shipping | metafield_tag }}
+                </rte-content>
+              </details>
+            </accordion-block>
+          {%- endif -%}
+
+          {%- if product.metafields.meta.fabricCare != blank -%}
+            <accordion-block>
+              <details class="group/accordion-item">
+                <summary class="flex justify-between items-center py-4 cursor-pointer">
+                  <span>Materials & Care</span>
+                </summary>
+                <rte-content class="block rte pb-4">
+                  {{ product.metafields.meta.fabricCare | metafield_tag }}
+                </rte-content>
+              </details>
+            </accordion-block>
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+  </div>
+</product-set-group>
+
+{%- render 'product-set-structured-data', product: product -%}
+
+<script>
+  // Re-init Yotpo widgets after any <product-fetcher> inside the set swaps
+  // its variant area, since the swap restores the empty Yotpo placeholder.
+  document.addEventListener('product-fetcher:rendered', () => {
+    window.yotpoWidgetsContainer?.initWidgets?.();
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Product set page",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Incentives"
+    },
+    {
+      "type": "image_picker",
+      "id": "incentive_1_image",
+      "label": "Incentive 1 image"
+    },
+    {
+      "type": "text",
+      "id": "incentive_1_text",
+      "label": "Incentive 1 text"
+    },
+    {
+      "type": "image_picker",
+      "id": "incentive_2_image",
+      "label": "Incentive 2 image"
+    },
+    {
+      "type": "text",
+      "id": "incentive_2_text",
+      "label": "Incentive 2 text"
+    }
+  ]
+}
+{% endschema %}

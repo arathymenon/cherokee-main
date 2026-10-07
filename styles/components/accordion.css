@@ -1,0 +1,66 @@
+@layer components {
+  accordion-block {
+    display: block;
+    border-bottom: 1px solid oklch(var(--color-border) / 50%);
+
+    details {
+      overflow: hidden;
+    }
+
+    &:first-of-type {
+      border-top-color: transparent;
+    }
+
+    summary {
+      position: relative;
+      cursor: pointer;
+      padding: 1rem 2.5rem 1rem 0;
+      list-style: none;
+      font-weight: 500;
+      -webkit-tap-highlight-color: rgb(255 255 255 / 0%);
+
+      &::before,
+      &::after {
+        content: "";
+        display: block;
+        width: 0.5625rem;
+        height: 0.0625rem;
+        position: absolute;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        margin: auto 0;
+        transition: 0.3s;
+        background-color: oklch(var(--color-foreground) / 100%);
+      }
+
+      &::after {
+        transform: rotate(90deg);
+      }
+
+      &::marker,
+      &::-webkit-details-marker {
+        display: none;
+        appearance: none;
+      }
+
+      + div {
+        padding-bottom: 1.5rem;
+        transform-origin: top;
+      }
+    }
+
+    [open] summary {
+      border-bottom: 0;
+
+      &::before {
+        transform: rotate(-90deg);
+        opacity: 0;
+      }
+
+      &::after {
+        transform: rotate(0);
+      }
+    }
+  }
+}

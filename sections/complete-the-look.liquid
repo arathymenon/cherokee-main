@@ -1,0 +1,89 @@
+<!-- section: complete-the-look -->
+{%- liquid
+  assign s = section.settings
+  assign complementary_products = product.metafields['shopify--discovery--product_recommendation'].complementary_products.value
+-%}
+
+{%- if complementary_products != blank -%}
+  <section class="color-{{ s.color_scheme }} py-section">
+    <div class="container">
+      {%- if s.heading != blank -%}
+        <div role="heading" aria-level="2" 
+          class="fs-display-3 uppercase mb-0 py-md lg:pb-sm">
+          {{- s.heading | escape -}}
+        </div>
+      {%- endif -%}
+
+      <div>
+        {%- for cp in complementary_products limit: s.products_to_show -%}
+          {%- # Mobile — existing horizontal card (with its own quick-shop) -%}
+          <div class="lg:hidden {% unless forloop.first %}border-t border-grey{% endunless %}">
+            {%- render 'complete-the-look-card', product: cp -%}
+          </div>
+
+          {%- # Desktop — inline buyable row -%}
+          <div class="hidden lg:block">
+            {%- liquid
+              # Pick state is owned client-side by <product-fetcher>; the
+              # server only supplies a display/thumbnail variant + price.
+              if cp.has_only_default_variant
+                assign cp_current_variant = cp.variants[0]
+              else
+                assign cp_current_variant = cp.selected_or_first_available_variant
+              endif
+              assign cp_gallery_variant = cp_current_variant
+            -%}
+            {%- render 'complete-look-item',
+              product: cp,
+              current_variant: cp_current_variant,
+              gallery_variant: cp_gallery_variant,
+              collection_context: collection
+            -%}
+          </div>
+        {%- endfor -%}
+      </div>
+    </div>
+  </section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Complete the look",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme"
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Wear it with",
+      "info": "Pulls complementary products from the Shopify Search & Discovery app. Configure them per product in that app."
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "label": "Maximum products to show",
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "default": 2
+    }
+  ],
+  "presets": [
+    {
+      "name": "Complete the look",
+      "category": "Products"
+    }
+  ],
+  "disabled_on": {
+    "groups": ["*"]
+  }
+}
+{% endschema %}

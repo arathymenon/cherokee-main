@@ -1,0 +1,119 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "header": {
+      "type": "collection-header",
+      "settings": {
+        "color_scheme": "",
+        "image_color_scheme": "scheme-dark",
+        "width": "container",
+        "center_content": false,
+        "active_button_style": "button",
+        "linked_button_style": "button button-outline-white"
+      }
+    },
+    "products": {
+      "type": "collection-products",
+      "settings": {
+        "filter_color_scheme": "scheme-default",
+        "products_per_page": 16
+      }
+    },
+    "seo_text_4tTMd4": {
+      "type": "seo-text",
+      "name": "SEO Text",
+      "settings": {
+        "content": "{{ collection.metafields.seo.content | metafield_tag }}",
+        "color_scheme": "scheme-0d9bed0c-0f1f-4f9d-99af-d15d3a707bfd"
+      }
+    },
+    "empty_collection_carousel_zApKLV": {
+      "type": "featured-collection",
+      "name": "Product carousel",
+      "settings": {
+        "color_scheme": "",
+        "heading": "Featured Products",
+        "text": "",
+        "collection": "",
+        "products_to_show": 12,
+        "loop": false,
+        "button_link": "",
+        "button_text": "Shop All",
+        "slides_per_view_tablet": 2,
+        "slides_per_view_laptop": 3,
+        "slides_per_view_desktop": 4
+      }
+    },
+    "collapsible_content_g7agba": {
+      "type": "collapsible-content",
+      "blocks": {
+        "item_NVL9jQ": {
+          "type": "item",
+          "settings": {
+            "heading": "What are Workwear Originals men's scrubs?",
+            "content": "Workwear Originals men's scrubs are the classic, go-to scrubs healthcare professionals have relied on for years. As the iconic line at the core of Cherokee heritage, they're built from a durable polyester-cotton blend designed for lasting comfort and dependable performance through long shifts. The men's lineup includes the Men's Drawstring Cargo Scrub Pant, unisex V-neck scrub tops in 1-pocket and 3-pocket styles, a unisex drawstring cargo pant, and coordinating <a href=\"https://www.cherokeeuniforms.com/men-scrub-sets\"><span style=\"text-decoration:underline\">scrub sets for men </span></a>available in a wide range of colors."
+          }
+        },
+        "item_MUtyHm": {
+          "type": "item",
+          "settings": {
+            "heading": "What fabric are Workwear Originals men's scrubs made from?",
+            "content": "Workwear Originals men's scrubs are made from a durable polyester-cotton blend designed to hold up through repeated wear and washing. The fabric features soil-release properties and resists fading and shrinking, helping scrubs maintain their color and fit over time. Breathable materials provide flexibility and ease of movement throughout demanding shifts."
+          }
+        },
+        "item_ddCED6": {
+          "type": "item",
+          "settings": {
+            "heading": "How do Workwear Originals men's scrubs fit?",
+            "content": "Workwear Originals men's scrubs are designed with an easy fit that allows for a full range of motion throughout the workday. The Men's Drawstring Cargo Scrub Pant features an adjustable drawstring waist for a secure, comfortable fit, while the unisex V-neck tops and cargo pants are cut to accommodate a variety of body types."
+          }
+        },
+        "item_dLtadG": {
+          "type": "item",
+          "settings": {
+            "heading": "What pockets and functional features do Workwear Originals men's scrubs have?",
+            "content": "Workwear Originals men's scrubs are built with practical, shift-ready features including multiple pockets, pen slots, and reinforced seams for long-lasting durability. The Unisex V-Neck Scrub Tops are available in 1-pocket and 3-pocket styles, while the Men’s Drawstring Cargo Scrub Pant includes 4 cargo pockets for everyday storage needs."
+          }
+        },
+        "item_Birtqg": {
+          "type": "item",
+          "settings": {
+            "heading": "Who are Workwear Originals men's scrubs designed for?",
+            "content": "Workwear Originals men's scrubs are designed for nurses, RNs, LPNs, medical assistants, and other healthcare professionals who need reliable, cost-effective scrubs for long shifts. Known for their durability, comfort, and classic styling, the collection remains a trusted choice for professionals who want dependable performance at an accessible price point."
+          }
+        }
+      },
+      "block_order": [
+        "item_NVL9jQ",
+        "item_MUtyHm",
+        "item_ddCED6",
+        "item_dLtadG",
+        "item_Birtqg"
+      ],
+      "name": "Collapsible Content",
+      "settings": {
+        "color_scheme": "",
+        "heading": "Frequently Asked Questions",
+        "text": "",
+        "button_text": "",
+        "button_link": "",
+        "button_style": "button"
+      }
+    }
+  },
+  "order": [
+    "header",
+    "products",
+    "seo_text_4tTMd4",
+    "empty_collection_carousel_zApKLV",
+    "collapsible_content_g7agba"
+  ]
+}

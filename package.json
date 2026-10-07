@@ -1,0 +1,53 @@
+{
+  "name": "avex-shopify-theme-codebase",
+  "version": "0.11.0",
+  "description": "",
+  "main": "vite.config.js",
+  "scripts": {
+    "dev": "concurrently --prefix-colors magenta,green --names vite,shopify \"npm run dev:vite\" \"npm run dev:shopify\"",
+    "dev:vite": "vite build --watch --mode development",
+    "dev:shopify": "shopify theme dev --store=cherokeeuniforms",
+    "build": "vite build",
+    "deploy": "vite build && shopify theme push --store=cherokeeuniforms",
+    "prepare": "husky install",
+    "eslint": "eslint --fix scripts/**/*.js",
+    "prettier": "prettier --write .",
+    "stylelint": "stylelint --fix styles/**/*.css"
+  },
+  "author": "avexdesigns",
+  "license": "ISC",
+  "dependencies": {
+    "@magic-spells/cart-progress-bar": "^1.0.0",
+    "@magic-spells/panel-stack": "github:magic-spells/panel-stack",
+    "@magic-spells/scroll-trigger": "^0.1.2",
+    "liquid-ajax-cart": "^2.1.1",
+    "stylelint-config-standard": "^26.0.0"
+  },
+  "devDependencies": {
+    "@shopify/prettier-plugin-liquid": "^1.4.4",
+    "@tailwindcss/vite": "^4.2.2",
+    "concurrently": "^9.0.1",
+    "eslint": "^8.20.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "husky": "^8.0.1",
+    "lint-staged": "^16.3.2",
+    "prettier": "^2.7.1",
+    "stylelint": "^14.9.1",
+    "stylelint-config-prettier": "^9.0.3",
+    "stylelint-prettier": "^2.0.0",
+    "tailwindcss": "^4.2.2",
+    "terser": "^5.37.0",
+    "vite": "^8.0.1"
+  },
+  "lint-staged": {
+    "scripts/**/*.js": [
+      "prettier --write",
+      "eslint --fix"
+    ],
+    "styles/**/*.css": [
+      "prettier --write",
+      "stylelint --fix"
+    ]
+  }
+}

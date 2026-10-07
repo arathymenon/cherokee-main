@@ -1,0 +1,45 @@
+#yotpo-reviews-carousel-widget {
+  margin: 0 !important;
+  width: 100% !important;
+}
+
+#yotpo-reviews-carousel-widget .reviews-carousel-card-container {
+  border: 1px solid #e5e5e5 !important;
+  border-radius: 8px !important;
+  min-height: none !important;
+}
+
+#yotpo-reviews-carousel-widget .yotpo-star-container svg {
+  width: 16px;
+  height: 16px;
+}
+
+#yotpo-reviews-carousel-widget .reviewer-display-name {
+  font-size: 0.75rem !important;
+  font-weight: 400 !important;
+  line-height: 160% !important;
+}
+
+#yotpo-reviews-carousel-widget .reviewer-status {
+  display: none !important;
+}
+
+#yotpo-reviews-carousel-widget .review-title {
+  font-size: 0.875rem !important;
+  font-weight: 500 !important;
+  line-height: 160% !important;
+}
+
+#yotpo-reviews-carousel-widget .review-content {
+  font-size: 0.875rem !important;
+  font-weight: 400 !important;
+  line-height: 160% !important;
+  height: auto !important;
+}
+
+#yotpo-reviews-carousel-widget .review-product-name {
+  color: #000 !important;
+  font-size: 0.75rem !important;
+  font-weight: 400 !important;
+  line-height: 160% !important;
+}

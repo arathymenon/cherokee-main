@@ -1,0 +1,45 @@
+{%- comment -%}
+  Renders the "Compare" checkbox for a product card.
+
+  Visibility logic lives here:
+  - Renders ONLY on collections where compare is enabled
+    (collection_context.metafields.compare.enable.value — a boolean metafield,
+    so .value is required: the metafield object is truthy whenever it exists).
+  - Fully hidden for set products (bundle.products metafield non-empty — the
+    same signal that suppresses the quick-shop button in product-card.liquid),
+    since a set can't be meaningfully compared.
+  - Otherwise visible when rendered (compare-enabled collections show checkboxes
+    by default; the bar's toggle just opens/closes the drawer).
+  - Rendered disabled (and marked data-compare-excluded) for gift cards and
+    embroidery-config products, so the controller never manages them.
+
+  Accepts:
+  - product: {Object} (required)
+  - collection_context: {Object} (required — gates rendering)
+{%- endcomment -%}
+
+{%- # Sets can't be compared — hidden via the same bundle.products metafield as quick-shop -%}
+{%- unless product.metafields.bundle.products.value.size > 0 -%}
+  {%- if collection_context.metafields.compare.enable.value -%}
+    {%- liquid
+      assign disabled_types = "embroidery config,gift cards" | split: ","
+      assign product_type = product.type | downcase
+      assign compare_excluded = false
+
+      if product.gift_card? or disabled_types contains product_type
+        assign compare_excluded = true
+      endif
+    -%}
+    <label
+      class="compare-checkbox flex items-center gap-2 mt-2 cursor-pointer select-none w-fit
+        has-disabled:opacity-40 has-disabled:cursor-not-allowed"
+      {% if compare_excluded %}aria-disabled="true"{% endif %}>
+      <input
+        type="checkbox"
+        class="size-4 accent-brand-blue"
+        data-compare-checkbox
+        {% if compare_excluded %}disabled data-compare-excluded{% endif %}>
+      <span class="fs-body-sm">{{ 'products.compare.label' | t }}</span>
+    </label>
+  {%- endif -%}
+{%- endunless -%}

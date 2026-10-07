@@ -1,0 +1,136 @@
+:root {
+  /* display font sizes */
+  --fs-display-1: 2.5rem;
+  --fs-display-2: 1.5rem;
+  --fs-display-3: 1.125rem;
+  --fs-display-4: 0.875rem;
+  --fs-display-5: 0.75rem;
+  --fs-display-6: 0.75rem;
+
+  /* body font sizes */
+  --fs-body-lg: 1rem;
+  --fs-body-md: 0.875rem;
+  --fs-body-sm: 0.75rem;
+  --fs-body-xs: 0.625rem;
+
+  @media (min-width: theme(--breakpoint-lg)) {
+    --fs-display-1: 5rem;
+    --fs-display-2: 2.5rem;
+    --fs-display-3: 1.5rem;
+    --fs-display-4: 0.875rem;
+    --fs-display-5: 1rem;
+    --fs-display-6: 0.75rem;
+  }
+}
+
+@utility fs-display-1 {
+  font-size: var(--fs-display-1);
+  font-family: var(--font-display);
+  line-height: 1;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: oklch(var(--color-headings));
+}
+
+@utility fs-display-2 {
+  font-size: var(--fs-display-2);
+  font-family: var(--font-display);
+  line-height: 1;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: oklch(var(--color-headings));
+}
+
+@utility fs-display-3 {
+  font-size: var(--fs-display-3);
+  font-family: var(--font-display);
+  line-height: 1;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: oklch(var(--color-headings));
+}
+
+@utility fs-display-4 {
+  font-size: var(--fs-display-4);
+  font-family: var(--font-display);
+  line-height: 1;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: oklch(var(--color-headings));
+}
+
+@utility fs-display-5 {
+  font-size: var(--fs-display-5);
+  line-height: 1.2;
+  font-family: Inter, sans-serif;
+  font-weight: 500;
+  color: oklch(var(--color-headings));
+  text-transform: uppercase;
+}
+
+@utility fs-display-6 {
+  font-size: var(--fs-display-6);
+  line-height: 1;
+  font-weight: 400;
+  color: oklch(var(--color-headings));
+  text-transform: uppercase;
+  letter-spacing: 0.06rem;
+}
+
+@utility fs-eyebrow {
+  font-size: var(--fs-display-5);
+  line-height: 1.2;
+  font-family: Inter, sans-serif;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+@utility fs-body-lg {
+  font-size: var(--fs-body-lg);
+  line-height: 1.6;
+  letter-spacing: 0;
+}
+
+@utility fs-body-md {
+  font-size: var(--fs-body-md);
+  line-height: 1.6;
+  letter-spacing: 0;
+}
+
+@utility fs-body-sm {
+  font-size: var(--fs-body-sm);
+  line-height: 1.6;
+  letter-spacing: 0;
+}
+
+@utility fs-body-xs {
+  font-size: var(--fs-body-xs);
+  line-height: 1.6;
+  letter-spacing: 0;
+}
+
+@layer base {
+  h1 {
+    @apply fs-display-1;
+  }
+
+  h2 {
+    @apply fs-display-2;
+  }
+
+  h3 {
+    @apply fs-display-3;
+  }
+
+  h4 {
+    @apply fs-display-4;
+  }
+
+  h5 {
+    @apply fs-display-5;
+  }
+
+  h6 {
+    @apply fs-display-6;
+  }
+}

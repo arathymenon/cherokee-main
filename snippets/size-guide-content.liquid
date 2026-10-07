@@ -1,0 +1,56 @@
+<!-- snippet: size-guide-content -->
+{%- comment -%}
+  Renders the size-chart body for one product. Fetched on demand into the
+  size-guide dialog via sections/sapi-size-chart.liquid + <html-fetcher>.
+
+  Accepts:
+  - product: {Object} the product whose chart to render
+{%- endcomment -%}
+
+{%- assign size_chart = product.metafields.meta.sizeChart.value -%}
+
+<div class="size-guide flex flex-col h-full">
+
+  {%- #  Dialog heading  -%}
+  <div class="flex items-start justify-between pb-sm">
+    <div role="heading" aria-level="3" class="fs-display-3 text-pretty">
+      {%- if size_chart.title != blank -%}
+        {{ size_chart.title }}
+      {%- else -%}
+        {{ 'size_chart.title' | t }}
+      {%- endif -%}
+    </div>
+    {% render 'dialog-close-button', position: 'float' %}
+  </div>
+
+  {%- if size_chart != blank -%}
+    {%- #  Text and chart  -%}
+    <rte-content class="w-full max-w-full block rte [&_table]:text-xs [&_p]:fs-body-sm">
+      {{ size_chart.chart }}
+    </rte-content>
+
+    {%- if size_chart.image != blank or size_chart.instructions != blank -%}
+      <div class="flex flex-col md:flex-row gap-6 mt-sm">
+
+        {%- #  Image  -%}
+        {%- if size_chart.image != blank -%}
+          <div class="order-2 md:order-1 md:w-1/2">
+            {{ size_chart.image | image_url: width: 600 | image_tag: loading: 'lazy', class: 'w-full' }}
+          </div>
+        {%- endif -%}
+
+        {%- #  Instructions  -%}
+        {%- if size_chart.instructions != blank -%}
+          <div class="order-1 md:order-2 flex flex-col md:w-1/2">
+            <div class="fs-display-5 mb-xs">How to measure</div>
+            <div class="size-guide-steps text-xs mt-6 md:mt-auto">
+              {{ size_chart.instructions | metafield_tag }}
+            </div>
+          </div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  {%- else -%}
+    <p>{{ 'sections.size_chart.not_found_info' | t }}</p>
+  {%- endif -%}
+</div>

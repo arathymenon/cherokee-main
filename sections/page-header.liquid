@@ -1,0 +1,58 @@
+<!-- section: page-header -->
+
+{%- liquid
+  assign s = section.settings
+  assign heading = s.heading | default: page.title
+-%}
+
+{%- if heading != blank -%}
+  <section class="{{ s.padding_top }} {{ s.padding_bottom }} px-gutter">
+    <div class="max-w-[720px] mx-auto text-center">
+      <h1 class="fs-display-2 text-pretty">{{ heading | escape }}</h1>
+    </div>
+  </section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Page Header",
+  "tag": "section",
+  "class": "section",
+  "enabled_on": {
+    "templates": ["page"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "info": "Leave blank to use the page title."
+    },
+    {
+      "type": "select",
+      "id": "padding_top",
+      "label": "Top padding",
+      "options": [
+        { "value": "pt-sm", "label": "Small" },
+        { "value": "pt-md", "label": "Medium" },
+        { "value": "pt-lg", "label": "Large" }
+      ],
+      "default": "pt-md"
+    },
+    {
+      "type": "select",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "options": [
+        { "value": "pb-sm", "label": "Small" },
+        { "value": "pb-md", "label": "Medium" },
+        { "value": "pb-lg", "label": "Large" }
+      ],
+      "default": "pb-sm"
+    }
+  ],
+  "presets": [
+    { "name": "Page Header" }
+  ]
+}
+{% endschema %}

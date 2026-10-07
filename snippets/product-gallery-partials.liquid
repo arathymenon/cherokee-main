@@ -1,0 +1,155 @@
+{%- comment -%}
+  Renders product gallery partials.
+
+  Accepts:
+    - name: {String} The name of the partial to render
+
+  Each partial might accept additional parameters.
+{%- endcomment -%}
+
+{%- case name -%}
+  {%- when 'media' -%}
+    {%- comment -%}
+      Renders product gallery image
+
+      Accepts:
+      - media: {Object}
+      - image_width: {String} The width attribute value for the image_url
+      - image_sizes: {String} The sizes attribute value for the image_tag
+      - image_loading_eager: {Boolean | String}
+        - if true (Boolean), then the loading='eager' attribute will be added to the image tag
+        - if a string, then it is expected to be a CSS media query defining what viewport width the eager loading should be applied.
+          Example: (min-width: 1024px)
+    {%- endcomment -%}
+
+    {%- capture image_html -%}
+      {%- render 'product-gallery-partials',
+        name: 'image',
+        media: media,
+        width: image_width,
+        sizes: image_sizes,
+        loading_eager: image_loading_eager
+        show_skeleton: true
+      -%}      
+    {%- endcapture -%}
+
+    {%- capture deferred_media_button_html -%}
+      {%- render 'product-gallery-partials', name: 'deferred_media_button', media: media -%}
+    {%- endcapture -%}
+
+    {%- if media.media_type == 'image' -%}
+      {{- image_html -}}
+
+    {%- else -%}
+      <deferred-media class="block w-full h-full relative">
+        <div data-deferred-media-poster class="size-full">
+          {{- image_html -}}
+        </div>
+
+        <button
+          data-deferred-media-button
+          class="absolute inset-0 size-full outline-none group"
+        >
+          {{- deferred_media_button_html -}}
+        </button>
+
+        <template>
+          {%- liquid
+            assign media_class = 'absolute inset-0 w-full h-full object-cover'
+            case media.media_type
+              when 'external_video'
+                assign media_class = media_class | append: ' bg-black'
+                if media.host == 'youtube'
+                  echo media | external_video_url: autoplay: true, mute: 1, loop: true, playlist: media.external_id, enablejsapi: 1 | external_video_tag: loading: 'lazy', class: media_class
+                else
+                  echo media | external_video_url: autoplay: true, muted: 1, loop: true | external_video_tag: loading: 'lazy', class: media_class
+                endif
+              when 'video'
+                assign media_class = media_class | append: ' bg-black'
+                echo media | media_tag: image_size: '2048x', autoplay: true, muted: true, loop: true, controls: true, preload: 'none', class: media_class
+              when 'model'
+                assign media_class = media_class | append: ' bg-white'
+                echo media | media_tag: image_size: '2048x', toggleable: true, class: media_class
+            endcase
+          -%}
+        </template>
+      </deferred-media>
+    {%- endif -%}
+
+  {%- when 'image' -%}
+    {%- comment -%}
+      Renders product gallery image
+
+      Accepts:
+      - media: {Object}
+      - width: {String} The width attribute value for the image_url
+      - sizes: {String} The sizes attribute value for the image_tag
+      - show_skeleton: {Boolean}
+      - loading_eager: {Boolean | String}
+        - if true (Boolean), then the loading='eager' attribute will be added to the image tag
+        - if a string, then it is expected to be a CSS media query defining what viewport width the eager loading should be applied.
+          Example: (min-width: 1024px)
+    {%- endcomment -%}
+
+    {%- liquid
+      assign loading = 'lazy'
+      if loading_eager == true
+        assign loading = 'eager'
+      endif
+
+      assign width = width | default: '2048'
+      assign sizes = sizes | default: '100vw'
+    -%}
+
+    {%- capture content -%}
+      {{-
+        media.preview_image
+        | image_url: width: width
+        | image_tag: loading: loading, sizes: sizes, class: 'size-full object-cover'
+      -}}
+
+      {%- if loading_eager and loading_eager != true and loading_eager != blank -%}
+        <script>
+          if (window.matchMedia('{{- loading_eager -}}').matches) {
+            document.currentScript.previousElementSibling.setAttribute('loading', 'eager');
+          }
+        </script>
+      {%- endif -%}
+    {%- endcapture -%}
+
+    {%- render 'media-loader', content: content, show_skeleton: show_skeleton -%}
+
+  {%- when 'deferred_media_button' -%}
+    {%- comment -%}
+      Renders a button that replaces the poster image with the actual media
+      in the deferred-media component.
+
+      Accepts:
+      - media: {Object}
+    {%- endcomment -%}
+
+    <div class="flex items-center justify-center size-full">
+      {%- case media.media_type -%}
+        {%- when 'model' -%}
+          <span class="sr-only">{{ 'products.product.media.play_model' | t }}</span>
+          <span
+            class="
+              bg-white rounded-full size-16 flex items-center justify-center outline-offset-4
+              group-focus-visible:outline-2 group-hover:scale-110
+            "
+          >
+            <span class="size-5 *:size-full">{{- 'icon-3d-model.svg' | inline_asset_content -}}</span>
+          </span>
+        {%- else -%}
+          <span class="sr-only">{{ 'products.product.media.play_video' | t }}</span>
+          <span
+            class="
+              bg-white rounded-full size-16 flex items-center justify-center outline-offset-4
+              group-focus-visible:outline-2 group-hover:scale-110
+            "
+          >
+            <span class="size-5 ml-1 *:size-full">{{- 'icon-play.svg' | inline_asset_content -}}</span>
+          </span>
+      {%- endcase -%}
+    </div>
+{%- endcase -%}

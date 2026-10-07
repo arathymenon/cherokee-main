@@ -1,0 +1,119 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "header": {
+      "type": "collection-header",
+      "settings": {
+        "color_scheme": "scheme-default",
+        "image_color_scheme": "scheme-default",
+        "width": "container",
+        "center_content": false,
+        "active_button_style": "button",
+        "linked_button_style": "button button-outline-black"
+      }
+    },
+    "products": {
+      "type": "collection-products",
+      "settings": {
+        "filter_color_scheme": "scheme-default",
+        "products_per_page": 16
+      }
+    },
+    "seo_text_4tTMd4": {
+      "type": "seo-text",
+      "name": "SEO Text",
+      "settings": {
+        "content": "{{ collection.metafields.seo.content | metafield_tag }}",
+        "color_scheme": "scheme-0d9bed0c-0f1f-4f9d-99af-d15d3a707bfd"
+      }
+    },
+    "empty_collection_carousel_zApKLV": {
+      "type": "featured-collection",
+      "name": "Product carousel",
+      "settings": {
+        "color_scheme": "",
+        "heading": "Featured Products",
+        "text": "",
+        "collection": "",
+        "products_to_show": 12,
+        "loop": false,
+        "button_link": "",
+        "button_text": "Shop All",
+        "slides_per_view_tablet": 2,
+        "slides_per_view_laptop": 3,
+        "slides_per_view_desktop": 4
+      }
+    },
+    "collapsible_content_DBcW9H": {
+      "type": "collapsible-content",
+      "blocks": {
+        "item_AcTCQn": {
+          "type": "item",
+          "settings": {
+            "heading": "What are Cherokee Workwear Originals Ultra women's scrubs?",
+            "content": "Cherokee Workwear Originals Ultra women's scrubs are a line of healthcare workwear built for nurses, LPNs, medical assistants, and other healthcare professionals who want advanced performance at exceptional value. Built on the trusted foundation of<a href=\"https://www.cherokeeuniforms.com/workwear-originals-women-scrubs.html\"><span style=\"text-decoration:underline\"> Workwear Originals</span></a>, the Ultra line combines durable, easy-care fabrics with modern silhouettes and activewear-inspired styling. The collection includes a variety of scrub tops, pants, jackets, skirts, maternity styles, and scrub sets designed to support comfort, mobility, and functionality throughout long shifts."
+          }
+        },
+        "item_QLRJqM": {
+          "type": "item",
+          "settings": {
+            "heading": "What fabric and technology is used in Workwear Originals Ultra women's scrubs?",
+            "content": "Ultra women's scrubs are built with advanced fabric technology designed to keep you comfortable and performing through your entire shift. PROTX2® technology combats odors and sweat so you stay fresh all day. The fabric is moisture-wicking with two-way stretch, drying quickly and allowing unrestricted movement in every direction. Reinforced seams and durable construction hold up through repeated washing and hard use — so your scrubs look as good in month twelve as they did on day one."
+          }
+        },
+        "item_WtUJAQ": {
+          "type": "item",
+          "settings": {
+            "heading": "What styles and silhouettes does Workwear Originals Ultra offer for women?",
+            "content": "The women's Ultra line covers a wide range of silhouettes for every preference and clinical setting. For scrub tops, you'll find a variety of silhouettes including V-neck, mock wrap, snap-front, and long-sleeve styles, along with modern tuck-in options for a polished, contemporary look. The collection also includes <a href=\"https://www.cherokeeuniforms.com/womens-scrubs-maternity\"><span style=\"text-decoration:underline\">maternity scrubs</span></a> designed to provide comfort and flexibility throughout pregnancy. For scrub pants, the lineup includes jogger, straight-leg, slim-leg, and cargo silhouettes to suit different fit preferences and work environments. Many styles feature multiple pockets for convenient storage, and maternity options are available for added comfort and support. The collection also includes coordinating jackets, scrub dresses, and scrub sets for a complete professional uniform."
+          }
+        },
+        "item_KYG6Vb": {
+          "type": "item",
+          "settings": {
+            "heading": "What makes Workwear Originals Ultra different from Workwear Originals?",
+            "content": "Ultra upgrades the trusted Originals foundation with advanced fabric technology and modern silhouettes that standard<a href=\"https://www.cherokeeuniforms.com/workwear-originals-women-scrubs.html\"> <span style=\"text-decoration:underline\">Workwear Originals</span></a> don't offer. The biggest difference is PROTX2® — an innovative technology that combats odors and sweat — plus moisture-wicking, two-way stretch fabric that dries quickly and moves with you. Ultra also introduces activewear-inspired silhouettes like cargo joggers, a scrub dress, and tuck-in cuts, plus reinforced construction details built for long-term durability. Same Cherokee reliability, raised to a higher standard."
+          }
+        },
+        "item_LBqV74": {
+          "type": "item",
+          "settings": {
+            "heading": "How many pockets do Workwear Originals Ultra women's scrubs have?",
+            "content": "Pocket count varies by style. Tops are available in 2-pocket and 3-pocket options depending on the cut. Jogger pants are available with up to 5 pockets, while cargo and slim leg styles offer additional storage pockets. The zip front jacket includes 2 pockets. For the highest pocket count, look for the jogger styles — built to keep everything within reach through a full shift."
+          }
+        }
+      },
+      "block_order": [
+        "item_AcTCQn",
+        "item_QLRJqM",
+        "item_WtUJAQ",
+        "item_KYG6Vb",
+        "item_LBqV74"
+      ],
+      "name": "Collapsible Content",
+      "settings": {
+        "color_scheme": "",
+        "heading": "Frequently Asked Questions",
+        "text": "",
+        "button_text": "",
+        "button_link": "",
+        "button_style": "button"
+      }
+    }
+  },
+  "order": [
+    "header",
+    "products",
+    "seo_text_4tTMd4",
+    "empty_collection_carousel_zApKLV",
+    "collapsible_content_DBcW9H"
+  ]
+}

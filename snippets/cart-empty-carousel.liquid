@@ -1,0 +1,73 @@
+<!-- snippet: cart-empty-carousel -->
+
+{% doc %}
+  Renders a compact product carousel for the empty cart state.
+
+  @param {object} [collection] - Collection to pull products from (defaults to global theme setting `empty_state_collection`; if blank, the carousel is not rendered)
+  @param {string} [heading] - Carousel heading (default: 'You might also like')
+  @param {number} [products_to_show] - Max products in the carousel (default: 8)
+
+  @example
+  {% render 'cart-empty-carousel' %}
+  {% render 'cart-empty-carousel', collection: collections.frontpage, heading: 'Bestsellers' %}
+{% enddoc %}
+
+{%- liquid
+  assign carousel_collection = collection | default: settings.empty_state_collection
+  assign carousel_heading = heading | default: 'You may also like'
+  assign product_limit = products_to_show | default: 8
+
+  # Product types never eligible for the cart upsell (config SKUs, gift cards).
+  assign disabled_types = "embroidery config,gift cards" | split: ","
+-%}
+
+{% if carousel_collection != blank and carousel_collection.products_count > 0 %}
+  <div class="overflow-hidden">
+
+    {% #  Header  %}
+    <div class="flex justify-between items-end mb-xs pl-5">
+      <div role="heading" aria-level="3" class="fs-display-5">{{ carousel_heading }}</div>
+    </div>
+
+    <tarot-carousel class="">
+      <script type="application/json" data-tarot-options>
+        {
+          "loop": false,
+          "gap": "1px",
+          "paddingLeft": "0px",
+          "paddingRight": "0px",
+          "slidesPerView": 2,
+          "navigation": {
+            "showPagination": false,
+            "showButtons": false
+          },
+          "breakpoints": {
+            "543": {
+              "slidesPerView": 2.2,
+              "paddingLeft": "20px",
+              "paddingRight": "20px",
+              "gap": "8px"
+            }
+          }
+        }
+      </script>
+
+      <tarot-viewport class="">
+        <tarot-track>
+          {% for product in carousel_collection.products limit: product_limit %}
+            {%- assign product_type_lc = product.type | downcase -%}
+            {%- unless product.gift_card? or disabled_types contains product_type_lc -%}
+              <tarot-slide>
+                {% render 'product-card-cart-upsell',
+                  product: product,
+                  collection_context: carousel_collection
+                %}
+              </tarot-slide>
+            {%- endunless -%}
+          {% endfor %}
+        </tarot-track>
+      </tarot-viewport>
+    </tarot-carousel>
+
+  </div>
+{% endif %}

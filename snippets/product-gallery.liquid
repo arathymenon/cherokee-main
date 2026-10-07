@@ -1,0 +1,153 @@
+<!-- snippet: product-gallery -->
+{%- comment -%}
+  Renders product gallery as a tarot carousel.
+
+  Accepts:
+  - product: {Object}
+  - variant: {Object} optional
+  - extra_badges: {String} optional — extra badge HTML appended to the gallery
+    badge stack (used by the set PDP to add a component-driven Sale badge)
+{%- endcomment -%}
+
+{%- liquid
+  capture media_list
+    render 'product-media-list', product: product, variant: variant, list_name: 'full'
+  endcapture
+
+  assign media_list = media_list | split: ' '
+-%}
+
+<product-gallery class="block w-full">
+  <div class="w-full flex gap-2">
+    {%- # Vertical thumbnail list -%}
+    <div class="hidden lg:block min-w-[100px]">
+      <div class="overflow-y-auto max-h-[848px] snap-y snap-proximity [&::-webkit-scrollbar]:hidden [scrollbar-width:none]">
+        <ul class="flex flex-col gap-2" data-product-gallery-thumbnails>
+          {%- for index_string in media_list -%}
+            {%- liquid
+              assign index = index_string | plus: 0
+              assign media = product.media[index]
+            -%}
+            <li class="snap-start">
+              <button
+                type="button"
+                class="relative block w-full aspect-product-image overflow-hidden opacity-50 aria-[current=true]:opacity-100 transition rounded-theme-sm"
+                data-product-gallery-thumbnail="{{ forloop.index0 }}"
+                {% if forloop.first %}
+                  aria-current="true"
+                {% endif %}>
+                {{-
+                  media.preview_image
+                  | image_url: width: 200
+                  | image_tag: loading: 'lazy', sizes: '100px', class: 'size-full object-cover'
+                -}}
+                {%- if media.media_type == 'video' or media.media_type == 'external_video' -%}
+                  <span class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                    <span class="block size-8 [&_svg]:size-full [&_svg]:text-white">
+                      {{- 'icon-play-video.svg' | inline_asset_content -}}
+                    </span>
+                  </span>
+                {%- endif -%}
+              </button>
+            </li>
+          {%- endfor -%}
+        </ul>
+      </div>
+      <button
+        type="button"
+        data-product-gallery-thumbnails-scroll="down"
+        aria-label="Scroll thumbnails down"
+        class="mt-2 w-full flex items-center justify-center h-8 bg-white/80 backdrop-blur rounded-full hover:bg-white transition opacity-0 pointer-events-none data-[show]:opacity-100 data-[show]:pointer-events-auto [&_svg]:size-4">
+        {{- 'icon-angle-down.svg' | inline_asset_content -}}
+      </button>
+    </div>
+
+    <tarot-carousel
+      class="relative min-w-0 flex-1 group/gallery lg:rounded-theme lg:overflow-hidden self-start"
+      data-product-gallery-carousel>
+      <script type="application/json" data-tarot-options>
+        {
+          "effect": "carousel",
+          "loop": true,
+          "slidesPerView": 1,
+          "gap": 0,
+          "navigation": {
+            "showButtons": true,
+            "showPagination": true,
+            "previousButtonSelector": "#product-gallery-prev",
+            "nextButtonSelector": "#product-gallery-next"
+          },
+          "breakpoints": {
+            "1024": {
+              "slidesPerView": 1,
+              "gap": "8px",
+              "navigation": {
+                "showButtons": true,
+                "showPagination": true,
+                "previousButtonSelector": "#product-gallery-prev",
+                "nextButtonSelector": "#product-gallery-next"
+              }
+            }
+          }
+        }
+      </script>
+
+      <tarot-viewport>
+        <tarot-track class="cursor-zoom-in">
+          {%- for index_string in media_list -%}
+            {%- liquid
+              assign index = index_string | plus: 0
+              assign media = product.media[index]
+              assign loading_eager = false
+              if forloop.index0 == 0
+                assign loading_eager = true
+              endif
+            -%}
+
+            <tarot-slide data-product-gallery-item="{{ media.id }}">
+              <div class="aspect-product-image relative lg:rounded-theme lg:overflow-hidden">
+                <div class="relative size-full">
+                  {%- render 'product-gallery-partials',
+                    name: 'media',
+                    media: media,
+                    image_loading_eager: loading_eager,
+                    image_sizes: '(min-width: 1024px) 50vw, 100vw'
+                  -%}
+                </div>
+              </div>
+            </tarot-slide>
+          {%- endfor -%}
+        </tarot-track>
+
+        <div class="absolute top-4 left-4 z-2 flex flex-wrap gap-1 lg:gap-2">
+          {%- render 'product-badges', product: product, variant: variant, badge_level: 'variant' -%}
+          {{ extra_badges }}
+        </div>
+      </tarot-viewport>
+
+      <button
+        id="product-gallery-prev"
+        class="hidden lg:flex absolute left-6 top-1/2 -translate-y-1/2 z-10 items-center justify-center size-10 bg-white/80 backdrop-blur rounded-full hover:bg-white transition lg:opacity-0 lg:group-hover/gallery:opacity-100"
+        aria-label="Previous image">
+        {{- 'icon-angle-left.svg' | inline_asset_content -}}
+      </button>
+
+      <button
+        id="product-gallery-next"
+        class="hidden lg:flex absolute right-6 top-1/2 -translate-y-1/2 z-10 items-center justify-center size-10 bg-white/80 backdrop-blur rounded-full hover:bg-white transition lg:opacity-0 lg:group-hover/gallery:opacity-100"
+        aria-label="Next image">
+        {{- 'icon-angle-right.svg' | inline_asset_content -}}
+      </button>
+
+      <div
+        data-tarot-pagination
+        class="absolute bottom-3 right-3 z-10 lg:hidden"></div>
+    </tarot-carousel>
+  </div>
+</product-gallery>
+
+{%- render 'product-image-zoom-dialog',
+  product: product,
+  variant: variant,
+  source_selector: '[data-product-gallery-carousel]'
+-%}

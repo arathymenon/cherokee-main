@@ -1,0 +1,27 @@
+<!-- section: search-header -->
+<section class="pt-lg pb-md text-center">
+  <div class="container">
+    <h1 class="fs-display-3 mb-6">
+      {%- if search.performed -%}
+        {{- 'search.search_results_for' | t: terms: search.terms -}}
+      {%- else -%}
+        {{- 'search.search' | t -}}
+      {%- endif -%}
+    </h1>
+    <div class="">
+      {%- render 'search-form', is_search_page: true -%}
+    </div>
+    {%- if search.performed and search.results.size == 0 and search.filters == empty -%}
+      <p class="mt-6 pb-md">
+        {{- 'search.nothing_found_try_another' | t: terms: search.terms -}}
+      </p>
+    {%- endif -%}
+  </div>
+</section>
+
+{%- schema -%}
+{
+  "name": "Search Header",
+  "settings": []
+}
+{%- endschema -%}

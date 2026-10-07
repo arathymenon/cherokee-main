@@ -1,0 +1,119 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "header": {
+      "type": "collection-header",
+      "settings": {
+        "color_scheme": "",
+        "image_color_scheme": "scheme-dark",
+        "width": "container",
+        "center_content": false,
+        "active_button_style": "button",
+        "linked_button_style": "button button-outline-white"
+      }
+    },
+    "products": {
+      "type": "collection-products",
+      "settings": {
+        "filter_color_scheme": "scheme-default",
+        "products_per_page": 16
+      }
+    },
+    "seo_text_4tTMd4": {
+      "type": "seo-text",
+      "name": "SEO Text",
+      "settings": {
+        "content": "{{ collection.metafields.seo.content | metafield_tag }}",
+        "color_scheme": "scheme-0d9bed0c-0f1f-4f9d-99af-d15d3a707bfd"
+      }
+    },
+    "empty_collection_carousel_zApKLV": {
+      "type": "featured-collection",
+      "name": "Product carousel",
+      "settings": {
+        "color_scheme": "",
+        "heading": "Featured Products",
+        "text": "",
+        "collection": "",
+        "products_to_show": 12,
+        "loop": false,
+        "button_link": "",
+        "button_text": "Shop All",
+        "slides_per_view_tablet": 2,
+        "slides_per_view_laptop": 3,
+        "slides_per_view_desktop": 4
+      }
+    },
+    "collapsible_content_DLYJUa": {
+      "type": "collapsible-content",
+      "blocks": {
+        "item_YgPGDz": {
+          "type": "item",
+          "settings": {
+            "heading": "What are Workwear Originals women's scrubs?",
+            "content": "Workwear Originals women's scrubs are the classic, time-tested scrubs healthcare professionals have relied on for years. As the iconic line at the core of Cherokee's heritage, they're built from a durable polyester-cotton blend designed to deliver comfort, quality, and long-lasting wear through demanding shifts. The collection includes cargo scrub pants, <a href=\"https://www.cherokeeuniforms.com/womens-scrubs-tops\"><span style=\"text-decoration:underline\">women’s scrub tops</span></a>, and matching scrub sets."
+          }
+        },
+        "item_kVT3FJ": {
+          "type": "item",
+          "settings": {
+            "heading": "What fabric are Workwear Originals women's scrubs made from?",
+            "content": "Workwear Originals women's scrubs are made from a durable yet soft polyester-cotton blend. The fabric features soil-release properties and resists fading and shrinking, helping scrubs maintain their color and shape wash after wash. Breathable materials allow for comfortable movement throughout long shifts."
+          }
+        },
+        "item_Vmy4bH": {
+          "type": "item",
+          "settings": {
+            "heading": "How do Workwear Originals women's scrubs fit?",
+            "content": "Workwear Originals women's scrubs are designed with a relaxed fit that accommodates a wide range of body types while allowing ease of movement throughout the workday. Pants are available in natural rise flare leg and elastic waist utility silhouettes built for all-day comfort in clinical settings."
+          }
+        },
+        "item_pn9tRK": {
+          "type": "item",
+          "settings": {
+            "heading": "What functional features do Workwear Originals women's scrubs include?",
+            "content": "Workwear Originals women's scrubs are built with practical, shift-ready details including multiple pockets, pen slots, and reinforced seams for long-lasting durability. The <a href=\"https://www.cherokeeuniforms.com/cherokee-workwear/cherokee-workwear-originals/female/womens-v-neck-2-pocket-solid-scrub-top/ck4700.html\"><span style=\"text-decoration:underline\">3-Pocket Dolman V-Neck Scrub Top </span></a>includes three pockets for storage, while a long sleeve knit underscrub is available for layering. Matching scrub sets pair coordinating tops and pants for an easy complete uniform."
+          }
+        },
+        "item_WzRKFQ": {
+          "type": "item",
+          "settings": {
+            "heading": "Are Workwear Originals women's scrubs a good value?",
+            "content": "Workwear Originals women's scrubs are designed to deliver long-lasting quality without the premium price tag. Durable fabrics, reinforced construction, and easy-care materials make the collection a dependable choice for healthcare professionals who want comfort, performance, and value in their everyday uniforms."
+          }
+        }
+      },
+      "block_order": [
+        "item_YgPGDz",
+        "item_kVT3FJ",
+        "item_Vmy4bH",
+        "item_pn9tRK",
+        "item_WzRKFQ"
+      ],
+      "name": "Collapsible Content",
+      "settings": {
+        "color_scheme": "",
+        "heading": "Frequently Asked Questions",
+        "text": "",
+        "button_text": "",
+        "button_link": "",
+        "button_style": "button"
+      }
+    }
+  },
+  "order": [
+    "header",
+    "products",
+    "seo_text_4tTMd4",
+    "empty_collection_carousel_zApKLV",
+    "collapsible_content_DLYJUa"
+  ]
+}

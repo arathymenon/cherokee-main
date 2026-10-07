@@ -1,0 +1,224 @@
+<!-- section: comparison-table-column -->
+
+{%- comment -%}
+  One product's column for the comparison table modal (Phase 2).
+
+  Fetched per-product via the Section Rendering API by <comparison-modal>:
+    /products/{handle}?section_id=comparison-table-column
+  Outputs a flat list of [data-compare-cell] nodes (image + header + option +
+  attribute + footer), each tagged with data-group / data-key / data-label /
+  data-handle. The controller harvests these and places them into the grid by
+  data-key. Every product emits a cell for every attribute (blank → "——"); the
+  controller shows a row when AT LEAST ONE product has a value (union), hiding
+  only rows that are blank across all products.
+
+  Standalone section: rendered with DEFAULT settings (the Section Rendering API does
+  not pass section settings), so everything derives from `product`.
+
+  Attribute rows are an explicit list of `comparison-attribute` renders below — add
+  an attribute by adding one line (namespace + key + label + type).
+{%- endcomment -%}
+
+{%- liquid
+  assign p = product
+
+  # Identify the swatch option (first option whose values carry swatches) so its
+  # row renders as color dots and every other option renders as a first–last range.
+  assign swatch_option_position = 0
+  for option in p.options_with_values
+    for value in option.values
+      if value.swatch.image or value.swatch.color
+        assign swatch_option_position = option.position
+        break
+      endif
+    endfor
+    if swatch_option_position > 0
+      break
+    endif
+  endfor
+-%}
+
+<div data-comparison-column data-handle="{{ p.handle }}">
+  {%- # ---- Image cell (scrolls away; the info cell below stays pinned) ---- -%}
+  <div
+    data-compare-cell
+    data-group="image"
+    data-key="image"
+    data-handle="{{ p.handle }}"
+    class="flex justify-center">
+    <div class="aspect-product-image md:w-36 w-24 bg-grey-light">
+      {%- if p.featured_image -%}
+        {{
+          p.featured_image
+          | image_url: width: 400
+          | image_tag: loading: 'lazy', class: 'size-full object-cover'
+        }}
+      {%- endif -%}
+    </div>
+  </div>
+
+  {%- # ---- Header cell (brand/title/price; pinned on vertical scroll) ---- -%}
+  <div
+    data-compare-cell
+    data-group="header"
+    data-key="header"
+    data-handle="{{ p.handle }}"
+    class="flex flex-col h-full items-center text-center">
+    <div class="flex flex-col gap-1 py-4 grow">
+      {%- render 'product-meta-collection', product: p -%}
+
+      <a href="{{ p.url }}" class="fs-body-lg font-medium no-underline line-clamp-2">
+        {{- p.title -}}
+      </a>
+
+      <div class="flex items-center justify-center gap-1 mt-auto fs-body-md mb-0">
+        <span class="fs-body-sm">{{ 'products.compare.from' | t }} </span>
+        {%- if p.compare_at_price_min > p.price_min -%}
+          <span class="text-red-sale">{{ p.price_min | money }}</span>
+          <s class="text-grey-dark font-medium">{{ p.compare_at_price_min | money }}</s>
+        {%- else -%}
+          <span>{{ p.price_min | money }}</span>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+
+  {%- # ---- Option cells (Size = range, Color = swatches; from variant options) ---- -%}
+  {%- for option in p.options_with_values -%}
+    {%- assign option_key = 'option:' | append: option.name | handleize -%}
+
+    {%- capture option_value -%}
+      {%- if swatch_option_position > 0 and option.position == swatch_option_position -%}
+        {%- render 'comparison-swatches', product: p -%}
+      {%- elsif option.values.size > 1 -%}
+        {{ option.values.first.name }} – {{ option.values.last.name }}
+      {%- else -%}
+        {{ option.values.first.name }}
+      {%- endif -%}
+    {%- endcapture -%}
+
+    {%- render 'comparison-cell',
+      group: 'option',
+      key: option_key,
+      label: option.name,
+      value: option_value,
+      handle: p.handle
+    -%}
+  {%- endfor -%}
+
+  {%- # ---- Attribute cells — one render per metafield (add a field = add a line). ---- -%}
+  {%- # comparison-attribute always emits a cell (blank → "——"); the controller hides -%}
+  {%- # a row only when every product is blank. `order` keeps the canonical sequence. -%}
+
+  {%- render 'comparison-attribute',
+    product: p,
+    namespace: 'attributes',
+    key: 'inseam',
+    label_key: 'products.compare.attr.inseam',
+    type: 'list_text',
+    order: 1
+  -%}
+  {%- render 'comparison-attribute',
+    product: p,
+    namespace: 'attributes',
+    key: 'fit_style',
+    label_key: 'products.compare.attr.fit_style',
+    type: 'text',
+    order: 2
+  -%}
+  {%- render 'comparison-attribute',
+    product: p,
+    namespace: 'shopify',
+    key: 'waist-rise',
+    label_key: 'products.compare.attr.waist_rise',
+    type: 'metaobject_list',
+    order: 3
+  -%}
+  {%- render 'comparison-attribute',
+    product: p,
+    namespace: 'attributes',
+    key: 'leg_shape',
+    label_key: 'products.compare.attr.leg_shape',
+    type: 'list_text',
+    order: 4
+  -%}
+  {%- render 'comparison-attribute',
+    product: p,
+    namespace: 'attributes',
+    key: 'waistline',
+    label_key: 'products.compare.attr.waistline',
+    type: 'list_text',
+    order: 5
+  -%}
+  {%- render 'comparison-attribute',
+    product: p,
+    namespace: 'shopify',
+    key: 'sleeve-length-type',
+    label_key: 'products.compare.attr.sleeve_length',
+    type: 'metaobject_list',
+    order: 6
+  -%}
+  {%- render 'comparison-attribute',
+    product: p,
+    namespace: 'shopify',
+    key: 'neckline',
+    label_key: 'products.compare.attr.neckline',
+    type: 'metaobject_list',
+    order: 7
+  -%}
+  {%- render 'comparison-attribute',
+    product: p,
+    namespace: 'attributes',
+    key: 'pockets',
+    label_key: 'products.compare.attr.pockets',
+    type: 'list_text',
+    order: 8
+  -%}
+  {%- render 'comparison-attribute',
+    product: p,
+    namespace: 'attributes',
+    key: 'pocket-type',
+    label_key: 'products.compare.attr.pocket_type',
+    type: 'list_text',
+    order: 9
+  -%}
+  {%- render 'comparison-attribute',
+    product: p,
+    namespace: 'attributes',
+    key: 'closure',
+    label_key: 'products.compare.attr.closure',
+    type: 'list_text',
+    order: 10
+  -%}
+
+  {%- # ---- Footer cell (actions at the bottom of the column) ---- -%}
+  {%- assign remove_label = 'products.compare.remove' | t: title: p.title -%}
+  <div
+    data-compare-cell
+    data-group="footer"
+    data-key="footer"
+    data-handle="{{ p.handle }}"
+    class="snap-start flex flex-col items-center gap-2">
+    <a
+      data-compare-view
+      href="{{ p.url }}"
+      class="button button-sm rounded-full! no-underline w-full whitespace-nowrap">
+      {{ 'products.compare.view_product' | t }}
+    </a>
+    <button
+      type="button"
+      data-compare-remove
+      data-handle="{{ p.handle }}"
+      class="underline-button mb-0! whitespace-nowrap"
+      aria-label="{{ remove_label | escape }}">
+      {{ 'products.compare.remove_short' | t }}
+    </button>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Comparison table column",
+  "settings": []
+}
+{% endschema %}

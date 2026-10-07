@@ -1,0 +1,39 @@
+{%- comment -%}
+  Renders a "Shop By Color" column inside the mega menu.
+  Each child link must point at a collection with colorway metafields: the
+  first custom.colorway_list item drives the chip (label + color hex), and
+  custom.colorway overrides it when set. Falls back gracefully when missing.
+
+  Accepts:
+    - top_link: {Object} the top-level link; .title is the column header,
+      .links are color collection links
+{%- endcomment -%}
+
+<div class="flex flex-col gap-3 min-w-[160px] xl:min-w-[320px]">
+  <div class="fs-body font-medium">{{ top_link.title | escape }}</div>
+  {%- if top_link.links.size > 0 -%}
+    <ul class="mega-menu-color-list no-scrollbar grid grid-cols-1 xl:grid-cols-2 gap-2">
+      {%- for link in top_link.links -%}
+        {%- liquid
+          assign cw = link.object.metafields.custom.colorway.value
+          unless cw
+            for item in link.object.metafields.custom.colorway_list.value limit: 1
+              assign cw = item
+            endfor
+          endunless
+          assign swatch_color = cw.color | default: '#cccccc'
+          assign swatch_label = cw.label | default: link.title
+        -%}
+        <li>
+          <a class="color-chip fs-body-sm max-w-[156px]" href="{{ link.url }}">
+            <span
+              class="w-[18px] h-[18px] rounded-full shrink-0"
+              style="background-color: {{ swatch_color }};"
+              aria-hidden="true"></span>
+            <span>{{ swatch_label | escape }}</span>
+          </a>
+        </li>
+      {%- endfor -%}
+    </ul>
+  {%- endif -%}
+</div>

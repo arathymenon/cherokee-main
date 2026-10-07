@@ -1,0 +1,25 @@
+<!-- snippet: cart-line-item-one-price -->
+{%- comment -%}
+  Renders the per-unit price for a cart line item, showing the regular price
+  struck-through with the sale price beside it when on sale.
+
+  Accepts:
+  - line_item: {Object}
+{%- endcomment -%}
+
+{%- if line_item.original_price != line_item.final_price -%}
+  <span class="sr-only">
+    {{ 'products.product.price.regular_price' | t }}
+  </span>
+  <s class="line-through text-grey-dark">
+    {{- line_item.original_price | money -}}
+  </s>
+  <span class="sr-only">
+    {{ 'products.product.price.sale_price' | t }}
+  </span>
+  <span>
+    {{ line_item.final_price | money }}
+  </span>
+{%- else -%}
+  {{ line_item.original_price | money }}
+{%- endif -%}

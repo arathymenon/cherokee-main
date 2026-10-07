@@ -1,0 +1,24 @@
+{%- comment -%}
+  Renders general theme partials.
+
+  Accepts:
+  - name: {String} The name of the partial to render
+{%- endcomment -%}
+
+{%- case name -%}
+  {%- when 'custom_scrollbar_h' -%}
+    {%- comment -%}
+      Renders a custom horizontal scrollbar
+      for the custom-scrollbar component,
+      so it is supposed to be used inside the custom-scrollbar component.
+    {%- endcomment -%}
+
+    <div class="bg-grey-light relative" style="display: var(--custom-scrollbar-display, none); height: 2px;">
+      <span
+        class="bg-black h-full block absolute"
+        style="width: var(--custom-scrollbar-thumb-width, 0); left: var(--custom-scrollbar-thumb-shift, 0); transition: left 0.05s"
+      ></span>
+    </div>
+
+
+{%- endcase -%}

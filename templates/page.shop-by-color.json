@@ -1,0 +1,474 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "page_header": {
+      "type": "page-header",
+      "disabled": true,
+      "settings": {
+        "heading": "",
+        "padding_top": "pt-md",
+        "padding_bottom": "pb-sm"
+      }
+    },
+    "hero_banner_JatMBi": {
+      "type": "hero-banner",
+      "name": "Hero Banner",
+      "settings": {
+        "color_scheme": "scheme-dark",
+        "transparent_header": false,
+        "width": "full-width",
+        "add_padding": false,
+        "section_height": 50,
+        "horizontal_position": "justify-center",
+        "vertical_position": "items-center",
+        "text_alignment": "text-center",
+        "image": "shopify://shop_images/ck-hero-shop-by_color-3x1-2026.jpg",
+        "overlay_color": "#000000",
+        "overlay_opacity": 20,
+        "eyebrow": "",
+        "heading": "SHOP BY COLOR",
+        "use_h1": true,
+        "heading_tag": "2",
+        "content_image_max_height": 80,
+        "richtext": "",
+        "fine_print": "",
+        "button_1_text": "",
+        "button_1_link": "",
+        "button_1_style": "button",
+        "button_2_text": "",
+        "button_2_link": "",
+        "button_2_style": "button button-outline-white"
+      }
+    },
+    "page_content": {
+      "type": "page-content",
+      "settings": {
+        "padding_top": "pt-sm",
+        "padding_bottom": "pb-lg"
+      }
+    },
+    "shop_the_look_nqg4bA": {
+      "type": "shop-the-look",
+      "blocks": {
+        "slide_GCxEX3": {
+          "type": "slide",
+          "settings": {
+            "product_1": "",
+            "product_1_color_label": "",
+            "product_2": "",
+            "product_2_color_label": "",
+            "product_3": "",
+            "product_3_color_label": ""
+          }
+        },
+        "slide_UCtb47": {
+          "type": "slide",
+          "settings": {
+            "product_1": "",
+            "product_1_color_label": "",
+            "product_2": "",
+            "product_2_color_label": "",
+            "product_3": "",
+            "product_3_color_label": ""
+          }
+        }
+      },
+      "block_order": [
+        "slide_GCxEX3",
+        "slide_UCtb47"
+      ],
+      "disabled": true,
+      "name": "New! Color Drop",
+      "settings": {
+        "color_scheme": "",
+        "card_color_scheme": "",
+        "heading": "NEW! True Coral",
+        "richtext": ""
+      }
+    },
+    "shop_by_color_qhrGi8": {
+      "type": "shop-by-color",
+      "blocks": {
+        "collection_iUKKaP": {
+          "type": "collection",
+          "settings": {
+            "collection": "womens-caribbean-blue-scrubs",
+            "label_override": "",
+            "color_override": ""
+          }
+        },
+        "collection_xAEHR8": {
+          "type": "collection",
+          "settings": {
+            "collection": "womens-wine-scrubs",
+            "label_override": "",
+            "color_override": ""
+          }
+        },
+        "collection_p3Epd8": {
+          "type": "collection",
+          "settings": {
+            "collection": "womens-navy-blue-scrubs",
+            "label_override": "",
+            "color_override": ""
+          }
+        },
+        "collection_mVH9EJ": {
+          "type": "collection",
+          "settings": {
+            "collection": "womens-hunter-green-scrubs",
+            "label_override": "",
+            "color_override": ""
+          }
+        },
+        "collection_CptweX": {
+          "type": "collection",
+          "settings": {
+            "collection": "womens-ceil-blue-scrubs",
+            "label_override": "",
+            "color_override": ""
+          }
+        },
+        "collection_dqUADM": {
+          "type": "collection",
+          "settings": {
+            "collection": "womens-royal-blue-scrubs",
+            "label_override": "",
+            "color_override": ""
+          }
+        },
+        "collection_maLBqf": {
+          "type": "collection",
+          "settings": {
+            "collection": "womens-black-scrubs",
+            "label_override": "",
+            "color_override": ""
+          }
+        },
+        "collection_6jthgB": {
+          "type": "collection",
+          "settings": {
+            "collection": "womens-white-scrubs",
+            "label_override": "",
+            "color_override": ""
+          }
+        }
+      },
+      "block_order": [
+        "collection_iUKKaP",
+        "collection_xAEHR8",
+        "collection_p3Epd8",
+        "collection_mVH9EJ",
+        "collection_CptweX",
+        "collection_dqUADM",
+        "collection_maLBqf",
+        "collection_6jthgB"
+      ],
+      "name": "Uniform Colors",
+      "settings": {
+        "color_scheme": "",
+        "eyebrow": "",
+        "heading": "Popular Uniform Colors",
+        "richtext": "",
+        "products_to_show": 12,
+        "loop": false,
+        "button_text": "Shop all",
+        "slides_per_view_tablet": 2,
+        "slides_per_view_laptop": 3,
+        "slides_per_view_desktop": 4
+      }
+    },
+    "shop_the_look_43cVtc": {
+      "type": "shop-the-look",
+      "blocks": {
+        "slide_kYaWUE": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/CK954_CK00034_CIE_02_LS_jpg.jpg",
+            "product_1": "womens-tuck-in-curved-v-neck-scrub-top-ckck954a",
+            "product_1_color_label": "ciel",
+            "product_2": "womens-5-pocket-mid-rise-knit-jogger-scrub-pant-ckck0034",
+            "product_2_color_label": "ciel",
+            "product_3": "",
+            "product_3_color_label": ""
+          }
+        },
+        "slide_eHHNfk": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/CK954_CK272_NAV_15_LS_jpg.jpg",
+            "product_1": "womens-tuck-in-curved-v-neck-scrub-top-ckck954a",
+            "product_1_color_label": "navy",
+            "product_2": "womens-drawstring-cargo-straight-leg-scrub-pant-ckck272a",
+            "product_2_color_label": "navy",
+            "product_3": "",
+            "product_3_color_label": ""
+          }
+        },
+        "slide_NALYRm": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/CK953_CK272_EEPI_14_LS_jpg.jpg",
+            "product_1": "womens-rounded-v-neck-scrub-top-ckck953a",
+            "product_1_color_label": "Electric Pink",
+            "product_2": "womens-drawstring-cargo-straight-leg-scrub-pant-ckck272a",
+            "product_2_color_label": "Electric Pink",
+            "product_3": "",
+            "product_3_color_label": ""
+          }
+        },
+        "slide_eDC8Pm": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/CK936_WINN_08_LS_jpg.jpg",
+            "product_1": "achieve-by-cherokee-womens-1-pocket-crew-neck-top-ckck936",
+            "product_1_color_label": "wine",
+            "product_2": "achieve-by-cherokee-womens-pull-on-jogger-pant-ckck033",
+            "product_2_color_label": "wine",
+            "product_3": "",
+            "product_3_color_label": ""
+          }
+        },
+        "slide_HkhMic": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/CK353_NAVN_01_LS_jpg.jpg",
+            "product_1": "womens-2-pocket-shawl-collar-warm-up-scrub-jacket-ckck353",
+            "product_1_color_label": "navy",
+            "product_2": "achieve-by-cherokee-womens-1-pocket-crew-neck-top-ckck936",
+            "product_2_color_label": "royal",
+            "product_3": "achieve-by-cherokee-womens-pull-on-straight-leg-pant-ckck096",
+            "product_3_color_label": "royal"
+          }
+        },
+        "slide_mMmA9h": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/4101_KAKW_04_LS_jpg.jpg",
+            "product_1": "womens-v-neck-2-pocket-solid-scrub-top-ck4700",
+            "product_1_color_label": "khaki",
+            "product_2": "womens-natural-rise-flare-leg-scrub-pants-ck4101",
+            "product_2_color_label": "khaki",
+            "product_3": "",
+            "product_3_color_label": ""
+          }
+        },
+        "slide_WpLJa4": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/IN527A_PWTN_39_LS_jpg.jpg",
+            "product_1": "infinity-pursuit-mens-zip-front-3-pocket-warm-up-scrub-jacket-ckin527a",
+            "product_1_color_label": "pewter",
+            "product_2": "infinity-pursuit-mens-3-pocket-v-neck-scrub-top-ckin651a",
+            "product_2_color_label": "pewter",
+            "product_3": "infinity-pursuit-mens-5-pocket-interior-drawstring-jogger-scrub-pant-ckin027a",
+            "product_3_color_label": "pewter"
+          }
+        }
+      },
+      "block_order": [
+        "slide_kYaWUE",
+        "slide_eHHNfk",
+        "slide_NALYRm",
+        "slide_eDC8Pm",
+        "slide_HkhMic",
+        "slide_mMmA9h",
+        "slide_WpLJa4"
+      ],
+      "name": "Our Favorite Looks",
+      "settings": {
+        "color_scheme": "scheme-0d9bed0c-0f1f-4f9d-99af-d15d3a707bfd",
+        "card_color_scheme": "",
+        "heading": "Top Picks",
+        "richtext": ""
+      }
+    },
+    "shop_by_color_y3c3An": {
+      "type": "shop-by-color",
+      "blocks": {
+        "collection_ddtL4n": {
+          "type": "collection",
+          "settings": {
+            "collection": "womens-royal-blue-scrubs",
+            "label_override": "",
+            "color_override": ""
+          }
+        },
+        "collection_zLxXbT": {
+          "type": "collection",
+          "settings": {
+            "collection": "womens-caribbean-blue-scrubs",
+            "label_override": "",
+            "color_override": ""
+          }
+        },
+        "collection_hTaB7X": {
+          "type": "collection",
+          "settings": {
+            "collection": "womens-ceil-blue-scrubs",
+            "label_override": "",
+            "color_override": ""
+          }
+        },
+        "collection_NPix49": {
+          "type": "collection",
+          "settings": {
+            "collection": "womens-navy-blue-scrubs",
+            "label_override": "",
+            "color_override": ""
+          }
+        }
+      },
+      "block_order": [
+        "collection_ddtL4n",
+        "collection_zLxXbT",
+        "collection_hTaB7X",
+        "collection_NPix49"
+      ],
+      "name": "Blue Hues",
+      "settings": {
+        "color_scheme": "",
+        "eyebrow": "",
+        "heading": "Blue Hues",
+        "richtext": "",
+        "products_to_show": 12,
+        "loop": false,
+        "button_text": "Shop all",
+        "slides_per_view_tablet": 2,
+        "slides_per_view_laptop": 3,
+        "slides_per_view_desktop": 4
+      }
+    },
+    "shop_by_color_6HgUye": {
+      "type": "shop-by-color",
+      "blocks": {
+        "collection_W3rHjj": {
+          "type": "collection",
+          "settings": {
+            "collection": "womens-purple-scrubs",
+            "label_override": "",
+            "color_override": ""
+          }
+        },
+        "collection_mPQVPP": {
+          "type": "collection",
+          "settings": {
+            "collection": "womens-red-scrubs",
+            "label_override": "",
+            "color_override": ""
+          }
+        },
+        "collection_tfj8Ra": {
+          "type": "collection",
+          "settings": {
+            "collection": "womens-pink-scrubs",
+            "label_override": "",
+            "color_override": ""
+          }
+        },
+        "collection_FaCiiN": {
+          "type": "collection",
+          "settings": {
+            "collection": "womens-royal-blue-scrubs",
+            "label_override": "",
+            "color_override": ""
+          }
+        }
+      },
+      "block_order": [
+        "collection_W3rHjj",
+        "collection_mPQVPP",
+        "collection_tfj8Ra",
+        "collection_FaCiiN"
+      ],
+      "name": "Bold Colors",
+      "settings": {
+        "color_scheme": "",
+        "eyebrow": "",
+        "heading": "Bold Colors",
+        "richtext": "",
+        "products_to_show": 12,
+        "loop": false,
+        "button_text": "Shop all",
+        "slides_per_view_tablet": 2,
+        "slides_per_view_laptop": 3,
+        "slides_per_view_desktop": 4
+      }
+    },
+    "shop_by_color_E4YWtj": {
+      "type": "shop-by-color",
+      "blocks": {
+        "collection_HgCXRm": {
+          "type": "collection",
+          "settings": {
+            "collection": "womens-grey-scrubs",
+            "label_override": "",
+            "color_override": ""
+          }
+        },
+        "collection_rWArNH": {
+          "type": "collection",
+          "settings": {
+            "collection": "womens-khaki-scrubs",
+            "label_override": "",
+            "color_override": ""
+          }
+        },
+        "collection_W8GEXC": {
+          "type": "collection",
+          "settings": {
+            "collection": "womens-black-scrubs",
+            "label_override": "",
+            "color_override": ""
+          }
+        },
+        "collection_ciCjEh": {
+          "type": "collection",
+          "settings": {
+            "collection": "womens-white-scrubs",
+            "label_override": "",
+            "color_override": ""
+          }
+        }
+      },
+      "block_order": [
+        "collection_HgCXRm",
+        "collection_rWArNH",
+        "collection_W8GEXC",
+        "collection_ciCjEh"
+      ],
+      "name": "Neutral Tones",
+      "settings": {
+        "color_scheme": "",
+        "eyebrow": "",
+        "heading": "Neutral Tones",
+        "richtext": "",
+        "products_to_show": 12,
+        "loop": false,
+        "button_text": "Shop all",
+        "slides_per_view_tablet": 2,
+        "slides_per_view_laptop": 3,
+        "slides_per_view_desktop": 4
+      }
+    }
+  },
+  "order": [
+    "page_header",
+    "hero_banner_JatMBi",
+    "page_content",
+    "shop_the_look_nqg4bA",
+    "shop_by_color_qhrGi8",
+    "shop_the_look_43cVtc",
+    "shop_by_color_y3c3An",
+    "shop_by_color_6HgUye",
+    "shop_by_color_E4YWtj"
+  ]
+}

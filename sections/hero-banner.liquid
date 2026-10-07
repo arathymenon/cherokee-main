@@ -1,0 +1,512 @@
+<!-- section: hero-banner -->
+
+{%- liquid
+  assign s = section.settings
+
+  # Layout
+  assign outer_class = ''
+  assign inner_rounded = ''
+  if s.width == 'container'
+    assign outer_class = 'max-w-container mx-auto'
+  endif
+  if s.add_padding
+    assign outer_class = outer_class | append: ' py-section px-gutter'
+    assign inner_rounded = 'rounded-theme overflow-hidden'
+  endif
+  assign outer_class = outer_class | strip
+
+  # Media fallbacks
+  assign image = s.image
+  assign mobile_image = s.mobile_image | default: image
+  assign video = s.video
+  assign mobile_video = s.mobile_video | default: video
+
+  # Desktop has media?
+  assign has_desktop_video = false
+  if video.sources != blank
+    assign has_desktop_video = true
+  endif
+  assign has_desktop_image = false
+  if image != blank
+    assign has_desktop_image = true
+  endif
+
+  # Mobile has media?
+  assign has_mobile_video = false
+  if mobile_video.sources != blank
+    assign has_mobile_video = true
+  endif
+  assign has_mobile_image = false
+  if mobile_image != blank
+    assign has_mobile_image = true
+  endif
+
+  # Any media? Without media the banner collapses to content height
+  assign has_media = false
+  if has_desktop_image or has_desktop_video or has_mobile_image or has_mobile_video
+    assign has_media = true
+  endif
+
+  assign banner_class = ''
+  assign banner_style = ''
+  assign content_class = 'relative'
+  if has_media
+    assign banner_class = 'min-h-[360px]'
+    assign banner_style = 'height: ' | append: s.section_height | append: 'vh;'
+    assign content_class = 'absolute inset-0 h-full'
+  endif
+
+  # Video posters
+  assign desktop_poster = image | default: video.preview_image
+  assign mobile_poster = mobile_image | default: mobile_video.preview_image
+
+  # Heading display class (literal strings so Tailwind's scanner detects them)
+  assign heading_class = 'fs-display-2'
+  if s.heading_tag == "1"
+    assign heading_class = 'fs-display-1'
+  elsif s.heading_tag == "3"
+    assign heading_class = 'fs-display-3'
+  endif
+
+  # Button row justification follows text alignment
+  assign buttons_justify = 'justify-center'
+  assign content_image_align = 'self-center'
+  if s.text_alignment == 'text-left'
+    assign buttons_justify = 'justify-start'
+    assign content_image_align = 'self-start'
+  elsif s.text_alignment == 'text-right'
+    assign buttons_justify = 'justify-end'
+    assign content_image_align = 'self-end'
+  endif
+
+  # Center the constrained text boxes (rte + fine print) within the wider parent
+  assign center_margin = ''
+  if s.text_alignment == 'text-center'
+    assign center_margin = 'mx-auto'
+  endif
+
+  # Used to trigger the transparent header on the hero banner
+  assign transparent_header = ""
+  if section.index == 1 and s.transparent_header == true
+    assign transparent_header = "data-has-transparent-header"
+  endif
+-%}
+
+
+<section {{ transparent_header  }} class="relative" >
+  <div class="{{ outer_class }}">
+    <div
+      class="relative {{ inner_rounded }} color-{{ s.color_scheme }} overflow-hidden {{ banner_class }}"
+      {% if banner_style != blank %}style="{{ banner_style }}"{% endif %} >
+
+      {% #  Media (absolute, fills vh-based height)  %}
+
+      {% #  Desktop media  %}
+      {% if has_desktop_video %}
+        {% for source in video.sources %}
+          {% if source.url contains 'mp4' %}
+            <video
+              class="absolute inset-0 w-full h-full object-cover hidden lg:block"
+              autoplay
+              playsinline
+              muted
+              loop
+              poster="{{ desktop_poster | image_url: width: 1920 }}"
+              preload="none"
+              type="video/mp4"
+              src="{{ source.url }}"
+            ></video>
+            {% break %}
+          {% endif %}
+        {% endfor %}
+      {% elsif has_desktop_image %}
+        <div class="absolute inset-0 hidden lg:block">
+          {%- capture desktop_content -%}
+            {{- image | image_url: width: 1920 | image_tag:
+              class: 'w-full h-full object-cover block',
+              loading: 'eager',
+              fetchpriority: 'high',
+              sizes: '100vw',
+              widths: '600, 900, 1200, 1440, 1920'
+            -}}
+          {%- endcapture -%}
+          {%- render 'media-loader', content: desktop_content, show_skeleton: true -%}
+        </div>
+      {% endif %}
+
+      {% #  Mobile media  %}
+      {% if has_mobile_video %}
+        {% for source in mobile_video.sources %}
+          {% if source.url contains 'mp4' %}
+            <video
+              class="absolute inset-0 w-full h-full object-cover block lg:hidden"
+              autoplay
+              playsinline
+              muted
+              loop
+              poster="{{ mobile_poster | image_url: width: 900 }}"
+              preload="none"
+              type="video/mp4"
+              src="{{ source.url }}"
+            ></video>
+            {% break %}
+          {% endif %}
+        {% endfor %}
+      {% elsif has_mobile_image %}
+        <div class="absolute inset-0 block lg:hidden">
+          {%- capture mobile_content -%}
+            {{- mobile_image | image_url: width: 900 | image_tag:
+              class: 'w-full h-full object-cover block',
+              loading: 'eager',
+              fetchpriority: 'high',
+              sizes: '100vw',
+              widths: '400, 600, 900'
+            -}}
+          {%- endcapture -%}
+          {%- render 'media-loader', content: mobile_content, show_skeleton: true -%}
+        </div>
+      {% endif %}
+
+      {% #  Overlay  %}
+      {% if s.overlay_opacity > 0 %}
+        <div class="absolute inset-0"
+          style="background-color: {{ s.overlay_color }}; opacity: {{ s.overlay_opacity | divided_by: 100.0 }};">
+        </div>
+      {% endif %}
+
+      {% #  Content  %}
+      <div class="{{ content_class }} z-1 flex {{ s.vertical_position }} {{ s.horizontal_position }} w-full p-5 lg:p-lg">
+        <div class="{{ s.text_alignment }} max-w-[720px]">
+          <div class="flex flex-col gap-4">
+
+            {% if s.eyebrow != blank or s.content_image != blank or s.heading != blank %}
+              <div class="flex flex-col gap-2">
+                {% if s.eyebrow != blank %}
+                  <p class="fs-eyebrow">
+                    {{ s.eyebrow | escape }}
+                  </p>
+                {% endif %}
+
+                {% if s.content_image != blank %}
+                  {% assign content_image_class = content_image_align | append: ' w-auto h-auto' %}
+                  {% capture content_image_style %}max-height: {{ s.content_image_max_height }}px;{% endcapture %}
+                  {{ s.content_image
+                    | image_url: width: 480
+                    | image_tag:
+                        loading: 'eager',
+                        widths: '180, 240, 360, 480',
+                        class: content_image_class,
+                        style: content_image_style
+                  }}
+                {% endif %}
+
+                {% if s.heading != blank %}
+                  {% if s.use_h1 %}
+                    <h1 class="{{ heading_class }} text-pretty">
+                      {{ s.heading | escape }}
+                    </h1>
+                  {% else %}
+                    <div
+                      role="heading"
+                      aria-level="2"
+                      class="{{ heading_class }} text-pretty" >
+                      {{ s.heading | escape }}
+                    </div>
+                  {% endif %}
+                {% endif %}
+              </div>
+            {% endif %}
+
+            {% if s.richtext != blank %}
+              <rte-content class="rte max-w-[620px] text-pretty {{ center_margin }}">{{ s.richtext }}</rte-content>
+            {% endif %}
+
+            {%- liquid
+              assign show_button_1 = false
+              if s.button_1_text != blank and s.button_1_link != blank
+                assign show_button_1 = true
+              endif
+              assign show_button_2 = false
+              if s.button_2_text != blank and s.button_2_link != blank
+                assign show_button_2 = true
+              endif
+            -%}
+            {% if show_button_1 or show_button_2 %}
+              <div class="flex flex-wrap gap-3 {{ buttons_justify }} mt-2">
+                {% if show_button_1 %}
+                  <a class="{{ s.button_1_style }}" href="{{ s.button_1_link }}">
+                    {{ s.button_1_text | escape }}
+                  </a>
+                {% endif %}
+                {% if show_button_2 %}
+                  <a class="{{ s.button_2_style }}" href="{{ s.button_2_link }}">
+                    {{ s.button_2_text | escape }}
+                  </a>
+                {% endif %}
+              </div>
+            {% endif %}
+
+          </div>
+
+          {% if s.fine_print != blank %}
+            <p class="fs-body-xs mt-6 max-w-[620px] {{ center_margin }}">
+              {{ s.fine_print | escape }}
+            </p>
+          {% endif %}
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Hero Banner",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+     {
+      "type": "checkbox",
+      "id": "transparent_header",
+      "label": "Transparent header",
+      "info": "Only applies when this section is first on the page.",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "width",
+      "label": "Width",
+      "options": [
+        { "value": "full-width", "label": "Full width" },
+        { "value": "container", "label": "Container" }
+      ],
+      "default": "full-width"
+    },
+    {
+      "type": "checkbox",
+      "id": "add_padding",
+      "label": "Add padding",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "section_height",
+      "label": "Section height",
+      "min": 30,
+      "max": 100,
+      "step": 5,
+      "default": 70,
+      "unit": "vh"
+    },
+    {
+      "type": "header",
+      "content": "Content position"
+    },
+    {
+      "type": "select",
+      "id": "horizontal_position",
+      "label": "Horizontal position",
+      "options": [
+        { "value": "justify-start", "label": "Left" },
+        { "value": "justify-center", "label": "Center" },
+        { "value": "justify-end", "label": "Right" }
+      ],
+      "default": "justify-center"
+    },
+    {
+      "type": "select",
+      "id": "vertical_position",
+      "label": "Vertical position",
+      "options": [
+        { "value": "items-start", "label": "Top" },
+        { "value": "items-center", "label": "Middle" },
+        { "value": "items-end", "label": "Bottom" }
+      ],
+      "default": "items-center"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text alignment",
+      "options": [
+        { "value": "text-left", "label": "Left" },
+        { "value": "text-center", "label": "Center" },
+        { "value": "text-right", "label": "Right" }
+      ],
+      "default": "text-center"
+    },
+    {
+      "type": "header",
+      "content": "Media"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Desktop image"
+    },
+    {
+      "type": "image_picker",
+      "id": "mobile_image",
+      "label": "Mobile image"
+    },
+    {
+      "type": "video",
+      "id": "video",
+      "label": "Desktop video"
+    },
+    {
+      "type": "video",
+      "id": "mobile_video",
+      "label": "Mobile video"
+    },
+    {
+      "type": "header",
+      "content": "Overlay"
+    },
+    {
+      "type": "color",
+      "id": "overlay_color",
+      "label": "Overlay color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Overlay opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": 0,
+      "unit": "%"
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading"
+    },
+    {
+      "type": "checkbox",
+      "id": "use_h1",
+      "label": "Use H1 tag for heading",
+      "info": "Enable on the page's primary heading for SEO. Only one H1 should exist per page.",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "heading_tag",
+      "label": "Heading font size",
+      "options": [
+        { "value": "1", "label": "H1" },
+        { "value": "2", "label": "H2" },
+        { "value": "3", "label": "H3" }
+      ],
+      "default": "2"
+    },
+    {
+      "type": "image_picker",
+      "id": "content_image",
+      "label": "Image",
+      "info": "Renders between eyebrow and heading (e.g. logo)"
+    },
+    {
+      "type": "range",
+      "id": "content_image_max_height",
+      "label": "Image max height",
+      "min": 40,
+      "max": 200,
+      "step": 10,
+      "default": 80,
+      "unit": "px"
+    },
+    {
+      "type": "richtext",
+      "id": "richtext",
+      "label": "Text"
+    },
+    {
+      "type": "text",
+      "id": "fine_print",
+      "label": "Fine print"
+    },
+    {
+      "type": "header",
+      "content": "Button 1"
+    },
+    {
+      "type": "text",
+      "id": "button_1_text",
+      "label": "Button text"
+    },
+    {
+      "type": "url",
+      "id": "button_1_link",
+      "label": "Button link"
+    },
+    {
+      "type": "select",
+      "id": "button_1_style",
+      "label": "Button style",
+      "options": [
+        { "value": "button", "label": "Primary" },
+        { "value": "button button-secondary", "label": "Secondary" },
+        { "value": "button button-outline-black", "label": "Outline black" },
+        { "value": "button button-outline-white", "label": "Outline white" }
+      ],
+      "default": "button"
+    },
+    {
+      "type": "header",
+      "content": "Button 2"
+    },
+    {
+      "type": "text",
+      "id": "button_2_text",
+      "label": "Button text"
+    },
+    {
+      "type": "url",
+      "id": "button_2_link",
+      "label": "Button link"
+    },
+    {
+      "type": "select",
+      "id": "button_2_style",
+      "label": "Button style",
+      "options": [
+        { "value": "button", "label": "Primary" },
+        { "value": "button button-secondary", "label": "Secondary" },
+        { "value": "button button-outline-black", "label": "Outline black" },
+        { "value": "button button-outline-white", "label": "Outline white" }
+      ],
+      "default": "button button-outline-white"
+    },
+  ],
+  "blocks": [],
+  "presets": [
+    {
+      "name": "Hero Banner",
+      "category": "Media & Content"
+    }
+  ],
+  "disabled_on": {
+    "groups": ["*"]
+  }
+}
+{% endschema %}

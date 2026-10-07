@@ -1,0 +1,30 @@
+<div data-ajax-cart-static-element="gift-wrap">
+  <component-loader>
+    <gift-wrap
+      hidden
+      product-id="{{ settings.cart_gift_wrap_product.id }}"
+      class="gift-wrap"
+    >
+      <accordion-block class="gift-wrap__accordion" data-gift-wrap-accordion>
+        <details>
+          <summary>{{- 'cart.gift_wrap_title' | t -}}</summary>
+          <div class="gift-wrap__content">
+            <label for="gift-variant-{{ forloop.index }}">{{- 'cart.gift_wrap_select_label' | t -}}</label>
+            <custom-select class="form-element">
+              <select id="gift-variant-{{ forloop.index }}" class="form-element">
+                <option value="reset" hidden>Select</option>
+                {%- for variant in settings.cart_gift_wrap_product.variants -%}
+                  <option
+                    value="{{ variant.id }}"
+                  >
+                    {{- variant.title | escape -}}
+                  </option>
+                {%- endfor -%}
+              </select>
+            </custom-select>
+          </div>
+        </details>
+      </accordion-block>
+    </gift-wrap>
+  </component-loader>
+</div>

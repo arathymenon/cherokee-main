@@ -1,0 +1,20 @@
+<!-- section: sapi-size-chart -->
+{%- comment -%}
+  For Shopify Section API only.
+
+  Fetched on demand by the size-guide dialog via <html-fetcher>. Shopify
+  resolves `product` from the requested /products/{handle} URL, so this works
+  for the main product, set/bundle components, and Complete-the-Look products.
+{%- endcomment -%}
+
+<html-fetcher>
+  <div data-html-fetcher-area>
+    {%- render 'size-guide-content', product: product -%}
+  </div>
+</html-fetcher>
+
+{% schema %}
+{
+  "name": "SAPI Size Chart"
+}
+{% endschema %}

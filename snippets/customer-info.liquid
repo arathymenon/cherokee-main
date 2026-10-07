@@ -1,0 +1,97 @@
+{% comment %} {%- assign is_profile_incomplete = false -%} {% endcomment %}
+
+<div class="customer-info">
+  <div class="customer-info__info-container">
+    <div class="customer-info__title">
+      {{- 'customer.account.contact_info' | t -}}
+    </div>
+    <dl class="customer-info__terms">
+      <div>
+        <dt>{{ 'customer.account.name' | t }}</dt>
+        <dd>{{ customer.name | escape }}</dd>
+      </div>
+
+      <div>
+        <dt>{{ 'customer.account.email' | t }}</dt>
+        <dd>{{ customer.email | escape }}</dd>
+      </div>
+
+      {% comment %} {%- if customer.metafields.customer_fields.birthday.value != blank -%}
+        <div>
+          <dt>{{ 'customer.account.birthday' | t }}</dt>
+          <dd>{{ customer.metafields.customer_fields.birthday.value | escape }}</dd>
+        </div>
+      {%- else -%}{%- assign is_profile_incomplete = true -%}
+      {%- endif -%} {% endcomment %}
+
+      {% comment %} {%- if customer.metafields.customer_fields.height_ft.value != blank or customer.metafields.customer_fields.height_in.value != blank -%}
+        <div>
+          <dt>{{ 'customer.account.height' | t }}</dt>
+          <dd>
+            {{ customer.metafields.customer_fields.height_ft.value | escape }}
+            {{ customer.metafields.customer_fields.height_in.value | escape }}
+          </dd>
+        </div>
+      {%- else -%}{%- assign is_profile_incomplete = true -%}
+      {%- endif -%}
+
+      {%- if customer.metafields.customer_fields.Weight.value != blank -%}
+        <div>
+          <dt>{{ 'customer.account.weight' | t }}</dt>
+          <dd>{{ customer.metafields.customer_fields.Weight.value | escape }} lb</dd>
+        </div>
+      {%- else -%}{%- assign is_profile_incomplete = true -%}
+      {%- endif -%}
+
+      {%- if customer.metafields.customer_fields.shirt_size.value != blank -%}
+        <div>
+          <dt>{{ 'customer.account.shirt_size' | t }}</dt>
+          <dd>{{ customer.metafields.customer_fields.shirt_size.value | escape }}</dd>
+        </div>
+      {%- else -%}{%- assign is_profile_incomplete = true -%}
+      {%- endif -%}
+
+      {%- if customer.metafields.customer_fields.pant_length.value != blank -%}
+        <div>
+          <dt>{{ 'customer.account.pant_length' | t }}</dt>
+          <dd>{{ customer.metafields.customer_fields.pant_length.value | escape }}</dd>
+        </div>
+      {%- else -%}{%- assign is_profile_incomplete = true -%}
+      {%- endif -%}
+
+      {%- if customer.metafields.customer_fields.shoe_size.value != blank -%}
+        <div>
+          <dt>{{ 'customer.account.shoe_size' | t }}</dt>
+          <dd>{{ customer.metafields.customer_fields.shoe_size.value | escape }}</dd>
+        </div>
+      {%- else -%}{%- assign is_profile_incomplete = true -%}
+      {%- endif -%} {% endcomment %}
+    </dl>
+    {% comment %} <a href="#edit" class="customer-info__edit-link">
+      {{- 'customer.account.edit' | t -}}
+    </a> {% endcomment %}
+  </div>
+  <div class="customer-info__image-container">
+    {%- if customer.metafields.customer_fields.photo.value.url != nil -%}
+      <div class="customer-info__image-title">
+        {{- 'customer.account.photo' | t -}}
+      </div>
+      <div class="customer-info__image">
+        <media-loader>
+          <img
+            src="{{ customer.metafields.customer_fields.photo.value.url }}"
+            alt="{{- 'customer.account.photo' | t -}}"
+            loading="lazy" />
+        </media-loader>
+      </div>
+    {%- endif -%}
+  </div>
+
+  {% comment %} {%- if is_profile_incomplete -%}
+    <div class="customer-info__complete-profile">
+      <a href="#edit" class="secondary-button">
+        {{- 'customer.account.complete_profile' | t -}}
+      </a>
+    </div>
+  {%- endif -%} {% endcomment %}
+</div>

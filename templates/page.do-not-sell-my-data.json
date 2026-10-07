@@ -1,0 +1,52 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "page_header": {
+      "type": "page-header",
+      "settings": {
+        "heading": "",
+        "padding_top": "pt-md",
+        "padding_bottom": "pb-sm"
+      }
+    },
+    "1778020139518b1b6f": {
+      "type": "apps",
+      "blocks": {
+        "pandectes_gdpr_ccpa_X7eJAc": {
+          "type": "shopify://apps/pandectes-gdpr/blocks/ccpa/58c0baa2-6cc1-480c-9ea6-38d6d559556a",
+          "settings": {
+            "container_classes": "page-width page-width--narrow"
+          }
+        }
+      },
+      "block_order": [
+        "pandectes_gdpr_ccpa_X7eJAc"
+      ],
+      "settings": {
+        "section_id": "",
+        "color_scheme": "",
+        "max_width": "custom",
+        "max_width_custom": "720px",
+        "side_padding": true,
+        "padding_top": "medium",
+        "padding_bottom": "large",
+        "min_height": "",
+        "heading": "",
+        "heading_size": "2",
+        "align_text": "left"
+      }
+    }
+  },
+  "order": [
+    "page_header",
+    "1778020139518b1b6f"
+  ]
+}

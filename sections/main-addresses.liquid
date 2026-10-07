@@ -1,0 +1,104 @@
+<!-- section: main-addresses -->
+<div class="customer-portal__page-heading">
+  <h1 class="customer-portal__page-title">
+    {{- 'customer.address.address_book' | t -}}
+  </h1>
+</div>
+
+<div class="customer-addresses">
+  {%- if customer.addresses.size > 0 -%}
+    {%- paginate customer.addresses by 10 -%}
+      <div class="customer-addresses__list">
+        {%- for address in customer.addresses -%}
+          <div class="customer-addresses__address">
+            <div class="customer-addresses__address-title">
+              {%- liquid
+                if address == customer.default_address
+                  echo 'customer.address.default_address' | t
+                else
+                  assign address_i = paginate.current_offset | plus: forloop.index
+                  echo 'customer.address.address_i' | t: i: address_i
+                endif
+              -%}
+            </div>
+
+            <div class="customer-addresses__address-text">
+              {{ address | format_address }}
+            </div>
+
+            {%- assign edit_address_title = 'customer.address.edit_title' | t -%}
+            {%- assign edit_address_popup_id = 'edit-address-form' | append: forloop.index -%}
+
+            {%- assign delete_address_title = 'customer.address.delete_title' | t -%}
+            {%- assign delete_address_popup_id = 'delete-address-form' | append: forloop.index -%}
+
+            {%- capture edit_address_form -%}
+              {% render 'customer-address-form', address: address %}
+            {%- endcapture -%}
+
+            {%- capture delete_address_form -%}
+              <form class="customer-addresses__edit-form" method="post" action="/account/addresses/{{ address.id }}">
+                <input type="hidden" name="_method" value="delete">
+                <div class="form-section" style="text-align: center">
+                  <p>{{ 'customer.address.delete_confirmation' | t }}</p>
+                </div>
+                <div class="form-section">
+                  <div class="customer-addresses__edit-form-submit">
+                    <button type="submit" class="primary-button">{{ 'customer.address.delete' | t }}</button>
+                    <div class="customer-addresses__edit-form-cancel">
+                      <a href="#{{ delete_address_popup_id }}--close">{{ 'customer.address.cancel' | t }}</a>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            {%- endcapture -%}
+
+            <div class="customer-addresses__address-actions-bar">
+              <a href="#{{ edit_address_popup_id }}" class="customer-addresses__address-action">
+                {{- 'customer.address.edit' | t -}}
+              </a>
+              |
+              <a href="#{{ delete_address_popup_id }}" class="customer-addresses__address-action">
+                {{- 'customer.address.delete' | t -}}
+              </a>
+            </div>
+            {%- render 'modal', title: edit_address_title, content: edit_address_form, id: edit_address_popup_id, max_width: '50rem', mobile_dock: true -%}
+            {%- render 'modal', title: delete_address_title, content: delete_address_form, id: delete_address_popup_id -%}
+          </div>
+        {%- endfor -%}
+      </div>
+
+      {%- if paginate.pages > 1 -%}
+        {%- if paginate.parts.size > 0 -%}
+          <div class="customer-addresses__pagination">
+            {%- render 'default-pagination', paginate: paginate -%}
+          </div>
+        {%- endif -%}
+      {%- endif -%}
+    {%- endpaginate -%}
+  {%- else -%}
+    <div class="customer-addresses__no-address-message">
+      {{- 'customer.address.no_address' | t -}}
+    </div>
+  {%- endif -%}
+
+  {%- assign new_address_title = 'customer.address.add' | t -%}
+  {%- assign new_address_popup_id = 'new-address-form' -%}
+  {%- capture new_address_form -%}
+    {%- render 'customer-address-form', address: customer.new_address -%}
+  {%- endcapture -%}
+
+  <div class="customer-addresses__add-action">
+    <a href="#{{ new_address_popup_id }}" class="primary-button primary-button--dark">
+      {{ 'customer.address.add' | t }}
+    </a>
+  </div>
+  {%- render 'modal', title: new_address_title, content: new_address_form, id: new_address_popup_id, max_width: '50rem', mobile_dock: true -%}
+</div>
+
+{% schema %}
+{
+  "name": "Main Addresses",
+  "settings": []
+}
+{% endschema %}

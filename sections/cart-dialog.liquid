@@ -1,0 +1,109 @@
+<!-- section: cart-dialog -->
+{%- if template.name != 'cart' -%}
+  {%- liquid
+    assign dialog_id = 'cart-dialog'
+    assign cart_form_id = 'cart_dialog_form'
+
+    assign threshold_cents = localization.market.metafields.shipping.threshold.value | default: 0
+    assign progress_threshold = threshold_cents | divided_by: 100.0
+    assign cart_total_dollars = cart.total_price | divided_by: 100.0
+  -%}
+  {%- capture item_count -%}
+    {%- render 'cart-display-count' -%}
+  {%- endcapture -%}
+  {%- assign item_count = item_count | strip | plus: 0 -%}
+
+  <openable-component data-close-on-outside-click>
+    <dialog id="{{ dialog_id }}"
+      class="dialog-r-drawer w-[34rem] overflow-hidden" data-openable>
+      <div class="flex flex-col h-full">
+      
+        {%- # Header -%}
+        <div class="flex items-center justify-between pt-md pb-sm px-5">
+          <div class="fs-display-3" data-ajax-cart-section>
+            {{ 'cart.title' | t }}
+            ({{ item_count }})
+          </div>
+          {% render 'dialog-close-button', position: 'float' %}
+        </div>
+
+        {%- # Progress bar -%}
+        {%- if progress_threshold > 0 -%}
+          <cart-progress-bar
+            id="cart-progress"
+            threshold="{{ progress_threshold }}"
+            current="{{ cart_total_dollars }}"
+            message-above="{{ settings.free_shipping_message_above }}"
+            message-below="{{ settings.free_shipping_message_below }}"
+            class="py-4 px-5" >
+            <p class="fs-body-sm text-[#333] mb-1" data-content-cart-progress-message></p>
+            <progress-bar></progress-bar>
+          </cart-progress-bar>
+        {%- endif -%}
+
+        {%- # Scrollable content -%}
+        <div
+          data-ajax-cart-section
+          data-ajax-cart-section-scroll 
+          class="flex-1 overflow-auto overscroll-none ">
+          {%- if item_count > 0 -%}
+            {%- # Cart items -%}
+            {%- form 'cart', cart, id: cart_form_id -%}
+              {%- render 'cart-line-item-list' -%}
+            {%- endform -%}
+
+            {%- # You might also like -%} 
+            {%- if settings.cart_upsell_carousel_enabled and cart.items.first -%}
+              <div data-ajax-cart-static-element>
+                <html-fetcher
+                  use-view-transition
+                  id="cart-upsell-carousel-fetcher"
+                  href="{{ routes.product_recommendations_url }}?section_id=cart-upsell-carousel&product_id={{ cart.items.first.product_id }}&intent=related&limit=10"
+                  ></html-fetcher>
+              </div>
+            {%- endif -%}
+          {%- else -%}
+            <div class="flex flex-col h-full ">
+              <p class="py-lg px-5 text-center ">
+                {{ settings.cart_empty_text }}
+              </p>
+
+              <div class="mt-auto py-sm">
+                {% render 'cart-empty-carousel' %}
+              </div>
+            </div>
+          {%- endif -%}
+        </div>
+
+        {%- # Footer -%}
+        <div 
+          data-ajax-cart-section
+          class="">
+          {%- if item_count > 0 -%}
+            <div class="px-5 py-sm">
+              {%- render 'cart-footer', cart_form_id: cart_form_id -%}
+            </div>
+          {%- endif -%}
+        </div>
+
+
+      </div>
+    </dialog>
+  </openable-component>
+
+  <script type="application/json" data-ajax-cart-initial-state>{{ cart | json }}</script>
+
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Cart dialog",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme"
+    }
+  ]
+}
+{% endschema %}

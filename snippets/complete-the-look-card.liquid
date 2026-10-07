@@ -1,0 +1,143 @@
+<!-- snippet: complete-the-look-card -->
+
+{% doc %}
+  Horizontal product card for the Complete the look section (mobile).
+  Image | text (collection / title / price) | quick-shop button.
+
+  @param {object} product - Shopify product object (required)
+  @param {string} [preferred_color_label] - If set, picks the variant whose Color option matches this label (case/whitespace-insensitive). Falls back to selected_or_first_available_variant on no match.
+  @param {string} [card_color_scheme] - Color scheme to apply to the card
+
+  @example
+  {% render 'complete-the-look-card',
+    product: product,
+    preferred_color_label: 'Caribbean Blue',
+    card_color_scheme: s.card_color_scheme %}
+{% enddoc %}
+
+{%- liquid
+  assign variant = null
+
+  if preferred_color_label != blank
+    assign target_label = preferred_color_label | downcase | strip
+    for option in product.options_with_values
+      assign option_name_lower = option.name | downcase
+      if option_name_lower == 'color'
+        for value in option.values
+          assign value_name = value.name | downcase | strip
+          if value_name == target_label
+            if value.variant
+              assign variant = value.variant
+            endif
+            break
+          endif
+        endfor
+        break
+      endif
+    endfor
+  endif
+
+  if variant == null
+    assign variant = product.selected_or_first_available_variant
+  endif
+
+  assign product_url = product.url
+
+  # Quick shop URL: pre-select color via option_values (not variant=ID), so
+  # the section can detect "fresh load" (partial selection) and render "From: $X"
+  # until the user picks the remaining options.
+  # Strip any existing query string before appending '?option_values=' to avoid
+  # ending up with two '?' in the URL.
+  assign quick_shop_url = product.url | split: '?' | first
+  assign color_value_id = null
+  for option in product.options_with_values
+    assign option_name_lower = option.name | downcase
+    if option_name_lower == 'color'
+      assign color_position_index = option.position | minus: 1
+      assign variant_color_name = variant.options[color_position_index]
+      for value in option.values
+        if value.name == variant_color_name
+          assign color_value_id = value.id
+          break
+        endif
+      endfor
+      break
+    endif
+  endfor
+  if color_value_id
+    assign quick_shop_url = quick_shop_url | append: '?option_values=' | append: color_value_id
+    if preferred_color_label != blank
+      assign product_url = product_url | split: '?' | first | append: '?option_values=' | append: color_value_id
+    endif
+  endif
+
+  assign card_image = variant.featured_image | default: product.featured_image
+  assign scheme_class = ''
+  if card_color_scheme != blank
+    assign scheme_class = 'color-' | append: card_color_scheme | append: ' bg-scheme text-scheme'
+  endif
+-%}
+
+<div class="{{ scheme_class }} flex items-center gap-sm py-sm rounded-theme-sm">
+
+  {% # Image %}
+  <a href="{{ product_url }}"
+    class="block shrink-0 w-[80px] overflow-hidden rounded-theme-sm no-underline">
+    <span class="sr-only">View {{ product.title | escape }}</span>
+    {%- if card_image != blank -%}
+      {%- capture content -%}
+        {{- card_image
+          | image_url: width: 400
+          | image_tag:
+              class: 'w-full h-full object-cover',
+              loading: 'lazy',
+              widths: '100, 200, 300, 400'
+        -}}
+      {%- endcapture -%}
+      {%- render 'media-loader', content: content, show_skeleton: true -%}
+    {%- else -%}
+      {{ 'product-1' | placeholder_svg_tag: 'w-full h-full object-cover' }}
+    {%- endif -%}
+  </a>
+
+  {% # Text %}
+  <div class="flex-1 flex flex-col gap-1 min-w-0">
+    {%- render 'product-meta-collection', product: product -%}
+
+    <a href="{{ product_url }}"
+      class="font-medium no-underline text-pretty">
+      {{ product.title | escape }}
+    </a>
+
+    <p class="font-medium flex items-center gap-1">
+      {%- if product.price_varies -%}
+        <span class="text-xs">From: </span>
+      {%- endif -%}
+      {%- if product.compare_at_price_min > product.price_min -%}
+        <span class="text-red-sale">{{ product.price_min | money }}</span>
+        <s class="text-grey-dark opacity-30">{{ product.compare_at_price_min | money }}</s>
+      {%- else -%}
+        <span>{{ product.price_min | money }}</span>
+      {%- endif -%}
+    </p>
+  </div>
+
+  {% # Quick Shop — hidden for set products since the modal can't configure them %}
+  {%- unless product.metafields.bundle.products.value.size > 0 -%}
+    <html-fetcher-trigger
+      selector="#quick-shop-dialog html-fetcher"
+      href="{{ quick_shop_url }}"
+      data-vegax-command="show-modal"
+      data-vegax-commandfor="quick-shop-dialog"
+      class="shrink-0">
+      <button type="button"
+        class="button button-primary p-0 min-w-0 size-8 lg:size-10 flex-center rounded-full"
+        aria-label="Quick shop {{ product.title | escape }}">
+        <span class="block size-4 [&>svg]:size-full">
+          {{- 'icon-plus.svg' | inline_asset_content -}}
+        </span>
+      </button>
+    </html-fetcher-trigger>
+  {%- endunless -%}
+
+</div>

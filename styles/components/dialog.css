@@ -1,0 +1,111 @@
+@layer components {
+  dialog::backdrop {
+    background: rgb(0 0 0 / 40%);
+    backdrop-filter: blur(5px);
+    opacity: 0;
+    transition: opacity 0.3s, backdrop-filter 0.3s, display 0.3s allow-discrete,
+      overlay 0.3s allow-discrete;
+  }
+
+  dialog[open]::backdrop {
+    opacity: 1;
+
+    @starting-style {
+      opacity: 0;
+    }
+  }
+
+  /* position/inset/z-index mirror the UA modal-dialog styles so the close
+     transition keeps viewport geometry after the dialog leaves the top layer
+     (Safari/Firefox don't support `overlay`). */
+  .dialog-popup {
+    position: fixed;
+    inset: 0;
+    z-index: 110;
+    padding: 1.5rem 1rem;
+    box-sizing: border-box;
+    overscroll-behavior: none;
+    transition: all 0.15s ease-in-out allow-discrete;
+    width: fit-content;
+    height: fit-content;
+    max-height: 100vh;
+    max-width: 100vw;
+    margin: auto;
+    opacity: 0;
+    transform: scale(0.9);
+
+    &[open] {
+      opacity: 1;
+      transform: scale(1);
+
+      @starting-style {
+        opacity: 0;
+        transform: scale(0.8);
+      }
+    }
+    @media (min-width: theme(--breakpoint-md)) {
+      padding: 2rem 1.5rem;
+    }
+  }
+
+  /* Bottom sheet on mobile (full-width, anchored to the bottom, slides up);
+     centered popup on lg+. Width and corner radius are set via Tailwind on the
+     element (w-full lg:w-[...], rounded-t-theme lg:rounded-b-theme). */
+  .dialog-popup-sheet {
+    position: fixed;
+    inset: 0;
+    z-index: 110;
+    padding: 1.5rem 1rem;
+    box-sizing: border-box;
+    overscroll-behavior: none;
+    transition: all 0.3s ease-in-out allow-discrete;
+    max-width: 100%;
+    height: fit-content;
+    max-height: 100dvh;
+    margin: auto auto 0;
+    opacity: 1;
+    transform: translateY(100%);
+
+    &[open] {
+      transform: translateY(0);
+
+      @starting-style {
+        transform: translateY(100%);
+      }
+    }
+
+    @media (min-width: theme(--breakpoint-lg)) {
+      padding: 2rem 1.5rem;
+      max-width: 100vw;
+      max-height: 100vh;
+      margin: auto;
+      transition: all 0.15s ease-in-out allow-discrete;
+      opacity: 0;
+      transform: scale(0.9);
+
+      &[open] {
+        opacity: 1;
+        transform: scale(1);
+
+        @starting-style {
+          opacity: 0;
+          transform: scale(0.8);
+        }
+      }
+    }
+  }
+
+  .dialog-popup-zoom {
+    transition-property: opacity;
+    transform: none;
+
+    &[open] {
+      transform: none;
+
+      @starting-style {
+        opacity: 0;
+        transform: none;
+      }
+    }
+  }
+}

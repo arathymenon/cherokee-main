@@ -1,0 +1,52 @@
+<!-- section: page-content -->
+
+{%- liquid
+  assign s = section.settings
+  assign content = page.content
+-%}
+
+{%- if content != blank -%}
+  <section class="{{ s.padding_top }} {{ s.padding_bottom }}">
+    <div class="container">
+      <rte-content class="rte max-w-[720px] mx-auto">{{- content -}}</rte-content>
+    </div>
+  </section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Page Content",
+  "tag": "section",
+  "class": "section",
+  "enabled_on": {
+    "templates": ["page"]
+  },
+  "settings": [
+    {
+      "type": "select",
+      "id": "padding_top",
+      "label": "Top padding",
+      "options": [
+        { "value": "pt-sm", "label": "Small" },
+        { "value": "pt-md", "label": "Medium" },
+        { "value": "pt-lg", "label": "Large" }
+      ],
+      "default": "pt-sm"
+    },
+    {
+      "type": "select",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "options": [
+        { "value": "pb-sm", "label": "Small" },
+        { "value": "pb-md", "label": "Medium" },
+        { "value": "pb-lg", "label": "Large" }
+      ],
+      "default": "pb-lg"
+    }
+  ],
+  "presets": [
+    { "name": "Page Content" }
+  ]
+}
+{% endschema %}

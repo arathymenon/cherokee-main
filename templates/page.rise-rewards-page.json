@@ -1,0 +1,176 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "17681348566d810cb3": {
+      "type": "apps",
+      "blocks": {
+        "rise_ai_gift_cards_loyalty_rise_rewards_page_hero_extension_XqXFGB": {
+          "type": "shopify://apps/rise-gift-cards-store-credit/blocks/rise-rewards-page-hero-extension/d837f9d0-9f22-491a-94b6-f32b41864892",
+          "settings": {
+            "background_image": "shopify://shop_images/rise-hero-background-image.png",
+            "title": "Our Rewards",
+            "subtitle": "Simple ways to earn store credit",
+            "background_color": "#E6E6E6",
+            "text_color": "#000000",
+            "show_text_container": true,
+            "container_color": "#FFFFFF"
+          }
+        },
+        "rise_ai_gift_cards_loyalty_rise_store_credit_banner_extension_iqt4kT": {
+          "type": "shopify://apps/rise-gift-cards-store-credit/blocks/rise-store-credit-banner-extension/d837f9d0-9f22-491a-94b6-f32b41864892",
+          "settings": {
+            "backgroundColor": "#000000",
+            "textColor": "#ffffff",
+            "with_credit_text": "Your store credit balance:",
+            "with_credit_button_label": "Apply Store Credit",
+            "preview_state": "with_credit",
+            "show_without_credit": false,
+            "no_credit_text": "No credit yet. Shop and earn store credit",
+            "no_credit_button_label": "Shop Now",
+            "no_credit_link": "shopify://collections/all",
+            "show_for_logged_out": false,
+            "logged_out_text": "Check your store credit balance",
+            "logged_out_button_label": "Log In"
+          }
+        },
+        "rise_ai_gift_cards_loyalty_rise_rewards_page_section_extension_pgPLTY": {
+          "type": "shopify://apps/rise-gift-cards-store-credit/blocks/rise-rewards-page-section-extension/d837f9d0-9f22-491a-94b6-f32b41864892",
+          "settings": {
+            "title": "How to earn store credit",
+            "background_color": "#FFFFFF",
+            "text_color": "#000000",
+            "show_column_container": false,
+            "container_color": "#EEEEEE",
+            "column1_image": "shopify://shop_images/rise-first-purchase-image.png",
+            "column1_title": "Place your first order",
+            "column1_subtitle": "Get $5 credit",
+            "column2_image": "shopify://shop_images/rise-referrals-image.png",
+            "column2_title": "Refer a friend",
+            "column2_subtitle": "Give $5 credit, get $5 credit",
+            "column3_image": "shopify://shop_images/rise-cashback-image.png",
+            "column3_title": "Shop $100+",
+            "column3_subtitle": "Get $5 credit per $100 spent"
+          }
+        },
+        "rise_ai_gift_cards_loyalty_rise_referrals_extension_bjBjwa": {
+          "type": "shopify://apps/rise-gift-cards-store-credit/blocks/rise-referrals-extension/d837f9d0-9f22-491a-94b6-f32b41864892",
+          "settings": {
+            "preview_state": "logged_in",
+            "backgroundColor": "#f3f3f3",
+            "contentColor": "#000000",
+            "contentAlignment": "center",
+            "buttonWidth": "stretched",
+            "caption": "Refer a friend",
+            "title": "Give $10 Get $10",
+            "subtitle": "Refer a friend - they’ll receive $10 off their first order, and you’ll earn $10 in return.",
+            "button_text": "Get your link",
+            "login_button_text": "Log in",
+            "enable_facebook": true,
+            "enable_twitter": true,
+            "enable_whatsapp": true,
+            "enable_email": true,
+            "enable_messenger": true,
+            "enable_imessage": true,
+            "preset_message": "Check out this store and get a reward on your first purchase!"
+          }
+        },
+        "rise_ai_gift_cards_loyalty_rise_vip_tiers_extension_VJJ8LQ": {
+          "type": "shopify://apps/rise-gift-cards-store-credit/blocks/rise-rewards-page-vip-tiers-extension/d837f9d0-9f22-491a-94b6-f32b41864892",
+          "settings": {
+            "title": "VIP Tiers",
+            "subtitle": "Subtitle",
+            "background_color": "#ffffff",
+            "text_color": "#000000",
+            "divider_color": "#000000",
+            "tier_count": 3,
+            "perk_count": 4,
+            "tier1_image": "shopify://shop_images/tier_icon_big.png",
+            "tier1_title": "Bronze",
+            "tier1_description": "Description",
+            "tier2_image": "shopify://shop_images/tier_icon_big.png",
+            "tier2_title": "Silver",
+            "tier2_description": "Description",
+            "tier3_image": "shopify://shop_images/tier_icon_big.png",
+            "tier3_title": "Gold",
+            "tier3_description": "Description",
+            "tier4_title": "Tier 4",
+            "tier4_description": "Description",
+            "tier5_title": "Tier 5",
+            "tier5_description": "Description",
+            "perk1_label": "Perk",
+            "perk1_tier1": "Reward",
+            "perk1_tier2": "Reward",
+            "perk1_tier3": "Reward",
+            "perk1_tier4": "Reward",
+            "perk1_tier5": "Reward",
+            "perk2_label": "Perk",
+            "perk2_tier1": "Reward",
+            "perk2_tier2": "Reward",
+            "perk2_tier3": "Reward",
+            "perk2_tier4": "Reward",
+            "perk2_tier5": "Reward",
+            "perk3_label": "Perk",
+            "perk3_tier1": "Reward",
+            "perk3_tier2": "Reward",
+            "perk3_tier3": "Reward",
+            "perk3_tier4": "Reward",
+            "perk3_tier5": "Reward",
+            "perk4_label": "Perk",
+            "perk4_tier1": "Reward",
+            "perk4_tier2": "Reward",
+            "perk4_tier3": "Reward",
+            "perk4_tier4": "Reward",
+            "perk4_tier5": "Reward",
+            "perk5_label": "Perk",
+            "perk5_tier1": "Reward",
+            "perk5_tier2": "Reward",
+            "perk5_tier3": "Reward",
+            "perk5_tier4": "Reward",
+            "perk5_tier5": "Reward",
+            "perk6_label": "Perk",
+            "perk6_tier1": "Reward",
+            "perk6_tier2": "Reward",
+            "perk6_tier3": "Reward",
+            "perk6_tier4": "Reward",
+            "perk6_tier5": "Reward"
+          }
+        },
+        "rise_ai_gift_cards_loyalty_rise_rewards_page_faq_extension_UDYWD9": {
+          "type": "shopify://apps/rise-gift-cards-store-credit/blocks/rise-rewards-page-faq-extension/d837f9d0-9f22-491a-94b6-f32b41864892",
+          "settings": {
+            "caption": "FAQ",
+            "title": "Everything you need to know",
+            "background_color": "#FFFFFF",
+            "text_color": "#000000",
+            "row1_question": "Where can I see my store credit?",
+            "row1_answer": "Write your answer here",
+            "row2_question": "Can I use credit with other discounts?",
+            "row2_answer": "Write your answer here",
+            "row3_question": "Does store credit expire?",
+            "row3_answer": "Write your answer here"
+          }
+        }
+      },
+      "block_order": [
+        "rise_ai_gift_cards_loyalty_rise_rewards_page_hero_extension_XqXFGB",
+        "rise_ai_gift_cards_loyalty_rise_store_credit_banner_extension_iqt4kT",
+        "rise_ai_gift_cards_loyalty_rise_rewards_page_section_extension_pgPLTY",
+        "rise_ai_gift_cards_loyalty_rise_referrals_extension_bjBjwa",
+        "rise_ai_gift_cards_loyalty_rise_vip_tiers_extension_VJJ8LQ",
+        "rise_ai_gift_cards_loyalty_rise_rewards_page_faq_extension_UDYWD9"
+      ],
+      "settings": {}
+    }
+  },
+  "order": [
+    "17681348566d810cb3"
+  ]
+}

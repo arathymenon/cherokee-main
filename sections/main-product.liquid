@@ -1,0 +1,371 @@
+<!-- section: main-product -->
+{%- liquid
+  assign s = section.settings
+
+  # Display/gallery variant only. Pick state + the buy button are owned by
+  # <product-fetcher> client-side: Shopify auto-resolves a FULL variant even
+  # from partial option_values, so the server can't know which size/inseam
+  # the shopper actually picked. selected_or_first_available_variant already
+  # reflects the URL-selected color, so it drives the correct price and
+  # color-filtered media.
+  assign current_variant = null
+  if product.has_only_default_variant
+    assign current_variant = product.variants[0]
+  else
+    assign current_variant = product.selected_or_first_available_variant
+  endif
+
+  # Gallery variant is display-only and decoupled from buy state. When the
+  # picked combination has no variant record (e.g. Grape + XSM, never created)
+  # Shopify resolves option_values to nil, so current_variant is null and the
+  # gallery would otherwise show EVERY color's media. Recover the URL-selected
+  # color and point the gallery at the first variant that shares it, so the
+  # correct color's images (featured image first) are returned. current_variant
+  # stays null; product-form renders both the "unavailable" notice and the
+  # gated form, and <product-fetcher> picks one from its client pick state
+  # (notice only when the shopper has FULLY picked a non-existent combo).
+  assign gallery_variant = current_variant
+  if gallery_variant == null
+    assign selected_color = ''
+    assign color_position = 0
+    for option in product.options_with_values
+      assign option_name_lower = option.name | downcase
+      if option_name_lower == 'color'
+        assign color_position = option.position
+        for value in option.values
+          if value.selected
+            assign selected_color = value.name
+            break
+          endif
+        endfor
+        break
+      endif
+    endfor
+
+    if selected_color != ''
+      for variant in product.variants
+        assign variant_color = ''
+        case color_position
+          when 1
+            assign variant_color = variant.option1
+          when 2
+            assign variant_color = variant.option2
+          when 3
+            assign variant_color = variant.option3
+        endcase
+        if variant_color == selected_color
+          assign gallery_variant = variant
+          break
+        endif
+      endfor
+    endif
+  endif
+
+  assign base_id = 'main-product-' | append: section.id
+  assign product_form_id = base_id | append: '-form'
+
+  assign product_description = product.description
+  if product_description != blank
+    assign product_description_text = product_description | strip_html | strip
+    if product_description_text == ''
+      assign product_description = blank
+    endif
+  endif
+
+  capture product_options_html
+    render 'product-options-list', product: product, collection_context: collection, is_main_product_form: true
+  endcapture
+-%}
+
+{%- render 'breadcrumbs' -%}
+
+<section class="lg:px-gutter ">
+  <product-fetcher
+    section="{{ section.id }}"
+    id="{{ base_id }}-product-fetcher"
+    sapi-id="{{ base_id }}-product-fetcher"
+    update-url>
+    {%- render 'product-fetcher-state',
+      product: product,
+      variant: current_variant,
+      collection_context: collection
+    -%}
+
+    <div class="max-w-container mx-auto lg:pb-md">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-0">
+        {%- # Gallery column -%}
+        <div data-product-fetcher-area="gallery">
+          {% render 'product-gallery', product: product, variant: gallery_variant %}
+        </div>
+
+        {%- # Product details column -%}
+        <div class="py-md px-gutter lg:pl-lg lg:pr-md">
+          <div class="max-w-120 mx-auto">
+            <div data-product-fetcher-area="variant">
+              {% # Product title info %}
+              <div class="flex flex-col gap-2 ">
+                {%- render 'product-meta-collection', product: product, class: 'inline-block' -%}
+
+                <h1 class="font-body text-xl font-medium normal-case">
+                  {%- render 'product-title', product: product -%}
+                </h1>
+
+                {%- liquid
+                  # has_full_variant is the server's best guess at whether the
+                  # shopper has a complete selection. Correct on a deep-linked
+                  # ?variant=… cold load and on default-variant products, but
+                  # ALSO true on SAPI re-renders (option_values populates
+                  # selected_variant even for partial picks) — the JS toggle
+                  # below corrects from client pick state after each swap.
+                  assign has_full_variant = false
+                  if product.has_only_default_variant
+                    assign has_full_variant = true
+                  elsif product.selected_variant != blank
+                    assign has_full_variant = true
+                  endif
+                -%}
+                <div data-pdp-price>
+                  <div
+                    data-pdp-price-fresh
+                    {% if has_full_variant %}
+                      hidden
+                    {% endif %}
+                    class="flex items-center">
+                    {%- render 'product-price', target: product -%}
+                  </div>
+                  <div
+                    data-pdp-price-variant
+                    {% unless has_full_variant %}
+                      hidden
+                    {% endunless %}
+                    class="flex items-center">
+                    {%- render 'product-price', target: current_variant -%}
+                  </div>
+                </div>
+
+                {% if settings.yotpo_widget_instance_id != blank %}
+                  <div
+                    class="yotpo-widget-instance min-h-[22.5px]"
+                    data-yotpo-instance-id="{{ settings.yotpo_widget_instance_id | escape }}"
+                    data-yotpo-product-id="{{ product.id }}"
+                    data-yotpo-section-id="{{ section.id | default: template.name }}"></div>
+                {% endif %}
+
+                {% if current_variant.metafields.meta.clearance.value == true %}
+                  <p
+                    class="
+                      inline-block fs-body-sm py-2xs px-xs self-start
+                      bg-[#FFEBEB] text-red-error rounded-theme-sm
+                    ">
+                    {{ 'products.product.clearance_message' | t }}
+                  </p>
+                {% endif %}
+              </div>
+
+              <div class="flex flex-col gap-2 mt-6">
+                {% # product features with icons %}
+                {%- assign features = product.metafields.attributes.features.value -%}
+                {%- if features != blank -%}
+                  <div class="grid grid-cols-[repeat(auto-fill,minmax(150px,1fr))] gap-2">
+                    {%- for feature in features -%}
+                      <div
+                        class="
+                          flex items-center gap-2
+                          bg-grey-light-blue rounded-theme-sm p-2xs
+                        ">
+                        {%- if feature.icon != blank -%}
+                          <span class="size-6 shrink-0">
+                            {{
+                              feature.icon
+                              | image_url: width: 40
+                              | image_tag: class: 'size-full', loading: 'lazy'
+                            }}
+                          </span>
+                        {%- endif -%}
+                        <span class="fs-body-sm">{{ feature.label }}</span>
+                      </div>
+                    {%- endfor -%}
+                  </div>
+                {%- endif -%}
+
+                <rte-content class="block rte mb-6">
+                  {{ product_description }}
+                </rte-content>
+              </div>
+
+              <div class="empty:hidden">{{- product_options_html -}}</div>
+            </div>
+
+            {%- render 'embroidery-configurator', product: product -%}
+
+            <div data-product-fetcher-area="variant">
+              {% render 'product-form',
+                product: product,
+                variant: current_variant,
+                product_form_id: product_form_id
+              %}
+            </div>
+
+            {%- # Incentives -%}
+            {% if s.incentive_1_image
+              or s.incentive_1_text
+              or s.incentive_2_image
+              or s.incentive_2_text
+            %}
+              <div class="grid grid-cols-1 lg:grid-cols-2 mt-6 rounded-theme-sm overflow-hidden bg-grey-light-blue px-4 lg:px-0 lg:py-2xs mb-6">
+                {% if s.incentive_1_image or s.incentive_1_text %}
+                  <div
+                    class="
+                      flex items-center lg:justify-center gap-2
+                      border-b lg:border-b-0 lg:border-r border-grey
+                      py-2xs lg:px-4
+                    ">
+                    {% if s.incentive_1_image %}
+                      <div class="size-6 shrink-0">
+                        {{
+                          s.incentive_1_image
+                          | image_url: width: 80
+                          | image_tag: class: 'size-full', loading: 'lazy'
+                        }}
+                      </div>
+                    {% endif %}
+                    {% if s.incentive_1_text %}
+                      <span class="fs-body-sm">{{ s.incentive_1_text }}</span>
+                    {% endif %}
+                  </div>
+                {% endif %}
+                {% if s.incentive_2_image or s.incentive_2_text %}
+                  <div class="flex items-center lg:justify-center gap-2 py-2xs lg:px-4">
+                    {% if s.incentive_2_image %}
+                      <div class="size-6 shrink-0">
+                        {{
+                          s.incentive_2_image
+                          | image_url: width: 80
+                          | image_tag: class: 'size-full', loading: 'lazy'
+                        }}
+                      </div>
+                    {% endif %}
+                    {% if s.incentive_2_text %}
+                      <span class="fs-body-sm">{{ s.incentive_2_text }}</span>
+                    {% endif %}
+                  </div>
+                {% endif %}
+              </div>
+            {% endif %}
+
+            {%- # Product description -%}
+            {%- if product.metafields.meta.longDescription != blank -%}
+              <accordion-block>
+                <details class="group/accordion-item">
+                  <summary class="flex justify-between items-center py-4 cursor-pointer">
+                    <span>Details</span>
+                  </summary>
+                  <rte-content class="block rte pb-4">
+                    {{ product.metafields.meta.longDescription | metafield_tag }}
+                  </rte-content>
+                </details>
+              </accordion-block>
+            {%- endif -%}
+
+            {%- if product.metafields.meta.shipping != blank -%}
+              <accordion-block>
+                <details class="group/accordion-item">
+                  <summary class="flex justify-between items-center py-4 cursor-pointer">
+                    <span>Shipping & Returns</span>
+                  </summary>
+                  <rte-content class="block rte pb-4">
+                    {{ product.metafields.meta.shipping | metafield_tag }}
+                  </rte-content>
+                </details>
+              </accordion-block>
+            {%- endif -%}
+
+            {%- if product.metafields.meta.fabricCare != blank -%}
+              <accordion-block>
+                <details class="group/accordion-item">
+                  <summary class="flex justify-between items-center py-4 cursor-pointer">
+                    <span>Materials & Care</span>
+                  </summary>
+                  <rte-content class="block rte pb-4">
+                    {{ product.metafields.meta.fabricCare | metafield_tag }}
+                  </rte-content>
+                </details>
+              </accordion-block>
+            {%- endif -%}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div data-product-fetcher-area="variant">
+      {%- render 'product-partials', name: 'structured_data', product: product, allow_js: true -%}
+    </div>
+
+    <div data-product-fetcher-area="variant">
+      {%- render 'sticky-add-to-cart',
+        product: product,
+        variant: current_variant,
+        product_form_id: product_form_id
+      -%}
+    </div>
+  </product-fetcher>
+</section>
+
+<script>
+  // Re-init Yotpo widgets after <product-fetcher> swaps the variant area,
+  // since the swap restores the empty Yotpo placeholder div.
+  document.addEventListener('product-fetcher:rendered', () => {
+    window.yotpoWidgetsContainer?.initWidgets?.();
+  });
+
+  // Toggle "From: $X.XX" vs the specific-variant price. Both branches are
+  // server-rendered inside the variant area and replaced on every SAPI swap,
+  // so we just flip [hidden] in response to product-fetcher:state-change.
+  // Scoped by id because complete-the-look / recs on the PDP fire their own
+  // state-change events that bubble to document.
+  document.addEventListener('product-fetcher:state-change', (event) => {
+    const fetcher = event.target;
+    if (!(fetcher instanceof HTMLElement)) return;
+    if (fetcher.id !== '{{ base_id }}-product-fetcher') return;
+    const wrap = fetcher.querySelector('[data-pdp-price]');
+    if (!wrap) return;
+    const fresh = wrap.querySelector('[data-pdp-price-fresh]');
+    const variant = wrap.querySelector('[data-pdp-price-variant]');
+    if (!fresh || !variant) return;
+    const showVariant = Boolean(event.detail?.picksComplete);
+    fresh.hidden = showVariant;
+    variant.hidden = !showVariant;
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Product page",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Incentives"
+    },
+    {
+      "type": "image_picker",
+      "id": "incentive_1_image",
+      "label": "Incentive 1 image"
+    },
+    {
+      "type": "text",
+      "id": "incentive_1_text",
+      "label": "Incentive 1 text"
+    },
+    {
+      "type": "image_picker",
+      "id": "incentive_2_image",
+      "label": "Incentive 2 image"
+    },
+    {
+      "type": "text",
+      "id": "incentive_2_text",
+      "label": "Incentive 2 text"
+    }
+  ]
+}
+{% endschema %}

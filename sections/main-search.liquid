@@ -1,0 +1,176 @@
+<!-- section: main-search -->
+
+{%- liquid
+  assign s = section.settings
+  assign filter_dialog_id = 'search-filter-dialog-' | append: section.id
+
+  assign terms = search.terms | escape
+  assign reset_url = '?q=' | append: terms | append: '&options%5Bprefix%5D=last&type=product'
+  if search.sort_by != blank
+    assign reset_url = reset_url | append: '&sort_by=' | append: search.sort_by
+  endif
+-%}
+
+{%- if search.performed -%}
+{%- if search.filters != empty or search.results.size > 0 -%}
+
+  <facets-form>
+    <form>
+      <input type="hidden" name="q" value="{{ search.terms | escape }}">
+      <input type="hidden" name="options[prefix]" value="last">
+      <input type="hidden" name="type" value="product">
+
+      <sticky-content>
+        {%- render 'filter-sort-bar',
+          filter_dialog_id: filter_dialog_id,
+          sort_options: search.sort_options,
+          current_sort_by: search.sort_by,
+          results_count: search.results_count,
+          color_scheme: s.filter_color_scheme -%}
+      </sticky-content>
+
+        {%- render 'filter-dialog',
+          dialog_id: filter_dialog_id,
+          filters: search.filters,
+          reset_url: reset_url -%}
+
+        {% #  Active Filter Chips  %}
+        <div data-facets-form-content="active-filters-bar">
+          {%- liquid
+            assign has_active_filters = false
+            for filter in search.filters
+              if filter.active_values.size > 0
+                assign has_active_filters = true
+                break
+              endif
+              if filter.type == 'price_range'
+                if filter.min_value.value != null or filter.max_value.value != null
+                  assign has_active_filters = true
+                  break
+                endif
+              endif
+            endfor
+          -%}
+          {%- if has_active_filters -%}
+            <div class="container py-3">
+              <div class="flex flex-wrap items-center gap-2">
+                {%- for filter in search.filters -%}
+                  {%- for value in filter.active_values -%}
+                    <a href="{{ value.url_to_remove }}" class="chip" data-facets-form-link>
+                      <span>{%- render 'filter-active-value-label', filter: filter, value: value -%}</span>
+                      <span class="size-3">{{- 'icon-x.svg' | inline_asset_content -}}</span>
+                    </a>
+                  {%- endfor -%}
+                  {%- if filter.type == 'price_range' -%}
+                    {%- if filter.min_value.value != null or filter.max_value.value != null -%}
+                      <a href="{{ filter.url_to_remove }}" class="chip" data-facets-form-link>
+                        <span>
+                          {%- if filter.min_value.value -%}{{ filter.min_value.value | money }}{%- else -%}{{ 0 | money }}{%- endif -%}
+                          &mdash;
+                          {%- if filter.max_value.value -%}{{ filter.max_value.value | money }}{%- else -%}{{ filter.range_max | money }}{%- endif -%}
+                        </span>
+                        <span class="size-3">{{- 'icon-x.svg' | inline_asset_content -}}</span>
+                      </a>
+                    {%- endif -%}
+                  {%- endif -%}
+                {%- endfor -%}
+                <a href="{{ reset_url }}"
+                  class="text-sm underline ml-2"
+                  data-facets-form-link>
+                  {{ 'facets.filters.reset_all' | t }}
+                </a>
+              </div>
+            </div>
+          {%- endif -%}
+        </div>
+
+    </form>
+
+      {% #  Product Grid  %}
+      <section class="md:px-gutter">
+        <div class="max-w-container mx-auto lg:pt-6 pb-lg">
+          <div data-facets-form-content="products-list">
+            {%- if search.results.size > 0 -%}
+              {%- paginate search.results by s.products_per_page -%}
+
+                {%- render 'product-listing-pagination', type: 'prev', paginate: paginate -%}
+
+                <div
+                  data-ajax-pagination="content"
+                  class="grid grid-cols-2 lg:grid-cols-4 gap-px md:gap-2 pb-lg lg:pb-sm">
+                  {%- for search_item in search.results -%}
+                    {%- render 'product-card', product: search_item -%}
+                  {%- endfor -%}
+                </div>
+
+                {%- render 'product-listing-pagination', type: 'more', paginate: paginate -%}
+
+              {%- endpaginate -%}
+            {%- else -%}
+              <div class="py-section text-center">
+                {{- 'search.nothing_found_try_another' | t: terms: search.terms -}}
+              </div>
+            {%- endif -%}
+          </div>
+        </div>
+      </section>
+
+  </facets-form>
+
+{%- else -%}
+  {%- liquid
+    assign empty_collection = settings.empty_state_collection
+  -%}
+  {%- if empty_collection != blank and empty_collection.products_count > 0 -%}
+    {%- render 'product-carousel',
+      carousel_collection: empty_collection,
+      heading: s.upsell_title -%}
+  {%- endif -%}
+{%- endif -%}
+{%- else -%}
+  {%- liquid
+    assign empty_collection = settings.empty_state_collection
+  -%}
+  {%- if empty_collection != blank and empty_collection.products_count > 0 -%}
+    {%- render 'product-carousel',
+      carousel_collection: empty_collection,
+      heading: s.upsell_title -%}
+  {%- endif -%}
+{%- endif -%}
+
+<script>
+  document.addEventListener('change', (event) => {
+    const details = event.target.closest('details');
+    if (details && event.target.name === 'sort_by') {
+      details.open = false;
+    }
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Search Page",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "filter_color_scheme",
+      "label": "Filter bar color scheme"
+    },
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "label": "Products per page",
+      "min": 8,
+      "max": 48,
+      "step": 4,
+      "default": 24
+    },
+    {
+      "type": "text",
+      "id": "upsell_title",
+      "label": "Upsell title",
+      "default": "You may like..."
+    }
+  ]
+}
+{% endschema %}

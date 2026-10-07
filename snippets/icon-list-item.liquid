@@ -1,0 +1,60 @@
+<!-- snippet: icon-list-item -->
+
+{% doc %}
+  Renders the inner content of a single icon-list block (icon + title + text + link).
+  Parent provides the wrapping <li>/<tarot-slide> with block.shopify_attributes.
+
+  Layout switches on alignment:
+    - 'center': flex column, icon stacked above text
+    - 'left':   flex row, icon beside text column
+
+  @param {object} block - Section block (required)
+  @param {string} align - 'center' or 'left' (required)
+
+  @example
+  {% render 'icon-list-item', block: block, align: 'center' %}
+{% enddoc %}
+
+{%- liquid
+  assign b = block.settings
+  if align == 'left'
+    assign wrap_class = 'flex items-start gap-6 text-left'
+    assign icon_spacing_class = ""
+    assign text_width_class = ""
+  else
+    assign wrap_class = 'flex flex-col gap-2 text-center items-center'
+    assign icon_spacing_class = "mb-6"
+    assign text_width_class = "max-w-[300] mx-auto"
+  endif
+-%}
+
+<div class="{{ wrap_class }}">
+  {% if b.icon != blank %}
+    <div class="icon-list-icon shrink-0 {{ icon_spacing_class }}">
+      {{ b.icon | image_url: width: 240 | image_tag: class: 'h-full w-auto object-contain', loading: 'lazy' }}
+    </div>
+  {% endif %}
+
+  {% if align == 'left' %}
+    <div class="flex-1 flex flex-col items-start gap-2">
+  {% endif %}
+
+    {% if b.title != blank %}
+      <div role="heading" aria-level="3" class="fs-display-6">
+        {{ b.title | escape }}
+      </div>
+    {% endif %}
+    {% if b.text != blank %}
+      <div class="rte {{ text_width_class }}">{{ b.text }}</div>
+    {% endif %}
+
+    {% if b.link_text != blank and b.link_url != blank %}
+      <a class="underline-button mt-2xs" href="{{ b.link_url }}">
+        {{ b.link_text | escape }}
+      </a>
+    {% endif %}
+
+  {% if align == 'left' %}
+    </div>
+  {% endif %}
+</div>

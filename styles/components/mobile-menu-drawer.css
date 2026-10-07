@@ -1,0 +1,60 @@
+mobile-menu-drawer {
+  position: fixed;
+  inset-inline-start: 0;
+  inset-inline-end: 0;
+  bottom: 0;
+  top: var(--mobile-menu-top, 50px);
+  z-index: 90;
+  display: block;
+  background: white;
+  transform: translateX(-100%);
+  transition: transform 220ms ease-out, visibility 0s linear 220ms;
+  visibility: hidden;
+  overflow: hidden;
+  overscroll-behavior: contain;
+  contain: layout paint;
+}
+
+mobile-menu-drawer[state="open"] {
+  transform: translateX(0);
+  visibility: visible;
+  transition: transform 220ms ease-out, visibility 0s linear 0s;
+}
+
+@media (min-width: 1024px) {
+  mobile-menu-drawer {
+    display: none;
+  }
+}
+
+mobile-menu-drawer panel-stack {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: white;
+}
+
+mobile-menu-drawer stack-panel {
+  background: white;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+mobile-menu-drawer stack-panel[handle="root"] {
+  display: flex;
+  flex-direction: column;
+}
+
+mobile-menu-drawer summary {
+  list-style: none;
+}
+
+mobile-menu-drawer summary::-webkit-details-marker {
+  display: none;
+}
+
+body:has(mobile-menu-drawer[state="open"]) {
+  overflow: hidden;
+  overscroll-behavior: none;
+}

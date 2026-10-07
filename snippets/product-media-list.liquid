@@ -1,0 +1,120 @@
+{%- comment -%}
+  Returns a string with the product media indexes
+  separated by space in the order they should be displayed.
+
+  Accepts:
+  - product: {Object}
+  - variant: {Object} optional
+  - selected_color: {String} optional - color name to filter media by; takes
+    precedence over the .selected option value / variant color detection.
+  - list_name: {String}
+    - full - all media for product page (default)
+    - featured - only featured media
+    - featured_hover - only featured and hover media
+{%- endcomment -%}
+
+{%- liquid
+  assign media_list = ''
+  assign counter = 0
+
+  if variant and variant.featured_media
+    assign featured_media = variant.featured_media
+  endif
+
+  # Determine the selected color for filtering. Prefer the color option's
+  # URL-selected value: Shopify marks the per-option value .selected from
+  # option_values even when the picked size/inseam combination resolves to NO
+  # variant (e.g. Grape + XSM, which was never created) — the exact case where
+  # `variant` comes back nil and we'd otherwise fall through to showing every
+  # color's media. Fall back to the resolved variant's color for ?variant=
+  # deep links and default-variant products.
+  # An explicit selected_color (e.g. the colorway color resolved on a color PLP
+  # card) takes precedence — it works regardless of Color's option position.
+  assign color_value = selected_color | default: '' | downcase | strip
+  if color_value == ''
+    for option in product.options_with_values
+      assign option_name_lower = option.name | downcase
+      if option_name_lower == 'color'
+        for value in option.values
+          if value.selected
+            assign color_value = value.name | downcase | strip
+            break
+          endif
+        endfor
+        if color_value == '' and variant
+          case option.position
+            when 1
+              assign color_value = variant.option1 | downcase | strip
+            when 2
+              assign color_value = variant.option2 | downcase | strip
+            when 3
+              assign color_value = variant.option3 | downcase | strip
+          endcase
+        endif
+        break
+      endif
+    endfor
+  endif
+
+  # Add featured media first
+  if featured_media
+    assign include_featured = true
+
+    if color_value != ''
+      assign featured_alt = featured_media.alt | default: ''
+      if featured_alt contains '::'
+        assign featured_color = featured_alt | split: '::' | last | strip | downcase
+        unless featured_color == color_value
+          assign include_featured = false
+        endunless
+      endif
+    endif
+
+    if include_featured
+      assign index = featured_media.position | minus: 1
+      assign media_list = media_list | append: index | append: ' '
+      assign counter = counter | plus: 1
+    endif
+  endif
+
+  for media in product.media
+    if list_name == 'featured' and counter >= 1
+      break
+    endif
+
+    if list_name == 'featured_hover' and counter >= 2
+      break
+    endif
+
+    if media.id == featured_media.id
+      continue
+    endif
+
+    # Filter by color
+    if color_value != ''
+      assign media_alt = media.alt | default: ''
+      if media_alt contains '::'
+        assign media_color = media_alt | split: '::' | last | strip | downcase
+        unless media_color == color_value
+          continue
+        endunless
+      endif
+    endif
+
+    assign index = media.position | minus: 1
+    assign media_list = media_list | append: index | append: ' '
+    assign counter = counter | plus: 1
+  endfor
+
+  # Fallback: if filtering produced no results, include all media
+  if counter == 0
+    assign media_list = ''
+    for media in product.media
+      assign index = media.position | minus: 1
+      assign media_list = media_list | append: index | append: ' '
+    endfor
+  endif
+
+  assign media_list = media_list | strip
+  echo media_list
+-%}

@@ -1,0 +1,251 @@
+<!-- section: apps -->
+
+{%- liquid
+  assign s = section.settings
+
+  assign max_width_class = ''
+  assign max_width_style = ''
+  if s.max_width == 'container'
+    assign max_width_class = 'max-w-container mx-auto'
+  elsif s.max_width == 'custom' and s.max_width_custom != blank
+    assign max_width_class = 'mx-auto'
+    assign safe_custom = s.max_width_custom | escape
+    assign max_width_style = 'max-width: ' | append: safe_custom | append: ';'
+  endif
+
+  assign side_padding_class = ''
+  if s.side_padding
+    assign side_padding_class = 'px-gutter'
+  endif
+
+  assign pt_class = ''
+  case s.padding_top
+    when 'medium'
+      assign pt_class = 'pt-md'
+    when 'large'
+      assign pt_class = 'pt-lg'
+  endcase
+
+  assign pb_class = ''
+  case s.padding_bottom
+    when 'medium'
+      assign pb_class = 'pb-md'
+    when 'large'
+      assign pb_class = 'pb-lg'
+  endcase
+
+  assign align_text_class = ''
+  if s.align_text == 'center'
+    assign align_text_class = 'text-center'
+  endif
+
+  assign heading_class = 'fs-display-2'
+  if s.heading_size == '3'
+    assign heading_class = 'fs-display-3'
+  endif
+
+  assign min_height_style = ''
+  if s.min_height != blank
+    assign min_height_style = 'min-height: ' | append: s.min_height | append: ';'
+  endif
+-%}
+
+<section
+  id="{{ s.section_id }}"
+  class="color-{{ s.color_scheme }} overflow-hidden {{ side_padding_class }}"
+  style="{{ min_height_style }}">
+  <div
+    class="{{ max_width_class }}  {{ pt_class }} {{ pb_class }}"
+    style="{{ max_width_style }}">
+
+    {% if s.heading != blank %}
+      <div
+        role="heading"
+        aria-level="{{ s.heading_size }}"
+        class="{{ heading_class }} mb-md {{ align_text_class }}">
+        {{ s.heading | escape }}
+      </div>
+    {% endif %}
+
+    {%- for block in section.blocks -%}
+      {%- if block.type == '@app' -%}
+        {% render block %}
+      {%- elsif block.type == 'raw_html' -%}
+        {%- assign b = block.settings -%}
+        <div class="mb-md last:mb-0" {{ block.shopify_attributes }}>
+          {% if b.heading != blank %}
+            <div role="heading" aria-level="3" class="fs-display-3 mb-sm">
+              {{ b.heading | escape }}
+            </div>
+          {% endif %}
+          {{ b.html }}
+        </div>
+      {%- endif -%}
+    {%- endfor -%}
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Apps",
+  "settings": [
+    {
+      "type": "text",
+      "id": "section_id",
+      "label": "Section ID",
+      "info": "Add an ID to this section so you can link to it in a URL like #reviews"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme"
+    },
+    {
+      "type": "select",
+      "id": "max_width",
+      "label": "Max width",
+      "options": [
+        {
+          "value": "full-width",
+          "label": "Full width"
+        },
+        {
+          "value": "container",
+          "label": "Container"
+        },
+        {
+          "value": "custom",
+          "label": "Custom"
+        }
+      ],
+      "default": "container"
+    },
+    {
+      "type": "text",
+      "id": "max_width_custom",
+      "label": "Custom max width",
+      "info": "Any CSS length, e.g. 960px, 70rem, 90vw.",
+      "visible_if": "{{ section.settings.max_width == 'custom' }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "side_padding",
+      "label": "Add side padding",
+      "default": true,
+      "info": "Adds horizontal gutter padding inside the container."
+    },
+    {
+      "type": "select",
+      "id": "padding_top",
+      "label": "Top padding",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "medium",
+          "label": "Medium"
+        },
+        {
+          "value": "large",
+          "label": "Large"
+        }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "medium",
+          "label": "Medium"
+        },
+        {
+          "value": "large",
+          "label": "Large"
+        }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "text",
+      "id": "min_height",
+      "label": "Min Height",
+      "info": "Setting a min height helps with CLS scores on Google Pagespeed. You can enter '500px' or '100vh'."
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading size",
+      "options": [
+        {
+          "value": "2",
+          "label": "H2"
+        },
+        {
+          "value": "3",
+          "label": "H3"
+        }
+      ],
+      "default": "2"
+    },
+    {
+      "type": "select",
+      "id": "align_text",
+      "label": "Align text",
+      "options": [
+        {
+          "value": "left",
+          "label": "left"
+        },
+        {
+          "value": "center",
+          "label": "center"
+        }
+      ],
+      "default": "left"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "@app"
+    },
+    {
+      "type": "raw_html",
+      "name": "Raw HTML",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading"
+        },
+        {
+          "type": "liquid",
+          "id": "html",
+          "label": "HTML",
+          "info": "Paste any HTML or embed code. Liquid is supported."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Apps",
+      "category": "Custom"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,86 @@
+<!-- section: main-404 -->
+
+{%- liquid
+  assign s = section.settings
+-%}
+
+<section class="color-{{ s.color_scheme }} py-section">
+  <div class="container flex flex-col items-center text-center">
+
+    {% if s.image != blank %}
+      {%- capture content -%}
+        {{- s.image
+          | image_url: width: 800
+          | image_tag:
+              class: 'w-full h-full object-cover',
+              loading: 'lazy',
+              sizes: '(min-width: 1024px) 32rem, 100vw',
+              widths: '400, 600, 800'
+        -}}
+      {%- endcapture -%}
+      <div class="w-full max-w-lg mb-md">
+        {%- render 'media-loader', content: content, show_skeleton: true -%}
+      </div>
+    {% endif %}
+
+    {% if s.content_title != blank %}
+      <div role="heading" aria-level="1" class="fs-display-1 mb-sm text-pretty">
+        {{- s.content_title | escape -}}
+      </div>
+    {% endif %}
+
+    {% if s.content_text != blank %}
+      <div class="rte text-pretty mb-md max-w-xl">
+        {{- s.content_text -}}
+      </div>
+    {% endif %}
+
+    {% if s.content_button_label != blank %}
+      <a class="button button-lg" href="{{ s.content_button_url }}">
+        {{- s.content_button_label | escape -}}
+      </a>
+    {% endif %}
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "404",
+  "settings": [
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme" },
+
+    { "type": "header", "content": "Content" },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "content_title",
+      "label": "Title",
+      "default": "404"
+    },
+    {
+      "type": "text",
+      "id": "content_text",
+      "label": "Text",
+      "default": "Oops, Nothing found."
+    },
+
+    { "type": "header", "content": "Button" },
+    {
+      "type": "text",
+      "id": "content_button_label",
+      "label": "Button text",
+      "default": "Back to Home"
+    },
+    {
+      "type": "url",
+      "id": "content_button_url",
+      "label": "Button URL"
+    }
+  ]
+}
+{% endschema %}

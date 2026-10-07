@@ -1,0 +1,42 @@
+{%- comment -%}
+  Render a subcollections link for a collection
+  Accepts:
+  - collection {Object}: Shopify Collection object
+{%- endcomment -%}
+
+{%- liquid
+  capture subcollections_html
+    for subcollection_item in collection.metafields.subcollection.items.value
+      if subcollection_item.metafields.subcollection.image
+        render 'subcollection-item', item: subcollection_item, is_duplicate: is_duplicate
+      endif
+    endfor
+  endcapture
+-%}
+
+{%- if subcollections_html != '' -%}
+  <swiper-loader class="subcollections-list" loaded-class="subcollections-list-swiper-inited">
+    <swiper-container init="false" class="subcollections-list__wrapper">
+      <script type="application/json" data-json-params>
+        {
+          "slidesPerView": "auto",
+          "centeredSlides": false,
+          "centerInsufficientSlides": true,
+          "scrollbar": false,
+          "breakpoints": {
+            "768": {
+              "centeredSlides": false,
+              "centerInsufficientSlides": true,
+              "loop": false,
+              "scrollbar": {
+                "el": ".subcollections-list__scrollbar"
+              }
+            }
+          }
+        }
+      </script>
+      {{ subcollections_html }}
+    </swiper-container>
+    <div class="subcollections-list__scrollbar"></div>
+  </swiper-loader>
+{%- endif -%}

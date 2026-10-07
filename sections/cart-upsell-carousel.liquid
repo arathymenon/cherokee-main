@@ -1,0 +1,143 @@
+
+{% doc %}
+  Standalone section fetched via the Section Rendering API by the
+  <html-fetcher id="cart-upsell-carousel-fetcher"> host in cart-dialog.liquid.
+  The `recommendations` object only resolves here because the request
+  carries ?section_id= & product_id=. Renders recommendations.products
+  (deduped against the cart, max 4) as a 1-up tarot carousel of
+  interactive cart-upsell cards.
+{% enddoc %}
+
+{%- if settings.cart_upsell_carousel_enabled -%}
+  {%- liquid
+    assign heading = settings.cart_upsell_carousel_title | default: 'You might also like'
+
+    # Comma-bounded list of product ids already in the cart, for dedupe.
+    assign cart_pids = ','
+    for item in cart.items
+      assign cart_pids = cart_pids | append: item.product_id | append: ','
+    endfor
+
+    # Product types never eligible for the cart upsell (config SKUs, gift cards).
+    assign disabled_types = "embroidery config,gift cards" | split: ","
+
+    # Count eligible recommendations, capped at 4. A product is ineligible if it
+    # is already in the cart, is a set/bundle (would need per-component variant
+    # selection inline), or is an embroidery-config / gift-card product.
+    assign upsell_count = 0
+    if recommendations.performed?
+      for product in recommendations.products
+        capture pid_token
+          echo ','
+          echo product.id
+          echo ','
+        endcapture
+        assign product_type_lc = product.type | downcase
+        assign eligible = true
+        if cart_pids contains pid_token
+          assign eligible = false
+        elsif product.metafields.bundle.products.value.size > 0
+          assign eligible = false
+        elsif product.gift_card? or disabled_types contains product_type_lc
+          assign eligible = false
+        endif
+        if eligible and upsell_count < 4
+          assign upsell_count = upsell_count | plus: 1
+        endif
+      endfor
+    endif
+  -%}
+
+  <html-fetcher  class="block">
+    {%- if recommendations.performed? and upsell_count > 0 -%}
+      <!-- section: cart-upsell-carousel -->
+
+      <div class="bg-grey-light pb-sm -mt-0.5">
+
+        <tarot-carousel class="block [--color-pagination-dot:white]">
+          <script type="application/json" data-tarot-options>
+            {
+              "loop": false,
+              "gap": "8px",
+              "slidesPerView": 1,
+              "paddingLeft": "20px",
+              "paddingRight": "20px",
+              "navigation": {
+                "showButtons": true,
+                "showPagination": true
+              },
+              "breakpoints": {
+                "1024": {
+                  "gap": "16px",
+                  "paddingLeft": "40px",
+                  "paddingRight": "40px"
+                }
+              }
+            }
+          </script>
+
+           {%- # Header: title left, desktop-only prev/next arrows right -%}
+          <div class="flex items-center justify-between gap-4 px-gutter
+            pt-md pb-sm md:pt-sm md:pb-xs">
+            <div role="heading" aria-level="3" class="fs-display-6">{{ heading }}</div>
+            <div class="hidden lg:has-[button:not(:disabled)]:flex items-center gap-1 shrink-0">
+              <button
+                class="tarot-button tarot-prev {{ prev_class }} h-10 w-10"
+                data-action-tarot-previous
+                aria-label="Previous">
+                {{ 'icon-angle-left.svg' | inline_asset_content }}
+              </button>
+              <button
+                class="tarot-button tarot-next {{ next_class }} h-10 w-10"
+                data-action-tarot-next
+                aria-label="Next">
+                {{ 'icon-angle-right.svg' | inline_asset_content }}
+              </button>
+            </div>
+          </div>
+
+          <tarot-viewport>
+            <tarot-track>
+              {%- assign shown = 0 -%}
+              {%- for product in recommendations.products -%}
+                {%- capture pid_token -%},{{ product.id }},{%- endcapture -%}
+                {%- assign product_type_lc = product.type | downcase -%}
+                {%- liquid
+                  assign eligible = true
+                  if cart_pids contains pid_token
+                    assign eligible = false
+                  elsif product.metafields.bundle.products.value.size > 0
+                    assign eligible = false
+                  elsif product.gift_card? or disabled_types contains product_type_lc
+                    assign eligible = false
+                  endif
+                -%}
+                {%- if eligible and shown < 4 -%}
+                  <tarot-slide>
+                    {%- render 'cart-upsell-card', product: product -%}
+                  </tarot-slide>
+                  {%- assign shown = shown | plus: 1 -%}
+                {%- endif -%}
+              {%- endfor -%}
+            </tarot-track>
+          </tarot-viewport>
+
+          <div data-tarot-pagination class="flex justify-center gap-2 py-sm"></div>
+        </tarot-carousel>
+
+      </div>
+
+    {%- endif -%}
+  </html-fetcher>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Cart: You might also like",
+  "settings": [],
+  "blocks": [],
+  "disabled_on": {
+    "groups": ["*"]
+  }
+}
+{% endschema %}

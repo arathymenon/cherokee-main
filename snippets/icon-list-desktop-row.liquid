@@ -1,0 +1,27 @@
+<!-- snippet: icon-list-desktop-row -->
+
+{% doc %}
+  Desktop horizontal-row layout for the icon-list section.
+  Header centered above a responsive grid: 2 cols at md, 4 cols at lg.
+  No section image. Items always center-aligned.
+  Parent should wrap with `hidden md:block`.
+
+  @param {object} section - Shopify section object (required)
+
+  @example
+  {% render 'icon-list-desktop-row', section: section %}
+{% enddoc %}
+
+{%- assign s = section.settings -%}
+
+{% render 'icon-list-header', eyebrow: s.eyebrow, headline: s.heading, align: 'center' %}
+
+{% if section.blocks.size > 0 %}
+  <ul class="grid grid-cols-2 lg:grid-cols-4 gap-4 max-w-[1248px] mx-auto">
+    {% for block in section.blocks %}
+      <li class="py-sm max-w-[300px] mx-auto" {{ block.shopify_attributes }}>
+        {% render 'icon-list-item', block: block, align: 'center' %}
+      </li>
+    {% endfor %}
+  </ul>
+{% endif %}

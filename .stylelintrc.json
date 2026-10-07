@@ -1,0 +1,23 @@
+{
+  "extends": [
+    "stylelint-config-standard",
+    "stylelint-prettier/recommended"
+  ],
+  "defaultSeverity": "warning",
+  "ignoreFiles": ["assets/*.css", "snippets/*.css.liquid"],
+  "rules": {
+    "at-rule-no-unknown": [true, {
+      "ignoreAtRules": ["theme", "utility", "variant", "custom-variant", "plugin", "config", "tailwind", "apply", "layer", "screen", "starting-style"]
+    }],
+    "selector-class-pattern": null,
+    "selector-no-qualifying-type": null,
+    "function-no-unknown": null,
+    "max-nesting-depth": 3,
+    "no-descending-specificity": null,
+    "no-duplicate-selectors": null,
+    "declaration-block-no-redundant-longhand-properties": null,
+    "custom-property-pattern": null,
+    "property-no-unknown": null,
+    "no-empty-source": null
+  }
+}

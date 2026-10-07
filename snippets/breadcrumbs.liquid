@@ -1,0 +1,200 @@
+{% comment %}
+  Breadcrumbs
+
+  @param {boolean} [without_schema] - If true, will not output JSON-LD schema
+{% endcomment %}
+
+{% liquid
+  assign schema_position_counter = 2
+  assign schema_list = ''
+%}
+
+<div class="container empty:hidden">
+  <nav class="breadcrumbs fs-body-sm py-2" aria-label="Breadcrumbs">
+    <ul>
+      <li>
+        <a href="{{ routes.root_url }}">{{- 'accessibility.home' | t -}}</a>
+      </li>
+
+      {%- case template.name -%}
+        {%- when 'index' -%}
+        {%- when 'page' -%}
+          <li>
+            <span>{{ page.title | escape }}</span>
+          </li>
+          {%- capture schema_list_item -%}
+            ,{
+              "@type": "ListItem",
+              "position": {{ schema_position_counter }},
+              "name": {{ page.title | json }},
+              "item": {{ request.origin | append: page.url | json }}
+            }
+          {%- endcapture -%}
+          {%- assign schema_list = schema_list | append: schema_list_item -%}
+          {%- assign schema_position_counter = schema_position_counter | plus: 1 -%}
+
+        {%- when 'search' -%}
+          {%- if search.terms != blank -%}
+            {%- assign search_label = 'general.search.breadcrumbs.terms' | t: terms: search.terms -%}
+          {%- else -%}
+            {%- assign search_label = 'general.search.breadcrumbs.no_terms' | t -%}
+          {%- endif -%}
+          <li>
+            <span>{{ search_label }}</span>
+          </li>
+          {%- capture schema_list_item -%}
+            ,{
+              "@type": "ListItem",
+              "position": {{ schema_position_counter }},
+              "name": {{ search_label | json }}
+            }
+          {%- endcapture -%}
+          {%- assign schema_list = schema_list | append: schema_list_item -%}
+          {%- assign schema_position_counter = schema_position_counter | plus: 1 -%}
+
+        {%- when 'product' -%}
+          {%- if collection.url -%}
+            <li>{{ collection.title | link_to: collection.url }}</li>
+            {%- capture schema_list_item -%}
+              ,{
+                "@type": "ListItem",
+                "position": {{ schema_position_counter }},
+                "name": {{ collection.title | json }},
+                "item": {{ request.origin | append: collection.url | json }}
+              }
+            {%- endcapture -%}
+            {%- assign schema_list = schema_list | append: schema_list_item -%}
+            {%- assign schema_position_counter = schema_position_counter | plus: 1 -%}
+          {%- endif -%}
+          <li>
+            <span>{%- render 'product-title', product: product -%}</span>
+          </li>
+          {%- capture schema_list_item -%}
+            ,{
+              "@type": "ListItem",
+              "position": {{ schema_position_counter }},
+              "name": {{ product.title | json }},
+              "item": {{ request.origin | append: product.url | json }}
+            }
+          {%- endcapture -%}
+          {%- assign schema_list = schema_list | append: schema_list_item -%}
+          {%- assign schema_position_counter = schema_position_counter | plus: 1 -%}
+
+        {%- when 'blog' -%}
+          {%- if current_tags -%}
+            <li>{{ blog.title | link_to: blog.url }}</li>
+            {%- capture schema_list_item -%}
+              ,{
+                "@type": "ListItem",
+                "position": {{ schema_position_counter }},
+                "name": {{ blog.title | json }},
+                "item": {{ request.origin | append: blog.url | json }}
+              }
+            {%- endcapture -%}
+            {%- assign schema_list = schema_list | append: schema_list_item -%}
+            {%- assign schema_position_counter = schema_position_counter | plus: 1 -%}
+
+            {%- assign tags_label = current_tags | join: ', ' -%}
+            <li>
+              <span>{{ tags_label }}</span>
+            </li>
+            {%- capture schema_list_item -%}
+              ,{
+                "@type": "ListItem",
+                "position": {{ schema_position_counter }},
+                "name": {{ tags_label | json }}
+              }
+            {%- endcapture -%}
+            {%- assign schema_list = schema_list | append: schema_list_item -%}
+            {%- assign schema_position_counter = schema_position_counter | plus: 1 -%}
+          {%- else -%}
+            <li>
+              <span>{{ blog.title | escape }}</span>
+            </li>
+            {%- capture schema_list_item -%}
+              ,{
+                "@type": "ListItem",
+                "position": {{ schema_position_counter }},
+                "name": {{ blog.title | json }},
+                "item": {{ request.origin | append: blog.url | json }}
+              }
+            {%- endcapture -%}
+            {%- assign schema_list = schema_list | append: schema_list_item -%}
+            {%- assign schema_position_counter = schema_position_counter | plus: 1 -%}
+          {%- endif -%}
+
+        {%- when 'article' -%}
+          <li>{{ blog.title | link_to: blog.url }}</li>
+          {%- capture schema_list_item -%}
+            ,{
+              "@type": "ListItem",
+              "position": {{ schema_position_counter }},
+              "name": {{ blog.title | json }},
+              "item": {{ request.origin | append: blog.url | json }}
+            }
+          {%- endcapture -%}
+          {%- assign schema_list = schema_list | append: schema_list_item -%}
+          {%- assign schema_position_counter = schema_position_counter | plus: 1 -%}
+
+          <li>
+            <span>{{ article.title | escape }}</span>
+          </li>
+          {%- capture schema_list_item -%}
+            ,{
+              "@type": "ListItem",
+              "position": {{ schema_position_counter }},
+              "name": {{ article.title | json }}
+            }
+          {%- endcapture -%}
+          {%- assign schema_list = schema_list | append: schema_list_item -%}
+          {%- assign schema_position_counter = schema_position_counter | plus: 1 -%}
+
+        {%- when 'collection' -%}
+          <li aria-current="page">
+            <span> {{ collection.title | escape }}</span>
+          </li>
+          {%- capture schema_list_item -%}
+            ,{
+              "@type": "ListItem",
+              "position": {{ schema_position_counter }},
+              "name": {{ collection.title | json }}
+            }
+          {%- endcapture -%}
+          {%- assign schema_list = schema_list | append: schema_list_item -%}
+          {%- assign schema_position_counter = schema_position_counter | plus: 1 -%}
+
+        {%- else -%}
+          <li aria-current="page">
+            <span> {{ page_title | escape }}</span>
+          </li>
+          {%- capture schema_list_item -%}
+            ,{
+              "@type": "ListItem",
+              "position": {{ schema_position_counter }},
+              "name": {{ page_title | json }}
+            }
+          {%- endcapture -%}
+          {%- assign schema_list = schema_list | append: schema_list_item -%}
+          {%- assign schema_position_counter = schema_position_counter | plus: 1 -%}
+      {% endcase %}
+    </ul>
+  </nav>
+</div>
+
+{%- if without_schema != true and schema_list != '' -%}
+  <script type="application/ld+json">
+    {
+      "@context": "http://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": {{ 'accessibility.home' | t | json }},
+          "item": {{ request.origin | append: routes.root_url | json }}
+        }
+        {{ schema_list | strip }}
+      ]
+    }
+  </script>
+{%- endif -%}

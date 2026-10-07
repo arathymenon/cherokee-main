@@ -1,0 +1,64 @@
+@layer base {
+  /* Hide number spinner (Firefox + standard) */
+  input[type="number"] {
+    appearance: textfield;
+    appearance: textfield;
+  }
+
+  /* Hide number spinner (WebKit/Blink) */
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    appearance: none;
+    appearance: none;
+    margin: 0;
+  }
+}
+
+@layer components {
+  .quantity-input {
+    border: 1px solid oklch(var(--color-input-border) / var(--tw-border-opacity));
+    display: flex;
+    align-items: stretch;
+    height: 100%;
+    border-radius: 5rem;
+    overflow: hidden;
+    transition: border 300ms ease-out;
+
+    &:hover,
+    &:has(input:focus),
+    &:has(button:focus) {
+      border: 1px solid oklch(var(--color-foreground));
+    }
+  }
+
+  .quantity-input__button {
+    /* width: 2.5rem; */
+    padding-inline: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+  }
+
+  .quantity-input__button[data-ajax-cart-quantity-minus] {
+    padding-right: 8px;
+  }
+
+  .quantity-input__button[data-ajax-cart-quantity-plus] {
+    padding-left: 8px;
+  }
+
+  .quantity-input__input {
+    font-size: 12px;
+    border: none;
+    text-align: center;
+    flex: 1;
+    min-width: 1rem;
+    width: 1px;
+  }
+}

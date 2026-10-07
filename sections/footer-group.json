@@ -1,0 +1,36 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "type": "footer",
+  "name": "Footer group",
+  "sections": {
+    "footer": {
+      "type": "footer",
+      "custom_css": [
+        "input.go1700428545 {border-bottom: 1px solid #fff; padding: 0;}",
+        "#kl_Gender__3_label {font-weight: 400;}",
+        ".go2249105972.go2249105972.go2249105972 svg {stroke: #fff;}",
+        ".klaviyo-form-button {min-width: 120px; font-weight: 600;}"
+      ],
+      "settings": {
+        "color_scheme": "scheme-dark-blue-bg",
+        "newsletter_title": "Stay in the know",
+        "newsletter_embed": "<div class=\"klaviyo-form-R8NRr5\"></div>",
+        "newsletter_min_height": "232px",
+        "footer_menu": "footer",
+        "subfooter_menu": "subfooter",
+        "social_menu": "social-links"
+      }
+    }
+  },
+  "order": [
+    "footer"
+  ]
+}

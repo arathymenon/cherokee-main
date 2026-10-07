@@ -1,0 +1,25 @@
+{% comment %}
+  Renders rte link colors
+  Accepts:
+  - color: {String} var(--color-accent) | #fff
+  - button_type {String} primary-button | primary-button primary-button--outline
+
+  Usage:
+  {%- render 'get-rte-link-colors', color: '#fff'; -%}
+{% endcomment %}
+{% comment %} [TODO] add css vars{% endcomment %}
+{%- liquid
+  assign hover_color = '#757575'
+  assign visited_color = '#1F2A2F'
+
+  case color
+    when 'main'
+      assign visited_color = '#CB9F06'
+      assign hover_color = '#FFE795'
+    when 'white'
+      assign visited_color = '#8F8F8F'
+      assign hover_color = '#F2F2F2'
+  endcase
+
+  echo hover_color | append: '|' | append: visited_color
+-%}

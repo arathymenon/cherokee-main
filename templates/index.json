@@ -1,0 +1,551 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "hero_banner_4iYHXM": {
+      "type": "hero-banner",
+      "settings": {
+        "color_scheme": "scheme-dark",
+        "transparent_header": true,
+        "width": "full-width",
+        "add_padding": false,
+        "section_height": 75,
+        "horizontal_position": "justify-center",
+        "vertical_position": "items-center",
+        "text_alignment": "text-center",
+        "video": "shopify://files/videos/ck-hero-brand-film-20260603.mp4",
+        "mobile_video": "shopify://files/videos/ck-mobile-hero-brand-film-20260603.mp4",
+        "overlay_color": "#000000",
+        "overlay_opacity": 10,
+        "eyebrow": "",
+        "heading": "ONE FOR ALL",
+        "use_h1": false,
+        "heading_tag": "1",
+        "content_image_max_height": 100,
+        "richtext": "<p>Trusted by the team. Built for the shift.</p>",
+        "fine_print": "",
+        "button_1_text": "WOMEN",
+        "button_1_link": "shopify://collections/womens-scrubs",
+        "button_1_style": "button button-outline-white",
+        "button_2_text": "MEN",
+        "button_2_link": "shopify://collections/mens-scrubs",
+        "button_2_style": "button button-outline-white"
+      },
+      "disabled": true
+    },
+    "hero_banner_e6xMMd": {
+      "type": "hero-banner",
+      "name": "Hero Banner [sale]",
+      "settings": {
+        "color_scheme": "scheme-dark",
+        "transparent_header": true,
+        "width": "full-width",
+        "add_padding": false,
+        "section_height": 75,
+        "horizontal_position": "justify-center",
+        "vertical_position": "items-center",
+        "text_alignment": "text-center",
+        "image": "shopify://shop_images/ck-hp-hero-2-day-sale-20261006.jpg",
+        "mobile_image": "shopify://shop_images/ck-hp-hero-mobile-2-day-sale-20261006.jpg",
+        "overlay_color": "#000000",
+        "overlay_opacity": 45,
+        "eyebrow": "",
+        "heading": "TWO-DAY SALE",
+        "use_h1": false,
+        "heading_tag": "1",
+        "content_image_max_height": 100,
+        "richtext": "<p>20% off* everything. Up to 40% off prints, underscrubs and socks.</p>",
+        "fine_print": "*Sale excludes WW Originals Ultra. Ends 10-07-26.",
+        "button_1_text": "WOMEN' SALE",
+        "button_1_link": "shopify://collections/womens-sale",
+        "button_1_style": "button",
+        "button_2_text": "MEN'S SALE",
+        "button_2_link": "shopify://collections/mens-sale",
+        "button_2_style": "button"
+      }
+    },
+    "spacer_Kfknpw": {
+      "type": "spacer",
+      "disabled": true,
+      "name": "Spacer",
+      "settings": {
+        "height": 32
+      }
+    },
+    "hero_banner_Nm3CQU": {
+      "type": "hero-banner",
+      "disabled": true,
+      "name": "Hero Banner [GWP]",
+      "settings": {
+        "color_scheme": "scheme-dark",
+        "transparent_header": true,
+        "width": "full-width",
+        "add_padding": false,
+        "section_height": 30,
+        "horizontal_position": "justify-center",
+        "vertical_position": "items-center",
+        "text_alignment": "text-center",
+        "overlay_color": "#000000",
+        "overlay_opacity": 45,
+        "eyebrow": "",
+        "heading": "No Tricks - Just a Free Top",
+        "use_h1": false,
+        "heading_tag": "2",
+        "content_image_max_height": 100,
+        "richtext": "<p>Spend $50 and a get a Halloween scrub top on us. Use code: FALLGIFT at checkout.&nbsp;</p>",
+        "fine_print": "",
+        "button_1_text": "SHOP NOW",
+        "button_1_link": "shopify://collections/halloween-print-scrubs",
+        "button_1_style": "button",
+        "button_2_text": "",
+        "button_2_link": "shopify://collections/mens-sale",
+        "button_2_style": "button"
+      }
+    },
+    "featured_collection_HjDRXE": {
+      "type": "featured-collection",
+      "disabled": true,
+      "name": "Halloween Collection [GWP]",
+      "settings": {
+        "color_scheme": "",
+        "heading": "Halloween Collection",
+        "text": "",
+        "collection": "halloween-print-scrubs",
+        "products_to_show": 12,
+        "loop": false,
+        "button_link": "shopify://collections/halloween-print-scrubs",
+        "button_text": "Learn More",
+        "slides_per_view_tablet": 2,
+        "slides_per_view_laptop": 3,
+        "slides_per_view_desktop": 4
+      }
+    },
+    "collection_list_carousel_nPENBw": {
+      "type": "collection-list-carousel",
+      "blocks": {
+        "collection_DXNpV7": {
+          "type": "collection",
+          "settings": {
+            "collection": "womens-scrub-tops",
+            "custom_title": "SCRUB TOPS",
+            "image": "shopify://shop_images/ck-cat-tops-20260602.jpg"
+          }
+        },
+        "collection_PAMWTm": {
+          "type": "collection",
+          "settings": {
+            "collection": "womens-scrub-pants",
+            "custom_title": "SCRUB PANTS",
+            "image": "shopify://shop_images/ck-cat-pants-20260602.jpg"
+          }
+        },
+        "collection_xYr9yB": {
+          "type": "collection",
+          "settings": {
+            "collection": "womens-scrubs-sets",
+            "custom_title": "SCRUB SETS",
+            "image": "shopify://shop_images/ck-cat-sets-20260602.jpg"
+          }
+        },
+        "collection_638Rjx": {
+          "type": "collection",
+          "settings": {
+            "collection": "womens-print-scrubs",
+            "custom_title": "PRINTS",
+            "image": "shopify://shop_images/ck-cat-prints-20260602.jpg"
+          }
+        },
+        "collection_nVPiDg": {
+          "type": "collection",
+          "settings": {
+            "collection": "womens-scrub-jackets",
+            "custom_title": "SCRUB JACKETS",
+            "image": "shopify://shop_images/ck-cat-jackets-20260602.jpg"
+          }
+        },
+        "collection_gykBMi": {
+          "type": "collection",
+          "settings": {
+            "collection": "womens-lab-coats",
+            "custom_title": "LAB COATS",
+            "image": "shopify://shop_images/ck-cat-labcoats-20260602.jpg"
+          }
+        }
+      },
+      "block_order": [
+        "collection_DXNpV7",
+        "collection_PAMWTm",
+        "collection_xYr9yB",
+        "collection_638Rjx",
+        "collection_nVPiDg",
+        "collection_gykBMi"
+      ],
+      "name": "Collection List Carousel",
+      "settings": {
+        "color_scheme": "",
+        "use_max_width": false,
+        "eyebrow": "",
+        "heading": "Shop by Category",
+        "richtext": "",
+        "carousel_loop": true,
+        "slides_per_view_tablet": 3,
+        "slides_per_view_laptop": 4,
+        "slides_per_view_desktop": 5
+      }
+    },
+    "shop_by_color_hQkMdR": {
+      "type": "shop-by-color",
+      "blocks": {
+        "collection_wNAa4N": {
+          "type": "collection",
+          "settings": {
+            "collection": "womens-black-scrubs",
+            "label_override": "",
+            "color_override": ""
+          }
+        },
+        "collection_ppWCyc": {
+          "type": "collection",
+          "settings": {
+            "collection": "womens-navy-blue-scrubs",
+            "label_override": "",
+            "color_override": ""
+          }
+        },
+        "collection_473aAk": {
+          "type": "collection",
+          "settings": {
+            "collection": "womens-grey-scrubs",
+            "label_override": "",
+            "color_override": ""
+          }
+        },
+        "collection_4fVMWM": {
+          "type": "collection",
+          "settings": {
+            "collection": "womens-royal-blue-scrubs",
+            "label_override": "",
+            "color_override": ""
+          }
+        },
+        "collection_g8M6GH": {
+          "type": "collection",
+          "settings": {
+            "collection": "womens-green-scrubs",
+            "label_override": "",
+            "color_override": ""
+          }
+        },
+        "collection_aixhjE": {
+          "type": "collection",
+          "settings": {
+            "collection": "womens-ceil-blue-scrubs",
+            "label_override": "",
+            "color_override": ""
+          }
+        },
+        "collection_DKjTr8": {
+          "type": "collection",
+          "settings": {
+            "collection": "womens-white-scrubs",
+            "label_override": "",
+            "color_override": ""
+          }
+        },
+        "collection_Gd6QCQ": {
+          "type": "collection",
+          "settings": {
+            "collection": "womens-khaki-scrubs",
+            "label_override": "",
+            "color_override": ""
+          }
+        },
+        "collection_bCc64E": {
+          "type": "collection",
+          "settings": {
+            "collection": "womens-caribbean-blue-scrubs",
+            "label_override": "",
+            "color_override": ""
+          }
+        }
+      },
+      "block_order": [
+        "collection_wNAa4N",
+        "collection_ppWCyc",
+        "collection_473aAk",
+        "collection_4fVMWM",
+        "collection_g8M6GH",
+        "collection_aixhjE",
+        "collection_DKjTr8",
+        "collection_Gd6QCQ",
+        "collection_bCc64E"
+      ],
+      "name": "Shop by Color",
+      "settings": {
+        "color_scheme": "",
+        "eyebrow": "",
+        "heading": "Shop by Color",
+        "richtext": "",
+        "products_to_show": 10,
+        "loop": true,
+        "button_text": "Shop this color",
+        "slides_per_view_tablet": 4,
+        "slides_per_view_laptop": 5,
+        "slides_per_view_desktop": 5
+      }
+    },
+    "image_collage_LRGgMz": {
+      "type": "image-collage",
+      "blocks": {
+        "content_kD3Dp4": {
+          "type": "content",
+          "settings": {
+            "color_scheme": "scheme-dark",
+            "image": "shopify://shop_images/ww-originals-ultra-women-3x4.png",
+            "overlay_color": "#000000",
+            "overlay_opacity": 0,
+            "eyebrow": "WW ORIGINALS ULTRA",
+            "heading": "Built to Last.",
+            "button_1_text": "SHOP WOMEN",
+            "button_1_link": "shopify://collections/workwear-originals-ultra-womens-scrubs",
+            "button_1_style": "button button-outline-white",
+            "button_2_text": "",
+            "button_2_link": "shopify://collections",
+            "button_2_style": "button button-outline-white"
+          }
+        },
+        "content_3c7rxH": {
+          "type": "content",
+          "settings": {
+            "color_scheme": "scheme-dark",
+            "image": "shopify://shop_images/ww-originals-ultra-men-3x4.png",
+            "overlay_color": "#000000",
+            "overlay_opacity": 0,
+            "eyebrow": "WW ORIGINALS ULTRA",
+            "heading": "Dependable, Shift After Shift.",
+            "button_1_text": "SHOP MEN",
+            "button_1_link": "shopify://collections/workwear-originals-ultra-mens-scrubs",
+            "button_1_style": "button button-outline-white",
+            "button_2_text": "",
+            "button_2_link": "",
+            "button_2_style": "button button-outline-white"
+          }
+        }
+      },
+      "block_order": [
+        "content_kD3Dp4",
+        "content_3c7rxH"
+      ],
+      "name": "Image Collage",
+      "settings": {
+        "color_scheme": "scheme-default",
+        "add_padding": false,
+        "width": "full-width",
+        "section_height": 80
+      }
+    },
+    "shop_the_look_FDeEzw": {
+      "type": "shop-the-look",
+      "blocks": {
+        "slide_dwD3Nw": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/CK840_IRON_shop-the-look.jpg",
+            "product_1": "form-by-cherokee-womens-curved-hemline-v-neck-top-ckck840",
+            "product_1_color_label": "Iron",
+            "product_2": "womens-mid-rise-tapered-leg-drawstring-scrub-pant-ckck095",
+            "product_2_color_label": "Iron",
+            "product_3": "womens-long-sleeve-underscrub-knit-tee-ckck773",
+            "product_3_color_label": "black"
+          }
+        },
+        "slide_CKcXiK": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/WW695_CAR_shop-the-look.jpg",
+            "product_1": "mens-utility-4-pocket-v-neck-scrub-top-ckww695",
+            "product_1_color_label": "Caribbean Blue",
+            "product_2": "mens-tapered-leg-zip-fly-drawstring-scrub-pant-ckww190",
+            "product_2_color_label": "Caribbean Blue",
+            "product_3": "mens-long-sleeve-solid-underscrub-t-shirt-ckww700",
+            "product_3_color_label": "White"
+          }
+        },
+        "slide_Kzjbkd": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/shop-the-look.jpg",
+            "product_1": "womens-shaped-3-pocket-mock-wrap-scrub-top-ckww610",
+            "product_1_color_label": "Grape",
+            "product_2": "womens-drawstring-flare-scrub-pant-ckww120",
+            "product_2_color_label": "Grape",
+            "product_3": "womens-snap-front-crew-neck-scrub-jacket-ckww310",
+            "product_3_color_label": "Grape"
+          }
+        }
+      },
+      "block_order": [
+        "slide_dwD3Nw",
+        "slide_CKcXiK",
+        "slide_Kzjbkd"
+      ],
+      "disabled": true,
+      "name": "Shop the Look",
+      "settings": {
+        "color_scheme": "scheme-light-grey-blue-heading",
+        "card_color_scheme": "scheme-default",
+        "heading": "Shop the Look",
+        "richtext": ""
+      }
+    },
+    "shop_the_look_4EFwMk": {
+      "type": "shop-the-look",
+      "blocks": {
+        "slide_DF9eeq": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/ck-wworiginals-4700_4200-teal_CK773-look-3x4.png",
+            "product_1": "womens-long-sleeve-underscrub-knit-tee-ckck773",
+            "product_1_color_label": "white",
+            "product_2": "womens-v-neck-2-pocket-solid-scrub-top-ck4700",
+            "product_2_color_label": "teal blue",
+            "product_3": "womens-scrubs-elastic-waist-utility-scrub-pants-ck4200",
+            "product_3_color_label": "teal blue"
+          }
+        },
+        "slide_zcKpT7": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/ck-inifinity-2624A_1123A_CAPS_IN525A-look-3x4.png",
+            "product_1": "infinity-pursuit-womens-zip-front-3-pocket-warm-up-scrub-jacket-ckin525a",
+            "product_1_color_label": "black",
+            "product_2": "infinity-womens-split-neck-top-wprincess-seam-ck2624a",
+            "product_2_color_label": "caribbean blue",
+            "product_3": "infinity-womens-rib-knit-drawstring-waist-pant-ck1123a",
+            "product_3_color_label": "caribbean blue"
+          }
+        },
+        "slide_d7GVmf": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/ck-achieve-CK834_CK036_CK00013A-look-3x4.png",
+            "product_1": "mens-zip-front-warm-up-scrub-jacket-ckck0036",
+            "product_1_color_label": "navy",
+            "product_2": "achieve-by-cherokee-mens-one-pocket-top-ckck834",
+            "product_2_color_label": "navy",
+            "product_3": "achieve-by-cherokee-mens-straight-leg-pant-ckck036",
+            "product_3_color_label": "navy"
+          }
+        },
+        "slide_XkX9KN": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/ck-wworiginals-ultra-CK953A_CK272A_WIN_CK00013A-loook-3x4.png",
+            "product_1": "womens-2-pocket-zip-front-scrub-jacket-ckck0013a",
+            "product_1_color_label": "black",
+            "product_2": "womens-rounded-v-neck-scrub-top-ckck953a",
+            "product_2_color_label": "wine",
+            "product_3": "womens-drawstring-cargo-straight-leg-scrub-pant-ckck272a",
+            "product_3_color_label": "wine"
+          }
+        }
+      },
+      "block_order": [
+        "slide_DF9eeq",
+        "slide_zcKpT7",
+        "slide_d7GVmf",
+        "slide_XkX9KN"
+      ],
+      "name": "Shop the Look",
+      "settings": {
+        "color_scheme": "scheme-light-grey-blue-heading",
+        "card_color_scheme": "scheme-default",
+        "heading": "Shop the Look",
+        "richtext": ""
+      }
+    },
+    "article_carousel_rNiaNf": {
+      "type": "article-carousel",
+      "name": "Articles carousel",
+      "settings": {
+        "color_scheme": "scheme-aed956a8-0590-4fa9-8aea-ec51184aeac3",
+        "heading": "From the blog",
+        "text": "",
+        "hide_header": false,
+        "loop": true,
+        "blog": "scrub-hub",
+        "article_list": [],
+        "show_image": true,
+        "show_date": true,
+        "show_author": false,
+        "button_link": "shopify://blogs/scrub-hub",
+        "button_text": "View all",
+        "slides_per_view_mobile": 1.3,
+        "slides_per_view_tablet": 2,
+        "slides_per_view_laptop": 3,
+        "slides_per_view_desktop": 3
+      }
+    },
+    "yotpo_reviews_carousel_C6NwQC": {
+      "type": "yotpo-reviews-carousel",
+      "name": "Yotpo Reviews Carousel",
+      "settings": {
+        "heading": "Backed by real reviews",
+        "instance_id": "1319642",
+        "widget_id": "uYOSEsQmXRjRHq6WfsKJSXEDdP1YYdD6NEdP6FQf"
+      }
+    },
+    "hero_banner_JhBCHe": {
+      "type": "hero-banner",
+      "name": "H1 Section",
+      "settings": {
+        "color_scheme": "scheme-dark",
+        "transparent_header": false,
+        "width": "full-width",
+        "add_padding": false,
+        "section_height": 30,
+        "horizontal_position": "justify-center",
+        "vertical_position": "items-center",
+        "text_alignment": "text-center",
+        "image": "shopify://shop_images/ww-core-stretch-women-3x1-20260611.jpg",
+        "overlay_color": "#000000",
+        "overlay_opacity": 50,
+        "eyebrow": "",
+        "heading": "Reliable Scrubs for Every Shift",
+        "use_h1": true,
+        "heading_tag": "2",
+        "content_image_max_height": 80,
+        "richtext": "<p>Cherokee scrubs and uniforms are built for healthcare professionals who need durability and function they can count on. Stock up on everyday basics in colors and fits that hold up wash after wash, shift after shift. </p>",
+        "fine_print": "",
+        "button_1_text": "",
+        "button_1_link": "",
+        "button_1_style": "button",
+        "button_2_text": "",
+        "button_2_link": "",
+        "button_2_style": "button button-outline-white"
+      }
+    }
+  },
+  "order": [
+    "hero_banner_4iYHXM",
+    "hero_banner_e6xMMd",
+    "spacer_Kfknpw",
+    "hero_banner_Nm3CQU",
+    "featured_collection_HjDRXE",
+    "collection_list_carousel_nPENBw",
+    "shop_by_color_hQkMdR",
+    "image_collage_LRGgMz",
+    "shop_the_look_FDeEzw",
+    "shop_the_look_4EFwMk",
+    "article_carousel_rNiaNf",
+    "yotpo_reviews_carousel_C6NwQC",
+    "hero_banner_JhBCHe"
+  ]
+}

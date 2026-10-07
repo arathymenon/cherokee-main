@@ -1,0 +1,37 @@
+<!-- snippet: comparison-cell -->
+
+{% doc %}
+  Renders one value cell for the comparison table (option or attribute rows).
+
+  The cell is harvested by <comparison-modal> (scripts/components/comparison-modal.js)
+  and placed into the grid by its data-key. `value` may contain HTML (swatches,
+  rich-text); a blank value falls back to the localized em-dash placeholder so
+  every product keeps a cell for every row and the grid stays aligned.
+
+  @param {string} group - Cell band: 'option' or 'attribute'
+  @param {string} key - Stable row identity across products, e.g. 'option:color', 'mf:neckline'
+  @param {string} label - Banner label as raw text; this snippet HTML-escapes it for
+    the attribute (pass unescaped — note `| t` output is pre-escaped, so decode it first)
+  @param {string} value - Pre-rendered HTML/text for this product's value (blank → em-dash)
+  @param {string} handle - Owning product handle
+  @param {number} [order] - Canonical row order (keeps the union in section order)
+
+  @example
+  {% render 'comparison-cell', group: 'attribute', key: 'mf:neckline', label: 'Neckline', value: v, handle: product.handle, order: 3 %}
+{% enddoc %}
+
+<div
+  data-compare-cell
+  data-group="{{ group }}"
+  data-key="{{ key }}"
+  data-label="{{ label | escape }}"
+  data-handle="{{ handle }}"
+  data-order="{{ order }}"
+  {% if value == blank %}data-empty="true"{% endif %}
+  class="snap-start flex items-center justify-center text-center fs-body-lg px-2 py-6 lg:px-4 lg:py-4 [&_.rte]:text-center">
+  {%- if value == blank -%}
+    <span class="text-grey-dark">{{ 'products.compare.empty_value' | t }}</span>
+  {%- else -%}
+    {{ value }}
+  {%- endif -%}
+</div>

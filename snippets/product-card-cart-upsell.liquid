@@ -1,0 +1,160 @@
+<!-- snippet: product-card-cart-upsell -->
+
+{% doc %}
+  Lean product card for the empty-cart upsell carousel. Image + hover swap,
+  badges, quick-shop, title, price. No Yotpo, no collection metafield label,
+  no color swatches.
+
+  @param {object} product - Shopify product object (required)
+  @param {object} [collection_context] - Collection for URL context
+  @param {boolean} [loading_eager] - Set true for above-fold images
+
+  @example
+  {% render 'product-card-cart-upsell', product: product, collection_context: collection %}
+{% enddoc %}
+
+{%- liquid
+  assign hide_card = false
+  if product.metafields.bundle.products.value.size > 0
+    for component in product.metafields.bundle.products.value
+      unless component.available
+        assign hide_card = true
+        break
+      endunless
+    endfor
+  endif
+
+  assign variant = product.selected_or_first_available_variant
+  assign product_url = product.url | within: collection_context
+
+  assign quick_shop_url = product.url | within: collection_context | split: '?' | first
+  assign color_value_id = null
+  for option in product.options_with_values
+    assign option_name_lower = option.name | downcase
+    if option_name_lower == 'color'
+      assign color_position_index = option.position | minus: 1
+      assign variant_color_name = variant.options[color_position_index]
+      for value in option.values
+        if value.name == variant_color_name
+          assign color_value_id = value.id
+          break
+        endif
+      endfor
+      break
+    endif
+  endfor
+  if color_value_id
+    assign quick_shop_url = quick_shop_url | append: '?option_values=' | append: color_value_id
+  endif
+
+  assign loading = 'lazy'
+  if loading_eager
+    assign loading = 'eager'
+  endif
+-%}
+
+{%- unless hide_card -%}
+  <div class="product-card">
+
+    {% #  Image  %}
+    <div class="group/product-card-media aspect-product-image relative overflow-hidden ">
+      <a href="{{ product_url }}"
+        class="no-underline ">
+        <span class="sr-only">View {{ product.title }}</span>
+        {%- liquid
+          capture media_list
+            render 'product-media-list', product: product, variant: variant, list_name: 'featured_hover'
+          endcapture
+          assign media_list = media_list | split: ' '
+        -%}
+        <div class="size-full relative overflow-hidden rounded-xs md:rounded-theme-sm">
+          {%- for index_string in media_list -%}
+            {%- liquid
+              assign index = index_string | plus: 0
+              assign media = product.media[index]
+              assign img_loading_eager = loading_eager
+              assign show_skeleton = true
+              assign img_loading = 'lazy'
+              assign hover_img_class = ""
+
+              unless forloop.first
+                assign img_loading_eager = false
+                assign show_skeleton = false
+                assign img_loading = 'eager'
+                assign hover_img_class = "opacity-0 z-1 transition-opacity duration-300 group-hover/product-card-media:opacity-100"
+              endunless
+            -%}
+            <div class="absolute size-full inset-0 {{ hover_img_class }}" >
+              <media-loader class="block size-full relative group/media-loader">
+                <div class="size-full duration-300 opacity-0 transition-opacity
+                  group-[[ready]]/media-loader:opacity-100">
+                  {{- media.preview_image
+                    | image_url: width: 2048
+                    | image_tag: loading: img_loading, sizes: '(min-width: 1024px) 25vw, 50vw', class: 'size-full object-cover'
+                  -}}
+                </div>
+                {%- if show_skeleton -%}
+                  <div class="absolute duration-300 inset-0 size-full transition-opacity group-[[ready]]/media-loader:opacity-0">
+                    <div class="skeleton-pulse bg-grey-light size-full"></div>
+                  </div>
+                {%- endif -%}
+              </media-loader>
+            </div>
+
+          {%- else -%}
+            <div class="absolute size-full inset-0 bg-grey-light"></div>
+          {%- endfor -%}
+
+        </div>
+      </a>
+
+      {% #  Badges  %}
+      <div class="absolute top-1 left-1 lg:top-2 lg:left-2 z-1">
+        {%- render 'product-badges',
+          product: product,
+          variant: variant -%}
+      </div>
+
+      {% #  Quick Shop — hidden for set products since the modal can't configure them  %}
+      {%- unless product.metafields.bundle.products.value.size > 0 -%}
+        <html-fetcher-trigger
+          selector="#quick-shop-dialog html-fetcher"
+          href="{{ quick_shop_url }}"
+          data-vegax-command="show-modal"
+          data-vegax-commandfor="quick-shop-dialog" >
+          <button type="button"
+            class="button button-secondary p-0 min-w-0
+              absolute bottom-2 right-2 lg:bottom-4 lg:right-4 size-8 lg:size-10
+              flex-center rounded-full z-1"
+            aria-label="Quick shop {{ product.title }}">
+            <span class="block size-4 lg:size-5 [&>svg]:size-full">
+              {{- 'icon-plus.svg' | inline_asset_content -}}
+            </span>
+          </button>
+        </html-fetcher-trigger>
+      {%- endunless -%}
+    </div>
+
+    {%- #  Text  -%}
+    <div class="flex flex-col gap-0 px-4 md:px-0 py-xs ">
+
+      {%- #  Product title  -%}
+      <a href="{{ product_url }}" class="fs-body-md font-medium no-underline line-clamp-2">{{ product.title }}</a>
+
+      {%- #  Price  -%}
+      <p class="flex items-center gap-1 fs-body-sm">
+        {%- if product.price_varies -%}
+          <span class="text-xs">From: </span>
+        {%- endif -%}
+        {%- if product.compare_at_price_min > product.price_min -%}
+          <span class="text-red-sale">{{ product.price_min | money }}</span>
+          <s class="text-grey-dark opacity-30 font-medium">{{ product.compare_at_price_min | money }}</s>
+        {%- else -%}
+          <span>{{ product.price_min | money }}</span>
+        {%- endif -%}
+      </p>
+
+    </div>
+
+  </div>
+{%- endunless -%}

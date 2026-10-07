@@ -1,0 +1,121 @@
+<!-- section: announcement-bar -->
+
+{%- liquid
+  assign s = section.settings
+  assign blocks = section.blocks
+  assign timer_ms = s.timer | times: 1000
+
+  assign show_nav = false
+  if blocks.size > 1
+    assign show_nav = true
+  endif
+-%}
+
+{%- if blocks.size > 0 -%}
+  <section class="color-{{ s.color_scheme }}" aria-label="Announcements">
+    <div class="container relative flex items-center justify-center flex-1 gap-2">
+
+        {%- if show_nav -%}
+          <button
+            id="announcement-prev-{{ section.id }}"
+            class="flex items-center justify-center size-4 shrink-0 rounded-none bg-transparent border-0"
+            data-action-tarot-previous
+            aria-label="Previous">
+            {{ 'icon-angle-left.svg' | inline_asset_content }}
+          </button>
+        {%- endif -%}
+
+        <div class="max-w-[720px] flex-1 overflow-hidden py-2">
+          <tarot-carousel>
+            <script type="application/json" data-tarot-options>
+              {
+                "effect": "carousel",
+                "loop": true,
+                "slidesPerView": 1,
+                "autoplay": {
+                  "interval": {{ timer_ms }},
+                  "stopAfterInteraction": true
+                },
+                "navigation": {
+                  "showButtons": {{ show_nav }},
+                  "showPagination": false,
+                  "previousButtonSelector": "#announcement-prev-{{ section.id }}",
+                  "nextButtonSelector": "#announcement-next-{{ section.id }}"
+                }
+              }
+            </script>
+
+            <tarot-viewport>
+              <tarot-track>
+                {%- for block in blocks -%}
+                  {%- assign b = block.settings -%}
+                  <tarot-slide {{ block.shopify_attributes }}>
+                    <div
+                      class="rte text-center font-medium text-[12px] leading-[160%] lg:text-[14px] [&_p]:m-0"
+                      {% if b.text_color != blank %}style="color: {{ b.text_color }}"{% endif %}>
+                      {{ b.title }}
+                    </div>
+                  </tarot-slide>
+                {%- endfor -%}
+              </tarot-track>
+            </tarot-viewport>
+          </tarot-carousel>
+        </div>
+
+        {%- if show_nav -%}
+          <button
+            id="announcement-next-{{ section.id }}"
+            class="flex items-center justify-center size-4 shrink-0 rounded-none bg-transparent border-0"
+            data-action-tarot-next
+            aria-label="Next">
+            {{ 'icon-angle-right.svg' | inline_asset_content }}
+          </button>
+        {%- endif -%}
+
+    </div>
+  </section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Announcement Bar",
+  "class": "announcement-bar",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme"
+    },
+    {
+      "type": "range",
+      "id": "timer",
+      "label": "Timer",
+      "min": 3,
+      "max": 12,
+      "step": 1,
+      "unit": "s",
+      "default": 5
+    }
+  ],
+  "max_blocks": 4,
+  "blocks": [
+    {
+      "type": "announcement",
+      "name": "Announcement",
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "title",
+          "label": "Message",
+          "default": "<p>Some message that appears in announcement</p>"
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Text color"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

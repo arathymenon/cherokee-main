@@ -1,0 +1,11 @@
+<!-- snippet: cart-line-item-title -->
+{%- comment -%}
+  Renders the cart line item product title (linked to the product).
+
+  Accepts:
+  - line_item: {Object}
+{%- endcomment -%}
+
+<a href="{{ line_item.url }}" class="no-underline">
+  {%- render 'product-title', product: line_item.product -%}
+</a>

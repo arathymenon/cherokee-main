@@ -1,0 +1,145 @@
+.header-overlay {
+  position: fixed;
+  top: 50px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgb(0 0 0 / 30%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.1s ease-in-out;
+}
+
+@media (min-width: 1024px) {
+  .header-overlay {
+    top: 56px;
+  }
+}
+
+.header-section:has(details[data-openable][open]:not(.closing)) .header-overlay {
+  opacity: 1;
+}
+
+/* Mega-menu dropdown: never exceed the space below the header.
+   100dvh - announcement bar - header - 50px breathing room.
+   Safety net; the Shop By Color list below is the usual tall column. */
+.mega-menu-panel {
+  max-height: calc(100dvh - var(--header-group-height) - 50px);
+  overflow-y: auto;
+}
+
+/* Shop By Color column: scroll the swatch list on its own so a long
+   color list stays reachable without growing the whole panel.
+   Subtracts extra for the column title + panel padding above/below. */
+.mega-menu-color-list {
+  max-height: calc(100dvh - var(--header-group-height) - 120px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.header-menu-root-item details summary::after,
+.header-menu-root-item > a::after {
+  content: "";
+  display: block;
+  width: 0%;
+  top: calc(100% - 1px);
+  height: 2px;
+  border-radius: 5px;
+  position: absolute;
+  background: var(--color-brand-blue);
+  z-index: 20;
+  pointer-events: none;
+  transition: width 300ms ease-out;
+}
+
+.header-menu-root-item details[open]:not(.closing) summary::after,
+.header-menu-root-item > a:hover::after {
+  width: 100%;
+}
+
+/*  Transparent header on homepage hero */
+body:has([data-has-transparent-header]) header {
+  margin-bottom: calc(var(--header-height) * -1);
+}
+
+body[data-state="top"]:has([data-has-transparent-header]) header:not(:hover) {
+  background: transparent;
+
+  --color-foreground: 1 0 0;
+
+  [data-logo="colored"] {
+    opacity: 0;
+  }
+
+  [data-logo="white"] {
+    opacity: 1;
+  }
+}
+
+body[data-state="top"]:has([data-has-transparent-header])
+  header:not(:hover)
+  .header-menu-root-item
+  a {
+  color: oklch(var(--color-foreground)) !important;
+}
+
+/* --- Mobile sliding header group ---
+   Two states only. JS (<header-manager>) toggles body[data-header-hidden];
+   CSS swaps --header-group-offset between 0 and -(group height) and the
+   transition animates between them. The body default below keeps the var
+   defined (0px) before JS runs and on desktop, where it's never overridden. */
+body {
+  --header-group-offset: 0;
+}
+
+@media (max-width: 1023.98px) {
+  body[data-header-hidden="true"] {
+    --header-group-offset: calc(-1 * var(--header-group-height, 0px));
+  }
+
+  /* Announcement bar: not sticky on desktop; on mobile it pins at the
+     top and slides via transform (no fixed descendants → safe).
+     Targets the stable schema `class`, not the section id. */
+  .shopify-section.announcement-bar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    transform: translateY(var(--header-group-offset, 0));
+    transition: transform 0.3s ease;
+  }
+
+  /* Header is already position:sticky from its schema class. Keep its
+     sticky inset STATIC (just below the announcement bar) and animate
+     the slide on the inner <header> via transform — compositor-only,
+     so it's smoother than animating `top`. The transform stays OFF the
+     section wrapper because that wrapper contains the position:fixed
+     .header-overlay (a transformed ancestor would become its containing
+     block and drag it along); the inner <header> is a sibling of the
+     overlay, so transforming it is safe. The compound
+     `.shopify-section.header-section` (0,2,0) outranks the `top-0`
+     Tailwind utility (0,1,0). */
+  .shopify-section.header-section {
+    top: var(--announcement-bar-height, 0);
+    z-index: 100;
+  }
+
+  .shopify-section.header-section > header {
+    transform: translateY(var(--header-group-offset, 0));
+    transition: transform 0.3s ease;
+  }
+}
+
+/* Reusable utility — any element opts in by adding the class, e.g.
+   `sticky top-[80px] transform-y-header`. Rides the same two states. */
+@utility transform-y-header {
+  transform: translateY(var(--header-group-offset, 0));
+  transition: transform 0.3s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shopify-section.announcement-bar,
+  .shopify-section.header-section > header,
+  .transform-y-header {
+    transition: none;
+  }
+}

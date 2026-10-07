@@ -1,0 +1,136 @@
+<!-- section: rich-text -->
+
+{%- liquid
+  assign s = section.settings
+-%}
+
+<section class="color-{{ s.color_scheme }} py-lg">
+  <div class="container">
+    <div class="max-w-[720px] mx-auto flex flex-col items-center text-center">
+
+      {% if s.eyebrow != blank %}
+        <p class="fs-eyebrow mb-2">{{ s.eyebrow | escape }}</p>
+      {% endif %}
+
+      {% if s.heading != blank %}
+        <div role="heading" aria-level="2" class="fs-display-2 text-pretty">
+          {{ s.heading | escape }}
+        </div>
+      {% endif %}
+
+      {% if s.image != blank %}
+        {% capture image_style %}max-height: {{ s.image_max_height }}px;{% endcapture %}
+        <div class="mt-2">
+          {{ s.image | image_url: width: 720 | image_tag: class: 'w-auto h-auto', loading: 'lazy', widths: '240, 360, 480, 720', style: image_style }}
+        </div>
+      {% endif %}
+
+      {% if s.richtext != blank %}
+        <div class="rte text-pretty mt-4 w-full {{ s.richtext_alignment }}">{{ s.richtext }}</div>
+      {% endif %}
+
+      {%- liquid
+        assign show_button_1 = false
+        assign show_button_2 = false
+        if s.button_1_text != blank and s.button_1_link != blank
+          assign show_button_1 = true
+        endif
+        if s.button_2_text != blank and s.button_2_link != blank
+          assign show_button_2 = true
+        endif
+      -%}
+
+      {% if show_button_1 or show_button_2 %}
+        <div class="flex flex-wrap gap-4 justify-center mt-6">
+          {% if show_button_1 %}
+            <a class="{{ s.button_1_style }}" href="{{ s.button_1_link }}">
+              {{ s.button_1_text | escape }}
+            </a>
+          {% endif %}
+          {% if show_button_2 %}
+            <a class="{{ s.button_2_style }}" href="{{ s.button_2_link }}">
+              {{ s.button_2_text | escape }}
+            </a>
+          {% endif %}
+        </div>
+      {% endif %}
+
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Rich Text",
+  "settings": [
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme" },
+
+    { "type": "header", "content": "Content" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Rich text heading" },
+    { "type": "image_picker", "id": "image", "label": "Image", "info": "Renders between heading and text" },
+    {
+      "type": "range",
+      "id": "image_max_height",
+      "label": "Image max height",
+      "min": 60,
+      "max": 200,
+      "step": 5,
+      "default": 80,
+      "unit": "px"
+    },
+    { "type": "richtext", "id": "richtext", "label": "Text", "default": "<p>Use this text to share information about your brand with your customers.</p>" },
+    {
+      "type": "select",
+      "id": "richtext_alignment",
+      "label": "Text alignment",
+      "options": [
+        { "value": "text-left", "label": "Left" },
+        { "value": "text-center", "label": "Center" }
+      ],
+      "default": "text-center"
+    },
+
+    { "type": "header", "content": "Button 1" },
+    { "type": "text", "id": "button_1_text", "label": "Button text" },
+    { "type": "url", "id": "button_1_link", "label": "Button link" },
+    {
+      "type": "select",
+      "id": "button_1_style",
+      "label": "Button style",
+      "options": [
+        { "value": "button", "label": "Primary" },
+        { "value": "button button-secondary", "label": "Secondary" },
+        { "value": "button button-outline-black", "label": "Outline black" },
+        { "value": "button button-outline-white", "label": "Outline white" }
+      ],
+      "default": "button"
+    },
+
+    { "type": "header", "content": "Button 2" },
+    { "type": "text", "id": "button_2_text", "label": "Button text" },
+    { "type": "url", "id": "button_2_link", "label": "Button link" },
+    {
+      "type": "select",
+      "id": "button_2_style",
+      "label": "Button style",
+      "options": [
+        { "value": "button", "label": "Primary" },
+        { "value": "button button-secondary", "label": "Secondary" },
+        { "value": "button button-outline-black", "label": "Outline black" },
+        { "value": "button button-outline-white", "label": "Outline white" }
+      ],
+      "default": "button button-secondary"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Rich Text",
+      "category": "Media & Content"
+    }
+  ],
+  "disabled_on": {
+    "groups": ["*"]
+  }
+}
+{% endschema %}

@@ -1,0 +1,105 @@
+<!-- snippet: product-image-zoom-dialog -->
+{%- comment -%}
+  Renders a fullscreen <dialog> containing a tarot-carousel of the product media.
+  Mirrors the slide order of product-gallery so indexes line up 1:1.
+
+  Accepts:
+  - product: {Object}
+  - variant: {Object} optional
+{%- endcomment -%}
+
+{%- liquid
+  capture zoom_media_list
+    render 'product-media-list', product: product, variant: variant, list_name: 'full'
+  endcapture
+
+  assign zoom_media_list = zoom_media_list | split: ' '
+  assign zoom_source_selector = source_selector | default: '[data-product-gallery-carousel]'
+-%}
+
+<product-zoom-gallery source-selector="{{ zoom_source_selector | escape }}">
+  <openable-component data-close-on-outside-click>
+    <dialog
+      data-openable
+      data-product-zoom-dialog
+      class="dialog-popup dialog-popup-zoom w-screen h-screen max-w-none max-h-none m-0 p-0 bg-white">
+      {% render 'dialog-close-button', position: 'absolute' %}
+
+      <tarot-carousel
+        class="relative w-full h-full group/zoom"
+        data-product-zoom-carousel>
+        <script type="application/json" data-tarot-options>
+          {
+            "effect": "carousel",
+            "loop": true,
+            "slidesPerView": 1,
+            "gap": "0px",
+            "navigation": {
+              "showButtons": true,
+              "showPagination": true,
+              "previousButtonSelector": "#product-zoom-prev",
+              "nextButtonSelector": "#product-zoom-next"
+            }
+          }
+        </script>
+
+        <tarot-viewport class="h-screen">
+          <tarot-track>
+            {%- for index_string in zoom_media_list -%}
+              {%- liquid
+                assign index = index_string | plus: 0
+                assign media = product.media[index]
+              -%}
+              {%- if media.media_type == 'image' -%}
+                <tarot-slide data-product-gallery-item="{{ media.id }}">
+                  <image-zoom class="h-screen w-full" data-dont-close-dialog>
+                    {{-
+                      media.preview_image
+                      | image_url: width: 2048
+                      | image_tag: loading: 'lazy', sizes: '100vw'
+                    -}}
+                  </image-zoom>
+                </tarot-slide>
+              {%- endif -%}
+            {%- endfor -%}
+
+            {%- comment -%}
+              Video / external_video / model media is temporarily disabled in the zoom view.
+              To re-enable, drop this block inside the loop above as an else branch on the media_type check:
+
+              <tarot-slide data-product-gallery-item="{{ media.id }}">
+                <div class="h-screen flex items-center justify-center">
+                  {%- render 'product-gallery-partials',
+                    name: 'media',
+                    media: media,
+                    image_loading_eager: false,
+                    image_sizes: '100vw' -%}
+                </div>
+              </tarot-slide>
+            {%- endcomment -%}
+          </tarot-track>
+        </tarot-viewport>
+
+        <button
+          id="product-zoom-prev"
+          type="button"
+          class="hidden lg:flex absolute left-6 top-1/2 -translate-y-1/2 z-10 items-center justify-center size-10 bg-white/80 backdrop-blur rounded-full hover:bg-white transition lg:opacity-0 lg:group-hover/zoom:opacity-100"
+          aria-label="Previous image">
+          {{- 'icon-angle-left.svg' | inline_asset_content -}}
+        </button>
+
+        <button
+          id="product-zoom-next"
+          type="button"
+          class="hidden lg:flex absolute right-6 top-1/2 -translate-y-1/2 z-10 items-center justify-center size-10 bg-white/80 backdrop-blur rounded-full hover:bg-white transition lg:opacity-0 lg:group-hover/zoom:opacity-100"
+          aria-label="Next image">
+          {{- 'icon-angle-right.svg' | inline_asset_content -}}
+        </button>
+
+        <div
+          data-tarot-pagination
+          class="absolute bottom-3 right-3 z-10"></div>
+      </tarot-carousel>
+    </dialog>
+  </openable-component>
+</product-zoom-gallery>

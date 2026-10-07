@@ -1,0 +1,384 @@
+<!-- section: contact-page -->
+
+{%- liquid
+  assign s = section.settings
+-%}
+
+<section class="color-{{ s.color_scheme }}">
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-0">
+
+    {% # Image column %}
+    <div class="order-last lg:order-first aspect-square lg:aspect-auto overflow-hidden">
+      {% if s.image != blank %}
+        {%- capture content -%}
+          {{- s.image
+            | image_url: width: 1600
+            | image_tag:
+                class: 'w-full h-full object-cover',
+                loading: 'lazy',
+                sizes: '(min-width: 1024px) 50vw, 100vw',
+                widths: '600, 800, 1000, 1200, 1600'
+          -}}
+        {%- endcapture -%}
+        {%- render 'media-loader', content: content, show_skeleton: true -%}
+      {% else %}
+        {{ 'lifestyle-2' | placeholder_svg_tag: 'w-full h-full object-cover' }}
+      {% endif %}
+    </div>
+
+    {% # Content column %}
+    <div class="px-gutter">
+      <div class="lg:max-w-[520px] mx-auto">
+
+        <div class="pt-md pb-sm lg:pt-lg lg:pb-10">
+          {% if s.heading != blank %}
+            <h1 class="fs-display-2 text-pretty">
+              {{ s.heading | escape }}
+            </h1>
+          {% endif %}
+          {% if s.richtext != blank %}
+            <div class="rte text-pretty mt-sm">{{ s.richtext }}</div>
+          {% endif %}
+        </div>
+
+        <div data-contact-toggle>
+
+          <div data-content="blocks">
+            {% for block in section.blocks %}
+              {%- assign b = block.settings -%}
+              {%- assign border_class = '' -%}
+              {%- if b.top_border -%}
+                {%- assign border_class = 'border-t border-[#E5E5E5] pt-sm' -%}
+              {%- endif -%}
+
+              {% case block.type %}
+
+                {% when 'item' %}
+                  <div
+                    class="flex items-center py-6 {{ border_class }}"
+                    {{ block.shopify_attributes }}>
+                    <div class="flex items-center gap-2 lg:gap-4">
+                      <div class="shrink-0 size-[60px] rounded-full bg-[#F2F3F5] flex-center">
+                        {% if b.icon != blank %}
+                          {{ b.icon
+                            | image_url: width: 48
+                            | image_tag:
+                                class: 'size-6 object-contain',
+                                loading: 'lazy',
+                                widths: '24, 48'
+                          }}
+                        {% endif %}
+                      </div>
+                      {% if b.title != blank %}
+                        <div class="fs-body-lg">{{ b.title | escape }}</div>
+                      {% endif %}
+                    </div>
+                    {% if b.richtext != blank %}
+                      <div class="rte ml-auto text-right text-grey-dark">{{ b.richtext }}</div>
+                    {% endif %}
+                  </div>
+
+                {% when 'form' %}
+                  <div
+                    class="flex items-center py-sm {{ border_class }}"
+                    {{ block.shopify_attributes }}>
+                    <div class="flex items-center gap-2 lg:gap-4">
+                      <div class="shrink-0 size-[60px] rounded-full bg-[#F2F3F5] flex-center">
+                        {% if b.icon != blank %}
+                          {{ b.icon
+                            | image_url: width: 48
+                            | image_tag:
+                                class: 'size-6 object-contain',
+                                loading: 'lazy',
+                                widths: '24, 48'
+                          }}
+                        {% endif %}
+                      </div>
+                      {% if b.title != blank %}
+                        <div class="fs-body-lg">{{ b.title | escape }}</div>
+                      {% endif %}
+                    </div>
+                    {% if b.button_text != blank %}
+                      <button
+                        type="button"
+                        class="button ml-auto"
+                        data-action-show-form>
+                        {{ b.button_text | escape }}
+                      </button>
+                    {% endif %}
+                  </div>
+
+              {% endcase %}
+            {% endfor %}
+          </div>
+
+          <div data-content="form" class="pb-md" hidden>
+            {% for block in section.blocks %}
+              {% if block.type == '@app' %}
+                {% render block %}
+              {% endif %}
+            {% endfor %}
+            <div class="flex justify-center">
+              <button type="button" class="underline-button" data-action-hide-form>
+                Cancel
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<script>
+  (function () {
+    var FORM_CSS = [
+      ':host, [data-form-root] {',
+      '  font-family: var(--font-body, inherit);',
+      '  --inline-container-max-width: 100%;',
+      '  --input-label-transform: translateY(-1em) scale(0.85);',
+      '}',
+      '#app-embed > div {',
+      '  display: block !important;',
+      '}',
+      'h2 {',
+      '  text-align: left !important;',
+      '  font-size: var(--fs-display-4) !important;',
+      '  font-family: var(--font-display) !important;',
+      '  line-height: 1 !important;',
+      '  font-weight: 800 !important;',
+      '  text-transform: uppercase !important;',
+      '  color: oklch(var(--color-headings)) !important;',
+      '}',
+      'input, select {',
+      '  border: 0 !important;',
+      '  border-bottom: 1px solid #E5E5E5 !important;',
+      '  border-radius: 0 !important;',
+      '  box-shadow: none !important;',
+      '  background: transparent !important;',
+      '}',
+      'textarea {',
+      '  border: 1px solid #E5E5E5 !important;',
+      '  border-radius: 0 !important;',
+      '  box-shadow: none !important;',
+      '}',
+      'div:has(> textarea)::before {',
+      '  display: none !important;',
+      '}',
+      'div:has(> textarea) {',
+      '  --input-label-transform: translateY(-0.5em) scale(0.85);',
+      '}',
+      'input {',
+      '  padding-left: 0 !important;',
+      '  padding-right: 0 !important;',
+      '  padding-inline: 0 !important;',
+      '  padding-inline-start: 0 !important;',
+      '  padding-inline-end: 0 !important;',
+      '}',
+      'div:has(> input) {',
+      '  --form-field-padding: 0px !important;',
+      '}',
+      'button[type="submit"] {',
+      '  display: inline-flex !important;',
+      '  align-items: center !important;',
+      '  justify-content: center !important;',
+      '  min-width: 7.5rem !important;',
+      '  padding: 1rem 2.5rem !important;',
+      '  font-family: var(--font-body, inherit) !important;',
+      '  font-size: 0.875rem !important;',
+      '  font-weight: 600 !important;',
+      '  text-transform: capitalize !important;',
+      '  line-height: normal !important;',
+      '  border: 1px solid #000193 !important;',
+      '  border-radius: 5rem !important;',
+      '  background-color: #000193 !important;',
+      '  color: #fff !important;',
+      '  transition: all 300ms ease-out !important;',
+      '  cursor: pointer !important;',
+      '}',
+      'button[type="submit"]:hover:not(:disabled) {',
+      '  background-color: #000159 !important;',
+      '  border-color: #000159 !important;',
+      '}'
+    ].join('\n');
+
+    function ensureStyle(shadow) {
+      if (!shadow || shadow.querySelector('style[data-contact-form]')) return;
+      var style = document.createElement('style');
+      style.setAttribute('data-contact-form', '');
+      style.textContent = FORM_CSS;
+      shadow.appendChild(style);
+    }
+
+    var watched = new WeakSet();
+    function watchShadow(shadow) {
+      if (watched.has(shadow)) return;
+      watched.add(shadow);
+      ensureStyle(shadow);
+      new MutationObserver(function () { ensureStyle(shadow); })
+        .observe(shadow, { childList: true });
+    }
+
+    function injectShadowStyles(host) {
+      if (host.shadowRoot) return watchShadow(host.shadowRoot);
+      var attempts = 0;
+      (function tick() {
+        if (host.shadowRoot) return watchShadow(host.shadowRoot);
+        if (attempts++ < 100) setTimeout(tick, 100);
+      })();
+    }
+
+    function styleForms(root) {
+      var hosts = root.querySelectorAll('shopify-forms-embed');
+      for (var i = 0; i < hosts.length; i++) injectShadowStyles(hosts[i]);
+    }
+
+    function init() {
+      styleForms(document);
+      if (window.customElements && customElements.whenDefined) {
+        customElements.whenDefined('shopify-forms-embed').then(function () {
+          styleForms(document);
+        });
+      }
+      new MutationObserver(function (muts) {
+        for (var i = 0; i < muts.length; i++) {
+          var added = muts[i].addedNodes;
+          for (var j = 0; j < added.length; j++) {
+            var n = added[j];
+            if (n.nodeType !== 1) continue;
+            if (n.tagName === 'SHOPIFY-FORMS-EMBED') injectShadowStyles(n);
+            else if (n.querySelectorAll) styleForms(n);
+          }
+        }
+      }).observe(document.body, { childList: true, subtree: true });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+
+    document.addEventListener('click', function (e) {
+      var show = e.target.closest('[data-action-show-form]');
+      var hide = e.target.closest('[data-action-hide-form]');
+      if (!show && !hide) return;
+      e.preventDefault();
+      var root = (show || hide).closest('[data-contact-toggle]');
+      if (!root) return;
+      var blocksEl = root.querySelector('[data-content="blocks"]');
+      var formEl = root.querySelector('[data-content="form"]');
+      if (show) {
+        if (blocksEl) blocksEl.setAttribute('hidden', '');
+        if (formEl) formEl.removeAttribute('hidden');
+        styleForms(formEl);
+      } else {
+        if (formEl) formEl.setAttribute('hidden', '');
+        if (blocksEl) blocksEl.removeAttribute('hidden');
+      }
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Contact us",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme"
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "richtext",
+      "label": "Text"
+    },
+    {
+      "type": "header",
+      "content": "Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Item",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Icon",
+          "info": "24x24 transparent PNG/SVG renders inside a 60x60 circle."
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "richtext",
+          "id": "richtext",
+          "label": "Text"
+        },
+        {
+          "type": "checkbox",
+          "id": "top_border",
+          "label": "Add top border",
+          "default": false
+        }
+      ]
+    },
+    {
+      "type": "form",
+      "name": "Form button",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Icon",
+          "info": "24x24 transparent PNG/SVG renders inside a 60x60 circle."
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Send a message"
+        },
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": "Button text",
+          "default": "Open form"
+        },
+        {
+          "type": "checkbox",
+          "id": "top_border",
+          "label": "Add top border",
+          "default": false
+        }
+      ]
+    },
+    {
+      "type": "@app"
+    }
+  ]
+}
+{% endschema %}

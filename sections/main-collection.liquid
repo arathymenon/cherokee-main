@@ -1,0 +1,81 @@
+<!-- section: main-collection -->
+{%- liquid
+  if collection.filters != empty or collection.products.size > 0
+    render 'facets', results: collection
+  endif
+-%}
+
+<div data-facets-form-content="products-list">
+  {%- if collection.products.size > 0 -%}
+
+    {%- liquid
+      assign promo_card_positions_string = ''
+      for promo_card_position in collection.metafields.card.position
+        if promo_card_position and promo_card_position != blank
+          # assign promo_card_position_num = promo_card_position | plus: 0
+          # if promo_card_position_num > 0
+          assign promo_card_positions_string = promo_card_positions_string | append: ':' | append: promo_card_position | append: ':'
+          # endif
+        endif
+      endfor
+    -%}
+    <div class="products-listing" data-facets-form-loading-class="products-listing--loading">
+      {%- paginate collection.products by 14 -%}
+        {%- render 'product-listing-pagination', type: 'prev', paginate: paginate -%}
+
+        <div class="products-listing__list" data-ajax-pagination="content">
+          {%- liquid
+            for product in collection.products
+              assign current_item_index = paginate.current_offset | plus: forloop.index | append: ''
+              assign current_item_index_string = ':' | append: current_item_index | append: ':'
+
+              if promo_card_positions_string contains ":0:" and current_item_index_string == ":1:"
+                render 'collection-promo-card', collection: collection, position: 0
+                render 'product-card', product: product, collection_context: collection
+                continue
+              endif
+
+              render 'product-card', product: product, collection_context: collection
+
+              if promo_card_positions_string contains current_item_index_string
+                render 'collection-promo-card', collection: collection, position: current_item_index
+              endif
+            endfor
+          -%}
+        </div>
+
+        {%- render 'product-listing-pagination', type: 'more', paginate: paginate -%}
+      {%- endpaginate -%}
+    </div>
+  {%- else -%}
+    <div class="products-listing">
+      <div class="products-listing__empty-message">
+        {{- 'collections.empty_message' | t -}}
+      </div>
+    </div>
+    <div class="products-listing__upsell">
+      {%- if section.settings.upsell_collection.products.size > 0 -%}
+        {%- render 'product-carousel', product_array: section.settings.upsell_collection.products, title: section.settings.upsell_title, limit: 10 -%}
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "Product Collection",
+  "settings": [
+    {
+      "type": "text",
+      "id": "upsell_title",
+      "label": "Upsell title",
+      "default": "You may like..."
+    },
+    {
+      "type": "collection",
+      "id": "upsell_collection",
+      "label": "Upsell collection"
+    }
+  ]
+}
+{% endschema %}

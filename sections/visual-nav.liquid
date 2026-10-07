@@ -1,0 +1,215 @@
+<!-- section: visual-nav -->
+
+{%- liquid
+  assign s = section.settings
+  assign section_id = section.id | split: '_' | last
+
+  assign container_max_width = ''
+  if s.use_max_width
+    assign container_max_width = 'max-w-container'
+  endif
+
+  assign show_header = false
+  if s.heading != blank
+    assign show_header = true
+  endif
+
+  # Item shape — circle or square (square uses the theme radius).
+  assign shape_class = 'rounded-full'
+  if s.shape == 'square'
+    assign shape_class = 'rounded-theme'
+  endif
+
+  # Title alignment — left or center.
+  assign align_class = 'items-center text-center'
+  if s.text_align == 'left'
+    assign align_class = 'items-start text-left'
+  endif
+
+  # Content alignment — centers the heading and the carousel cards. When centered,
+  # Tarot's centerInsufficientSlides keeps cards centered if they don't fill the width.
+  assign heading_align_class = ''
+  assign center_insufficient = false
+  if s.content_align == 'center'
+    assign heading_align_class = 'text-center'
+    assign center_insufficient = true
+  endif
+-%}
+
+<section class="color-{{ s.color_scheme }} {{ s.top_padding }} {{ s.bottom_padding }} overflow-hidden px-gutter">
+  <div class="mx-auto {{ container_max_width }} ">
+
+    {% if section.blocks.size > 0 %}
+      <div class="flex justify-between items-center gap-4 mb-sm">
+        <div class="flex-1 min-w-0">
+          {% if show_header %}
+            <div role="heading" aria-level="2" class="fs-display-3 mb-0 text-pretty {{ heading_align_class }}">{{ s.heading | escape }}</div>
+          {% endif %}
+        </div>
+        <div class="hidden md:has-[button:not(:disabled)]:flex items-center gap-1 shrink-0">
+          {% render 'carousel-buttons', unique_id: section_id %}
+        </div>
+      </div>
+
+      <tarot-carousel class="relative block">
+
+        <script type="application/json" data-tarot-options>
+          {
+            "effect": "carousel",
+            "loop": {{ s.carousel_loop | json }},
+            "gap": "12px",
+            "centerInsufficientSlides": {{ center_insufficient | json }},
+            "slidesPerView": {{ s.slides_per_view_mobile | json }},
+            "navigation": {
+              "showPagination": false,
+              "previousButtonSelector": "#prev-{{ section_id }}",
+              "nextButtonSelector": "#next-{{ section_id }}"
+            },
+            "breakpoints": {
+              "540": { "slidesPerView": {{ s.slides_per_view_mobile_large | json }} },
+              "768": { "slidesPerView": {{ s.slides_per_view_tablet | json }} },
+              "1024": { "slidesPerView": {{ s.slides_per_view_laptop | json }} },
+              "1280": { "slidesPerView": {{ s.slides_per_view_desktop | json }} }
+            }
+          }
+        </script>
+
+        <tarot-viewport class="overflow-visible">
+          <tarot-track>
+            {% for block in section.blocks %}
+              {%- assign b = block.settings -%}
+              {% if b.image == blank or b.title == blank or b.link == blank %}{% continue %}{% endif %}
+              {%- liquid
+                # When the card targets the current collection, drive the on-page
+                # facets-form filter engine instead of navigating (see facets-form.js).
+                assign card_handle = b.link | split: '?' | first | split: '/collections/' | last | split: '/' | first
+                assign is_current_collection = false
+                if collection.handle != blank and card_handle == collection.handle
+                  assign is_current_collection = true
+                endif
+              -%}
+              <tarot-slide {{ block.shopify_attributes }}>
+                <a href="{{ b.link }}"{% if is_current_collection %} data-facets-form-link data-facets-form-scroll{% endif %} class="block group/card no-underline flex flex-col {{ align_class }} gap-2">
+                  <div class="relative w-full aspect-square overflow-hidden {{ shape_class }}">
+                    {%- capture content -%}
+                      {{- b.image
+                        | image_url: width: 600
+                        | image_tag:
+                            class: 'w-full h-full object-cover transition group-hover/card:scale-105',
+                            loading: 'lazy',
+                            alt: b.title,
+                            sizes: '(min-width: 1024px) 15vw, 30vw',
+                            widths: '200, 300, 400, 600'
+                      -}}
+                    {%- endcapture -%}
+                    {%- render 'media-loader', content: content, show_skeleton: true -%}
+                  </div>
+                  <p class="fs-body-md w-full mt-1">{{ b.title | escape }}</p>
+                </a>
+              </tarot-slide>
+            {% endfor %}
+          </tarot-track>
+        </tarot-viewport>
+      </tarot-carousel>
+    {% endif %}
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Visual Nav",
+  "settings": [
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme" },
+    { "type": "checkbox", "id": "use_max_width", "label": "Use container max-width", "default": true },
+
+    { "type": "header", "content": "Content" },
+    { "type": "text", "id": "heading", "label": "Heading" },
+    {
+      "type": "select",
+      "id": "content_align",
+      "label": "Content alignment",
+      "info": "Aligns the heading and the cards. Center keeps cards centered when there aren't enough to fill the width.",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" }
+      ],
+      "default": "left"
+    },
+
+    { "type": "header", "content": "Items" },
+    {
+      "type": "select",
+      "id": "shape",
+      "label": "Image shape",
+      "options": [
+        { "value": "circle", "label": "Circle" },
+        { "value": "square", "label": "Square" }
+      ],
+      "default": "circle"
+    },
+    {
+      "type": "select",
+      "id": "text_align",
+      "label": "Title alignment",
+      "options": [
+        { "value": "center", "label": "Center" },
+        { "value": "left", "label": "Left" }
+      ],
+      "default": "center"
+    },
+
+    { "type": "header", "content": "Carousel" },
+    { "type": "checkbox", "id": "carousel_loop", "label": "Loop carousel", "default": false },
+    { "type": "range", "id": "slides_per_view_mobile", "label": "Slides per view (mobile)", "min": 1, "max": 6, "step": 1, "default": 3 },
+    { "type": "range", "id": "slides_per_view_mobile_large", "label": "Slides per view (large mobile)", "info": "From 540px wide", "min": 1, "max": 6, "step": 1, "default": 4 },
+    { "type": "range", "id": "slides_per_view_tablet", "label": "Slides per view (tablet)", "min": 2, "max": 8, "step": 1, "default": 4 },
+    { "type": "range", "id": "slides_per_view_laptop", "label": "Slides per view (laptop)", "min": 2, "max": 10, "step": 1, "default": 6 },
+    { "type": "range", "id": "slides_per_view_desktop", "label": "Slides per view (desktop)", "min": 2, "max": 12, "step": 1, "default": 8 },
+
+    { "type": "header", "content": "Layout" },
+    {
+      "type": "select",
+      "id": "top_padding",
+      "label": "Top padding",
+      "default": "pt-md",
+      "options": [
+        { "value": "pt-0", "label": "None" },
+        { "value": "pt-sm", "label": "Small" },
+        { "value": "pt-md", "label": "Medium" },
+        { "value": "pt-lg", "label": "Large" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding",
+      "label": "Bottom padding",
+      "default": "pb-md",
+      "options": [
+        { "value": "pb-0", "label": "None" },
+        { "value": "pb-sm", "label": "Small" },
+        { "value": "pb-md", "label": "Medium" },
+        { "value": "pb-lg", "label": "Large" }
+      ]
+    }
+  ],
+  "blocks": [
+    {
+      "type": "nav_item",
+      "name": "Nav Item",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "text", "id": "title", "label": "Title", "default": "Nav item" },
+        { "type": "url", "id": "link", "label": "Link" }
+      ]
+    }
+  ],
+
+  "presets": [
+    { "name": "Visual Nav", "category": "Collection" }
+  ],
+  "enabled_on": {
+    "templates": ["collection"]
+  }
+}
+{% endschema %}

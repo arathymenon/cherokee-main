@@ -1,0 +1,26 @@
+@layer components {
+  .breadcrumbs {
+    a {
+      color: currentcolor;
+      text-decoration: none;
+    }
+
+    span {
+      color: currentcolor;
+    }
+
+    ul {
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    li {
+      display: flex;
+
+      &:not(:last-child)::after {
+        content: "/";
+        margin: 0 0.5rem;
+      }
+    }
+  }
+}

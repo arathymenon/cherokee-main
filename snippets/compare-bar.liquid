@@ -1,0 +1,112 @@
+{%- comment -%}
+  Floating product-comparison bar + drawer for the collection PLP.
+  Rendered once, only on collections where compare is enabled.
+
+  Layout (matches Figma): a centered pill sits 16px above a full-width
+  bottom-sheet drawer. Pill + drawer live in one slider that moves as a unit:
+  - closed → slider is translated down by the drawer's height (--compare-h, set
+    by the controller) so only the pill peeks 16px above the bottom edge,
+  - open → slider rests at translateY(0); the drawer is flush to the bottom.
+
+  Behavior is owned by <compare-bar> (scripts/components/compare-bar.js):
+  - Pill toggles compare mode (body.compare-active) and the drawer together
+    (data-open on <compare-bar> drives the slide via CSS).
+  - JS clones [data-compare-item-template] / [data-compare-empty-template]
+    to fill the slot row from sessionStorage.
+{%- endcomment -%}
+
+{%- assign compare_max = 4 -%}
+
+<compare-bar
+  data-collection-handle="{{ collection.handle }}"
+  data-collection-title="{{ collection.title | escape }}"
+  data-compare-max="{{ compare_max }}"
+  data-remove-label="{{ 'products.compare.remove' | t: title: '%TITLE%' | escape }}"
+  class="group fixed inset-x-0 bottom-0 z-40 pointer-events-none"
+  style="--compare-h: 16rem;">
+
+  {%- #  Slider: pill + drawer move together (see comment above)  -%}
+  <div class="flex flex-col items-center w-full transition-transform duration-300 ease-out
+    translate-y-(--compare-h) group-data-open:translate-y-0">
+
+    {%- #  Pill  -%}
+    <button
+      type="button"
+      data-compare-toggle
+      aria-expanded="false"
+      aria-controls="compare-drawer"
+      class="pointer-events-auto button rounded-full! mb-4 flex items-center gap-2">
+      <span>{{ 'products.compare.pill' | t }}</span>
+      <span>(<span data-compare-count>0</span>/{{ compare_max }})</span>
+      <span data-compare-chevron class="size-4 [&>svg]:size-full transition-transform">
+        {{- 'icon-angle-down.svg' | inline_asset_content -}}
+      </span>
+    </button>
+
+    {%- #  Drawer — full-width bottom sheet  -%}
+    <div
+      id="compare-drawer"
+      role="region"
+      aria-label="{{ 'products.compare.comparing' | t }}"
+      data-compare-drawer
+      class="pointer-events-auto w-full bg-grey-light-blue rounded-t-theme shadow-xl px-4 py-5 lg:p-10">
+
+      {%- #  Header  -%}
+      <div class="flex md:items-center md:flex-row flex-col justify-between gap-4 mb-4 lg:mb-6">
+        <p class="fs-display-3 flex items-center gap-2 mb-0">
+          <span>{{ 'products.compare.comparing' | t }}</span>
+          <span><span data-compare-count>0</span>/{{ compare_max }}</span>
+          <span>{{ 'products.compare.items' | t }}</span>
+        </p>
+        <div class="flex md:flex-row flex-row-reverse items-center justify-between md:justify-normal gap-4 lg:gap-6 shrink-0">
+          <button
+            type="button"
+            data-compare-clear
+            class="underline-button mb-0! hidden group-has-data-compare-item-remove:inline-block">
+            {{ 'products.compare.clear_all' | t }}
+          </button>
+          <button type="button" data-compare-now class="button button-sm rounded-full!" disabled>
+            {{ 'products.compare.compare_now' | t }}
+          </button>
+        </div>
+      </div>
+
+      {%- #  Slots — rendered by JS (filled items + empty placeholders)  -%}
+      <div
+        data-compare-slots
+        class="grid grid-cols-4 gap-4 max-lg:flex max-lg:overflow-x-auto max-lg:snap-x">
+      </div>
+    </div>
+  </div>
+
+  {%- #  Clone template: a filled slot (horizontal card)  -%}
+  <template data-compare-item-template>
+    <div class="relative flex items-center bg-white rounded-theme-sm p-2 h-27
+      max-lg:w-70 max-lg:shrink-0 max-lg:snap-start">
+      <a data-compare-item-link class="block shrink-0 no-underline">
+        <img data-compare-item-image src="" alt="" width="120" height="184"
+          class="h-23 w-15 rounded-theme-sm object-cover" />
+      </a>
+      <div class="flex flex-col gap-1 justify-center min-w-0 flex-1 px-4">
+        <span data-compare-item-collection class="fs-display-6 text-brand-blue truncate"></span>
+        <a data-compare-item-title-link class="fs-body-md font-medium text-black no-underline line-clamp-2"></a>
+      </div>
+      <button type="button" data-compare-item-remove
+        class="shrink-0 size-10 rounded-full bg-white border border-grey text-black flex-center
+          transition-colors hover:bg-grey-light">
+        <span class="size-3 [&>svg]:size-full">{{- 'icon-x.svg' | inline_asset_content -}}</span>
+      </button>
+    </div>
+  </template>
+
+  {%- #  Clone template: an empty slot  -%}
+  <template data-compare-empty-template>
+    <div class="flex-center bg-white border border-dashed border-grey rounded-theme-sm p-2 h-27
+      max-lg:w-70 max-lg:shrink-0 max-lg:snap-start"
+      aria-label="{{ 'products.compare.empty_slot' | t | escape }}">
+      <span class="flex-center size-10 rounded-full bg-white border border-grey text-grey-dark">
+        <span class="size-4 [&>svg]:size-full">{{- 'icon-plus.svg' | inline_asset_content -}}</span>
+      </span>
+    </div>
+  </template>
+</compare-bar>

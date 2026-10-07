@@ -1,0 +1,9 @@
+.icon-list-icon {
+  height: var(--icon-h-mobile, 40px);
+}
+
+@media (min-width: theme(--breakpoint-lg)) {
+  .icon-list-icon {
+    height: var(--icon-h-desktop, 40px);
+  }
+}

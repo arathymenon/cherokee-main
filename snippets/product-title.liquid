@@ -1,0 +1,22 @@
+{%- comment -%}
+  This should be the source of truth for the product title.
+  So instead of using {{ product.title }} directly in the template,
+  you should use this snippet.
+
+  If you have a logic that modifies the product title,
+  for example, splitting the original title by the first pipe character (|),
+  and removing the last part, you should do it here.
+
+  This snippet should NOT contain any styling/wrappers like <h1>, <h2>, <div class> etc.
+  The styling and wrappers should be in the parent template/snippet where this snippet is rendered.
+
+  The non-html characters should be escaped to be ready for rendering.
+
+  Accepts:
+  - product: {Object} Shopify product
+{%- endcomment -%}
+
+{%- liquid
+  assign product_title = product.title
+  echo product_title | escape
+-%}

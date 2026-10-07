@@ -1,0 +1,45 @@
+{%- comment -%}
+  Renders the right-side image promo for a mega menu block.
+
+  Accepts:
+    - block: {Object} the mega_menu section block; reads
+      block.settings.image, block.settings.image_url, block.settings.image_text
+{%- endcomment -%}
+
+{%- liquid
+  assign image = block.settings.image
+  assign url = block.settings.image_url
+  assign text = block.settings.image_text
+-%}
+
+<a href="{{ url | default: '#' }}" class="block no-underline group/header-promo">
+  <div class="aspect-[200/260] w-[200px] overflow-hidden rounded-[12px] mb-2">
+    {%- if image != blank -%}
+      {%- capture image_html -%}
+        {{
+          image
+          | image_url: width: 600
+          | image_tag:
+            width: image.width,
+            height: image.height,
+            alt: image.alt | default: text,
+            loading: 'lazy',
+            sizes: '(min-width: 768px) 25vw, 80vw',
+            class: 'size-full object-cover'
+        }}
+      {%- endcapture -%}
+      {% render 'media-loader', content: image_html, show_skeleton: true %}
+    {%- else -%}
+      <div class="size-full bg-grey-light"></div>
+    {%- endif -%}
+  </div>
+
+  {%- if text != blank -%}
+    <div class="arrow-button">
+      <span>{{ text | escape }}</span>
+      <span class="arrow-button-icon">
+        {{- 'icon-arrow-right.svg' | inline_asset_content -}}
+      </span>
+    </div>
+  {%- endif -%}
+</a>

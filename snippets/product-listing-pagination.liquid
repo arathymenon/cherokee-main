@@ -1,0 +1,50 @@
+<!-- snippet: product-listing-pagination -->
+
+{% doc %}
+  Renders pagination controls for product listings.
+
+  @param {string} type - 'prev' or 'more'
+  @param {object} paginate - Shopify paginate object
+
+  @example
+  {% render 'product-listing-pagination', type: 'more', paginate: paginate %}
+{% enddoc %}
+
+{%- if type == 'prev' -%}
+  <div data-ajax-pagination="load_prev">
+    {%- if paginate.previous.is_link -%}
+      <div class="flex justify-center py-6">
+        <pagination-link data-pagination-link-mode="prepend">
+          <a href="{{ paginate.previous.url }}" class="button button-outline button-primary">
+            Load previous
+          </a>
+        </pagination-link>
+      </div>
+    {%- endif -%}
+  </div>
+
+{%- elsif type == 'more' -%}
+  <div data-ajax-pagination="load_more">
+    {%- if paginate.next.is_link -%}
+      {%- liquid
+        assign current_items = paginate.page_size | times: paginate.current_page
+        if current_items > paginate.items
+          assign current_items = paginate.items
+        endif
+      -%}
+      <div class="flex flex-col items-center gap-4 pt-md">
+        <p class="fs-body-sm text-scheme-icons">
+          Showing {{ current_items }} of {{ paginate.items }}
+        </p>
+
+        <pagination-link data-pagination-link-mode="append">
+          <a href="{{ paginate.next.url }}" 
+            class="button button-outline-black">
+            Load more 
+          </a>
+        </pagination-link>
+        
+      </div>
+    {%- endif -%}
+  </div>
+{%- endif -%}

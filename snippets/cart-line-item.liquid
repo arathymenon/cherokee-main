@@ -1,0 +1,57 @@
+<!-- snippet: cart-line-item -->
+{%- comment -%}
+  Renders a single line item as an <li> in the cart list.
+
+  Accepts:
+  - line_item: {Object}
+  - line_item_index: {Number} The index of the line item in the cart starting from 1
+{%- endcomment -%}
+
+<li class="grid grid-cols-[100px_1fr] lg:grid-cols-[120px_1fr] gap-x-4 py-4 border-b border-grey-light border-solid">
+
+  {%- # Column 1: image -%}
+  <a
+    href="{{ line_item.url }}"
+    class="w-[100px] lg:w-[120px] block aspect-product-image bg-grey-light rounded-theme-sm overflow-hidden"
+    aria-hidden="true"
+    tabindex="-1">
+    {%- if line_item.image -%}
+      {{ line_item.image
+        | image_url: width: 220
+        | image_tag: loading: 'lazy', class: 'size-full object-cover' }}
+    {%- endif -%}
+  </a>
+
+  {%- # Column 2: stacked content rows -%}
+  <div class="flex flex-col gap-2">
+
+    {%- # Row 1: title + remove icon -%}
+    <div class="flex justify-between items-start gap-2">
+      {%- render 'cart-line-item-title', line_item: line_item -%}
+      {%- render 'cart-line-item-remove', line_item: line_item -%}
+    </div>
+
+    {%- # Row 2: status flags (clearance, final sale) — renders nothing if none apply -%}
+    {%- render 'cart-line-item-flags', line_item: line_item -%}
+
+    {%- # Row 3: variant options, each on its own line -%}
+    {%- render 'cart-line-item-options', line_item: line_item -%}
+
+    {%- # Row 4: line-level discount badges (renders nothing if none) -%}
+    {%- render 'cart-line-item-discounts', line_item: line_item -%}
+
+    {%- # Row 5: quantity + per-unit price -%}
+    <div class="flex justify-between items-center">
+      <div class="w-24">
+        {%- render 'cart-line-item-quantity', line_item: line_item, line_item_index: line_item_index -%}
+      </div>
+      <div class="fs-body-sm">
+        {%- render 'cart-line-item-one-price', line_item: line_item -%}
+      </div>
+    </div>
+
+    {%- # Row 6: line-scoped error (e.g. "Max quantity in cart." on a rejected change) -%}
+    {%- render 'cart-line-item-errors', line_item: line_item -%}
+
+  </div>
+</li>

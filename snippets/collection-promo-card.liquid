@@ -1,0 +1,76 @@
+<!-- snippet: collection-promo-card -->
+
+{% doc %}
+  Renders a promo card in the collection product grid.
+  Positioned via CSS grid custom properties.
+
+  @param {object} collection - Shopify collection object (required)
+
+  @example
+  {% render 'collection-promo-card', collection: collection %}
+{% enddoc %}
+
+{%- liquid
+  assign card = collection.metafields.cards.promo_cards.value
+
+  if card == blank
+    break
+  endif
+
+  assign placement = card.text_placement | default: 'Bottom left'
+  assign placement_parts = placement | split: ' '
+  assign vertical = placement_parts[0]
+  assign horizontal = placement_parts[1]
+
+  case vertical
+    when 'Top'
+      assign v_class = 'items-start'
+    when 'Center'
+      assign v_class = 'items-center'
+    when 'Bottom'
+      assign v_class = 'items-end'
+  endcase
+
+  case horizontal
+    when 'left'
+      assign h_class = 'justify-start text-left'
+    when 'center'
+      assign h_class = 'justify-center text-center'
+    when 'right'
+      assign h_class = 'justify-end text-right'
+  endcase
+
+  assign col_span = card.columns | default: 2
+  assign mobile_span = col_span | at_most: 2
+-%}
+
+<div class="collection-promo-card relative overflow-hidden"
+  style="--card-desktop-row: 3; --card-desktop-col: 1; --card-desktop-span: {{ col_span }}; --card-mobile-row: 5; --card-mobile-col: 1; --card-mobile-span: {{ mobile_span }};">
+
+  {%- if card.media -%}
+    {{ card.media | image_url: width: 1000 | image_tag:
+      class: 'absolute inset-0 w-full h-full object-cover',
+      sizes: '(min-width: 1024px) 50vw, 100vw',
+      widths: '400, 600, 800, 1000',
+      loading: 'lazy' }}
+  {%- endif -%}
+
+  <div class="absolute inset-0 flex p-6 lg:p-10 {{ v_class }} {{ h_class }}">
+    <div>
+      {% if card.eyebrow != blank %}
+        <p class="fs-eyebrow mb-2 text-white">{{ card.eyebrow }}</p>
+      {% endif %}
+      {% if card.title != blank %}
+        <div role="heading" aria-level="3" class="fs-display-3 text-white mb-2">{{ card.title }}</div>
+      {% endif %}
+      {% if card.link != blank %}
+        {% render 'arrow-button',
+          url: card.link.value.url,
+          text: card.link.value.text,
+          class: 'text-white'
+        %}
+      {% endif %}
+    </div>
+  </div>
+
+</div>

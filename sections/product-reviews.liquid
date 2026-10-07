@@ -1,0 +1,361 @@
+<!-- section: product-reviews -->
+
+{{ 'product-reviews.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign s = section.settings
+  assign uid = 'product-reviews-' | append: section.id
+
+  assign max_width_class = ''
+  assign max_width_style = ''
+  if s.max_width == 'container'
+    assign max_width_class = 'max-w-[1200px] mx-auto'
+  elsif s.max_width == 'custom' and s.max_width_custom != blank
+    assign max_width_class = 'mx-auto'
+    assign safe_custom = s.max_width_custom | escape
+    assign max_width_style = 'max-width: ' | append: safe_custom | append: ';'
+  endif
+
+  assign side_padding_class = ''
+  if s.side_padding
+    assign side_padding_class = 'px-gutter'
+  endif
+
+  assign align_text_class = ''
+  if s.align_text == 'center'
+    assign align_text_class = 'text-center'
+  endif
+
+  assign heading_class = 'fs-display-2'
+  if s.heading_size == '3'
+    assign heading_class = 'fs-display-3'
+  endif
+
+  assign min_height_style = ''
+  if s.min_height != blank
+    assign min_height_style = 'min-height: ' | append: s.min_height | append: ';'
+  endif
+
+  assign tab1_label = s.tab1_label | default: 'Reviews'
+  assign tab2_label = s.tab2_label | default: 'Q&A'
+-%}
+
+<section
+  id="{{ s.section_id }}"
+  data-product-reviews="{{ section.id }}"
+  class="color-{{ s.color_scheme }} overflow-hidden"
+  style="{{ min_height_style }}">
+  <div
+    class="{{ max_width_class }} {{ side_padding_class }} py-lg"
+    style="{{ max_width_style }}">
+
+    {% if s.heading != blank %}
+      <div
+        role="heading"
+        aria-level="{{ s.heading_size }}"
+        class="{{ heading_class }} mb-md {{ align_text_class }}">
+        {{ s.heading | escape }}
+      </div>
+    {% endif %}
+
+    <div role="tablist" class="flex flex-row gap-sm mb-md">
+      <button
+        type="button"
+        role="tab"
+        id="{{ uid }}-tab-reviews"
+        aria-selected="true"
+        aria-controls="{{ uid }}-panel-reviews"
+        data-product-reviews-tab="reviews"
+        class="font-medium text-left underline-offset-8 decoration-2 aria-selected:underline">
+        {{ tab1_label | escape }}
+      </button>
+      <button
+        type="button"
+        role="tab"
+        id="{{ uid }}-tab-qa"
+        aria-selected="false"
+        aria-controls="{{ uid }}-panel-qa"
+        data-product-reviews-tab="qa"
+        class="font-medium text-left underline-offset-8 decoration-2 aria-selected:underline">
+        {{ tab2_label | escape }}
+      </button>
+    </div>
+
+    <div
+      role="tabpanel"
+      id="{{ uid }}-panel-reviews"
+      aria-labelledby="{{ uid }}-tab-reviews"
+      data-product-reviews-panel="reviews">
+      {%- for block in section.blocks -%}
+        {%- assign b = block.settings -%}
+        {% case block.type %}
+
+          {% when 'reviews' %}
+            <div class="mb-md last:mb-0" {{ block.shopify_attributes }}>
+              {% if b.heading != blank %}
+                <div role="heading" aria-level="3" class="fs-display-2 mb-sm text-center">
+                  {{ b.heading | escape }}
+                </div>
+              {% endif %}
+              {% if b.instance_id != blank %}
+                <div
+                  class="yotpo-widget-instance"
+                  data-yotpo-instance-id="{{ b.instance_id | escape }}"
+                  data-yotpo-product-id="{{ product.id }}"
+                  data-yotpo-name="{{ product.title | escape }}"
+                  data-yotpo-url="{{ shop.url }}{{ product.url }}"
+                  data-yotpo-image-url="{{ product.featured_image | product_img_url: 'large' | prepend: 'https:' | replace: '?', '%3F' | replace: '&', '%26' }}"
+                  data-yotpo-price="{{ product.price | divided_by: 100.00 }}"
+                  data-yotpo-currency="{{ shop.currency }}"
+                  data-yotpo-description="{{ product.description | escape }}"></div>
+              {% endif %}
+            </div>
+
+          {% when 'raw_html' %}
+            {%- if b.tab == 'reviews' -%}
+              <div class="mb-md last:mb-0" {{ block.shopify_attributes }}>
+                {% if b.heading != blank %}
+                  <div role="heading" aria-level="3" class="fs-display-3 mb-sm">
+                    {{ b.heading | escape }}
+                  </div>
+                {% endif %}
+                {{ b.html }}
+              </div>
+            {%- endif -%}
+
+        {% endcase %}
+      {%- endfor -%}
+    </div>
+
+    <div
+      role="tabpanel"
+      id="{{ uid }}-panel-qa"
+      aria-labelledby="{{ uid }}-tab-qa"
+      data-product-reviews-panel="qa"
+      hidden>
+      {%- for block in section.blocks -%}
+        {%- assign b = block.settings -%}
+        {% case block.type %}
+
+          {% when 'qa' %}
+            <div class="mb-md last:mb-0" {{ block.shopify_attributes }}>
+              {% if b.heading != blank %}
+                <div role="heading" aria-level="3" class="fs-display-2 mb-6 text-center">
+                  {{ b.heading | escape }}
+                </div>
+              {% endif %}
+              {% if b.instance_id != blank %}
+                <div
+                  class="yotpo-widget-instance"
+                  data-yotpo-instance-id="{{ b.instance_id | escape }}"
+                  data-yotpo-product-id="{{ product.id }}"
+                  data-yotpo-name="{{ product.title | escape }}"
+                  data-yotpo-url="{{ shop.url }}{{ product.url }}"
+                  data-yotpo-image-url="{{ product.featured_image | product_img_url: 'large' | prepend: 'https:' | replace: '?', '%3F' | replace: '&', '%26' }}"
+                  data-yotpo-description="{{ product.description | escape }}"></div>
+              {% endif %}
+            </div>
+
+          {% when 'raw_html' %}
+            {%- if b.tab == 'qa' -%}
+              <div class="mb-md last:mb-0" {{ block.shopify_attributes }}>
+                {% if b.heading != blank %}
+                  <div role="heading" aria-level="3" class="fs-display-3 mb-sm">
+                    {{ b.heading | escape }}
+                  </div>
+                {% endif %}
+                {{ b.html }}
+              </div>
+            {%- endif -%}
+
+        {% endcase %}
+      {%- endfor -%}
+    </div>
+
+  </div>
+</section>
+
+<script>
+  (function () {
+    var root = document.querySelector('[data-product-reviews="{{ section.id }}"]');
+    if (!root) return;
+    var tabs = root.querySelectorAll('[data-product-reviews-tab]');
+    var panels = root.querySelectorAll('[data-product-reviews-panel]');
+    tabs.forEach(function (tab) {
+      tab.addEventListener('click', function () {
+        var target = tab.getAttribute('data-product-reviews-tab');
+        tabs.forEach(function (t) {
+          t.setAttribute('aria-selected', t === tab ? 'true' : 'false');
+        });
+        panels.forEach(function (p) {
+          if (p.getAttribute('data-product-reviews-panel') === target) {
+            p.removeAttribute('hidden');
+          } else {
+            p.setAttribute('hidden', '');
+          }
+        });
+      });
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Product Reviews",
+  "tag": "section",
+  "enabled_on": {
+    "templates": ["product"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "section_id",
+      "label": "Section ID",
+      "info": "Add an ID to this section so you can link to it in a URL like #reviews"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme"
+    },
+    {
+      "type": "select",
+      "id": "max_width",
+      "label": "Max width",
+      "options": [
+        { "value": "full-width", "label": "Full width" },
+        { "value": "container", "label": "Container" },
+        { "value": "custom", "label": "Custom" }
+      ],
+      "default": "container"
+    },
+    {
+      "type": "text",
+      "id": "max_width_custom",
+      "label": "Custom max width",
+      "info": "Any CSS length, e.g. 960px, 70rem, 90vw.",
+      "visible_if": "{{ section.settings.max_width == 'custom' }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "side_padding",
+      "label": "Add side padding",
+      "default": true,
+      "info": "Adds horizontal gutter padding inside the container."
+    },
+    {
+      "type": "text",
+      "id": "min_height",
+      "label": "Min Height",
+      "info": "Setting a min height helps with CLS scores on Google Pagespeed. You can enter '500px' or '100vh'."
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading size",
+      "options": [
+        { "value": "2", "label": "H2" },
+        { "value": "3", "label": "H3" }
+      ],
+      "default": "2"
+    },
+    {
+      "type": "select",
+      "id": "align_text",
+      "label": "Align text",
+      "options": [
+        { "value": "left", "label": "left" },
+        { "value": "center", "label": "center" }
+      ],
+      "default": "left"
+    },
+    { "type": "header", "content": "Tabs" },
+    {
+      "type": "text",
+      "id": "tab1_label",
+      "label": "Tab 1 label",
+      "default": "Reviews"
+    },
+    {
+      "type": "text",
+      "id": "tab2_label",
+      "label": "Tab 2 label",
+      "default": "Q&A"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "reviews",
+      "name": "Reviews",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading"
+        },
+        {
+          "type": "text",
+          "id": "instance_id",
+          "label": "Yotpo Instance ID",
+          "info": "The numeric instance ID for the Yotpo Reviews widget, e.g. '1307631'."
+        }
+      ]
+    },
+    {
+      "type": "qa",
+      "name": "Q&A",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading"
+        },
+        {
+          "type": "text",
+          "id": "instance_id",
+          "label": "Yotpo Instance ID",
+          "info": "The numeric instance ID for the Yotpo Q&A widget, e.g. '1319640'."
+        }
+      ]
+    },
+    {
+      "type": "raw_html",
+      "name": "Raw HTML",
+      "settings": [
+        {
+          "type": "select",
+          "id": "tab",
+          "label": "Tab",
+          "options": [
+            { "value": "reviews", "label": "Reviews" },
+            { "value": "qa", "label": "Q&A" }
+          ],
+          "default": "reviews"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading"
+        },
+        {
+          "type": "liquid",
+          "id": "html",
+          "label": "HTML",
+          "info": "Paste any HTML or embed code. Liquid is supported."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product Reviews",
+      "category": "Custom"
+    }
+  ]
+}
+{% endschema %}

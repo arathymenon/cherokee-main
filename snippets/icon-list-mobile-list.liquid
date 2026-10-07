@@ -1,0 +1,45 @@
+<!-- snippet: icon-list-mobile-list -->
+
+{% doc %}
+  Mobile vertical-list layout for the icon-list section.
+  Optional section image above the header. Alignment driven by `s.mobile_align`.
+  Parent should wrap with `lg:hidden` (when desktop=image-column) or `md:hidden` (when desktop=horizontal).
+
+  @param {object} section - Shopify section object (required)
+  @param {boolean} show_image - Whether to render section_image above the header (required)
+
+  @example
+  {% render 'icon-list-mobile-list', section: section, show_image: true %}
+{% enddoc %}
+
+{%- assign s = section.settings -%}
+
+{% if show_image and s.section_image != blank %}
+  <div class="aspect-square overflow-hidden rounded-theme mb-md">
+    {%- capture content -%}
+      {{- s.section_image
+        | image_url: width: 1600
+        | image_tag:
+            class: 'w-full h-full object-cover',
+            loading: 'lazy',
+            sizes: '100vw',
+            widths: '600, 900, 1200, 1600'
+      -}}
+    {%- endcapture -%}
+    {%- render 'media-loader', content: content, show_skeleton: true -%}
+  </div>
+{% endif %}
+
+<div class="">
+  {% render 'icon-list-header', eyebrow: s.eyebrow, headline: s.heading, align: s.mobile_align %}
+</div>
+
+{% if section.blocks.size > 0 %}
+  <ul class="flex flex-col gap-md">
+    {% for block in section.blocks %}
+      <li class="py-sm" {{ block.shopify_attributes }}>
+        {% render 'icon-list-item', block: block, align: s.mobile_align %}
+      </li>
+    {% endfor %}
+  </ul>
+{% endif %}

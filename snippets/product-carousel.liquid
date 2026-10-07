@@ -1,0 +1,146 @@
+<!-- snippet: product-carousel -->
+{% doc %}
+  Renders a tarot-carousel of product cards with heading, nav buttons, and CTA.
+
+  @param {object} carousel_collection - Collection to render products from
+  @param {string} [heading] - Carousel heading (default: collection title)
+  @param {string} [text] - Rich text displayed below heading
+  @param {string} [button_text] - CTA button text (default: 'Shop All')
+  @param {string} [link_url] - CTA link URL (default: collection URL)
+  @param {string} [color_scheme] - Color scheme class
+  @param {number} [products_to_show] - Max products to display (default: 12)
+  @param {boolean} [loop] - Loop carousel (default: false)
+  @param {number} [slides_per_view_tablet] - Slides per view at tablet breakpoint (default: 2)
+  @param {number} [slides_per_view_laptop] - Slides per view at laptop breakpoint (default: 3)
+  @param {number} [slides_per_view_desktop] - Slides per view at desktop breakpoint (default: 4)
+  @param {boolean} [hide_header] - Hide the heading/text/CTA row above the carousel (default: false)
+  @param {boolean} [hide_padding] - Strip the carousel's outer vertical padding and horizontal gutter so it sits flush with its container (default: false)
+  @param {string} [preferred_color_labels] - '||'-delimited Color option labels forwarded to each product card (drives card image, swatch preselect, and quick-shop URL; see product-card)
+
+  @example
+  {% render 'product-carousel', carousel_collection: collection %}
+  {% render 'product-carousel', carousel_collection: collection, heading: 'You may like', products_to_show: 8 %}
+  {% render 'product-carousel', carousel_collection: collection, hide_header: true, hide_padding: true %}
+{% enddoc %}
+
+{%- liquid
+  assign _heading = heading | default: carousel_collection.title
+  assign _button_text = button_text | default: 'Shop All'
+  assign _link_url = link_url | default: carousel_collection.url
+  assign _products_to_show = products_to_show | default: 12
+  assign _loop = loop | default: false
+  assign _spv_tablet = slides_per_view_tablet | default: 2
+  assign _spv_laptop = slides_per_view_laptop | default: 3
+  assign _spv_desktop = slides_per_view_desktop | default: 4
+
+  if hide_padding
+    assign _outer_padding_class = ''
+    assign _tarot_class = 'group'
+    assign _nav_gutter_class = ''
+    assign _prev_position_class = 'left-0'
+    assign _next_position_class = 'right-0'
+    assign _header_wrapper_class = ''
+  else
+    assign _outer_padding_class = 'pt-section pb-section'
+    assign _tarot_class = 'group lg:px-gutter'
+    assign _nav_gutter_class = 'px-gutter'
+    assign _prev_position_class = 'left-4'
+    assign _next_position_class = 'right-4'
+    assign _header_wrapper_class = 'px-gutter'
+  endif
+-%}
+
+<section class="color-{{ color_scheme }}">
+  <div class="{{ _outer_padding_class }}">
+
+    {% unless hide_header %}
+      <div class="{{ _header_wrapper_class }} flex justify-between items-center mb-sm">
+        <div class="flex flex-col gap-2">
+          {% if _heading != blank %}
+            <div role="heading" aria-level="2" class="fs-display-3">{{ _heading }}</div>
+          {% endif %}
+
+          {% if text != blank %}
+            <div class="rte max-w-[720px] text-pretty">{{ text }}</div>
+          {% endif %}
+        </div>
+
+        {% if _link_url != blank %}
+          {% render 'arrow-button',
+            url: _link_url,
+            text: _button_text
+          %}
+        {% endif %}
+      </div>
+    {% endunless %}
+
+    <tarot-carousel class="{{ _tarot_class }}">
+
+      <div class="{{ _nav_gutter_class }} relative">
+        {%- assign prev_class = 'flex absolute z-2 opacity-0 group-hover:opacity-100 transition-opacity ' | append: _prev_position_class -%}
+        {%- assign next_class = 'flex absolute z-2 opacity-0 group-hover:opacity-100 transition-opacity ' | append: _next_position_class -%}
+        {% render 'carousel-buttons',
+          prev_class: prev_class,
+          next_class: next_class
+        %}
+      </div>
+
+      <script type="application/json" data-tarot-options>
+        {
+          "loop": {{ _loop | json }},
+          "gap": "1px",
+          "slidesPerView": 2,
+          "navigation": {
+            "showButtons": false,
+            "showPagination": true,
+            "smartButtons": true
+          },
+          "breakpoints": {
+            "768": {
+              "gap": "8px",
+              "slidesPerView": {{ _spv_tablet }},
+              "navigation": {
+                "showPagination": false,
+                "showButtons": true
+              }
+            },
+            "1024": {
+              "gap": "8px",
+              "slidesPerView": {{ _spv_laptop }},
+              "navigation": {
+                "showPagination": false,
+                "showButtons": true
+              }
+            },
+            "1280": {
+              "gap": "8px",
+              "slidesPerView": {{ _spv_desktop }},
+              "navigation": {
+                "showPagination": false,
+                "showButtons": true
+              }
+            }
+          }
+        }
+      </script>
+
+      <tarot-viewport>
+        <tarot-track>
+          {% for product in carousel_collection.products limit: _products_to_show %}
+            <tarot-slide>
+              {% render 'product-card',
+                product: product,
+                collection_context: carousel_collection,
+                preferred_color_labels: preferred_color_labels
+              %}
+            </tarot-slide>
+          {% endfor %}
+        </tarot-track>
+      </tarot-viewport>
+
+      <div data-tarot-pagination class="py-sm md:hidden"></div>
+
+    </tarot-carousel>
+
+  </div>
+</section>

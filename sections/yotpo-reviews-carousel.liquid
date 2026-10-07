@@ -1,0 +1,70 @@
+<!-- section: yotpo-reviews-carousel -->
+
+{%- liquid
+  assign s = section.settings
+  assign instance_id = s.instance_id | default: "1319642"
+-%}
+
+<section class="py-md">
+
+  {% if s.heading != blank %}
+    <div class="px-gutter w-full" >
+      <div class="mx-auto">
+        <div
+          role="heading"
+          aria-level="2"
+          class="fs-display-2 mb-sm">
+            {{- s.heading | escape -}}
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+  <yotpo-lazy-widget
+    class="block mx-auto min-h-[24rem]"
+    {% if s.widget_id != blank %}
+      loader-src="https://cdn-widgetsrepository.yotpo.com/v1/loader/{{ s.widget_id | escape }}"
+    {% endif %}>
+    <div
+      data-yotpo-instance-id="{{ instance_id | escape }}"
+      data-yotpo-product-id="{{ product.id }}"
+      data-yotpo-cart-product-id="{{ item.product.id }}"></div>
+  </yotpo-lazy-widget>
+
+</section>
+
+{% schema %}
+{
+  "name": "Yotpo Reviews Carousel",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading"
+    },
+    {
+      "type": "text",
+      "id": "instance_id",
+      "label": "Yotpo Instance ID",
+      "info": "The data-yotpo-instance-id for this widget (e.g. '1319642').",
+      "default": "1319642"
+    },
+    {
+      "type": "text",
+      "id": "widget_id",
+      "label": "Yotpo Widget ID",
+      "info": "The ID at the end of your Yotpo widget loader URL, e.g. 'uYOSEsQmXRjRHq6WfsKJSXEDdP1YYdD6NEdP6FQf'"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Yotpo Reviews Carousel",
+      "category": "Custom"
+    }
+  ],
+  "disabled_on": {
+    "groups": ["*"]
+  }
+}
+{% endschema %}

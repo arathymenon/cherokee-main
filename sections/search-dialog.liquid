@@ -1,0 +1,62 @@
+<!-- section: search-dialog -->
+<openable-component data-close-on-outside-click>
+  <dialog id="search-dialog"
+    class="dialog-t-drawer w-full overflow-hidden px-5 max-h-dvh" data-openable>
+    <div class="flex flex-col overflow-hidden pt-sm mx-auto w-full max-w-[720px] max-h-dvh">
+
+      <predictive-search class="flex flex-col flex-1 min-h-0">
+        <form action="{{ routes.search_url }}" method="get" role="search" class="flex flex-col flex-1 min-h-0">
+          <div class="flex items-center gap-2 w-full border-b border-current py-3 mb-sm">
+            <input
+              class="flex-1 bg-transparent outline-none"
+              type="search"
+              name="q"
+              data-predictive-search-input
+              autofocus
+              value=""
+              placeholder="{{ 'general.search.search' | t }}"
+              role="combobox"
+              autocorrect="off"
+              autocomplete="off"
+              autocapitalize="off"
+              spellcheck="false"
+            >
+            <div class="flex items-center gap-4 shrink-0">
+              <button
+                type="submit"
+                class="flex items-center justify-center [&_svg]:size-4"
+                aria-label="{{ 'general.search.search' | t }}" >
+                {{- 'icon-magnifier.svg' | inline_asset_content -}}
+              </button>
+              <button
+                type="button"
+                class="flex items-center justify-center [&_svg]:size-4"
+                aria-label="{{ 'accessibility.close' | t }}"
+                onclick="this.closest('dialog').close()" >
+                {{- 'icon-x.svg' | inline_asset_content -}}
+              </button>
+            </div>
+          </div>
+
+          <input type="hidden" name="options[prefix]" value="last">
+          <input type="hidden" name="type" value="product">
+
+          <div
+            class="flex-1 overflow-auto overscroll-none no-scrollbar"
+            data-predictive-search-results >
+          </div>
+
+          <span class="sr-only" role="status" aria-hidden="true" data-predictive-search-status></span>
+        </form>
+      </predictive-search>
+
+    </div>
+  </dialog>
+</openable-component>
+
+{% schema %}
+{
+  "name": "Search dialog",
+  "settings": []
+}
+{% endschema %}

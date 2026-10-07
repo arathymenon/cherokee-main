@@ -1,0 +1,52 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "page_header": {
+      "type": "page-header",
+      "disabled": true,
+      "settings": {
+        "heading": "",
+        "padding_top": "pt-md",
+        "padding_bottom": "pb-sm"
+      }
+    },
+    "page_content": {
+      "type": "page-content",
+      "disabled": true,
+      "settings": {
+        "padding_top": "pt-sm",
+        "padding_bottom": "pb-lg"
+      }
+    },
+    "1fba19ef-381a-4590-ae4f-4145acd78d0f": {
+      "type": "rich-text",
+      "settings": {
+        "color_scheme": "scheme-default",
+        "eyebrow": "",
+        "heading": "About Careismatic Brands",
+        "image_max_height": 60,
+        "richtext": "<h4>Our Story</h4><p>It all started in 1995 when we launched Strategic Partners, Inc. in Chatsworth, California, with our flagship brand Med Couture Uniforms at the forefront. Fast forward to today, and we’ve evolved into Careismatic Brands, an innovator in the medical apparel industry with a growing portfolio of brands and products that cater to all corners of the healthcare world.</p><h4>Our People</h4><p>We are committed to providing a truly unique workplace, driven by our passion to make a positive impact on our people, customers and communities. Our diverse team is a vibrant mix of solution seekers, collaborators, innovators and ethical decision-makers, all dedicated to serving those who care for others.</p><p>Supported by over 700 incredible team members worldwide, we're firmly rooted at our Global HQ in Santa Monica, California. We also maintain strong bases in Chatsworth, Dallas, Canada, Hong Kong, China, Sweden and the United Kingdom.</p><h4>Many Brands, One Mission</h4><p>All of our brands revolve around one guiding principle: to improve the lives of everyday heroes doing extraordinary things. Whether you're a small business owner, caretaker or healthcare worker, we're here for you. We stand proudly alongside dedicated and courageous individuals who strive to serve, nurture and care for others with compassion.</p><p><a href=\"https://www.cherokeeuniforms.com\" target=\"_blank\" title=\"https://www.cherokeeuniforms.com\"><strong>Cherokee Uniforms:</strong></a> Our flagship brand for over a quarter-century, which quickly grew to become the largest and most popular medical apparel line in the world.</p><p><a href=\"https://www.healinghandsscrubs.com/?_kx=oCGmYvxyA0laB88kzGS5tvINTiMipm4zj9VkqL2gMOGtQCW05fwrCpPd3rr13Vw2.VZfpcm\"><strong>Healing Hands</strong></a>: Medical apparel inspired by angels and founded by Bansi Lakhani after receiving inspirational medical care.</p><p><a href=\"https://www.medelita.com/?_kx=oCGmYvxyA0laB88kzGS5tvINTiMipm4zj9VkqL2gMOGtQCW05fwrCpPd3rr13Vw2.VZfpcm\"><strong>Medelita</strong></a>: High-end, tailored medical apparel designs crafted from cutting-edge performance fabrics.</p><p><a href=\"https://www.allheart.com/brands/heartsoul\" target=\"_blank\" title=\"https://www.allheart.com/brands/heartsoul\"><strong>heartsoul</strong>:</a> A fierce, feminine, far-from-ordinary medical apparel brand for women with a huge and loyal following.</p><p><a href=\"https://www.allheart.com/?_kx=oCGmYvxyA0laB88kzGS5tvINTiMipm4zj9VkqL2gMOGtQCW05fwrCpPd3rr13Vw2.VZfpcm\"><strong>AllHeart</strong></a>: Offering top brands at incredible prices, AllHeart brings you an extensive selection of high-quality scrubs, lab coats and nursing uniforms.</p><p><a href=\"https://www.allheart.com/brands/dickies-medical-uniforms\" target=\"_blank\" title=\"https://www.allheart.com/brands/dickies-medical-uniforms\"><strong>Dickies</strong>:</a> Essential workwear for essential workers, with a range of collections under the iconic Dickies brand.</p><p><a href=\"https://medcouture.com/\" title=\"https://medcouture.com/\"><strong>Med Couture</strong></a>: A premium medical apparel brand with fashion-forward collections for men and women, Med Couture joined Careismatic in 2022.</p><p><a href=\"https://www.classroomuniforms.com/\" target=\"_blank\" title=\"https://www.classroomuniforms.com/\"><strong>Classroom</strong></a>: Along with its sister brand Real School, Classroom has been a leader in the school uniform space since 1995.</p>",
+        "richtext_alignment": "text-left",
+        "button_1_text": "",
+        "button_1_link": "",
+        "button_1_style": "button",
+        "button_2_text": "",
+        "button_2_link": "",
+        "button_2_style": "button button-secondary"
+      }
+    }
+  },
+  "order": [
+    "page_header",
+    "page_content",
+    "1fba19ef-381a-4590-ae4f-4145acd78d0f"
+  ]
+}

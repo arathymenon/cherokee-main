@@ -1,0 +1,159 @@
+<!-- snippet: filter-dialog -->
+{% doc %}
+  Generic filter dialog — works for both collection and search pages.
+
+  @param {string} dialog_id - Unique ID for the dialog element
+  @param {array} filters - Array of Shopify Filter objects (e.g. collection.filters or search.filters)
+  @param {string} reset_url - Pre-built URL for "Clear All" link
+
+  @example
+  {% render 'filter-dialog',
+    dialog_id: 'my-dialog',
+    filters: collection.filters,
+    reset_url: reset_url %}
+{% enddoc %}
+
+<openable-component data-close-on-outside-click>
+  <dialog 
+    data-openable
+    aria-labelledby="{{ dialog_id }}-title"
+    id="{{ dialog_id }}"
+    class="dialog-l-drawer p-0 w-full max-w-[480px] h-full"  >
+    <div class="flex flex-col h-full py-md">
+
+      <div class="flex items-center justify-between pb-sm px-5">
+        <div
+          id="{{ dialog_id }}-title"
+          role="heading"
+          aria-level="3"
+          class="fs-display-3">
+          {{ 'facets.filters.container_title' | t }}
+        </div>
+        <button
+          type="button"
+          class="flex items-center justify-center h-4 w-4 [&_svg]:size-4"
+          aria-label="{{ 'accessibility.close' | t }}"
+          onclick="this.closest('dialog').close()">
+          {{- 'icon-x.svg' | inline_asset_content -}}
+        </button>
+      </div>
+
+      <div data-facets-form-content="active-filters-dialog" class="px-5">
+        {%- liquid
+          assign has_active_filters = false
+          for filter in filters
+            if filter.active_values.size > 0
+              assign has_active_filters = true
+              break
+            endif
+            if filter.type == 'price_range'
+              if filter.min_value.value != null or filter.max_value.value != null
+                assign has_active_filters = true
+                break
+              endif
+            endif
+          endfor
+        -%}
+        {%- if has_active_filters -%}
+          <div class="flex flex-wrap items-center gap-2">
+            {%- for filter in filters -%}
+              {%- for value in filter.active_values -%}
+                <a href="{{ value.url_to_remove }}" class="chip [&_svg]:size-3" data-facets-form-link>
+                  <span>{%- render 'filter-active-value-label', filter: filter, value: value -%}</span>
+                  {{- 'icon-x.svg' | inline_asset_content -}}
+                </a>
+              {%- endfor -%}
+              {%- if filter.type == 'price_range' -%}
+                {%- if filter.min_value.value != null or filter.max_value.value != null -%}
+                  <a href="{{ filter.url_to_remove }}" class="chip [&_svg]:size-3" data-facets-form-link>
+                    <span>
+                      {%- if filter.min_value.value -%}{{ filter.min_value.value | money }}{%- else -%}{{ 0 | money }}{%- endif -%}
+                      &mdash;
+                      {%- if filter.max_value.value -%}{{ filter.max_value.value | money }}{%- else -%}{{ filter.range_max | money }}{%- endif -%}
+                    </span>
+                    {{- 'icon-x.svg' | inline_asset_content -}}
+                  </a>
+                {%- endif -%}
+              {%- endif -%}
+            {%- endfor -%}
+            <a href="{{ reset_url }}"
+              class="text-xs underline ml-2"
+              data-facets-form-link>
+              {{ 'facets.filters.reset_all' | t }}
+            </a>
+          </div>
+        {%- endif -%}
+      </div>
+
+      <div class="flex-1 overflow-auto overscroll-none px-5" data-facets-form-content="filter-accordions">
+        {%- for filter in filters -%}
+          {%- liquid
+            assign filter_has_active = false
+            if filter.active_values.size > 0
+              assign filter_has_active = true
+            endif
+            if filter.type == 'price_range'
+              if filter.min_value.value != null or filter.max_value.value != null
+                assign filter_has_active = true
+              endif
+            endif
+          -%}
+          {%- if filter.values.size > 1 or filter.type == 'price_range' or filter.type == 'boolean' -%}
+          <accordion-block class="accordion">
+            <details{% if filter_has_active %} open{% endif %}>
+              <summary class="font-medium">
+                {{ filter.label | escape }}
+              </summary>
+              <filter-show-more class="pb-4 grid gap-0 content-start" limit="10">
+                {%- case filter.type -%}
+
+                  {%- when 'boolean' -%}
+                    {%- render 'filter-boolean-values', filter: filter -%}
+
+                  {%- when 'list' -%}
+                    {%- liquid
+                      assign filter_label_handle = filter.label | handle
+                      assign is_color_filter = false
+                      if filter_label_handle == 'color' or filter_label_handle == 'colour'
+                        for value in filter.values
+                          if value.swatch
+                            assign is_color_filter = true
+                            break
+                          endif
+                        endfor
+                      endif
+                    -%}
+
+                    {%- if is_color_filter -%}
+                      {%- render 'filter-color-swatch', filter: filter -%}
+                    {%- elsif filter_label_handle == 'size' -%}
+                      {%- render 'filter-size-list', filter: filter -%}
+                    {%- else -%}
+                      {%- for value in filter.values -%}
+                        {%- render 'filter-list-value', filter: filter, value: value -%}
+                      {%- endfor -%}
+                    {%- endif -%}
+
+                  {%- when 'price_range' -%}
+                    {%- render 'filter-price-range', filter: filter -%}
+
+                {%- endcase -%}
+                <button type="button"
+                  class="group underline-button fs-body-sm font-normal justify-self-start inline-flex items-center gap-[5px] mt-2 pt-2 pb-1 mb-0"
+                  data-action-show-more-toggle
+                  aria-expanded="false">
+                  <span class="size-4 group-aria-expanded:hidden">{{- 'icon-plus.svg' | inline_asset_content -}}</span>
+                  <span class="size-4 hidden group-aria-expanded:block">{{- 'icon-minus.svg' | inline_asset_content -}}</span>
+                  <span class="group-aria-expanded:hidden">{{ 'facets.filters.show_more' | t }}</span>
+                  <span class="hidden group-aria-expanded:inline">{{ 'facets.filters.show_less' | t }}</span>
+                </button>
+              </filter-show-more>
+            </details>
+          </accordion-block>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+
+    </div>
+  </dialog>
+</openable-component>

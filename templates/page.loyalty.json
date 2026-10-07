@@ -1,0 +1,498 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "page_header": {
+      "type": "page-header",
+      "disabled": true,
+      "settings": {
+        "heading": "",
+        "padding_top": "pt-md",
+        "padding_bottom": "pb-sm"
+      }
+    },
+    "page_content": {
+      "type": "page-content",
+      "disabled": true,
+      "settings": {
+        "padding_top": "pt-sm",
+        "padding_bottom": "pb-lg"
+      }
+    },
+    "17908684230b3b8658": {
+      "type": "apps",
+      "blocks": {
+        "rise_gift_cards_store_credit_rise_store_credit_banner_extension_yUqtzC": {
+          "type": "shopify://apps/rise-gift-cards-store-credit/blocks/rise-store-credit-banner-extension/d837f9d0-9f22-491a-94b6-f32b41864892",
+          "settings": {
+            "backgroundColor": "#FFFFFF",
+            "textColor": "#000000",
+            "with_credit_text": "Your store credit balance:",
+            "with_credit_button_label": "Apply Store Credit",
+            "preview_state": "logged_out",
+            "show_without_credit": false,
+            "no_credit_text": "No credit yet. Shop and earn store credit",
+            "no_credit_button_label": "Shop Now",
+            "no_credit_link": "shopify://collections/all",
+            "show_for_logged_out": false,
+            "logged_out_text": "Check your store credit balance",
+            "logged_out_button_label": "Log In"
+          }
+        }
+      },
+      "block_order": [
+        "rise_gift_cards_store_credit_rise_store_credit_banner_extension_yUqtzC"
+      ],
+      "settings": {
+        "section_id": "",
+        "color_scheme": "",
+        "max_width": "container",
+        "max_width_custom": "",
+        "side_padding": true,
+        "padding_top": "none",
+        "padding_bottom": "none",
+        "min_height": "",
+        "heading": "",
+        "heading_size": "2",
+        "align_text": "left"
+      }
+    },
+    "hero_banner_ye6FDM": {
+      "type": "hero-banner",
+      "name": "Hero Banner",
+      "settings": {
+        "color_scheme": "scheme-dark",
+        "transparent_header": false,
+        "width": "full-width",
+        "add_padding": false,
+        "section_height": 30,
+        "horizontal_position": "justify-center",
+        "vertical_position": "items-center",
+        "text_alignment": "text-center",
+        "image": "shopify://shop_images/ck-hero-ww-originals-ultra-women.jpg",
+        "overlay_color": "#000000",
+        "overlay_opacity": 20,
+        "eyebrow": "",
+        "heading": "Careismatic Rewards",
+        "use_h1": true,
+        "heading_tag": "2",
+        "content_image_max_height": 80,
+        "richtext": "<p>Simple ways to earn store credit</p>",
+        "fine_print": "",
+        "button_1_text": "",
+        "button_1_link": "",
+        "button_1_style": "button",
+        "button_2_text": "",
+        "button_2_link": "",
+        "button_2_style": "button button-outline-white"
+      }
+    },
+    "multi_column_deMxP7": {
+      "type": "multi-column",
+      "blocks": {
+        "column_LDhatC": {
+          "type": "column",
+          "settings": {
+            "video": "shopify://files/videos/ck-desktop-hero-1920x1080-bts-08112026.mp4",
+            "title": "Column",
+            "text": "<p>Pair text with an image to focus on your chosen product, collection, or blog post.</p>"
+          }
+        },
+        "column_GNUmmm": {
+          "type": "column",
+          "settings": {
+            "image": "shopify://shop_images/ck-hero-ww-core-stretch-men.jpg",
+            "title": "Column",
+            "text": "<p>Pair text with an image to focus on your chosen product, collection, or blog post.</p>"
+          }
+        },
+        "column_zJQbEy": {
+          "type": "column",
+          "settings": {
+            "video": "shopify://files/videos/ck-mobile-hero-brand-film-20260603.mp4",
+            "title": "Column",
+            "text": "<p>Pair text with an image to focus on your chosen product, collection, or blog post.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "column_LDhatC",
+        "column_GNUmmm",
+        "column_zJQbEy"
+      ],
+      "name": "Multi Column",
+      "settings": {
+        "color_scheme": "",
+        "heading": "Multi Column"
+      }
+    },
+    "17908682460329f200": {
+      "type": "apps",
+      "blocks": {
+        "rise_gift_cards_store_credit_rise_referrals_extension_VyXYFB": {
+          "type": "shopify://apps/rise-gift-cards-store-credit/blocks/rise-referrals-extension/d837f9d0-9f22-491a-94b6-f32b41864892",
+          "settings": {
+            "preview_state": "logged_in",
+            "backgroundColor": "#FFFFFF",
+            "contentColor": "#000000",
+            "contentAlignment": "center",
+            "buttonWidth": "stretched",
+            "caption": "Refer a friend",
+            "title": "Give $10 Get $10",
+            "subtitle": "Refer a friend - they’ll receive $10 off their first order, and you’ll earn $10 in return.",
+            "button_text": "Get your link",
+            "login_button_text": "Log in",
+            "enable_facebook": true,
+            "enable_twitter": true,
+            "enable_whatsapp": true,
+            "enable_email": true,
+            "enable_messenger": true,
+            "enable_imessage": true,
+            "preset_message": "Check out this store and get a reward on your first purchase!"
+          }
+        }
+      },
+      "block_order": [
+        "rise_gift_cards_store_credit_rise_referrals_extension_VyXYFB"
+      ],
+      "settings": {
+        "section_id": "",
+        "color_scheme": "",
+        "max_width": "container",
+        "max_width_custom": "",
+        "side_padding": true,
+        "padding_top": "medium",
+        "padding_bottom": "medium",
+        "min_height": "",
+        "heading": "",
+        "heading_size": "2",
+        "align_text": "left"
+      }
+    },
+    "icon_list_kG4j7W": {
+      "type": "icon-list",
+      "blocks": {
+        "item_rQ3QDK": {
+          "type": "item",
+          "settings": {
+            "icon": "shopify://shop_images/style_01_1.svg",
+            "title": "Item title",
+            "text": "",
+            "link_text": "",
+            "link_url": ""
+          }
+        },
+        "item_GCg6Wk": {
+          "type": "item",
+          "settings": {
+            "icon": "shopify://shop_images/style_07.svg",
+            "title": "Item title",
+            "text": "",
+            "link_text": "",
+            "link_url": ""
+          }
+        },
+        "item_igzpBW": {
+          "type": "item",
+          "settings": {
+            "icon": "shopify://shop_images/style_07.svg",
+            "title": "Item title",
+            "text": "",
+            "link_text": "",
+            "link_url": ""
+          }
+        }
+      },
+      "block_order": [
+        "item_rQ3QDK",
+        "item_GCg6Wk",
+        "item_igzpBW"
+      ],
+      "name": "Icon List",
+      "settings": {
+        "color_scheme": "",
+        "eyebrow": "text",
+        "heading": "text",
+        "icon_height_desktop": 24,
+        "icon_height_mobile": 26,
+        "section_image": "shopify://shop_images/ck-hp-hero-mobile-2-day-sale-20261006.jpg",
+        "image_position": "left",
+        "mobile_layout": "carousel",
+        "mobile_align": "center",
+        "carousel_loop": false
+      }
+    },
+    "media_with_text_87Vkkm": {
+      "type": "media-with-text",
+      "name": "Media with Text",
+      "settings": {
+        "color_scheme": "",
+        "add_padding": true,
+        "use_max_width": true,
+        "image_position": "left",
+        "eyebrow": "text",
+        "content_image_max_height": 65,
+        "heading": "text",
+        "richtext": "<p>text</p>",
+        "button_text": "text",
+        "button_link": "",
+        "button_style": "button"
+      }
+    },
+    "1790868391abb1f08e": {
+      "type": "apps",
+      "blocks": {
+        "rise_gift_cards_store_credit_rise_rewards_page_section_extension_3nyfxE": {
+          "type": "shopify://apps/rise-gift-cards-store-credit/blocks/rise-rewards-page-section-extension/d837f9d0-9f22-491a-94b6-f32b41864892",
+          "settings": {
+            "title": "How to earn store credit",
+            "background_color": "#FFFFFF",
+            "text_color": "#000000",
+            "show_column_container": true,
+            "container_color": "#EEEEEE",
+            "item_count": 3,
+            "columns_per_row": 3,
+            "column1_title": "Place your first order",
+            "column1_subtitle": "Get $5 credit",
+            "column2_title": "Refer a friend",
+            "column2_subtitle": "Give $5 credit, get $5 credit",
+            "column3_title": "Shop $100+",
+            "column3_subtitle": "Get $5 credit per $100 spent",
+            "column4_title": "Reward",
+            "column4_subtitle": "Description",
+            "column5_title": "Reward",
+            "column5_subtitle": "Description",
+            "column6_title": "Reward",
+            "column6_subtitle": "Description"
+          }
+        }
+      },
+      "block_order": [
+        "rise_gift_cards_store_credit_rise_rewards_page_section_extension_3nyfxE"
+      ],
+      "settings": {
+        "section_id": "",
+        "color_scheme": "",
+        "max_width": "container",
+        "max_width_custom": "",
+        "side_padding": true,
+        "padding_top": "medium",
+        "padding_bottom": "medium",
+        "min_height": "",
+        "heading": "",
+        "heading_size": "2",
+        "align_text": "left"
+      }
+    },
+    "179086840832badcf1": {
+      "type": "apps",
+      "blocks": {
+        "rise_gift_cards_store_credit_rise_rewards_page_vip_tiers_extension_zU6hUT": {
+          "type": "shopify://apps/rise-gift-cards-store-credit/blocks/rise-rewards-page-vip-tiers-extension/d837f9d0-9f22-491a-94b6-f32b41864892",
+          "settings": {
+            "title": "VIP Tiers",
+            "subtitle": "Subtitle",
+            "background_color": "#FFFFFF",
+            "text_color": "#000000",
+            "divider_color": "#000000",
+            "tier_count": 3,
+            "perk_count": 4,
+            "tier1_title": "Bronze",
+            "tier1_description": "Description",
+            "tier2_title": "Silver",
+            "tier2_description": "Description",
+            "tier3_title": "Gold",
+            "tier3_description": "Description",
+            "tier4_title": "Tier 4",
+            "tier4_description": "Description",
+            "tier5_title": "Tier 5",
+            "tier5_description": "Description",
+            "perk1_label": "Perk",
+            "perk1_tier1": "Reward",
+            "perk1_tier2": "Reward",
+            "perk1_tier3": "Reward",
+            "perk1_tier4": "Reward",
+            "perk1_tier5": "Reward",
+            "perk2_label": "Perk",
+            "perk2_tier1": "Reward",
+            "perk2_tier2": "Reward",
+            "perk2_tier3": "Reward",
+            "perk2_tier4": "Reward",
+            "perk2_tier5": "Reward",
+            "perk3_label": "Perk",
+            "perk3_tier1": "Reward",
+            "perk3_tier2": "Reward",
+            "perk3_tier3": "Reward",
+            "perk3_tier4": "Reward",
+            "perk3_tier5": "Reward",
+            "perk4_label": "Perk",
+            "perk4_tier1": "Reward",
+            "perk4_tier2": "Reward",
+            "perk4_tier3": "Reward",
+            "perk4_tier4": "Reward",
+            "perk4_tier5": "Reward",
+            "perk5_label": "Perk",
+            "perk5_tier1": "Reward",
+            "perk5_tier2": "Reward",
+            "perk5_tier3": "Reward",
+            "perk5_tier4": "Reward",
+            "perk5_tier5": "Reward",
+            "perk6_label": "Perk",
+            "perk6_tier1": "Reward",
+            "perk6_tier2": "Reward",
+            "perk6_tier3": "Reward",
+            "perk6_tier4": "Reward",
+            "perk6_tier5": "Reward"
+          }
+        }
+      },
+      "block_order": [
+        "rise_gift_cards_store_credit_rise_rewards_page_vip_tiers_extension_zU6hUT"
+      ],
+      "settings": {
+        "section_id": "",
+        "color_scheme": "",
+        "max_width": "container",
+        "max_width_custom": "",
+        "side_padding": true,
+        "padding_top": "medium",
+        "padding_bottom": "medium",
+        "min_height": "",
+        "heading": "",
+        "heading_size": "2",
+        "align_text": "left"
+      }
+    },
+    "1790868412bf12b18c": {
+      "type": "apps",
+      "blocks": {
+        "rise_gift_cards_store_credit_rise_check_balance_extension_Y6AfNj": {
+          "type": "shopify://apps/rise-gift-cards-store-credit/blocks/rise-check-balance-extension/d837f9d0-9f22-491a-94b6-f32b41864892",
+          "settings": {
+            "preview_state": "input",
+            "title": "Check your gift card balance",
+            "subtitle": "Enter your gift card code to see your current balance and expiration date",
+            "inputPlaceholder": "Your code",
+            "buttonText": "Check Balance",
+            "balanceViewTitle": "Your gift card balance",
+            "balanceLabel": "Balance:",
+            "expiresOnLabel": "Expires on",
+            "neverExpiresLabel": "Never expires",
+            "checkAnotherButtonText": "Check Another",
+            "backgroundColor": "transparent",
+            "errorColor": "#FF0000",
+            "inputBorderColor": "#000000",
+            "buttonWidthOption": "full"
+          }
+        }
+      },
+      "block_order": [
+        "rise_gift_cards_store_credit_rise_check_balance_extension_Y6AfNj"
+      ],
+      "settings": {
+        "section_id": "",
+        "color_scheme": "",
+        "max_width": "container",
+        "max_width_custom": "",
+        "side_padding": true,
+        "padding_top": "medium",
+        "padding_bottom": "medium",
+        "min_height": "",
+        "heading": "",
+        "heading_size": "2",
+        "align_text": "left"
+      }
+    },
+    "1790868378e83d2257": {
+      "type": "apps",
+      "blocks": {
+        "rise_gift_cards_store_credit_rise_rewards_page_faq_extension_6AyrRJ": {
+          "type": "shopify://apps/rise-gift-cards-store-credit/blocks/rise-rewards-page-faq-extension/d837f9d0-9f22-491a-94b6-f32b41864892",
+          "settings": {
+            "caption": "FAQ",
+            "title": "Everything you need to know",
+            "background_color": "#FFFFFF",
+            "text_color": "#000000",
+            "row1_question": "Where can I see my store credit?",
+            "row1_answer": "Write your answer here",
+            "row2_question": "Can I use credit with other discounts?",
+            "row2_answer": "Write your answer here",
+            "row3_question": "Does store credit expire?",
+            "row3_answer": "Write your answer here"
+          }
+        }
+      },
+      "block_order": [
+        "rise_gift_cards_store_credit_rise_rewards_page_faq_extension_6AyrRJ"
+      ],
+      "settings": {
+        "section_id": "",
+        "color_scheme": "",
+        "max_width": "container",
+        "max_width_custom": "",
+        "side_padding": true,
+        "padding_top": "medium",
+        "padding_bottom": "medium",
+        "min_height": "",
+        "heading": "",
+        "heading_size": "2",
+        "align_text": "left"
+      }
+    },
+    "1790868387e567f4b0": {
+      "type": "apps",
+      "blocks": {
+        "rise_gift_cards_store_credit_rise_rewards_page_hero_extension_PJR8Dw": {
+          "type": "shopify://apps/rise-gift-cards-store-credit/blocks/rise-rewards-page-hero-extension/d837f9d0-9f22-491a-94b6-f32b41864892",
+          "settings": {
+            "title": "Our Rewards",
+            "subtitle": "Simple ways to earn store credit",
+            "background_color": "#E6E6E6",
+            "text_color": "#000000",
+            "show_text_container": true,
+            "container_color": "#FFFFFF"
+          }
+        }
+      },
+      "block_order": [
+        "rise_gift_cards_store_credit_rise_rewards_page_hero_extension_PJR8Dw"
+      ],
+      "disabled": true,
+      "settings": {
+        "section_id": "",
+        "color_scheme": "",
+        "max_width": "container",
+        "max_width_custom": "",
+        "side_padding": true,
+        "padding_top": "medium",
+        "padding_bottom": "medium",
+        "min_height": "",
+        "heading": "",
+        "heading_size": "2",
+        "align_text": "left"
+      }
+    }
+  },
+  "order": [
+    "page_header",
+    "page_content",
+    "17908684230b3b8658",
+    "hero_banner_ye6FDM",
+    "multi_column_deMxP7",
+    "17908682460329f200",
+    "icon_list_kG4j7W",
+    "media_with_text_87Vkkm",
+    "1790868391abb1f08e",
+    "179086840832badcf1",
+    "1790868412bf12b18c",
+    "1790868378e83d2257",
+    "1790868387e567f4b0"
+  ]
+}

@@ -1,0 +1,78 @@
+<!-- snippet: product-card-search -->
+
+{% doc %}
+  Renders a compact product card for search results.
+
+  @param {object} product - Shopify product object (required)
+
+  @example
+  {% render 'product-card-search', product: product %}
+{% enddoc %}
+
+{%- liquid
+  # Hide set cards where any component is fully out of stock.
+  # A "set" is detected by the bundle.products metafield being non-empty.
+  assign hide_card = false
+  assign is_set = false
+  assign set_price_min = 0
+  assign set_compare_min = 0
+  if product.metafields.bundle.products.value.size > 0
+    assign is_set = true
+    for component in product.metafields.bundle.products.value
+      unless component.available
+        assign hide_card = true
+        break
+      endunless
+      # Combined starting-at: sum each component's lowest price + lowest
+      # compare-at. compare_at_price_min is 0 when none of the component's
+      # variants are on sale, so fall back to price_min in that case.
+      assign set_price_min = set_price_min | plus: component.price_min
+      assign comp_compare = component.compare_at_price_min
+      if comp_compare < component.price_min
+        assign comp_compare = component.price_min
+      endif
+      assign set_compare_min = set_compare_min | plus: comp_compare
+    endfor
+  endif
+
+  assign variant = product.selected_or_first_available_variant
+-%}
+
+{%- unless hide_card -%}
+<a href="{{ product.url }}" class="flex items-center gap-0 no-underline rounded py-1">
+  <media-loader class="shrink-0 aspect-product-image w-[60px] overflow-hidden rounded-theme-sm">
+    {%- if product.featured_image -%}
+      {{-
+        product.featured_image
+        | image_url: width: 160, height: 214
+        | image_tag: alt: product.featured_image.alt, loading: 'lazy', class: 'w-full h-full object-cover'
+      -}}
+    {%- endif -%}
+  </media-loader>
+  <div class="flex flex-col gap-0 p-xs">
+    {%- render 'product-meta-collection', product: product, linked: false, class: 'mb-2' -%}
+    <p class="font-medium">{{ product.title }}</p>
+    <p class="flex items-center gap-1 fs-display-sm">
+      {%- if is_set -%}
+        <span>From</span>
+        {%- if set_compare_min > set_price_min -%}
+          <span class="text-red-sale font-medium">{{ set_price_min | money }}</span>
+          <s class="text-grey-dark opacity-50">{{ set_compare_min | money }}</s>
+        {%- else -%}
+          <span class="font-medium">{{ set_price_min | money }}</span>
+        {%- endif -%}
+      {%- else -%}
+        {%- if product.price_varies -%}
+          <span>From</span>
+        {%- endif -%}
+        {%- if product.compare_at_price_min > product.price_min -%}
+          <span class="text-red-sale font-medium">{{ product.price_min | money }}</span>
+          <s class="text-grey-dark opacity-50">{{ product.compare_at_price_min | money }}</s>
+        {%- else -%}
+          <span class="font-medium">{{ product.price_min | money }}</span>
+        {%- endif -%}
+      {%- endif -%}
+    </p>
+  </div>
+</a>
+{%- endunless -%}

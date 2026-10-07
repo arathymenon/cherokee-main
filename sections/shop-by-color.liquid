@@ -1,0 +1,271 @@
+<!-- section: shop-by-color -->
+
+{%- liquid
+  assign s = section.settings
+  assign first_block = section.blocks[0]
+  if first_block
+    assign first_collection = first_block.settings.collection
+  else
+    assign first_collection = collection
+  endif
+
+  if request.page_type == 'collection' and collection != blank
+    assign first_collection = collection
+  endif
+
+  capture first_color_labels
+    render 'colorway-labels', collection: first_collection
+  endcapture
+-%}
+
+{% if first_collection != blank %}
+  <shop-by-color class="color-{{ s.color_scheme }} py-section block overflow-hidden">
+    <div class="">
+
+      {% # Header row %}
+      <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-2 pb-sm lg:pr-gutter">
+        <div class="flex flex-col min-w-0">
+          <div class="flex flex-col gap-sm pl-gutter">
+            {% if s.eyebrow != blank %}
+              <p class="fs-eyebrow">{{ s.eyebrow | escape }}</p>
+            {% endif %}
+
+            {% if s.heading != blank %}
+              <div role="heading" aria-level="2" class="fs-display-3 text-pretty">
+                {{- s.heading | escape -}}
+              </div>
+            {% endif %}
+
+            {% if s.richtext != blank %}
+              <div class="rte text-pretty">{{ s.richtext }}</div>
+            {% endif %}
+          </div>
+
+          <div role="tablist" aria-label="Colors" 
+            class="flex gap-xs mt-2 md:mt-4 overflow-x-auto no-scrollbar px-gutter">
+            {% for block in section.blocks %}
+              {%- liquid
+                assign col = block.settings.collection
+                assign cw = col.metafields.custom.colorway.value
+                unless cw
+                  for item in col.metafields.custom.colorway_list.value limit: 1
+                    assign cw = item
+                  endfor
+                endunless
+                assign swatch_color = block.settings.color_override | default: cw.color | default: '#cccccc'
+                assign swatch_label = block.settings.label_override | default: cw.label | default: col.title
+              -%}
+              <button
+                type="button"
+                role="tab"
+                {% if forloop.first %}aria-selected="true"{% else %}aria-selected="false"{% endif %}
+                data-shop-by-color-selector
+                data-collection-url="{{ col.url }}"
+                data-block-id="{{ block.id }}"
+                class="color-selector-tab fs-body-sm"
+                {{ block.shopify_attributes }}>
+                <span
+                  class="w-4 h-4 rounded-full shrink-0"
+                  style="background-color: {{ swatch_color }};"
+                  aria-hidden="true"></span>
+                <span>{{ swatch_label | escape }}</span>
+              </button>
+            {% endfor %}
+          </div>
+        </div>
+
+        {% if s.button_text != blank and first_collection != blank %}
+          <div class="shrink-0 whitespace-nowrap pl-gutter lg:pr-0 lg:pl-6 ">
+            {% render 'arrow-button',
+              url: first_collection.url,
+              text: s.button_text,
+              attributes: 'data-shop-by-color-cta'
+            %}
+          </div>
+        {% endif %}
+
+      </div>
+
+      {% # Carousel row %}
+      <div
+        data-shop-by-color-area
+        data-shop-by-color-loading-class="opacity-50"
+        class="transition-opacity">
+        <tarot-carousel class="group block lg:px-gutter">
+
+          <div class="px-gutter relative">
+            {% render 'carousel-buttons',
+              unique_id: section.id,
+              prev_class: 'flex absolute left-4 z-2 opacity-0 group-hover:opacity-100 transition-opacity',
+              next_class: 'flex absolute right-4 z-2 opacity-0 group-hover:opacity-100 transition-opacity'
+            %}
+          </div>
+
+          <script type="application/json" data-tarot-options>
+            {
+              "loop": {{ s.loop | json }},
+              "gap": "1px",
+              "slidesPerView": 2,
+              "navigation": {
+                "showButtons": false,
+                "showPagination": true,
+                "smartButtons": true,
+                "previousButtonSelector": "#prev-{{ section.id }}",
+                "nextButtonSelector": "#next-{{ section.id }}"
+              },
+              "breakpoints": {
+                "768": {
+                  "gap": "8px",
+                  "slidesPerView": {{ s.slides_per_view_tablet }},
+                  "navigation": { "showButtons": true, "showPagination": false }
+                },
+                "1024": {
+                  "gap": "8px",
+                  "slidesPerView": {{ s.slides_per_view_laptop }},
+                  "navigation": { "showButtons": true, "showPagination": false }
+                },
+                "1280": {
+                  "gap": "8px",
+                  "slidesPerView": {{ s.slides_per_view_desktop }},
+                  "navigation": { "showButtons": true, "showPagination": false }
+                }
+              }
+            }
+          </script>
+
+          <tarot-viewport class="overflow-visible">
+            <tarot-track>
+              {% assign slide_count = 0 %}
+              {% for product in first_collection.products %}
+                {%- capture card_html -%}
+                  {% render 'product-card',
+                    product: product,
+                    collection_context: first_collection,
+                    preferred_color_labels: first_color_labels,
+                    hide_swatches: true,
+                    hide_if_no_color: true
+                  %}
+                {%- endcapture -%}
+                {%- if card_html contains 'product-fetcher' -%}
+                  {% # check valid card %}
+                  <tarot-slide>
+                    {{ card_html }}
+                  </tarot-slide>
+                  {% assign slide_count = slide_count | plus: 1 %}
+                  {% if slide_count >= s.products_to_show %}
+                    {% break %}
+                  {% endif %}
+                {%- endif -%}
+              {% endfor %}
+            </tarot-track>
+          </tarot-viewport>
+
+          <div data-tarot-pagination class="py-sm md:hidden"></div>
+
+        </tarot-carousel>
+      </div>
+
+    </div>
+  </shop-by-color>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Shop by Color",
+  "settings": [
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme" },
+
+    { "type": "header", "content": "Content" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Shop by Color" },
+    { "type": "inline_richtext", "id": "richtext", "label": "Text" },
+
+    { "type": "header", "content": "Carousel" },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "label": "Products to show",
+      "min": 2,
+      "max": 24,
+      "step": 1,
+      "default": 12
+    },
+    {
+      "type": "checkbox",
+      "id": "loop",
+      "label": "Loop carousel",
+      "default": false
+    },
+
+    { "type": "header", "content": "Button" },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "Shop all",
+      "info": "Links to the currently selected color's collection."
+    },
+
+    { "type": "header", "content": "Slides per view" },
+    {
+      "type": "range",
+      "id": "slides_per_view_tablet",
+      "label": "Tablet",
+      "min": 1, "max": 5, "step": 1, "default": 2
+    },
+    {
+      "type": "range",
+      "id": "slides_per_view_laptop",
+      "label": "Laptop",
+      "min": 1, "max": 6, "step": 1, "default": 3
+    },
+    {
+      "type": "range",
+      "id": "slides_per_view_desktop",
+      "label": "Desktop",
+      "min": 1, "max": 8, "step": 1, "default": 4
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collection",
+      "name": "Collection with color",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection",
+          "info": "Collection should have a custom.colorway_list (metaobjects with label, color). The list drives which product colors are shown/preselected; its first item drives the chip. Set custom.colorway to override the chip label/color (e.g. a generic 'Green' swatch)."
+        },
+        {
+          "type": "text",
+          "id": "label_override",
+          "label": "Chip label override",
+          "info": "Optional. Overrides the colorway label on the selection chip, e.g. show \"Green\" instead of \"Forest Green\"."
+        },
+        {
+          "type": "color",
+          "id": "color_override",
+          "label": "Chip color override",
+          "info": "Optional. Overrides the colorway swatch color on the selection chip."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Shop by Color",
+      "category": "Products",
+      "blocks": [
+        { "type": "collection" },
+        { "type": "collection" },
+        { "type": "collection" },
+        { "type": "collection" }
+      ]
+    }
+  ],
+  "disabled_on": {
+    "groups": ["*"]
+  }
+}
+{% endschema %}

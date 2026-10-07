@@ -1,0 +1,240 @@
+{% comment %}
+  Renders a shop the look
+  Accepts:
+  - title: {String} Title
+  - products_is_visible: {Boolean} Whether it is for product page or not
+  - slide_products: {Array} array of product list
+  - slide_images: {Array} Array of images
+  - section_id: {String} Section id
+  - size: {Number} Number of slide - it is needed to render non array values
+  - toggler_for: {String} Toggler for the drawer
+  - hide_shop_the_look_section: {Boolean} Hides only section
+  - fetcher_selector: {String} Fetcher selector
+  - fetcher_toggler: {String} Fetcher toggler
+  - body_attr: {String}
+
+  Usage:
+  {%- render 'shop-the-look', title: 'Title', slide_products: slide_products, slide_images: slide_images, section_id: section_id, products_is_visible: false, size: 3 -%}
+{% endcomment %}
+
+{%- liquid
+  assign media_slides_html = ''
+  assign product_slides_html = ''
+  assign confirmation_el_class = ''
+  assign size = size | minus: 1
+
+-%}
+
+{%- for count in (0..size) -%}
+  {%- liquid
+    assign slide_image = slide_images[count]
+    assign slide_products_list = slide_products[count]
+    if products_is_visible
+      assign slide_image = slide_images
+      assign slide_products_list = slide_products
+    endif
+  -%}
+  {%- capture media_slide_html -%}
+    <swiper-slide>
+      <div class="shop-the-look__media-item">
+        <media-loader>
+          {%- if slide_image and slide_image != empty -%}
+            {{- slide_image | image_url: width: 1440 | image_tag: loading: 'lazy', sizes: '(min-width: 540px) 100vw, 40vw' -}}
+          {%- else -%}
+            {{- 'detailed-apparel-1' | placeholder_svg_tag -}} 
+          {%- endif -%}
+        </media-loader>
+        <label class="shop-the-look__toggler primary-button primary-button--light" for="{{ toggler_for }}">
+          {{- 'sections.shop_the_look.shop_this_look' | t -}}
+        </label>
+      </div>
+    </swiper-slide>
+  {%- endcapture -%}
+  {%- assign media_slides_html = media_slides_html | append: media_slide_html -%}
+
+  {%- capture product_slide_html -%}
+    <swiper-slide>
+      <div class="shop-the-look__products-item {% if products_is_visible %}shop-the-look__products-item--products-visible{% endif %}">
+        {%-  liquid
+          render 'shop-the-look-product' for slide_products_list as product, fetcher_toggler: fetcher_toggler, fetcher_selector: fetcher_selector, body_attr: body_attr
+
+          assign product_ids = slide_products_list | map: 'id'
+          for product_id in product_ids
+            assign confirmation_el_class = confirmation_el_class | append: ' cart-confirmation-' | append: product_id 
+          endfor
+        -%}
+      </div>
+    </swiper-slide>
+  {%- endcapture -%}
+  {%- assign product_slides_html = product_slides_html | append: product_slide_html -%}
+{%- endfor -%}
+
+<swiper-loader
+  class="shop-the-look {% if products_is_visible %}shop-the-look--products-visible{% endif %}"
+  modules="Pagination,Controller,Navigation"
+>
+  <div class="shop-the-look__container {% if products_is_visible %}shop-the-look__container--products-visible{% endif %}">
+    {%- unless products_is_visible -%}
+      <div class="shop-the-look__header-mobile">
+        <div class="shop-the-look__header">
+          <div role="heading" aria-level="2" class="shop-the-look__title">{{- title | escape -}}</div>
+          <div
+            class="shop-the-look__header-pagination {% if size == 0 %}shop-the-look__header-pagination--hide{% endif %} {% if products_is_visible %}shop-the-look__header-pagination--products-visible{% endif %}"
+          >
+            <div
+              id="swiper-product-pagination-{{ section_id }}-1"
+              class="shop-the-look__header-pagination-inner"
+            ></div>
+            <span></span>
+            <span>
+              {%- if size > 0 -%}
+                0{{ size | plus: 1 }}
+              {%- else -%}
+                {{ size | plus: 1 }}
+              {%- endif -%}
+            </span>
+          </div>
+        </div>
+      </div>
+    {%- endunless -%}
+    {%- unless hide_shop_the_look_section -%}
+      <div class="shop-the-look__media {% if products_is_visible %}shop-the-look__media--products-visible{% endif %}">
+        <swiper-container
+          controller-control="#swiper-product-{{ section_id }}"
+          id="swiper-media-{{ section_id }}"
+          init="false"
+          {% unless products_is_visible %}
+            css-mode="true"
+          {% endunless %}
+          slides-per-view="1"
+          pagination-clickable="true"
+          pagination-el="#swiper-media-pagination-{{ section_id }}"
+          navigation-next-el="#swiper-media-next-{{ section_id }}"
+          navigation-prev-el="#swiper-media-prev-{{ section_id }}"
+        >
+          {%- unless products_is_visible -%}
+            <script type="application/json" data-json-params>
+              {
+                "breakpoints": {
+                  "768": {
+                    "effect": "fade",
+                    "cssMode": false
+                  }
+                }
+              }
+            </script>
+          {%- endunless -%}
+          {{- media_slides_html -}}
+        </swiper-container>
+        <div
+          id="swiper-media-pagination-{{ section_id }}"
+          class="shop-the-look__media-pagination"
+        ></div>
+        <div class="shop-the-look__media-navigation-wrapper">
+          <div
+            id="swiper-media-prev-{{ section_id }}"
+            class="shop-the-look__media-navigation primary-button primary-button--accent"
+          >
+            {{- 'icon-longerArrow.svg' | inline_asset_content -}}
+          </div>
+          <div
+            id="swiper-media-next-{{ section_id }}"
+            class="shop-the-look__media-navigation primary-button primary-button--accent"
+          >
+            {{- 'icon-longerArrow.svg' | inline_asset_content -}}
+          </div>
+        </div>
+      </div>
+    {%- endunless -%}
+    <input data-drawer-block-toggler type="checkbox" class="shop-the-look__input" id="{{ toggler_for }}">
+    <label for="{{ toggler_for }}" class="shop-the-look__mask"></label>
+    {%- capture shop_the_look_content -%}
+      <div class="shop-the-look__header">
+        <div role="heading" aria-level="2" class="shop-the-look__title">{{- title | escape -}}</div>
+        <div
+          class="shop-the-look__header-pagination {% if size == 0 %}shop-the-look__header-pagination--hide{% endif %} {% if products_is_visible %}shop-the-look__header-pagination--products-visible{% endif %}"
+        >
+          <div id="swiper-product-pagination-{{ section_id }}-2" class="shop-the-look__header-pagination-inner">
+
+          </div>
+          <span></span>
+          <span>
+            {%- if size > 0 -%}
+              0{{ size | plus: 1 }}
+            {%- else -%}
+              {{ size | plus: 1 }}
+            {%- endif -%}
+          </span>
+        </div>
+        <label
+          class="shop-the-look__close"
+          for="{{ toggler_for }}"
+        >
+          {{- 'icon-x.svg' | inline_asset_content -}}
+        </label>
+      </div>
+      <div class="shop-the-look__products">
+        <swiper-container
+          controller-control="#swiper-media-{{ section_id }}"
+          id="swiper-product-{{ section_id }}"
+          init="false"
+          {% if products_is_visible %}
+            css-mode="true"
+          {% endif %}
+          slides-per-view="1"
+           effect="fade"
+        >
+          <script type="application/json" data-json-params data-js-like>
+            {
+              pagination: {
+                el: "#swiper-product-pagination-{{ section_id }}-1",
+                renderBullet: (index, className) =>
+                      `<span class='${className}'>${(index + 1).toString().padStart(2, '0')}</span>`,
+              },
+              {%- unless products_is_visible -%}
+                allowTouchMove: false,
+              {%- endunless -%}
+              breakpoints: {
+                992: {
+                  pagination: {
+                    el: "#swiper-product-pagination-{{ section_id }}-2"
+                  },
+                  {%- unless products_is_visible -%}
+                    allowTouchMove: true
+                  {%- endunless -%}
+                },
+                {%- if products_is_visible -%}
+                  768: {
+                    cssMode: false
+                  }
+                {%- endif -%}
+              }
+            }
+          </script>
+          {{- product_slides_html -}}
+        </swiper-container>
+      </div>
+      {%- liquid
+        assign cart_confirmation_class = 'shop-the-look__note ' | append: confirmation_el_class  
+
+        if products_is_visible
+          assign cart_confirmation_class = cart_confirmation_class | append: ' shop-the-look__note--products-visible'
+        endif
+
+        render 'cart-confirmation', wrapper_class: cart_confirmation_class, 
+      -%}
+    {%- endcapture -%}
+    {%- unless hide_shop_the_look_section -%}
+      <div class="shop-the-look__content {% if products_is_visible %}shop-the-look__content--products-visible{% endif %}">
+        {{- shop_the_look_content -}}
+      </div>
+    {%- endunless -%}
+
+    {%- if products_is_visible -%}
+      <div class="shop-the-look__content shop-the-look__content--drawer">
+        {{- shop_the_look_content -}}
+      </div>
+    {%- endif -%}
+  </div>
+</swiper-loader>
+{% comment %} {{- mini_pdps_html -}} {% endcomment %}

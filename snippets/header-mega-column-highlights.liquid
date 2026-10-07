@@ -1,0 +1,25 @@
+{%- comment -%}
+  Renders a "Highlights" column inside the mega menu.
+  All items render as a flat list at fs-body / medium weight; no column header.
+
+  Accepts:
+    - top_link: {Object} the top-level link whose .links are rendered
+{%- endcomment -%}
+
+<div class="flex flex-col gap-4 lg:gap-2 min-w-[160px]">
+  {%- for link in top_link.links -%}
+    {%- assign label_text = link.object.metafields.meta.badges.value.text -%}
+    {%- assign link_key = link.title | downcase | strip -%}
+    {%- assign accent_class = '' -%}
+    {%- if link_key == 'sale' or link_key == 'clearance' -%}
+      {%- assign accent_class = 'text-[#B21C02]' -%}
+    {%- endif -%}
+    <a
+      class="group fs-body font-medium no-underline min-h-6 lg:min-h-none
+        inline-flex items-center gap-1 {{ accent_class }}"
+      href="{{ link.url }}">
+      <span class="border-b border-transparent transition-colors group-hover:border-current">{{- link.title | escape -}}</span>
+      {%- render 'menu-item-label', text: label_text -%}
+    </a>
+  {%- endfor -%}
+</div>

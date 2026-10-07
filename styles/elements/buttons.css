@@ -1,0 +1,251 @@
+@layer base {
+  .button {
+    /* size — small on mobile, large at md (overridable via button-sm / button-lg) */
+    --button-min-width: 6.25rem;
+    --button-padding-inline: 1.5rem;
+    --button-padding-block: 0.75rem;
+
+    @media (min-width: theme(--breakpoint-md)) {
+      --button-min-width: 7.5rem;
+      --button-padding-inline: 2.5rem;
+      --button-padding-block: 1rem;
+    }
+
+    /* layout and sizing */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    vertical-align: middle;
+    padding-inline: var(--button-padding-inline);
+    padding-block: var(--button-padding-block);
+    min-width: var(--button-min-width);
+
+    /* max-width: 26.25rem; */
+    gap: 0.75em;
+
+    /* font */
+    font-size: 0.875rem;
+    font-weight: 600;
+    font-family: var(--font-body);
+    text-transform: capitalize;
+    letter-spacing: 0;
+    line-height: normal;
+    text-align: center;
+    text-decoration: none;
+
+    /* appearance */
+    border-radius: 5rem;
+    transition: color 300ms ease-out, background-color 300ms ease-out, border-color 300ms ease-out,
+      opacity 300ms ease-out;
+    cursor: pointer;
+
+    /* colors — primary/blue is the default */
+    --button-bg: #000193;
+    --button-text: #fff;
+    --button-border: #000193;
+    --button-svg: #fff;
+    --button-bg-hover: #000159;
+    --button-text-hover: #fff;
+    --button-border-hover: #000159;
+    --button-svg-hover: #fff;
+
+    color: var(--button-text);
+    background-color: var(--button-bg);
+    border: 1px solid var(--button-border);
+
+    & svg {
+      color: var(--button-svg);
+    }
+
+    &:hover:not(:disabled, .non-clickable) {
+      color: var(--button-text-hover);
+      background-color: var(--button-bg-hover);
+      border-color: var(--button-border-hover);
+
+      & svg {
+        color: var(--button-svg-hover);
+      }
+    }
+
+    &:disabled {
+      opacity: 0.5;
+    }
+
+    &.non-clickable {
+      cursor: default;
+    }
+  }
+
+  .arrow-button {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.4375rem;
+    transition: gap 300ms ease-out;
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: capitalize;
+    line-height: 1.18;
+
+    &::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 0;
+      height: 1px;
+      background-color: currentcolor;
+      transition: width 300ms ease-out;
+    }
+
+    &:hover {
+      gap: 1rem;
+      color: oklch(var(--color-links));
+
+      &::after {
+        width: 100%;
+      }
+    }
+  }
+
+  .underline-button {
+    display: inline-block;
+    margin-bottom: 0.5rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.4375rem;
+    border-bottom: 1px solid currentcolor;
+    transition: border-color 300ms ease-out;
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-transform: capitalize;
+    line-height: 1.18;
+
+    &:hover:not(.non-clickable) {
+      border-color: transparent;
+      color: oklch(var(--color-links));
+    }
+
+    &.non-clickable {
+      cursor: default;
+    }
+  }
+
+  .text-link {
+    display: inline-block;
+    margin-bottom: 0.5rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.4375rem;
+    border-bottom: 1px solid transparent;
+    transition: border-color 300ms ease-out;
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-transform: capitalize;
+    line-height: 1.18;
+
+    &:hover:not(.non-clickable) {
+      border-color: currentcolor;
+      color: oklch(var(--color-links));
+    }
+
+    &.non-clickable {
+      cursor: default;
+    }
+  }
+
+  .button-bullet {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    width: 100%;
+    padding: 0;
+    text-align: left;
+    opacity: 0.6;
+    cursor: pointer;
+    transition: gap 0.2s ease, opacity 0.2s ease;
+
+    & > span:first-child {
+      flex-shrink: 0;
+      width: 0;
+      height: 0.5rem;
+      border-radius: 9999px;
+      background: var(--color-brand-blue);
+      transition: width 0.2s ease;
+    }
+
+    &:hover,
+    &[aria-current] {
+      opacity: 1;
+    }
+
+    &[aria-current] {
+      gap: 0.625rem;
+
+      & > span:first-child {
+        width: 0.5rem;
+      }
+    }
+  }
+}
+
+/* Button color utilities */
+
+@utility button-secondary {
+  --button-bg: #fff;
+  --button-text: #000193;
+  --button-border: #fff;
+  --button-svg: #000;
+  --button-bg-hover: #000193;
+  --button-text-hover: #fff;
+  --button-border-hover: #000193;
+  --button-svg-hover: #fff;
+}
+
+@utility button-outline-black {
+  --button-bg: transparent;
+  --button-text: #000;
+  --button-border: #000;
+  --button-svg: #000;
+  --button-bg-hover: #000193;
+  --button-text-hover: #fff;
+  --button-border-hover: #000193;
+  --button-svg-hover: #fff;
+}
+
+@utility button-outline-white {
+  --button-bg: transparent;
+  --button-text: #fff;
+  --button-border: #fff;
+  --button-svg: #fff;
+  --button-bg-hover: #fff;
+  --button-text-hover: #000;
+  --button-border-hover: #fff;
+  --button-svg-hover: #000;
+}
+
+/* Button size utilities */
+
+@utility button-sm {
+  --button-min-width: 6.25rem;
+  --button-padding-inline: 1.5rem;
+  --button-padding-block: 0.75rem;
+}
+
+@utility button-lg {
+  --button-min-width: 7.5rem;
+  --button-padding-inline: 2.5rem;
+  --button-padding-block: 1rem;
+}
+
+/* Select size utilities */
+
+/* Shrinks a select from the 3.375rem (54px) base min-height down to the
+   41px small-button height so selects can sit flush with button-sm. */
+@utility select-sm {
+  min-height: 2.5625rem;
+}

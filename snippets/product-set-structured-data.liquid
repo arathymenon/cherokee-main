@@ -1,0 +1,104 @@
+{% doc %}
+  Schema.org Product JSON-LD for a set PDP.
+
+  A set is a wrapper whose buyable items live on
+  `product.metafields.bundle.products`. The wrapper SKU is not sold, so
+  Shopify's `structured_data` filter would emit that SKU's price. This
+  snippet builds one Offer from the components instead: floor = sum of
+  each component's `price_min`; if that is below the combined compare-at,
+  the original total is output as StrikethroughPrice.
+
+  @param {object} product - Wrapper set product (required)
+
+  @example
+  {% render 'product-set-structured-data', product: product %}
+{% enddoc %}
+
+{%- liquid
+  assign components = product.metafields.bundle.products.value
+  assign set_price_min = 0
+  assign set_compare_min = 0
+  assign set_available = false
+
+  if components != blank and components.size > 0
+    assign set_available = true
+    for component in components
+      assign set_price_min = set_price_min | plus: component.price_min
+      assign comp_compare = component.compare_at_price_min
+      if comp_compare < component.price_min
+        assign comp_compare = component.price_min
+      endif
+      assign set_compare_min = set_compare_min | plus: comp_compare
+      unless component.available
+        assign set_available = false
+      endunless
+    endfor
+  endif
+
+  # Integer cents → "49.99" so Liquid float does not emit 49.989999999.
+  assign offer_dollars = set_price_min | divided_by: 100
+  assign offer_cents = set_price_min | modulo: 100 | prepend: '00' | slice: -2, 2
+  assign offer_price = offer_dollars | append: '.' | append: offer_cents
+  assign compare_dollars = set_compare_min | divided_by: 100
+  assign compare_cents = set_compare_min | modulo: 100 | prepend: '00' | slice: -2, 2
+  assign compare_price = compare_dollars | append: '.' | append: compare_cents
+
+  assign on_sale = false
+  if set_compare_min > set_price_min
+    assign on_sale = true
+  endif
+
+  assign currency_code = cart.currency.iso_code | default: shop.currency
+  assign set_url = canonical_url
+  if set_url == blank
+    assign set_url = request.origin | append: product.url
+  endif
+  assign set_description = product.description | strip_html | strip
+  if set_description == blank
+    assign set_description = product.title
+  endif
+
+  assign image_src = ''
+  if product.featured_image
+    assign image_src = product.featured_image | image_url: width: 1920
+    unless image_src contains '://'
+      assign image_src = image_src | prepend: 'https:'
+    endunless
+  endif
+-%}
+
+{%- if components != blank and components.size > 0 and set_price_min > 0 -%}
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org/",
+      "@type": "Product",
+      "name": {{ product.title | json }},
+      "url": {{ set_url | json }},
+      "description": {{ set_description | json }},
+      {%- if image_src != blank -%}
+        "image": [{{ image_src | json }}],
+      {%- endif -%}
+      {%- if product.selected_or_first_available_variant.sku != blank -%}
+        "sku": {{ product.selected_or_first_available_variant.sku | json }},
+      {%- endif -%}
+      "brand": {
+        "@type": "Brand",
+        "name": {{ shop.name | json }}
+      },
+      "offers": {
+        "@type": "Offer",
+        "url": {{ set_url | json }},
+        "priceCurrency": {{ currency_code | json }},
+        "price": {{ offer_price }},
+        "availability": {% if set_available %}"https://schema.org/InStock"{% else %}"https://schema.org/OutOfStock"{% endif %},
+        "itemCondition": "https://schema.org/NewCondition"{% if on_sale %},
+        "priceSpecification": {
+          "@type": "UnitPriceSpecification",
+          "priceType": "https://schema.org/StrikethroughPrice",
+          "price": {{ compare_price }},
+          "priceCurrency": {{ currency_code | json }}
+        }{% endif %}
+      }
+    }
+  </script>
+{%- endif -%}

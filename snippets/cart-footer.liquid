@@ -1,0 +1,123 @@
+<!-- snippet: cart-footer -->
+{%- comment -%}
+  Renders the cart footer: totals, discount badges, tax/shipping message, and checkout button.
+
+  Accepts:
+    - cart_form_id: {String} The ID of the form that the checkout button should submit
+{%- endcomment -%}
+
+{%- # Promo code input -%}
+<div data-ajax-cart-static-element class="mb-2">
+  <form data-discount-code-form action="#" class="input-field">
+    <label for="promo-code-input">Enter Promo Code</label>
+    <input
+      type="text"
+      name="discount_code"
+      id="promo-code-input"
+      placeholder="Enter Promo Code"
+      autocomplete="off"
+    >
+  </form>
+  <p data-discount-code-error class="text-red-error fs-body-sm mt-1 hidden"></p>
+</div>
+
+{%- # Discounts -%}
+{%- if cart.discount_applications.size > 0 -%}
+  <ul role="list" aria-label="{{ 'customer.order.discount' | t }}" class="flex flex-wrap gap-2 mb-1">
+    {%- for discount in cart.discount_applications -%}
+      {%- if discount.type == 'discount_code' -%}
+        <li>
+          <button
+            type="button"
+            data-action-remove-discount
+            data-discount-code="{{ discount.title | escape }}"
+            class="inline-flex items-center gap-2 py-1 px-2 bg-grey-light-blue text-2xs cursor-pointer rounded-full " >
+            <span class="w-3 h-3 flex items-center justify-center text-brand-blue">
+              {{- 'icon-price-tag.svg' | inline_asset_content -}}
+            </span>
+            <span class="uppercase text-brand-blue font-medium">{{ discount.title | escape }}</span>
+            <span class="w-[7px] h-[7px] flex items-center justify-center">
+              {{- 'icon-x.svg' | inline_asset_content -}}
+            </span>
+          </button>
+        </li>
+      {%- else -%}
+        <li class="inline-flex items-center gap-2 py-1 px-2 bg-grey-light-blue text-2xs rounded-full">
+          <span class="w-3 h-3 flex items-center justify-center text-brand-blue">
+            {{- 'icon-price-tag.svg' | inline_asset_content -}}
+          </span>
+          <span class="text-brand-blue font-medium">{{ discount.title | escape }}</span>
+        </li>
+      {%- endif -%}
+    {%- endfor -%}
+  </ul>
+{%- endif -%}
+
+{%- # Subtotal -%}
+<div class="flex gap-4 justify-between mb-2 mt-6" role="status">
+  <div class="font-medium">{{ 'cart.subtotal' | t }}</div>
+  <div>{{ cart.total_price | money }}</div>
+</div>
+
+{%- # Discount amount breakdown -%}
+{%- if cart.discount_applications.size > 0 -%}
+  {%- for discount in cart.discount_applications -%}
+    <div class="flex gap-4 justify-between mb-2 text-grey-dark">
+      <div>
+        {{ 'customer.order.discount' | t }}
+        {%- if discount.value_type == 'percentage' -%}
+          ({{ discount.value | replace: '.0', '' }}% OFF)
+        {%- elsif discount.value_type == 'fixed_amount' -%}
+          ({{ discount.value | money }} OFF)
+        {%- endif -%}
+      </div>
+      <div>-{{ discount.total_allocated_amount | money }}</div>
+    </div>
+  {%- endfor -%}
+{%- endif -%}
+
+{%- # Duties, taxes, and shipping message -%}
+<div class="mb-6">
+  <div class="text-grey-dark">
+    {% liquid
+      if cart.duties_included and cart.taxes_included
+        if shop.shipping_policy.body == blank
+          echo 'cart.duties_and_taxes_included_shipping_at_checkout_without_policy' | t
+        else
+          echo 'cart.duties_and_taxes_included_shipping_at_checkout_with_policy_html' | t: link: shop.shipping_policy.url
+        endif
+      elsif cart.duties_included == false and cart.taxes_included
+        if shop.shipping_policy.body == blank
+          echo 'cart.taxes_included_shipping_at_checkout_without_policy' | t
+        else
+          echo 'cart.taxes_included_shipping_at_checkout_with_policy_html' | t: link: shop.shipping_policy.url
+        endif
+      elsif cart.duties_included and cart.taxes_included == false
+        if shop.shipping_policy.body == blank
+          echo 'cart.duties_included_taxes_at_checkout_shipping_at_checkout_without_policy' | t
+        else
+          echo 'cart.duties_included_taxes_at_checkout_shipping_at_checkout_with_policy_html' | t: link: shop.shipping_policy.url
+        endif
+      elsif cart.duties_included == false and cart.taxes_included == false
+        if shop.shipping_policy.body == blank
+          echo 'cart.taxes_at_checkout_shipping_at_checkout_without_policy' | t
+        else
+          echo 'cart.taxes_at_checkout_shipping_at_checkout_with_policy_html' | t: link: shop.shipping_policy.url
+        endif
+      endif
+    %}
+  </div>
+</div>
+
+{%- # Checkout button -%}
+<button
+  type="submit"
+  class="button w-full"
+  name="checkout"
+  {% if cart == empty %}
+    disabled
+  {% endif %}
+  form="{{ cart_form_id }}"
+>
+  {{ 'cart.checkout' | t }}
+</button>

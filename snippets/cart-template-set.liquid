@@ -1,0 +1,161 @@
+<!-- snippet: cart-template-set -->
+{%- comment -%}
+  Renders a group of cart line items as a "set" — one <li> for the whole set,
+  treated as a single cart unit: one title, one quantity, one price, one remove
+  control. Each group member is listed underneath for reference.
+
+  Dispatched from cart-line-item-list.liquid when a line item has
+  properties._group_role == 'parent' and properties._cart_template == 'set'.
+
+  Accepts:
+  - parent: {Object} the parent line item (already located in cart.items)
+  - line_item_index: {Number} the parent's 1-based index in cart.items (unused
+      here — group updates go through /cart/update.js by line key, not by index)
+{%- endcomment -%}
+
+{%- liquid
+  assign group_id = parent.properties._group_id
+
+  assign max_sort = 0
+  for item in cart.items
+    if item.properties._group_id == group_id
+      assign so = item.properties._sort_order | times: 1
+      if so > max_sort
+        assign max_sort = so
+      endif
+    endif
+  endfor
+
+  assign set_price = 0
+  assign line_keys = ''
+  assign min_inventory = nil
+
+  for i in (1..max_sort)
+    for item in cart.items
+      assign item_so = item.properties._sort_order | times: 1
+      if item.properties._group_id == group_id and item_so == i
+        assign set_price = set_price | plus: item.final_price
+        if line_keys != ''
+          assign line_keys = line_keys | append: ','
+        endif
+        assign line_keys = line_keys | append: '"' | append: item.key | append: '"'
+        assign v = item.variant
+        if v.inventory_management == 'shopify' and v.inventory_policy != 'continue'
+          assign iq = v.inventory_quantity
+          if min_inventory == nil or iq < min_inventory
+            assign min_inventory = iq
+          endif
+        endif
+      endif
+    endfor
+  endfor
+
+  assign show_max_warning = false
+  if min_inventory != nil and parent.quantity >= min_inventory
+    assign show_max_warning = true
+  endif
+
+  assign set_product_url = all_products[parent.properties._set_handle].url
+-%}
+
+<li class="border-b border-grey border-solid py-4">
+  <set-cart-item group-id="{{ group_id }}" line-keys='[{{ line_keys }}]'>
+
+    {%- # Row 1: title + remove -%}
+    <div class="flex justify-between items-start gap-2">
+      <div role="heading" aria-level="3" 
+        class="font-medium">
+        {{- parent.properties._set_title -}}
+      </div>
+      <a
+        href="{{ parent.url_to_remove }}"
+        class="flex-center shrink-0 pl-4 box-content [&_svg]:size-4"
+        data-set-remove
+        role="button"
+        aria-label="{{ 'cart.remove_title' | t: title: parent.properties._set_title }}">
+        {{- 'icon-garbage-can.svg' | inline_asset_content -}}
+      </a>
+    </div>
+
+    {%- # Row 2: quantity + price -%}
+    <div class="flex justify-between items-center mt-2">
+      <div class="w-[100px] lg:w-[120px] h-12">
+        <div class="quantity-input">
+          <a
+            class="quantity-input__button"
+            href="#"
+            data-set-quantity-minus
+            role="button"
+            aria-label="{{ 'products.product.quantity.decrease' | t: product: parent.properties._set_title }}">
+            {{- 'icon-minus.svg' | inline_asset_content -}}
+          </a>
+          <input
+            class="quantity-input__input"
+            type="number"
+            min="0"
+            maxlength="3"
+            value="{{ parent.quantity }}"
+            data-set-quantity-input
+            aria-label="{{ 'products.product.quantity.input_label' | t: product: parent.properties._set_title }}">
+          <a
+            class="quantity-input__button"
+            href="#"
+            data-set-quantity-plus
+            role="button"
+            aria-label="{{ 'products.product.quantity.increase' | t: product: parent.properties._set_title }}">
+            {{- 'icon-plus.svg' | inline_asset_content -}}
+          </a>
+        </div>
+      </div>
+      <div class="fs-body-md">{{ set_price | money }}</div>
+    </div>
+
+    {%- # Row 3: max-available warning -%}
+    {%- if show_max_warning -%}
+      <div class="mt-2 fs-body-sm text-red-error">Max available in cart</div>
+    {%- endif -%}
+
+    {%- # Row 4: items list -%}
+    <div class="mt-2 border-l border-grey pl-4">
+      <ul role="list" class="flex flex-col gap-2 py-4">
+        {%- for i in (1..max_sort) -%}
+          {%- for item in cart.items -%}
+            {%- assign item_so = item.properties._sort_order | times: 1 -%}
+            {%- if item.properties._group_id == group_id and item_so == i -%}
+              <li class="grid grid-cols-[6.25rem_1fr] gap-x-4">
+                <a
+                  href="{{ set_product_url }}"
+                  class="w-[6.25rem] block aspect-product-image bg-grey-light rounded-theme-sm overflow-hidden"
+                  aria-hidden="true"
+                  tabindex="-1">
+                  {%- if item.image -%}
+                    {{ item.image
+                      | image_url: width: 220
+                      | image_tag: loading: 'lazy', class: 'size-full object-cover' }}
+                  {%- endif -%}
+                </a>
+                <div class="flex flex-col fs-body-sm font-medium text-grey-dark">
+                  <a href="{{ set_product_url }}" class="no-underline mb-2">
+                    {%- render 'product-title', product: item.product -%}
+                  </a>
+                  {%- render 'cart-line-item-options', line_item: item -%}
+                </div>
+              </li>
+            {%- endif -%}
+          {%- endfor -%}
+        {%- endfor -%}
+      </ul>
+    </div>
+
+    {%- # Per-line error sinks for liquid-ajax-cart -%}
+    {%- for i in (1..max_sort) -%}
+      {%- for item in cart.items -%}
+        {%- assign item_so = item.properties._sort_order | times: 1 -%}
+        {%- if item.properties._group_id == group_id and item_so == i -%}
+          <div data-ajax-cart-errors="{{ item.key }}" class="mt-2 text-danger fs-body-sm empty:hidden"></div>
+        {%- endif -%}
+      {%- endfor -%}
+    {%- endfor -%}
+
+  </set-cart-item>
+</li>

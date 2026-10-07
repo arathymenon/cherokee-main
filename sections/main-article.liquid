@@ -1,0 +1,130 @@
+<!-- section: main-article -->
+
+{%- liquid
+  assign carousels = article.metafields.custom.in_post_collection_carousel.value
+  assign custom_author_name = article.metafields.custom.custom_author_name.value
+  assign custom_author_url = article.metafields.custom.author_page_url.value.url
+  assign displayed_author = custom_author_name | default: article.author
+-%}
+
+<article class="flex flex-col gap-lg pb-lg lg:px-gutter" aria-labelledby="article-heading">
+  <div class="max-w-container w-full mx-auto ">
+    <div class="grid grid-cols-1 lg:grid-cols-2 items-stretch overflow-hidden lg:frounded-theme">
+      <div class="flex flex-col justify-between gap-md bg-grey-light-blue p-md">
+        <div class="flex flex-col gap-md">
+          {%- if article.tags.size > 0 -%}
+            <ul class="flex flex-wrap gap-2 list-none p-0 m-0" aria-label="Tags">
+              {%- for tag in article.tags -%}
+                <li>
+                  <a
+                    href="{{ blog.url }}/tagged/{{ tag | handleize }}"
+                    class="inline-flex items-center leading-relaxed px-3 py-1 rounded-full bg-white text-brand-blue fs-body-md font-medium no-underline">
+                    {{- tag -}}
+                  </a>
+                </li>
+              {%- endfor -%}
+            </ul>
+          {%- endif -%}
+          <h1 id="article-heading" class="fs-display-2 m-0 text-balance">{{ article.title | escape }}</h1>
+        </div>
+        <div class="flex flex-wrap items-center justify-between gap-sm fs-body-md text-grey-dark">
+          <time datetime="{{ article.published_at | date: '%Y-%m-%d' }}">
+            {{- article.published_at | date: '%B %-d, %Y' -}}
+          </time>
+          {%- if displayed_author != blank -%}
+            {%- if custom_author_name != blank and custom_author_url != blank -%}
+              <a
+                href="{{ custom_author_url | escape }}"
+                rel="author"
+                class="text-current no-underline hover:underline underline-offset-4">
+                {{- displayed_author | escape -}}
+              </a>
+            {%- else -%}
+              <span rel="author">{{ displayed_author | escape }}</span>
+            {%- endif -%}
+          {%- endif -%}
+        </div>
+      </div>
+      <div class="relative aspect-3/2 overflow-hidden">
+        {%- if article.image -%}
+          {%- assign image_alt = article.image.alt | default: article.title | escape -%}
+          {{
+            article.image
+            | image_url: width: 1360
+            | image_tag:
+              class: 'block w-full h-full object-cover',
+              loading: 'eager',
+              fetchpriority: 'high',
+              alt: image_alt,
+              sizes: '(min-width: 1024px) 50vw, 100vw',
+              widths: '600, 800, 1000, 1360'
+          }}
+        {%- else -%}
+          {{ 'lifestyle-1' | placeholder_svg_tag: 'block w-full h-full object-cover' }}
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+
+  <div class="mx-auto w-full px-gutter flex max-w-250 flex-col gap-md">
+    {%- comment -%}
+      Split the body at each "<!--[carousel_N]-->" marker so text runs render
+      inside .rte while carousels render as siblings outside it (they must not
+      inherit the rich-text resets). `remaining` holds the not-yet-rendered tail.
+    {%- endcomment -%}
+    {%- assign remaining = article.content -%}
+    {%- for collection in carousels -%}
+      {%- assign marker = '<!--[carousel_' | append: forloop.index | append: ']-->' -%}
+      {%- comment -%}
+        Shopify's editor wraps a standalone marker in its own paragraph. Unwrap
+        it so the split doesn't leave a dangling <p> in the preceding segment
+        (which would make the custom-element </rte-content> be ignored and nest
+        the feed back inside .rte).
+      {%- endcomment -%}
+      {%- assign wrapped_marker = '<p>' | append: marker | append: '</p>' -%}
+      {%- assign remaining = remaining | replace: wrapped_marker, marker -%}
+      {%- if remaining contains marker -%}
+        {%- assign parts = remaining | split: marker -%}
+        {%- assign before = parts | first -%}
+        {%- assign before_text = before | strip -%}
+        {%- if before_text != blank -%}
+          <rte-content class="rte max-w-none">{{ before }}</rte-content>
+        {%- endif -%}
+        <div class="article-product-feed w-full">
+          {%- comment -%}
+            Preselect the collection's colorway on each card (same mechanism as
+            the color PLPs): labels come from custom.colorway_list via
+            colorway-labels; blank when the collection has no colorway list.
+          {%- endcomment -%}
+          {%- capture carousel_color_labels -%}
+            {%- render 'colorway-labels', collection: collection -%}
+          {%- endcapture -%}
+          {%- render 'product-carousel',
+            carousel_collection: collection,
+            preferred_color_labels: carousel_color_labels,
+            products_to_show: 8,
+            slides_per_view_tablet: 2,
+            slides_per_view_laptop: 3,
+            slides_per_view_desktop: 4,
+            hide_padding: true -%}
+        </div>
+        {%- assign remaining = parts | last -%}
+      {%- endif -%}
+    {%- endfor -%}
+    {%- assign remaining_text = remaining | strip -%}
+    {%- if remaining_text != blank -%}
+      <rte-content class="rte max-w-none">{{ remaining }}</rte-content>
+    {%- endif -%}
+
+    <div class="flex justify-start pt-sm">
+      {%- render 'share-button', title: article.title, url: article.url, label: 'Share Article' -%}
+    </div>
+
+    {%- render 'article-controls' -%}
+  </div>
+</article>
+
+{%- capture article_structured_data -%}{{ article | structured_data }}{%- endcapture -%}
+<script type="application/ld+json">
+  {{ article_structured_data | replace: '"@type":"Article"', '"@type":"BlogPosting"' }}
+</script>

@@ -1,0 +1,21 @@
+{% comment %}
+  Renders an arrow button link.
+
+  Usage:
+    {% render 'arrow-button', url: '/collections', text: 'Shop Now', class: 'text-white' %}
+
+  Params:
+    - url: Link URL (default: '#')
+    - text: Button text (default: 'Learn More')
+    - class: Additional CSS classes
+    - attributes: Additional HTML attributes (e.g. 'data-action-open-panel')
+{% endcomment %}
+
+<a {{ attributes }}
+  href="{{ url | default: '#' }}" 
+  class="arrow-button {{ class }}" >
+  <span>{{ text | default: 'Learn More' }}</span>
+  <span class="arrow-button-icon">
+    {{ 'icon-arrow-right.svg' | inline_asset_content }}
+  </span>
+</a>

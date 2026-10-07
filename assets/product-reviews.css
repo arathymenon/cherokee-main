@@ -1,0 +1,220 @@
+/* Yotpo Reviews Panel */
+
+#yotpo-reviews-main-widget .yotpo-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#yotpo-reviews-main-widget .yotpo-review-border-smooth {
+  display: none !important;
+}
+
+#yotpo-reviews-main-widget .yotpo-head:empty {
+  display: none !important;
+}
+
+#yotpo-reviews-main-widget .yotpo-title-text {
+  color: #000 !important;
+  margin-bottom: 0.5em !important;
+  font-weight: 500 !important;
+  font-size: 1rem !important;
+}
+
+/* Create Review Panel */
+.yotpo-modal-header-heading {
+  text-transform: capitalize !important;
+  font-weight: 500 !important;
+  font-size: 16px !important;
+}
+
+#yotpo-modal svg.btn-close path {
+  stroke: #000 !important;
+}
+
+label.yotpo-form-label {
+  margin-bottom: 8px !important;
+}
+
+#yotpo-modal .yotpo-new-review-submit {
+  background: #000193 !important;
+  padding: 12px 24px !important;
+  height: auto !important;
+  border-radius: 50px !important;
+  font-weight: 600 !important;
+}
+
+.yotpo-new-input-message,
+.yotpo-custom-question-message,
+.yotpo-custom-question-message,
+.yotpo-file-input-headline {
+  color: #333 !important;
+  font-family: Inter !important;
+  font-size: 14px !important;
+  font-style: normal !important;
+  font-weight: 400 !important;
+}
+
+#yotpo-modal textarea,
+#yotpo-modal input[type="text"],
+#yotpo-modal input[type="email"] {
+  border-color: rgb(0 0 0 / 15%) !important;
+}
+
+/* Yotpo Q&A Panel */
+
+#yotpo-questions-and-answers {
+  .yotpo-empty-state {
+    margin-top: 0 !important;
+  }
+}
+
+#yotpo-questions-and-answers .yotpo-header-head:empty {
+  display: none !important;
+}
+
+#yotpo-questions-and-answers .yotpo-empty-state-wrapper {
+  margin-top: -50px !important;
+}
+
+#yotpo-questions-and-answers .yotpo-title-text {
+  color: #000 !important;
+  margin-bottom: 0.5em !important;
+  font-weight: 500 !important;
+  font-size: 1rem !important;
+}
+
+.yotpo-qna-modal {
+  max-width: 587px !important;
+  margin: auto !important;
+  width: 100vw;
+}
+
+.yotpo-qna-modal {
+  padding: 24px !important;
+}
+
+.yotpo-qna-modal #modalDescription {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.yotpo-qna-modal .yotpo-qna-modal-header {
+  text-align: left !important;
+  font-size: 1rem !important;
+  font-weight: 500 !important;
+  margin-top: 0 !important;
+  margin-bottom: 0px !important;
+}
+
+.yotpo-qna-modal .yotpo-qna-modal-header-font {
+  font-size: 1rem !important;
+  font-weight: 500 !important;
+}
+
+.yotpo-qna-modal #modalTitle {
+  padding-right: 50px !important;
+  margin-bottom: 24px !important;
+}
+
+.yotpo-qna-modal .yotpo-form-label {
+  margin-top: 0px !important;
+  font-size: 14px !important;
+  font-weight: 400 !important;
+  line-height: 160% !important;
+}
+
+.yotpo-qna-modal .yotpo-new-input-message {
+  margin-top: 8px !important;
+  margin-bottom: 10px !important;
+  font-size: 12px !important;
+  font-weight: 400 !important;
+  line-height: 160% !important;
+}
+
+.yotpo-qna-modal textarea,
+.yotpo-qna-modal input[type="text"],
+.yotpo-qna-modal input[type="email"] {
+  border: 1px solid #e5e5e5 !important;
+  border-radius: 4px !important;
+  font-size: 14px !important;
+}
+
+.yotpo-qna-modal .yotpo-name-email-wrapper {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 16px !important;
+}
+
+@media (max-width: 500px) {
+  .yotpo-qna-modal .yotpo-name-email-wrapper {
+    grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
+    gap: 0px !important;
+  }
+}
+
+.yotpo-qna-modal .yotpo-name-email-wrapper > div {
+  width: 100% !important;
+  max-width: none !important;
+}
+
+.yotpo-qna-modal .yotpo-question-submit {
+  background: #000193 !important;
+  padding: 12px 24px !important;
+  height: auto !important;
+  border-radius: 50px !important;
+  width: auto !important;
+  margin-top: 24px !important;
+  font-weight: 600 !important;
+}
+
+.yotpo-qna-modal .form-footer {
+  margin-bottom: 0px !important;
+}
+
+/* Both Panels */
+
+.yotpo-form-label {
+  font-family: Inter, Helvetica, sans-serif !important;
+  font-weight: 400 !important;
+  font-size: 14px !important;
+}
+
+#yotpo-reviews-main-widget *,
+#yotpo-questions-and-answers * {
+  font-family: Inter, Helvetica, sans-serif !important;
+
+  --primary-font-family: inter, helvetica, sans-serif !important;
+}
+
+#yotpo-reviews-main-widget #yotpo-main-widget-btn,
+#yotpo-questions-and-answers #yotpo-widget-btn {
+  --button-min-width: 6.25rem;
+  --button-padding-inline: 1.5rem;
+  --button-padding-block: 1rem;
+
+  /* layout and sizing */
+  display: inline-flex !important;
+  height: auto !important;
+  min-height: 0 !important;
+  align-items: center !important;
+  justify-content: center !important;
+  vertical-align: middle !important;
+  padding-inline: var(--button-padding-inline) !important;
+  padding-top: var(--button-padding-block) !important;
+  padding-bottom: var(--button-padding-block) !important;
+  min-width: var(--button-min-width) !important;
+
+  /* max-width: 26.25rem; */
+  gap: 0.75em !important;
+
+  /* font */
+  font-size: 0.875rem !important;
+  font-weight: 600 !important;
+  font-family: var(--font-body) !important;
+  text-transform: capitalize !important;
+  letter-spacing: 0 !important;
+  line-height: normal !important;
+  text-align: center !important;
+  text-decoration: none !important;
+}

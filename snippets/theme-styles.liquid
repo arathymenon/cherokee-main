@@ -1,0 +1,94 @@
+<link rel="stylesheet" type="text/css" media="all"
+	href="{{ 'styles.min.css' | asset_url }}" >
+
+
+{% liquid
+  assign container_max_width = "none"
+  if settings.container_max_width != "none"
+    assign container_max_width = settings.container_max_width | divided_by: 16.0
+    assign container_max_width = container_max_width | append: 'rem'
+  endif
+%}
+
+
+
+<style>
+
+  html {
+    --max-width-container: {{ container_max_width }};
+
+    --radius-theme: {{ settings.content_radius | divided_by: 16.0 }}rem;
+    --radius-theme-sm: {{ settings.content_radius | divided_by: 32.0 }}rem;
+  }
+
+
+  /* ═══════════════════════════════════════════════════════════
+     FONTS
+     ═══════════════════════════════════════════════════════════ */
+  @font-face {
+    font-family: "Inter";
+    src: url({{ 'font-Inter-Regular.woff2' | asset_url | split: '?' | first }}) format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: "Inter";
+    src: url({{ 'font-Inter-Medium.woff2' | asset_url | split: '?' | first }}) format('woff2');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: "GT Walsheim";
+    src: url({{ 'font-GT-Walsheim-Black.woff2' | asset_url | split: '?' | first }}) format('woff2');
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  /* ═══════════════════════════════════════════════════════════
+     COLOR SCHEMES
+     ═══════════════════════════════════════════════════════════ */
+  {%- for scheme in settings.color_schemes -%}
+    .color-{{ scheme }} {
+      --color-background: {{ scheme.settings.background.oklch }};
+      --color-background-gradient: {% if scheme.settings.background_gradient != blank %}{{ scheme.settings.background_gradient }}{% else %}oklch(var(--color-background)){% endif %};
+      --color-foreground: {{ scheme.settings.foreground.oklch }};
+      --color-headings: {{ scheme.settings.headings.oklch }};
+      --color-border: {{ scheme.settings.border.oklch }};
+
+      --color-input-border: {{ scheme.settings.input_border.oklch }};
+
+
+      --color-chip-background: {{ scheme.settings.chip_background.oklch }};
+      --color-chip-foreground: {{ scheme.settings.chip_foreground.oklch }};
+      --color-chip-border: {{ scheme.settings.chip_border.oklch }};
+      --color-chip-selected-background: {{ scheme.settings.chip_selected_background.oklch }};
+      --color-chip-selected-foreground: {{ scheme.settings.chip_selected_foreground.oklch }};
+      --color-chip-selected-border: {{ scheme.settings.chip_selected_border.oklch }};
+
+      --color-icons: {{ scheme.settings.icons.oklch }};
+      --color-links: {{ scheme.settings.links.oklch }};
+      --color-links-hover: {{ scheme.settings.links_hover.oklch }};
+
+      /* auto-apply background, text, and border */
+      background: var(--color-background-gradient);
+      color: oklch(var(--color-foreground));
+      border-color: oklch(var(--color-border));
+    }
+  {%- endfor -%}
+
+  /* ═══════════════════════════════════════════════════════════
+     BADGES
+     ═══════════════════════════════════════════════════════════ */
+  {%- for entry in shop.metaobjects.badges.values -%}
+    .badge-{{ entry.text.value | handleize }} {
+      background-color: {{ entry.color.value }};
+      color: {{ entry.text_color.value }};
+    }
+  {%- endfor -%}
+
+</style>

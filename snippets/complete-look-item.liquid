@@ -1,0 +1,193 @@
+<!-- snippet: complete-look-item -->
+{%- comment -%}
+  Renders one complementary product as an inline buyable row (desktop layout
+  for the "Complete the look" section). Shared between the initial server
+  render (sections/complete-the-look.liquid) and the section-API refetch
+  (sections/sapi-complete-look.liquid) — producing identical markup in both
+  contexts keeps the <product-fetcher> area swap a clean drop-in.
+
+  Mirrors the set pattern in snippets/product-set-item.liquid.
+
+  Accepts:
+  - product: {Object} the complementary product
+  - current_variant: {Object|null} resolved variant, null in fresh-load state
+  - gallery_variant: {Object} variant whose image shows in the thumbnail
+  - collection_context: {Object} optional
+{%- endcomment -%}
+
+{%- liquid
+  assign product_form_id = 'ctlook-' | append: product.id | append: '-form'
+
+  # Description — mirror sections/main-product.liquid blank-guard logic.
+  assign product_description = product.description
+  if product_description != blank
+    assign product_description_text = product_description | strip_html | strip
+    if product_description_text == ''
+      assign product_description = blank
+    endif
+  endif
+
+  capture media_list
+    render 'product-media-list', product: product, variant: gallery_variant, list_name: 'featured_hover'
+  endcapture
+  assign media_list = media_list | split: ' '
+-%}
+
+<product-fetcher
+  section="sapi-complete-look"
+  product-handle="{{ product.handle }}"
+  class="flex items-start gap-0 py-xs border-b border-grey">
+  {%- render 'product-fetcher-state',
+    product: product,
+    variant: current_variant,
+    collection_context: collection_context
+  -%}
+
+  {%- # Column A — image (hover-swaps to second media), color-filtered -%}
+  <div
+    data-product-fetcher-area="gallery"
+    class="group/product-card-media shrink-0 w-[200px] aspect-[200/307] relative overflow-hidden rounded-theme-sm">
+    <a
+      href="{{ product.url | within: collection_context }}"
+      data-product-color-link
+      class="block size-full no-underline">
+      {%- for index_string in media_list -%}
+        {%- liquid
+          assign index = index_string | plus: 0
+          assign media = product.media[index]
+          assign show_skeleton = true
+          assign img_loading = 'lazy'
+          assign hover_img_class = ''
+          unless forloop.first
+            assign show_skeleton = false
+            assign img_loading = 'eager'
+            assign hover_img_class = 'opacity-0 z-1 transition-opacity duration-300 group-hover/product-card-media:opacity-100'
+          endunless
+        -%}
+        <div class="absolute size-full inset-0 {{ hover_img_class }}">
+          <media-loader class="block size-full relative group/media-loader">
+            <div class="size-full duration-300 opacity-0 transition-opacity group-[[ready]]/media-loader:opacity-100">
+              {{-
+                media.preview_image
+                | image_url: width: 800
+                | image_tag:
+                  loading: img_loading,
+                  sizes: '200px',
+                  widths: '200, 400, 600, 800',
+                  class: 'size-full object-cover'
+              -}}
+            </div>
+            {%- if show_skeleton -%}
+              <div class="absolute duration-300 inset-0 size-full transition-opacity group-[[ready]]/media-loader:opacity-0">
+                <div class="skeleton-pulse bg-grey-light size-full"></div>
+              </div>
+            {%- endif -%}
+          </media-loader>
+        </div>
+      {%- else -%}
+        <div class="absolute size-full inset-0 bg-grey-light"></div>
+      {%- endfor -%}
+    </a>
+  </div>
+
+  {%- # Columns B + C share the product-info gutter -%}
+  <div class="grow min-w-0 flex gap-md items-start p-sm ">
+    {%- # Column B — brand / title / price / description / color -%}
+    <div data-product-fetcher-area="variant" 
+      class="grow min-w-0 flex flex-col gap-0 w-1/2">
+      {%- # Brand / title / price — 4px between each -%}
+      <div class="flex flex-col gap-1">
+        {%- render 'product-meta-collection', product: product -%}
+
+        <a
+          href="{{ product.url | within: collection_context }}"
+          data-product-color-link
+          class="fs-body font-medium no-underline text-pretty">
+          {%- render 'product-title', product: product -%}
+        </a>
+
+        <div class="fs-body">
+          {%- render 'product-price', target: current_variant -%}
+        </div>
+      </div>
+
+      {%- if product_description != blank -%}
+        <rte-content class="block rte fs-body text-grey-dark max-w-[620px] py-6">
+          {{- product_description -}}
+        </rte-content>
+      {%- endif -%}
+
+      {%- # Color option only (size/inseam render in column C) -%}
+      {%- unless product.has_only_default_variant -%}
+        {%- for option in product.options_with_values -%}
+          {%- if option.name == 'Color' -%}
+            {%- capture prefix_html -%}
+              <div class="flex justify-between gap-3 mb-2">
+                <legend>
+                  {%- render 'product-option-legend', product_option: option -%}
+                </legend>
+              </div>
+            {%- endcapture -%}
+            <div class="max-w-[480px]">
+              {%- render 'product-options',
+                product: product,
+                collection_context: collection_context,
+                product_option: option,
+                picker_type: 'radio',
+                prefix_html: prefix_html
+              -%}
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      {%- endunless -%}
+    </div>
+
+    {%- # Column C — size / inseam selections + add to bag -%}
+    <div
+      data-product-fetcher-area="variant"
+      class="grow min-w-0 flex flex-col gap-0 max-w-[480px] w-1/2">
+      {%- unless product.has_only_default_variant -%}
+        {%- for option in product.options_with_values -%}
+          {%- unless option.name == 'Color' -%}
+            {%- capture prefix_html -%}
+              <div class="flex justify-between gap-3 mb-2">
+                <legend>
+                  {%- render 'product-option-legend', product_option: option -%}
+                </legend>
+                {%- if option.name == 'Size' and product.metafields.meta.sizeChart != blank -%}
+                  <div class="fs-body-sm">
+                    <html-fetcher-trigger
+                      selector="#size-guide-dialog html-fetcher"
+                      href="{{ product.url }}"
+                      data-vegax-command="show-modal"
+                      data-vegax-commandfor="size-guide-dialog">
+                      <button type="button" class="underline">
+                        {{- 'size_chart.title' | t -}}
+                      </button>
+                    </html-fetcher-trigger>
+                  </div>
+                {%- endif -%}
+              </div>
+            {%- endcapture -%}
+            <div class="mb-4">
+              {%- render 'product-options',
+                product: product,
+                collection_context: collection_context,
+                product_option: option,
+                picker_type: 'radio',
+                prefix_html: prefix_html
+              -%}
+            </div>
+          {%- endunless -%}
+        {%- endfor -%}
+      {%- endunless -%}
+
+      {%- render 'product-form',
+        product: product,
+        variant: current_variant,
+        product_form_id: product_form_id,
+        hide_quantity: true
+      -%}
+    </div>
+  </div>
+</product-fetcher>

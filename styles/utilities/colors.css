@@ -1,0 +1,52 @@
+/* ============================================
+   Color Scheme Utilities
+   ============================================ */
+
+/* background colors */
+@utility bg-scheme {
+  background: var(--color-background-gradient);
+}
+
+@utility bg-scheme-fg {
+  background-color: oklch(var(--color-foreground) / var(--tw-bg-opacity, 1));
+}
+
+/* text colors */
+@utility text-scheme {
+  color: oklch(var(--color-foreground) / var(--tw-text-opacity, 1));
+}
+
+@utility text-scheme-bg {
+  color: oklch(var(--color-background) / var(--tw-text-opacity, 1));
+}
+
+@utility text-scheme-heading {
+  color: oklch(var(--color-headings) / var(--tw-text-opacity, 1));
+}
+
+@utility text-heading {
+  color: oklch(var(--color-headings) / var(--tw-text-opacity, 1));
+}
+
+/* border colors */
+@utility border-bg {
+  border-color: oklch(var(--color-background) / var(--tw-border-opacity, 1));
+}
+
+@utility border-fg {
+  border-color: oklch(var(--color-foreground) / var(--tw-border-opacity, 1));
+}
+
+/* form input colors */
+@utility border-scheme-input-border {
+  border-color: var(--color-input-border);
+}
+
+/* icon & link colors */
+@utility text-scheme-icons {
+  color: var(--color-icons);
+}
+
+@utility text-scheme-links {
+  color: var(--color-links);
+}

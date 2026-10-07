@@ -1,0 +1,165 @@
+<!-- section: video -->
+
+{%- liquid
+  assign s = section.settings
+
+  assign video = s.video
+  assign mobile_video = s.mobile_video | default: video
+
+  assign desktop_ratio = s.desktop_aspect_ratio
+  assign mobile_ratio = s.mobile_aspect_ratio
+
+  assign desktop_mp4 = ''
+  if video.sources != blank
+    for source in video.sources
+      if source.url contains 'mp4'
+        assign desktop_mp4 = source.url
+        break
+      endif
+    endfor
+  endif
+
+  assign mobile_mp4 = ''
+  if mobile_video.sources != blank
+    for source in mobile_video.sources
+      if source.url contains 'mp4'
+        assign mobile_mp4 = source.url
+        break
+      endif
+    endfor
+  endif
+
+  assign has_video = false
+  if desktop_mp4 != blank or mobile_mp4 != blank
+    assign has_video = true
+  endif
+
+  assign desktop_poster = video.preview_image
+  assign mobile_poster = mobile_video.preview_image | default: desktop_poster
+-%}
+
+{% if has_video %}
+
+  <style>
+    #shopify-section-{{ section.id }} video-player {
+      aspect-ratio: {% if mobile_ratio == 'natural' %}auto{% else %}{{ mobile_ratio }}{% endif %};
+    }
+    @media (min-width: 1024px) {
+      #shopify-section-{{ section.id }} video-player {
+        aspect-ratio: {% if desktop_ratio == 'natural' %}auto{% else %}{{ desktop_ratio }}{% endif %};
+      }
+    }
+  </style>
+
+  <section>
+    <div class="container py-md">
+
+      <video-player
+        class="relative block overflow-hidden rounded-theme"
+        desktop-src="{{ desktop_mp4 | default: mobile_mp4 }}"
+        mobile-src="{{ mobile_mp4 | default: desktop_mp4 }}"
+        breakpoint="1024"
+      >
+        <video
+          class="w-full h-full object-cover"
+          playsinline
+          controls
+          preload="none"
+        ></video>
+
+        <div
+          data-video-overlay
+          class="absolute inset-0 z-10 flex-center cursor-pointer transition-opacity duration-300"
+        >
+          {% if desktop_poster or mobile_poster %}
+            <picture class="absolute inset-0">
+              {% if desktop_poster %}
+                <source
+                  media="(min-width: 1024px)"
+                  srcset="{{ desktop_poster | image_url: width: 1920 }}"
+                >
+              {% endif %}
+              {{- mobile_poster | image_url: width: 900 | image_tag:
+                class: 'w-full h-full object-cover',
+                loading: 'eager',
+                sizes: '100vw',
+                widths: '400, 600, 900, 1200, 1920'
+              -}}
+            </picture>
+          {% endif %}
+          <span class="absolute inset-0" style="background-color: rgba(0, 0, 0, 0.2)"></span>
+          <button
+            class="relative text-white size-[60px] lg:size-20 *:size-full"
+            type="button"
+            aria-label="Play video"
+          >
+            {{- 'icon-play-video.svg' | inline_asset_content -}}
+          </button>
+        </div>
+      </video-player>
+
+    </div>
+  </section>
+
+{% endif %}
+
+{% schema %}
+{
+  "name": "Video",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Desktop video"
+    },
+    {
+      "type": "video",
+      "id": "video",
+      "label": "Video"
+    },
+    {
+      "type": "select",
+      "id": "desktop_aspect_ratio",
+      "label": "Aspect ratio",
+      "options": [
+        { "value": "1360/765", "label": "Widescreen (16:9)" },
+        { "value": "4/3", "label": "Standard (4:3)" },
+        { "value": "1/1", "label": "Square (1:1)" },
+        { "value": "natural", "label": "Natural" }
+      ],
+      "default": "1360/765"
+    },
+    {
+      "type": "header",
+      "content": "Mobile video"
+    },
+    {
+      "type": "video",
+      "id": "mobile_video",
+      "label": "Video (optional, falls back to desktop)"
+    },
+    {
+      "type": "select",
+      "id": "mobile_aspect_ratio",
+      "label": "Aspect ratio",
+      "options": [
+        { "value": "1/1", "label": "Square (1:1)" },
+        { "value": "9/16", "label": "Vertical (9:16)" },
+        { "value": "4/3", "label": "Standard (4:3)" },
+        { "value": "1360/765", "label": "Widescreen (16:9)" },
+        { "value": "natural", "label": "Natural" }
+      ],
+      "default": "1/1"
+    }
+  ],
+  "blocks": [],
+  "presets": [
+    {
+      "name": "Video",
+      "category": "Media & Content"
+    }
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  }
+}
+{% endschema %}

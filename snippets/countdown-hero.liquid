@@ -1,0 +1,38 @@
+{%- if date_param -%}
+  <span id="countdown"> --h --m --s </span>
+
+  <script type="application/javascript">
+    (function () {
+      const date_end = '{{ date_param }}';
+      const second = 1000;
+      let minute = second * 60;
+      let hour = minute * 60;
+      let s_date = '{{ separator }}';
+      let x = setInterval(function () {
+        let countDown = new Date(date_end).getTime();
+        if (countDown) {
+          let now = new Date().getTime();
+          let distance = countDown - now;
+          let hours = Math.floor(distance / hour) + 'h';
+          let minutes = Math.floor((distance % hour) / minute) + 'm';
+          let seconds = Math.floor((distance % minute) / second) + 's';
+          if (s_date === undefined) {
+            s_date = ' ';
+          }
+          let countDownText = [hours, minutes, seconds].join(s_date);
+          document.getElementById('countdown').innerText = countDownText;
+          if (distance < 0) {
+            let headline = document.getElementById('headline'),
+              countdown = document.getElementById('countdown'),
+              content = document.getElementById('content');
+
+            headline.innerText = '';
+            countdown.style.display = 'none';
+            content.style.display = 'block';
+            clearInterval(x);
+          }
+        }
+      }, 0);
+    })();
+  </script>
+{%- endif -%}

@@ -1,0 +1,149 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "page_header": {
+      "type": "page-header",
+      "settings": {
+        "heading": "GIFT CARDS",
+        "padding_top": "pt-sm",
+        "padding_bottom": "pb-sm"
+      }
+    },
+    "page_content": {
+      "type": "page-content",
+      "disabled": true,
+      "settings": {
+        "padding_top": "pt-sm",
+        "padding_bottom": "pb-lg"
+      }
+    },
+    "shop_the_look_HFJqEk": {
+      "type": "shop-the-look",
+      "blocks": {
+        "slide_ajydQJ": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/ww-core-stretch-men-3x2-20260603.jpg",
+            "product_1": "",
+            "product_1_color_label": "",
+            "product_2": "",
+            "product_2_color_label": "",
+            "product_3": "",
+            "product_3_color_label": ""
+          }
+        }
+      },
+      "block_order": [
+        "slide_ajydQJ"
+      ],
+      "name": "Shop the Look",
+      "settings": {
+        "color_scheme": "scheme-0d9bed0c-0f1f-4f9d-99af-d15d3a707bfd",
+        "card_color_scheme": "scheme-default",
+        "heading": "Coming Soon  |  The Gift of Comfort",
+        "richtext": "<strong>Check back to purchase e-gift cards $20-$500.</strong> Not sure what size they wear or which style they're into? A Cherokee gift card puts the decision where it belongs, with them. No guessing, no returns, just the perfect fit every time."
+      }
+    },
+    "shop_the_look_zirykY": {
+      "type": "shop-the-look",
+      "blocks": {
+        "slide_KPhPJH": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/ww-core-stretch-men-3x2-20260603.jpg",
+            "product_1": "cherokee-egift-card",
+            "product_1_color_label": "",
+            "product_2": "",
+            "product_2_color_label": "",
+            "product_3": "",
+            "product_3_color_label": ""
+          }
+        }
+      },
+      "block_order": [
+        "slide_KPhPJH"
+      ],
+      "disabled": true,
+      "name": "Shop the Look",
+      "settings": {
+        "color_scheme": "scheme-0d9bed0c-0f1f-4f9d-99af-d15d3a707bfd",
+        "card_color_scheme": "scheme-default",
+        "heading": "The gift of comfort, delivered.",
+        "richtext": "Not sure what size they wear or which style they're into? A Cherokee gift card puts the decision where it belongs, with them. No guessing, no returns, just the perfect fit every time. <a href=\"/products/cherokee-egift-card\" title=\"Cherokee eGift card\"><strong>Shop E-Cards $20-$500</strong></a>"
+      }
+    },
+    "1780420482c30bcf66": {
+      "type": "apps",
+      "blocks": {
+        "rise_gift_cards_store_credit_rise_check_balance_extension_heyyQB": {
+          "type": "shopify://apps/rise-gift-cards-store-credit/blocks/rise-check-balance-extension/d837f9d0-9f22-491a-94b6-f32b41864892",
+          "settings": {
+            "preview_state": "input",
+            "title": "Have A Gift Card?",
+            "subtitle": "Enter your gift card code to see your current balance.",
+            "inputPlaceholder": "Your code",
+            "buttonText": "Check Your Balance",
+            "balanceViewTitle": "Your gift card balance",
+            "balanceLabel": "Balance:",
+            "expiresOnLabel": "Expires on",
+            "neverExpiresLabel": "Never expires",
+            "checkAnotherButtonText": "Check A New Card",
+            "backgroundColor": "rgba(0,0,0,0)",
+            "errorColor": "#ff0000",
+            "inputBorderColor": "#000000",
+            "buttonWidthOption": "full"
+          }
+        }
+      },
+      "block_order": [
+        "rise_gift_cards_store_credit_rise_check_balance_extension_heyyQB"
+      ],
+      "settings": {
+        "section_id": "",
+        "color_scheme": "scheme-default",
+        "max_width": "full-width",
+        "max_width_custom": "",
+        "side_padding": true,
+        "padding_top": "none",
+        "padding_bottom": "none",
+        "min_height": "",
+        "heading": "",
+        "heading_size": "3",
+        "align_text": "center"
+      }
+    },
+    "featured_collection_YEHpqq": {
+      "type": "featured-collection",
+      "name": "Featured collection",
+      "settings": {
+        "color_scheme": "",
+        "heading": "Featured Products",
+        "text": "",
+        "collection": "giftcards",
+        "products_to_show": 12,
+        "loop": false,
+        "button_link": "",
+        "button_text": "Shop All",
+        "slides_per_view_tablet": 3,
+        "slides_per_view_laptop": 3,
+        "slides_per_view_desktop": 4
+      }
+    }
+  },
+  "order": [
+    "page_header",
+    "page_content",
+    "shop_the_look_HFJqEk",
+    "shop_the_look_zirykY",
+    "1780420482c30bcf66",
+    "featured_collection_YEHpqq"
+  ]
+}

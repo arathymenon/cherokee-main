@@ -1,0 +1,16 @@
+@layer components {
+  .label {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 9999px;
+    padding: 4px 8px;
+    font-size: 10px;
+    line-height: 1;
+    font-weight: 500;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    background-color: #f2f3f5;
+    color: #000193;
+    white-space: nowrap;
+  }
+}

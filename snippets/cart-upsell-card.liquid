@@ -1,0 +1,236 @@
+<!-- snippet: cart-upsell-card -->
+
+{% doc %}
+  Compact interactive upsell card for the cart "You might also like" carousel.
+
+  Color swatches re-render the card via <product-fetcher> against the
+  sapi-cart-upsell-card section (image + price + selected swatch update).
+  Non-color options (Size, Inseam, …) render as <select> pickers; the Add
+  button is disabled until <product-fetcher> reports a complete, available
+  selection (only color is server-preselected — size/inseam never are).
+
+  @param {object} product - Shopify product object (required)
+  @param {object} [collection_context] - Collection for URL context
+
+  @example
+  {% render 'cart-upsell-card', product: product %}
+{% enddoc %}
+
+{%- liquid
+  assign variant = product.selected_or_first_available_variant
+  assign product_url = product.url | within: collection_context
+
+  assign swatch_option = null
+  for option in product.options_with_values
+    for value in option.values
+      if value.swatch
+        if value.swatch.image or value.swatch.color
+          assign swatch_option = option
+          break
+        endif
+      endif
+    endfor
+    if swatch_option
+      break
+    endif
+  endfor
+
+  assign product_form_id = 'cart-upsell-' | append: product.id
+-%}
+
+<product-fetcher section="sapi-cart-upsell-card" class="block h-full">
+  {%- render 'product-fetcher-state',
+    product: product,
+    variant: variant,
+    collection_context: collection_context
+  -%}
+
+  <div class="bg-white rounded-xs p-4 flex flex-col gap-4 h-full justify-between">
+    {%- # Product row: image + title/price + color swatches -%}
+    <div class="flex gap-4 items-start">
+      <a
+        href="{{ product_url }}"
+        data-product-color-link
+        data-product-fetcher-area="variant"
+        class="block w-15 md:w-20 shrink-0 overflow-hidden no-underline">
+        {%- assign card_image = variant.featured_image | default: product.featured_image -%}
+        {%- if card_image -%}
+          {{-
+            card_image
+            | image_url: width: 180
+            | image_tag: loading: 'lazy', class: 'w-full h-full object-cover', sizes: '60px'
+          -}}
+        {%- else -%}
+          <div class="w-full h-full bg-grey-light"></div>
+        {%- endif -%}
+      </a>
+
+      <div class="flex-1 min-w-0 flex flex-col justify-between self-stretch pt-2 pb-4">
+        <div data-product-fetcher-area="variant" class="flex flex-col">
+          <a
+            href="{{ product_url }}"
+            data-product-color-link
+            class="fs-body font-medium no-underline">
+            {{- product.title -}}
+          </a>
+          {%- # Both price branches are server-rendered and swapped together
+              # with the variant area; cart-upsell-carousel.js flips [hidden]
+              # from client pick state (Shopify auto-resolves a full variant
+              # even for partial option_values, so the server can't know
+              # whether the shopper finished selecting — same pattern as the
+              # PDP price in main-product.liquid). -%}
+          <div data-upsell-price>
+            <p data-upsell-price-fresh class="fs-body-sm font-medium flex items-center gap-1">
+              {%- if product.price_varies -%}
+                <span>{{ product.price_min | money }}&ndash;{{ product.price_max | money }}</span>
+              {%- elsif product.compare_at_price_min > product.price_min -%}
+                <span class="text-red-sale">{{ product.price_min | money }}</span>
+                <s class="text-grey-dark opacity-30">{{ product.compare_at_price_min | money }}</s>
+              {%- else -%}
+                <span>{{ product.price_min | money }}</span>
+              {%- endif -%}
+            </p>
+            <p data-upsell-price-variant hidden class="fs-body-sm font-medium flex items-center gap-1">
+              {%- if variant.compare_at_price > variant.price -%}
+                <span class="text-red-sale">{{ variant.price | money }}</span>
+                <s class="text-grey-dark opacity-30">{{ variant.compare_at_price | money }}</s>
+              {%- else -%}
+                <span>{{ variant.price | money }}</span>
+              {%- endif -%}
+            </p>
+          </div>
+        </div>
+
+        {%- if swatch_option -%}
+          <custom-scroll class="relative mt-2 min-w-0" data-tarot-no-drag>
+            <button
+              type="button"
+              data-action-scroll-prev
+              aria-label="Scroll colors left"
+              class="hidden absolute inset-y-0 left-0 z-10 flex items-center justify-start w-8 bg-linear-to-r from-white from-50% to-transparent text-grey-dark [&>svg]:size-4">
+              {{- 'icon-angle-left.svg' | inline_asset_content -}}
+            </button>
+            <form class="min-w-0">
+              <product-option
+                position="{{ swatch_option.position }}"
+                data-product-color-option
+                data-product-fetcher-option-group="default"
+                class="block min-w-0">
+                <fieldset class="min-w-0">
+                  <div
+                    data-custom-scroll-track
+                    class="flex gap-2 items-center w-full overflow-x-auto no-scrollbar">
+                    {%- for value in swatch_option.values -%}
+                      {%- liquid
+                        assign swatch_value = null
+                        assign swatch_focal_point = 'initial'
+                        if value.swatch
+                          if value.swatch.image
+                            assign image_url = value.swatch.image | image_url: width: 50
+                            assign swatch_value = 'url(' | append: image_url | append: ')'
+                            assign swatch_focal_point = value.swatch.image.presentation.focal_point | default: 'initial'
+                          elsif value.swatch.color
+                            assign swatch_value = 'rgb(' | append: value.swatch.color.rgb | append: ')'
+                          endif
+                        endif
+                        unless swatch_value
+                          continue
+                        endunless
+                        assign value_url = value.product_url
+                        if value_url
+                          assign value_url = value_url | within: collection_context
+                        endif
+                      -%}
+                      <label class="shrink-0 p-0.5 border border-transparent border-solid relative cursor-pointer rounded-full hover:border-black has-[:checked]:border-black">
+                        <input
+                          type="radio"
+                          name="product-option-radio-group"
+                          value="{{ value.name | escape }}"
+                          {% if value.selected %}
+                            checked
+                          {% endif %}
+                          data-product-option-value-id="{{ value.id }}"
+                          data-product-option-display-value="{{ value.name | escape }}"
+                          data-product-option-url="{{ value_url }}"
+                          class="sr-only">
+                        <span
+                          class="size-[18px] block rounded-full overflow-hidden"
+                          style="background: {{ swatch_value }}; background-position: {{ swatch_focal_point }};">
+                          <span class="sr-only">{{ value.name | escape }}</span>
+                        </span>
+                      </label>
+                    {%- endfor -%}
+                  </div>
+                </fieldset>
+              </product-option>
+            </form>
+            <button
+              type="button"
+              data-action-scroll-next
+              aria-label="Scroll colors right"
+              class="hidden absolute inset-y-0 right-0 z-10 flex items-center justify-end w-8 bg-linear-to-l from-white from-50% to-transparent text-grey-dark [&>svg]:size-4">
+              {{- 'icon-angle-right.svg' | inline_asset_content -}}
+            </button>
+          </custom-scroll>
+        {%- endif -%}
+      </div>
+    </div>
+
+    {%- comment -%}
+      Size/Inseam selects + Add — all in one row. Selects sit outside the
+      Shopify product form; the Add button is gated by product-fetcher
+      (disabled until every option is picked and the variant resolves).
+    {%- endcomment -%}
+    {%- liquid
+      assign gap_class = "gap-2"
+      if product.options_with_values.size > 2
+        assign gap_class = "gap-1"
+      endif
+    %}
+    <div data-product-fetcher-area="variant" class="flex items-center {{ gap_class }}">
+      {%- for option in product.options_with_values -%}
+        {%- if product.has_only_default_variant -%}{%- break -%}{%- endif -%}
+        {%- if swatch_option and option.position == swatch_option.position -%}
+          {%- continue -%}
+        {%- endif -%}
+        <div class="flex-1 min-w-0">
+          {%- render 'product-options',
+            product: product,
+            collection_context: collection_context,
+            product_option: option,
+            picker_type: 'select',
+            option_group: 'default',
+            select_class: 'form-input select-sm w-full rounded-full border border-[#e5e5e5] px-4 fs-body-sm text-[#333]'
+          -%}
+        </div>
+      {%- endfor -%}
+
+      <ajax-cart-product-form
+        class="group/ajax-cart-product-form flex-1 min-w-0"
+        selection-incomplete>
+        {%- form 'product', product, id: product_form_id -%}
+          <input type="hidden" name="id" value="{{ variant.id }}" disabled>
+          <button
+            type="submit"
+            name="add"
+            class="button button-sm w-full"
+            disabled
+            aria-label="Add {{ product.title | escape }} to cart">
+            <span class="hidden group-[[selection-incomplete]]/ajax-cart-product-form:inline">
+              Select
+            </span>
+            <span class="group-[[selection-incomplete]]/ajax-cart-product-form:hidden group-[[processing]]/ajax-cart-product-form:hidden">
+              Add
+            </span>
+            <span class="hidden group-[[processing]]/ajax-cart-product-form:inline-flex items-center">
+              <span
+                class="size-3 border border-transparent border-l-current animate-spin rounded-full inline-block me-1"></span>
+              {{- 'products.product.adding_to_cart' | t -}}
+            </span>
+          </button>
+          <div data-ajax-cart-errors="form" class="text-danger fs-body-sm empty:hidden mt-1"></div>
+        {%- endform -%}
+      </ajax-cart-product-form>
+    </div>
+  </div>
+</product-fetcher>

@@ -1,0 +1,39 @@
+{%- if filter.true_value -%}
+  <div class="form-boolean">
+    <input
+      type="checkbox"
+      name="{{ filter.param_name }}"
+      data-facets-form-input
+      value="{{ filter.true_value.value }}"
+      id="Filter-{{ filter.param_name | escape }}-{{ filter.true_value.value }}"
+      {% if filter.true_value.active %}checked{% endif %}
+      {% if filter.true_value.count == 0 and filter.true_value.active == false %}disabled{% endif %}
+    >
+    <label for="Filter-{{ filter.param_name | escape }}-{{ filter.true_value.value }}">
+      <span>
+        {{ filter.true_value.label | escape }}&nbsp;
+        <small>({{ filter.true_value.count }})</small>
+      </span>
+    </label>
+  </div>
+{%- endif -%}
+
+{%- if filter.false_value -%}
+  <div class="form-boolean">
+    <input
+      type="checkbox"
+      name="{{ filter.param_name }}"
+      data-facets-form-input
+      value="{{ filter.false_value.value }}"
+      id="Filter-{{ filter.param_name | escape }}-{{ filter.false_value.value }}"
+      {% if filter.false_value.active %}checked{% endif %}
+      {% if filter.false_value.count == 0 and filter.false_value.active == false %}disabled{% endif %}
+    >
+    <label for="Filter-{{ filter.param_name | escape }}-{{ filter.false_value.value }}">
+      <span>
+        {{ filter.false_value.label | escape }}&nbsp;
+        <small>({{ filter.false_value.count }})</small>
+      </span>
+    </label>
+  </div>
+{%- endif -%}

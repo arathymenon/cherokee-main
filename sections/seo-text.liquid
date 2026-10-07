@@ -1,0 +1,49 @@
+<!-- section: seo-text -->
+{%- liquid
+  assign s = section.settings
+  assign seo_content = s.content
+
+  assign show_content = true
+  if collection != blank and collection.products.size == 0
+    assign show_content = false
+  endif
+-%}
+
+{%- if seo_content != blank and show_content == true -%}
+  <section 
+    class="color-{{ s.color_scheme }} py-10 lg:py-20">
+    <div class="container ">
+      <div class="rte [&_h2]:fs-display-5 [&_h2]:pt-0 [&_p]:fs-body-sm [&_li]:fs-body-sm 
+        max-w-[720px] mx-auto">
+        {{ seo_content }}
+      </div>
+    </div>
+  </section>
+{%- endif -%}
+
+
+{% schema %}
+{
+  "name": "SEO Text",
+  "enabled_on": {
+    "templates": ["collection"]
+  },
+  "settings": [
+    {
+      "type": "richtext",
+      "id": "content",
+      "label": "SEO Content"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme"
+    }
+  ],
+  "presets": [
+    {
+      "name": "SEO Text"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,20 @@
+{%- comment -%}
+  Render a subcollection card as a link
+  Accepts:
+  - item {Object}: Shopify Collection object
+  - is_duplicate {Boolean}: add "duplicate" css class
+{%- endcomment -%}
+
+<swiper-slide class="subcollections-list__item {% if is_duplicate %}subcollections-list__item--duplicate{% endif %}">
+  <a class="subcollections-list__item-link" href="{{ item.url }}">
+    <div class="subcollections-list__item-image">
+      <media-loader>
+        {{ item.metafields.subcollection.image.value | image_url: width: 280 | image_tag: loading: 'lazy', width: 140, height: 140 }}
+      </media-loader>
+    </div>
+
+    <div>
+      {{ item.title | escape }}
+    </div>
+  </a>
+</swiper-slide>

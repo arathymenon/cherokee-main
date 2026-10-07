@@ -1,0 +1,154 @@
+<!-- snippet: product-partials -->
+{%- comment %}
+  Renders general product partials.
+
+  Accepts:
+  - name: {String} The name of the partial to render
+{%- endcomment %}
+
+{%- case name -%}
+  {%- when 'buy_button' -%}
+    {%- comment -%}
+      Renders a buy button with variant id hidden input
+
+      Accepts:
+      - variant: {Object}
+    {%- endcomment -%}
+
+    {%- liquid
+      assign check_against_inventory = true
+      if variant.inventory_management != 'shopify' or variant.inventory_policy == 'continue'
+        assign check_against_inventory = false
+      endif
+      if variant.quantity_rule.min > variant.inventory_quantity and check_against_inventory
+        assign quantity_rule_soldout = true
+      endif
+    -%}
+
+    <input
+      type="hidden"
+      name="id"
+      value="{{ variant.id }}"
+      {% if variant.available == false or quantity_rule_soldout or variant == null %}
+        disabled
+      {% endif %}
+    >
+
+    <button
+      type="submit"
+      name="add"
+      class="button w-full"
+      {% if variant.available == false or quantity_rule_soldout or variant == null %}
+        disabled
+      {% endif %}
+    >
+      {%- if variant == null %}
+        {{- 'products.product.unavailable' | t -}}
+      {%- elsif variant.available == false or quantity_rule_soldout -%}
+        {{- 'products.product.sold_out' | t -}}
+      {%- else -%}
+        <span class="group-[[processing]]/ajax-cart-product-form:hidden">
+          {{- 'products.product.add_to_cart' | t -}}
+        </span>
+        <span class="hidden group-[[processing]]/ajax-cart-product-form:block animate-[fade-in_0.3s]">
+          <span
+            class="size-3 border border-transparent border-l-current animate-spin rounded-full inline-block me-2"
+          ></span>
+          {{- 'products.product.adding_to_cart' | t -}}
+        </span>
+      {%- endif -%}
+    </button>
+
+  {%- when 'structured_data' -%}
+    {%- comment -%}
+      Renders Schema.org JSON-LD for product.
+
+      Accepts:
+      - product: {Object}
+      - allow_js: {Boolean} optional
+    {%- endcomment -%}
+
+    {%- liquid
+      assign product_group_handle = product.metafields.product_group.collection_handle | default: blank
+      if product_group_handle != blank
+        assign product_group_collection = collections[product_group_handle]
+      endif
+      assign pr_rating = product.metafields.reviews.rating.value
+      assign pr_rating_count = product.metafields.reviews.rating_count.value
+      assign has_rating = false
+      if pr_rating_count and pr_rating_count > 0
+        assign has_rating = true
+      endif
+      assign is_group = false
+      if product_group_collection and allow_js
+        assign is_group = true
+      endif
+    -%}
+
+    {%- if is_group or has_rating -%}
+      <product-structured-data>
+        <script type="application/ld+json">
+          {{ product | structured_data }}
+        </script>
+        {%- if is_group -%}
+          {%- for group_product in product_group_collection.products -%}
+            {%- if group_product.id != product.id %}
+              <script type="application/json" data-psd="product">
+                {{ group_product | structured_data }}
+              </script>
+            {%- endif -%}
+          {%- endfor -%}
+          <script type="application/json" data-psd="group">
+            {
+              "productGroupID": "{{ product_group_collection.id }}",
+              "name": {{ product_group_collection.title | json }},
+              "image": "{{ shop.url }}{{ product_group_collection.image | image_url: width: 1920 }}",
+              "description": {{ product_group_collection.description | strip_html | json }}
+            }
+          </script>
+        {%- endif -%}
+        {%- if has_rating -%}
+          <script type="application/json" data-psd="rating">
+            {
+              "@type": "AggregateRating",
+              "ratingValue": {{ pr_rating.rating | json }},
+              "reviewCount": {{ pr_rating_count | json }},
+              "bestRating": {{ pr_rating.scale_max | json }},
+              "worstRating": {{ pr_rating.scale_min | json }}
+            }
+          </script>
+        {%- endif -%}
+      </product-structured-data>
+      <script>
+        if (!customElements.get('product-structured-data')) {
+          customElements.define(
+            'product-structured-data',
+            class extends HTMLElement {
+              #processed = false;
+
+              connectedCallback() {
+                if (this.#processed) return;
+                const $main = this.querySelector("script[type='application/ld+json']");
+                if (!$main) return;
+                let json = JSON.parse($main.innerHTML);
+                this.querySelectorAll("script[data-psd='product']").forEach(($script) => {
+                  const groupJson = JSON.parse($script.innerHTML);
+                  json.hasVariant = [...(json.hasVariant || []), ...(groupJson.hasVariant || [])];
+                });
+                const $group = this.querySelector("script[data-psd='group']");
+                if ($group) json = { ...json, ...JSON.parse($group.innerHTML) };
+                const $rating = this.querySelector("script[data-psd='rating']");
+                if ($rating) json.aggregateRating = JSON.parse($rating.innerHTML);
+                $main.innerHTML = JSON.stringify(json);
+                this.#processed = true;
+              }
+            }
+          );
+        }
+      </script>
+    {%- else -%}
+      <script type="application/ld+json">
+        {{ product | structured_data }}
+      </script>
+    {%- endif -%}
+{%- endcase -%}

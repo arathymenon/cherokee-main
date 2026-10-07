@@ -1,0 +1,23 @@
+<!-- snippet: block-header-nav-link -->
+{%- comment -%}
+  Renders a Nav link header block (desktop). Simple top-level link with no dropdown panel.
+
+  Accepts:
+    - block: {Object} the nav_link section block; reads
+      block.settings.title and block.settings.url
+{%- endcomment -%}
+
+{%- liquid
+  assign title_html = block.settings.title | escape
+  assign url = block.settings.url
+-%}
+
+{%- # Desktop -%}
+<li {{ block.shopify_attributes }}
+  class="header-menu-root-item hidden lg:block h-full px-5" >
+  <a
+    href="{{ url }}"
+    class=" fs-body-lg h-full flex items-center relative no-underline hover:text-scheme">
+    {{- title_html -}}
+  </a>
+</li>

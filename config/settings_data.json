@@ -1,0 +1,271 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "current": {
+    "gtm_container_id": "GTM-WFG5HH63",
+    "navistone_id": "D2D50EE5F2089C",
+    "yotpo_widget_instance_id": "1307632",
+    "embroidery_terms_body": "<p>Embroidery preview is meant as a sample only. Depending on the style, size and embroidery customizations, lapels may partially or fully cover the requested embroidery (standard text or logo). This is more common in smaller sizes due to the increase in limited embroidery space. Our team will best place the embroidery in a position that offers the most visibility and clarity but cannot guarantee no coverage. <strong>Please note that all embroidery is final and cannot be returned, exchanged or refunded - including due to lapel coverage.</strong> For further information, please view our <a href=\"/pages/embroidery\" target=\"_blank\" title=\"Embroidery\">embroidery FAQ page</a>.</p>",
+    "logo_colored": "shopify://shop_images/logo-blue.svg",
+    "logo_white": "shopify://shop_images/logo-white.svg",
+    "content_radius": 8,
+    "container_max_width": "1680",
+    "empty_state_collection": "test-all-items",
+    "google_site_verification": "wDuaGROCnaz_NT2ZHeP97oEPk98macJpzFsn_GVoXxk",
+    "trending_products_collection": "view-all",
+    "klaviyo_id": "VZfpcm",
+    "klaviyo_marketing_list_id": "",
+    "cart_upsell_carousel_title": "You might also like",
+    "cart_empty_text": "Oops, your cart is empty",
+    "account_image": "shopify://shop_images/image.jpg",
+    "account_menu": "account-nav",
+    "cart_upsell_collection": "refills",
+    "cart_empty_button_url": "shopify://collections/all",
+    "cart_gift_wrap_product": "",
+    "logo_image_light": "shopify://shop_images/quip_logo.svg",
+    "logo_image_dark": "shopify://shop_images/shopify-logo-1.png",
+    "logo_svg_light": "<svg width=\"94\" height=\"32\" viewbox=\"0 0 94 32\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<g clip-path=\"url(#clip0_9628_22146)\">\n<path d=\"M63.4702 1.6633H58.2852V24.9496H63.4702V1.6633Z\" fill=\"#50FCCE\"></path>\n<path d=\"M42.0437 25.5702C35.4099 25.5702 30.0215 20.3072 30.0215 13.8278V1.6633H35.1811V13.8278C35.1811 17.5268 38.2566 20.5306 42.0437 20.5306C45.8308 20.5306 48.9063 17.5268 48.9063 13.8278V1.6633H54.0913V13.8278C54.0659 20.3072 48.6775 25.5702 42.0437 25.5702Z\" fill=\"#50FCCE\"></path>\n<path d=\"M72.8745 32.0248H67.7148V12.4375C67.7148 5.5609 73.4082 0 80.4487 0C87.4892 0 93.1826 5.5609 93.1826 12.4375C93.1826 19.3142 87.4892 24.8751 80.4487 24.8751H76.3058V19.8107H80.4487C84.6171 19.8107 87.9976 16.5089 87.9976 12.4375C87.9976 8.36617 84.6171 5.06439 80.4487 5.06439C76.2804 5.06439 72.8999 8.36617 72.8999 12.4375V32.0248H72.8745Z\" fill=\"#50FCCE\"></path>\n<path d=\"M26.2861 32.0248H21.1011V12.4375C21.1011 8.36617 17.7206 5.06439 13.5523 5.06439C9.38387 5.06439 6.00342 8.36617 5.978 12.4375C5.95258 16.5089 9.35846 19.8107 13.5268 19.8107H17.6698V24.8751H13.5523C6.51176 24.8751 0.818359 19.3142 0.818359 12.4375C0.818359 5.5609 6.51176 0 13.5523 0C20.5928 0 26.2861 5.5609 26.2861 12.4375V32.0248Z\" fill=\"#50FCCE\"></path>\n</g>\n<defs>\n<clippath id=\"clip0_9628_22146\">\n<rect width=\"92.3652\" height=\"32\" fill=\"white\" transform=\"translate(0.818359)\"></rect>\n</clippath>\n</defs>\n</svg>",
+    "logo_svg_dark": "<svg width=\"94\" height=\"32\" viewbox=\"0 0 94 32\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<g clip-path=\"url(#clip0_9628_22146)\">\n<path d=\"M63.4702 1.6633H58.2852V24.9496H63.4702V1.6633Z\" fill=\"#50FCCE\"></path>\n<path d=\"M42.0437 25.5702C35.4099 25.5702 30.0215 20.3072 30.0215 13.8278V1.6633H35.1811V13.8278C35.1811 17.5268 38.2566 20.5306 42.0437 20.5306C45.8308 20.5306 48.9063 17.5268 48.9063 13.8278V1.6633H54.0913V13.8278C54.0659 20.3072 48.6775 25.5702 42.0437 25.5702Z\" fill=\"#50FCCE\"></path>\n<path d=\"M72.8745 32.0248H67.7148V12.4375C67.7148 5.5609 73.4082 0 80.4487 0C87.4892 0 93.1826 5.5609 93.1826 12.4375C93.1826 19.3142 87.4892 24.8751 80.4487 24.8751H76.3058V19.8107H80.4487C84.6171 19.8107 87.9976 16.5089 87.9976 12.4375C87.9976 8.36617 84.6171 5.06439 80.4487 5.06439C76.2804 5.06439 72.8999 8.36617 72.8999 12.4375V32.0248H72.8745Z\" fill=\"#50FCCE\"></path>\n<path d=\"M26.2861 32.0248H21.1011V12.4375C21.1011 8.36617 17.7206 5.06439 13.5523 5.06439C9.38387 5.06439 6.00342 8.36617 5.978 12.4375C5.95258 16.5089 9.35846 19.8107 13.5268 19.8107H17.6698V24.8751H13.5523C6.51176 24.8751 0.818359 19.3142 0.818359 12.4375C0.818359 5.5609 6.51176 0 13.5523 0C20.5928 0 26.2861 5.5609 26.2861 12.4375V32.0248Z\" fill=\"#50FCCE\"></path>\n</g>\n<defs>\n<clippath id=\"clip0_9628_22146\">\n<rect width=\"92.3652\" height=\"32\" fill=\"white\" transform=\"translate(0.818359)\"></rect>\n</clippath>\n</defs>\n</svg>",
+    "cart_title": "My Cart (#)",
+    "sections": {
+      "footer": {
+        "type": "footer",
+        "settings": {}
+      },
+      "announcement-bar": {
+        "type": "announcement-bar",
+        "blocks": {
+          "87e61ab0-2460-4872-8408-e7fea3e9fe73": {
+            "type": "announcement",
+            "settings": {
+              "title": "<p>Get a Minty Fresh Deal   <a href=\"#\" title=\"#\">Learn More</a></p>"
+            }
+          },
+          "list_item_pBKBwR": {
+            "type": "announcement",
+            "settings": {
+              "title": "<p>Some message that appears in announcement</p>"
+            }
+          },
+          "list_item_gzWGYe": {
+            "type": "announcement",
+            "disabled": true,
+            "settings": {
+              "title": "<p>Some message that appears in announcement</p>"
+            }
+          }
+        },
+        "block_order": [
+          "87e61ab0-2460-4872-8408-e7fea3e9fe73",
+          "list_item_pBKBwR",
+          "list_item_gzWGYe"
+        ],
+        "settings": {
+          "timer": 5
+        }
+      },
+      "giftcard": {
+        "type": "giftcard",
+        "settings": {
+          "image": "shopify://shop_images/GC_1_14234b56-a668-49d8-88eb-0981cee5d5cc.png"
+        }
+      },
+      "cart-dialog": {
+        "type": "cart-dialog",
+        "settings": {}
+      }
+    },
+    "content_for_index": [],
+    "blocks": {
+      "15351435345818755577": {
+        "type": "shopify://apps/pandectes-gdpr/blocks/banner/58c0baa2-6cc1-480c-9ea6-38d6d559556a",
+        "disabled": false,
+        "settings": {}
+      },
+      "13768625480086291342": {
+        "type": "shopify://apps/forms/blocks/forms/8744a304-fcb1-4347-b211-bb6b4759a76a",
+        "disabled": false,
+        "settings": {}
+      },
+      "7570552984445421165": {
+        "type": "shopify://apps/yotpo-product-reviews/blocks/settings/eb7dfd7d-db44-4334-bc49-c893b51b36cf",
+        "disabled": false,
+        "settings": {}
+      },
+      "855628211100114053": {
+        "type": "shopify://apps/klaviyo-email-marketing-sms/blocks/klaviyo-onsite-embed/2632fe16-c075-4321-a88b-50b567f42507",
+        "disabled": false,
+        "settings": {}
+      },
+      "7079518687644006178": {
+        "type": "shopify://apps/checkout-blocks/blocks/app-embed/b0024ca5-9de8-4bf0-a92f-cd0783877ae2",
+        "disabled": false,
+        "settings": {
+          "utm_id": true,
+          "utm_source": true,
+          "utm_medium": true,
+          "utm_campaign": true,
+          "utm_term": true,
+          "ref": true
+        }
+      },
+      "12439146293631897289": {
+        "type": "shopify://apps/blockify-fraud-filter/blocks/app_embed/2e3e0ba5-0e70-447a-9ec5-3bf76b5ef12e",
+        "disabled": false,
+        "settings": {}
+      },
+      "7313114205116804392": {
+        "type": "shopify://apps/propel-replays-heatmaps/blocks/app-embed/64fbaaa3-2d4a-49f3-aba7-86e92e44999f",
+        "disabled": false,
+        "settings": {}
+      },
+      "16841265354654477751": {
+        "type": "shopify://apps/fermat/blocks/claire-pixel/019dd98f-18fa-780a-a524-ec48a376093f",
+        "disabled": false,
+        "settings": {}
+      }
+    },
+    "color_schemes": {
+      "scheme-default": {
+        "settings": {
+          "background": "#ffffff",
+          "background_gradient": "",
+          "foreground": "#000000",
+          "headings": "#000000",
+          "border": "#e0e0e0",
+          "input_border": "#d4d4d4",
+          "chip_background": "#f5f5f5",
+          "chip_foreground": "#333333",
+          "chip_border": "#f5f5f5",
+          "chip_selected_background": "#1a1a1a",
+          "chip_selected_foreground": "#ffffff",
+          "chip_selected_border": "#1a1a1a",
+          "icons": "#1a1a1a",
+          "links": "#1a1a1a",
+          "links_hover": "#000193"
+        }
+      },
+      "scheme-dark": {
+        "settings": {
+          "background": "#3b3e40",
+          "background_gradient": "",
+          "foreground": "#ffffff",
+          "headings": "#ffffff",
+          "border": "#e0e0e0",
+          "input_border": "#5a5d60",
+          "chip_background": "#4a4d50",
+          "chip_foreground": "#ffffff",
+          "chip_border": "#5a5d60",
+          "chip_selected_background": "#ffffff",
+          "chip_selected_foreground": "#3b3e40",
+          "chip_selected_border": "#ffffff",
+          "icons": "#ffffff",
+          "links": "#ffffff",
+          "links_hover": "#000193"
+        }
+      },
+      "scheme-ed7cfcf6-92f5-4ca1-a444-303e46eb99fc": {
+        "settings": {
+          "background": "#006aff",
+          "background_gradient": "",
+          "foreground": "#ffffff",
+          "headings": "#ffffff",
+          "border": "#e0e0e0",
+          "input_border": "#d4d4d4",
+          "chip_background": "#f5f5f5",
+          "chip_foreground": "#1a1a1a",
+          "chip_border": "#d4d4d4",
+          "chip_selected_background": "#1a1a1a",
+          "chip_selected_foreground": "#ffffff",
+          "chip_selected_border": "#1a1a1a",
+          "icons": "#ffffff",
+          "links": "#ffffff",
+          "links_hover": "#ffffff"
+        }
+      },
+      "scheme-0d9bed0c-0f1f-4f9d-99af-d15d3a707bfd": {
+        "settings": {
+          "background": "#f2f3f5",
+          "background_gradient": "",
+          "foreground": "#000000",
+          "headings": "#000000",
+          "border": "#e0e0e0",
+          "input_border": "#d4d4d4",
+          "chip_background": "#f5f5f5",
+          "chip_foreground": "#1a1a1a",
+          "chip_border": "#d4d4d4",
+          "chip_selected_background": "#1a1a1a",
+          "chip_selected_foreground": "#ffffff",
+          "chip_selected_border": "#1a1a1a",
+          "icons": "#1a1a1a",
+          "links": "#1a1a1a",
+          "links_hover": "#000193"
+        }
+      },
+      "scheme-aed956a8-0590-4fa9-8aea-ec51184aeac3": {
+        "settings": {
+          "background": "#ffffff",
+          "background_gradient": "",
+          "foreground": "#000000",
+          "headings": "#000193",
+          "border": "#e0e0e0",
+          "input_border": "#d4d4d4",
+          "chip_background": "#f2f3f5",
+          "chip_foreground": "#000193",
+          "chip_border": "#f2f3f5",
+          "chip_selected_background": "#000193",
+          "chip_selected_foreground": "#ffffff",
+          "chip_selected_border": "#000193",
+          "icons": "#1a1a1a",
+          "links": "#1a1a1a",
+          "links_hover": "#000193"
+        }
+      },
+      "scheme-light-grey-blue-heading": {
+        "settings": {
+          "background": "#f2f3f5",
+          "background_gradient": "",
+          "foreground": "#000000",
+          "headings": "#000193",
+          "border": "#e0e0e0",
+          "input_border": "#d4d4d4",
+          "chip_background": "#f5f5f5",
+          "chip_foreground": "#1a1a1a",
+          "chip_border": "#d4d4d4",
+          "chip_selected_background": "#1a1a1a",
+          "chip_selected_foreground": "#ffffff",
+          "chip_selected_border": "#1a1a1a",
+          "icons": "#1a1a1a",
+          "links": "#1a1a1a",
+          "links_hover": "#000193"
+        }
+      },
+      "scheme-dark-blue-bg": {
+        "settings": {
+          "background": "#000193",
+          "background_gradient": "",
+          "foreground": "#ffffff",
+          "headings": "#ffffff",
+          "border": "#e0e0e0",
+          "input_border": "#d4d4d4",
+          "chip_background": "#f5f5f5",
+          "chip_foreground": "#1a1a1a",
+          "chip_border": "#d4d4d4",
+          "chip_selected_background": "#ffffff",
+          "chip_selected_foreground": "#000193",
+          "chip_selected_border": "#ffffff",
+          "icons": "#ffffff",
+          "links": "#ffffff",
+          "links_hover": "#ffffff"
+        }
+      }
+    }
+  }
+}

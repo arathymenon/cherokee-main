@@ -1,0 +1,186 @@
+<!-- section: footer -->
+{%- liquid
+  assign s = section.settings
+  assign footer_menu = linklists[s.footer_menu]
+  assign subfooter_menu = linklists[s.subfooter_menu]
+  assign social_menu = linklists[s.social_menu]
+
+  assign newsletter_min_height_style = ''
+  if s.newsletter_min_height != blank
+    assign newsletter_min_height_style = 'min-height: ' | append: s.newsletter_min_height | append: ';'
+  endif
+-%}
+
+<footer class="color-{{ s.color_scheme }} min-h-[500px] pt-lg pb-sm" >
+
+  <div class="container flex flex-col lg:flex-row gap-lg " >
+    {% # Newsletter form %}
+    <div class="lg:basis-2/5 lg:shrink-0 ">
+      
+      <klaviyo-form-lazy
+        class="block"
+        style="{{ newsletter_min_height_style }}">
+        <template>
+          {%- if s.newsletter_title != blank -%}
+            <div class="fs-display-3 pb-2">{{ s.newsletter_title | escape }}</div>
+          {%- endif -%}
+          {{- s.newsletter_embed -}}
+        </template>
+      </klaviyo-form-lazy>
+
+      {%- if social_menu != blank -%}
+        <ul role="list" 
+          class="pt-md flex flex-wrap items-center gap-4 w-full">
+          {%- for link in social_menu.links -%}
+            {%- assign filename = 'icon-' | append: link.title | handleize | append: '.svg' -%}
+            {%- assign svg = filename | inline_asset_content -%}
+            <li>
+              <a
+                href="{{ link.url }}"
+                target="_blank"
+                rel="noopener"
+                aria-label="{{ 'accessibility.follow_us_on' | t: title: link.title }}"
+                class="no-underline inline-flex items-center" >
+                {%- if svg contains '<svg' -%}
+                  <span class="size-6">{{- svg -}}</span>
+                {%- else -%}
+                  <span class="fs-body-sm">{{- link.title | escape -}}</span>
+                {%- endif -%}
+              </a>
+            </li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+    </div>
+
+    {% # Mobile: accordion menus %}
+    {%- if footer_menu != blank -%}
+      <div class="md:hidden">
+        {%- for link_v0 in footer_menu.links -%}
+          {%- if link_v0.links.size > 0 -%}
+            <accordion-block class="accordion">
+              <details>
+                <summary class="font-medium uppercase">
+                  {{- link_v0.title | escape -}}
+                </summary>
+                <div>
+                  <ul class="flex flex-col gap-xs">
+                    {%- for link_v1 in link_v0.links -%}
+                      <li>
+                        <a href="{{ link_v1.url }}" class="no-underline fs-body-sm capitalize">
+                          {{- link_v1.title | escape -}}
+                        </a>
+                      </li>
+                    {%- endfor -%}
+                  </ul>
+                </div>
+              </details>
+            </accordion-block>
+          {%- else -%}
+            <a
+              href="{{ link_v0.url }}"
+              class="block no-underline font-medium uppercase py-4 border-b border-[oklch(var(--color-border)/50%)]"
+            >
+              {{- link_v0.title | escape -}}
+            </a>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+    {% # Tablet/Desktop: stacked menu columns %}
+    {%- if footer_menu != blank -%}
+      <div class="hidden md:grid md:grid-cols-3 gap-4 flex-1">
+        {%- for link_v0 in footer_menu.links -%}
+          <div class="flex flex-col gap-4">
+            {%- if link_v0.links.size > 0 -%}
+              <div role="heading" aria-level="3"
+                class="font-medium uppercase">
+                {{- link_v0.title | escape -}}
+              </div>
+              <ul class="flex flex-col gap-4">
+                {%- for link_v1 in link_v0.links -%}
+                  <li>
+                    <a href="{{ link_v1.url }}" class="no-underline fs-body-sm capitalize border-b border-transparent transition-colors hover:border-current">
+                      {{- link_v1.title | escape -}}
+                    </a>
+                  </li>
+                {%- endfor -%}
+              </ul>
+            {%- else -%}
+              <a href="{{ link_v0.url }}" class="no-underline font-medium uppercase w-fit border-b border-transparent transition-colors hover:border-current">
+                {{- link_v0.title | escape -}}
+              </a>
+            {%- endif -%}
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+
+  <div class="container mt-lg flex flex-col-reverse gap-4 
+    lg:flex-row lg:gap-0 lg:items-center lg:justify-between" >
+    <p class="fs-body-sm">
+      &copy; {{ 'now' | date: '%Y' }} {{ shop.name -}}
+    </p>
+
+    {%- if subfooter_menu != blank -%}
+      <ul class="flex flex-wrap gap-4">
+        {%- for link in subfooter_menu.links -%}
+          <li>
+            <a href="{{ link.url }}" class="no-underline fs-body-sm capitalize">
+              {{- link.title | escape -}}
+            </a>
+          </li>
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Footer",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme"
+    },
+    { "type": "header", "content": "Newsletter" },
+    { "type": "text", "id": "newsletter_title", "label": "Newsletter title", "default": "Stay in the know" },
+    {
+      "type": "liquid",
+      "id": "newsletter_embed",
+      "label": "Embed code",
+      "info": "Paste your newsletter/Klaviyo embed code (e.g. <div class=\"klaviyo-form-...\"></div>). Liquid is supported.",
+      "default": "<div class='klaviyo-form-RUr2Yc'></div>"
+    },
+    {
+      "type": "text",
+      "id": "newsletter_min_height",
+      "label": "Placeholder min height",
+      "info": "Reserves space while the form loads to reduce layout shift (CLS). Enter e.g. '232px' or '100vh'.",
+      "default": "232px"
+    },
+    {
+      "type": "link_list",
+      "id": "footer_menu",
+      "label": "Footer menu",
+      "info": "Top-level items become column headings. Their child links become the column's links."
+    },
+    {
+      "type": "link_list",
+      "id": "subfooter_menu",
+      "label": "Sub-footer menu",
+      "info": "Flat list of links shown at the very bottom (e.g. Privacy Policy, Terms of Service)."
+    },
+    {
+      "type": "link_list",
+      "id": "social_menu",
+      "label": "Social menu",
+      "info": "Each link's title (e.g. Facebook) drives the icon. Upload icons to assets as icon-{title}.svg (lowercased, spaces → dashes). If no asset is found, the title text is shown instead."
+    }
+  ]
+}
+{% endschema %}

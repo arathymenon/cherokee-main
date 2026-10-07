@@ -1,0 +1,26 @@
+{%- comment -%}
+  Renders a dialog close button ("X" icon).
+
+  Accepts:
+  - position: {String} 'float' | 'absolute' | null (no positioning)
+{%- endcomment -%}
+
+{%- liquid
+  assign position_class = "relative"
+  if position == 'float'
+    assign position_class = "relative flex justify-end"
+  elsif position == 'absolute'
+    assign position_class = "absolute top-6 end-4 md:top-8 md:end-6"
+  endif
+-%}
+
+<form
+  method="dialog"
+  class="z-1 {{ position_class }}" >
+  <button
+    class="flex items-center justify-center [&_svg]:size-4"
+    formmethod="dialog"
+    aria-label="{{ 'accessibility.close' | t }}" >
+    {{- 'icon-x.svg' | inline_asset_content -}}
+  </button>
+</form>

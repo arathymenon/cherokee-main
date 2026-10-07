@@ -1,0 +1,65 @@
+<!-- snippet: block-header-nav-megamenu -->
+{%- comment -%}
+  Renders a Mega menu header block (desktop + mobile).
+
+  Accepts:
+    - block: {Object} the mega_menu section block; reads
+      block.settings.title, block.settings.menu (link_list),
+      block.settings.image, block.settings.image_url, block.settings.image_text
+
+  Column rendering is driven by the top-level link title (case/whitespace-insensitive):
+    - "highlights"     → header-mega-column-highlights
+    - "shop by color"  → header-mega-column-colors
+    - default          → header-mega-column-standard
+{%- endcomment -%}
+
+{%- liquid
+  assign menu = block.settings.menu
+  assign root_title = block.settings.title | default: menu.title
+  assign title_html = root_title | escape
+  assign has_promo = false
+  if block.settings.image != blank
+    assign has_promo = true
+  endif
+-%}
+
+{%- # Desktop -%}
+<li class="header-menu-root-item hidden lg:block h-full" {{ block.shopify_attributes }}>
+  <openable-component
+    data-close-on-outside-click
+    data-close-on-escape-key
+    data-open-on-hover
+    data-close-delay-ms="200">
+    <details
+      data-openable
+      class="h-full px-5">
+      <summary class="relative fs-body-lg h-full flex items-center cursor-pointer">
+        {{- title_html -}}
+      </summary>
+      <div class="mega-menu-panel absolute left-0 top-full w-full bg-white shadow-md border-t border-[#E5E5E5] rounded-b-theme">
+        <div class="container pt-sm pb-md">
+          <div class="flex-1 flex justify-center items-start gap-md w-full overflow-hidden">
+            {%- for top_link in menu.links -%}
+              {%- assign key = top_link.title | downcase | strip -%}
+              {%- case key -%}
+                {%- when 'highlights' -%}
+                  {% render 'header-mega-column-highlights', top_link: top_link %}
+                {%- when 'shop by color' -%}
+                  {% render 'header-mega-column-colors', top_link: top_link %}
+                {%- else -%}
+                  {% render 'header-mega-column-standard', top_link: top_link %}
+              {%- endcase -%}
+            {%- endfor -%}
+
+             {%- if has_promo -%}
+              <div class="hidden 2xl:block shrink-0 w-[200px]">
+                {% render 'header-mega-promo', block: block %}
+              </div>
+            {%- endif -%}
+          </div>
+        </div>
+      </div>
+    </details>
+  </openable-component>
+</li>
+

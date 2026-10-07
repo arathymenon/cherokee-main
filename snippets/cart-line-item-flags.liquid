@@ -1,0 +1,31 @@
+<!-- snippet: cart-line-item-flags -->
+{%- comment -%}
+  Renders small status flags (Clearance, Final Sale) for a cart line item
+  based on variant metafields. Both can render at once, separated by 8px.
+  Renders nothing when no flags apply.
+
+  Accepts:
+  - line_item: {Object}
+{%- endcomment -%}
+
+{%- liquid
+  assign show_clearance = false
+  assign show_final_sale = false
+  if line_item.variant.metafields.meta.clearance.value == true
+    assign show_clearance = true
+  endif
+  if line_item.variant.metafields.meta.finalSale.value == true
+    assign show_final_sale = true
+  endif
+-%}
+
+{%- if show_clearance or show_final_sale -%}
+  <div class="flex flex-wrap gap-2">
+    {%- if show_clearance -%}
+      <p class="text-[10px] font-medium uppercase text-red-sale">Clearance</p>
+    {%- endif -%}
+    {%- if show_final_sale -%}
+      <p class="text-[10px] font-medium uppercase text-brand-blue">Final Sale</p>
+    {%- endif -%}
+  </div>
+{%- endif -%}

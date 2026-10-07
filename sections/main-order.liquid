@@ -1,0 +1,130 @@
+<!-- section: main-order -->
+
+
+{%- liquid
+  assign discount = 0
+  for discount_application in order.cart_level_discount_applications
+    assign discount = discount | plus: discount_application.total_allocated_amount
+  endfor
+-%}
+
+<div class="customer-order">
+  <a href="{{ routes.account_url }}" class="customer-order__back">
+    {{- 'orders.order.back' | t -}}
+  </a>
+
+  <h1 class="customer-order__title">
+    {{ 'orders.order.order_number' | t }} {{ order.name }}
+  </h1>
+
+  <div class="customer-order__date">
+    {{ 'orders.order.order_date' | t }} <span>{{ order.created_at | date: '%B %d, %Y %I:%M%p' }}</span>
+  </div>
+  
+  {%- if order.cancelled -%}
+    <div class="customer-order__cancelled">
+      {%- assign cancelled_at = order.cancelled_at | date: '%m/%d/%y at %I:%M%p' -%}
+      <div>{{ 'orders.order.cancelled_date' | t: date: cancelled_at }}</div>
+      <div>{{ 'orders.order.cancelled_reason' | t: reason: order.cancel_reason_label }}</div>
+    </div>
+  {%- endif -%}
+
+  {%- if order.fulfillment_status == 'fulfilled' or order.fulfillment_status == 'partial' -%}
+    <div class="customer-order__main-actions">
+      <div>
+        <a href="https://goodcounsel.loopreturns.com/?order={{ order.order_number }}&email={{ order.email }}"
+           class="primary-button"
+           target="_blank">
+          {{- 'orders.order.start_return' | t -}}
+        </a>
+      </div>
+    </div>
+  {%- endif -%}
+
+
+  <div class="customer-order__addresses">
+    <div>
+      <div class="customer-order__addresses-title">
+        {{ 'orders.order.billing_address' | t }}
+      </div>
+      <div>
+        {{ 'orders.order.payment_status' | t }}: {{ order.financial_status_label }}
+      </div>
+      <div>{{ order.billing_address | format_address }}</div>
+    </div>
+    <div>
+      <div class="customer-order__addresses-title">
+        {{ 'orders.order.shipping_address' | t }}
+      </div>
+      <div>
+        {{ 'orders.order.fulfillment_status' | t }}: {{ order.fulfillment_status_label }}
+      </div>
+      <div>{{ order.shipping_address | format_address }}</div>
+    </div>
+  </div>
+
+
+  <div class="customer-order__items">
+    <div class="customer-order__items-header">
+      <span>{{ 'orders.order.products' | t }}</span>
+      <span>{{ 'orders.order.price' | t }}</span>
+      <span>{{ 'orders.order.total' | t }}</span>
+    </div>
+    <div class="customer-order__items-list">
+      {%- for line_item in order.line_items -%}
+        {%- render 'order-item', line_item: line_item, is_order_page: true -%}
+      {%- endfor -%}
+    </div>
+  </div>
+
+  <dl class="customer-order__totals">
+    <div class="customer-order__totals-subtotal">
+      <dt>{{ 'orders.order.subtotal' | t }}</dt>
+      <dd>{{ order.line_items_subtotal_price | money }}</dd>
+    </div>
+
+    {%- if discount > 0 -%}
+      <div>
+        <dt>{{ 'orders.order.discount' | t }}</dt>
+        <dd>-{{ discount | money }}</dd>
+      </div>
+    {%- endif -%}
+
+    {%- if order.total_duties -%}
+      <div>
+        <dt>{{ 'orders.order.total_duties' | t }}</dt>
+        <dd>{{ order.total_duties | money }}</dd>
+      </div>
+    {%- endif -%}
+
+    <div>
+      <dt>{{ 'orders.order.shipping' | t }}</dt>
+      <dd>{{ order.shipping_price | money }}</dd>
+    </div>
+
+    <div>
+      <dt>{{ 'orders.order.tax' | t }}</dt>
+      <dd>{{ order.tax_price | money }}</dd>
+    </div>
+
+    {%- if order.total_refunded_amount > 0 -%}
+      <div>
+        <dt>{{ 'orders.order.total_refunded' | t }}</dt>
+        <dd>-{{ order.total_refunded_amount | money }}</dd>
+      </div>
+    {%- endif -%}
+
+    <div class="customer-order__totals-total">
+      <dt>{{ 'orders.order.total' | t }}</dt>
+      <dd>{{ order.total_net_amount | money }}</dd>
+    </div>
+  </dl>
+</div>
+
+
+{% schema %}
+{
+  "name": "Main Order",
+  "settings": []
+}
+{% endschema %}

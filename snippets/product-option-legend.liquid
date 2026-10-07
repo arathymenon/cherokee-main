@@ -1,0 +1,28 @@
+<!-- snippet: product-option-legend -->
+{%- comment %}
+  Renders a legend for product option
+
+  Accepts:
+  - product_option: {Object}
+
+  Position 1 (color) shows its selected value; position >= 2 shows
+  "Please Select" until <product-fetcher> fills [data-product-option-label].
+{%- endcomment %}
+
+{%- liquid
+  if product_option.position == 1
+    assign label_text = product_option.selected_value
+    if label_text == blank
+      assign label_text = product_option.values.first.name
+    endif
+  else
+    assign label_text = 'products.product.please_select' | t
+  endif
+-%}
+
+<span>{{ product_option.name | escape }}</span>
+{%- # cutting white-space -%}
+<span class="has-[[data-product-option-label]:empty]:hidden">
+  {{- ': ' -}}
+  <span data-product-option-label>{{- label_text | escape -}}</span>
+</span>

@@ -1,0 +1,65 @@
+<!-- snippet: product-price -->
+{%- comment %}
+  Renders product/variant price
+
+  Accepts:
+  - target: {Object} Shopify variant or Shopify product
+
+  TODO: add quantity_price_breaks support
+{%- endcomment %}
+
+{%- if target.product -%}
+  {%- comment -%} target is a variant {%- endcomment -%}
+
+  <dl class="relative">
+    {%- if target.compare_at_price > target.price -%}
+      <div class="inline">
+        <dt class="sr-only">{{ 'products.product.price.regular_price' | t }}</dt>
+        <dd class="inline">
+          <s class="text-grey-dark">{{- target.compare_at_price | money -}}</s>
+        </dd>
+      </div>
+      <div class="inline">
+        <dt class="sr-only">{{ 'products.product.price.sale_price' | t }}</dt>
+        <dd class="inline font-medium fs-body-lg">{{- target.price | money -}}</dd>
+      </div>
+    {%- else -%}
+      <div class="inline">
+        <dt class="sr-only">{{ 'products.product.price.regular_price' | t }}</dt>
+        <dd class="inline font-medium">
+          {{- target.price | money -}}
+        </dd>
+      </div>
+    {%- endif -%}
+  </dl>
+
+{%- else -%}
+  {%- comment -%} target is a product {%- endcomment -%}
+
+  <dl class="relative">
+    {%- if target.compare_at_price > target.price and target.price_varies == false -%}
+      <div class="inline">
+        <dt class="sr-only">{{ 'products.product.price.regular_price' | t }}</dt>
+        <dd class="inline">
+          <s class="text-grey-dark">{{- target.compare_at_price | money -}}</s>
+        </dd>
+      </div>
+      <div class="inline">
+        <dt class="sr-only">{{ 'products.product.price.sale_price' | t }}</dt>
+        <dd class="inline font-medium fs-body-lg">{{- target.price | money -}}</dd>
+      </div>
+    {%- else -%}
+      <div class="inline">
+        <dt class="sr-only">{{ 'products.product.price.regular_price' | t }}</dt>
+        <dd class="inline-flex items-center gap-1">
+          {%- if target.price_varies -%}
+            <span class="font-medium fs-body-lg">{{- target.price_min | money -}}&ndash;{{- target.price_max | money -}}</span>
+          {%- else -%}
+            <span class="font-medium fs-body-lg">{{- target.price_min | money -}}</span>
+          {%- endif -%}
+        </dd>
+      </div>
+    {%- endif -%}
+  </dl>
+
+{%- endif -%}

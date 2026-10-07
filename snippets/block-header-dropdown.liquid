@@ -1,0 +1,48 @@
+<!-- snippet: block-header-dropdown -->
+{%- comment -%}
+  Renders a Dropdown menu header block (desktop + mobile).
+
+  Accepts:
+    - block: {Object} the dropdown_menu section block; reads
+      block.settings.title (override) and block.settings.menu (link_list)
+{%- endcomment -%}
+
+{%- liquid
+  assign menu = block.settings.menu
+  assign root_title = block.settings.title | default: menu.title
+  assign root_url = block.settings.url
+  assign title_html = root_title | escape
+-%}
+
+{%- # Desktop -%}
+<li class="header-menu-root-item hidden lg:block h-full" {{ block.shopify_attributes }}>
+  <openable-component
+    data-close-on-outside-click
+    data-close-on-escape-key
+    data-open-on-hover
+    data-close-delay-ms="200">
+    <details
+      data-openable
+      class="h-full px-5">
+      <summary class="relative fs-body-lg h-full flex items-center cursor-pointer">
+        {%- if root_url != blank -%}
+          <a href="{{ root_url }}" class="no-underline">{{- title_html -}}</a>
+        {%- else -%}
+          {{- title_html -}}
+        {%- endif -%}
+      </summary>
+      <div class="absolute top-full -ml-sm bg-white shadow-md rounded-b-theme z-10 p-sm border-t border-[#E5E5E5]">
+        <ul class="flex flex-col gap-1 min-w-[220px]">
+          {%- for link in menu.links -%}
+            <li>
+              <a class="group py-1 fs-body no-underline inline-flex items-center" href="{{ link.url }}">
+                <span class="border-b border-transparent transition-colors group-hover:border-current">{{- link.title | escape -}}</span>
+              </a>
+            </li>
+          {%- endfor -%}
+        </ul>
+      </div>
+    </details>
+  </openable-component>
+</li>
+

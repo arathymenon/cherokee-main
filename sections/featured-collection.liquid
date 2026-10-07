@@ -1,0 +1,153 @@
+<!-- section: featured-collection -->
+
+{%- liquid
+  assign s = section.settings
+  assign fallback_collection = settings.empty_state_collection
+  assign using_fallback = false
+
+  if s.collection != blank
+    assign carousel_collection = s.collection
+  else
+    assign carousel_collection = fallback_collection
+    assign using_fallback = true
+  endif
+
+  assign heading = s.heading | default: carousel_collection.title
+  assign text = s.text
+  assign button_text = s.button_text | default: 'Shop All'
+
+  assign link_url = s.button_link
+  if link_url == blank and carousel_collection != blank
+    assign link_url = carousel_collection.url
+  endif
+
+  assign show_section = false
+  if carousel_collection != blank and carousel_collection.products_count > 0
+    if using_fallback
+      if collection == blank or collection.products_count == 0 or collection.all_products_count == 0
+        assign show_section = true
+      endif
+    else
+      assign show_section = true
+    endif
+  endif
+-%}
+
+{% if show_section %}
+  {%- render 'product-carousel',
+    carousel_collection: carousel_collection,
+    heading: heading,
+    text: text,
+    button_text: button_text,
+    link_url: link_url,
+    color_scheme: s.color_scheme,
+    products_to_show: s.products_to_show,
+    loop: s.loop,
+    slides_per_view_tablet: s.slides_per_view_tablet,
+    slides_per_view_laptop: s.slides_per_view_laptop,
+    slides_per_view_desktop: s.slides_per_view_desktop -%}
+{% endif %}
+
+{% schema %}
+{
+  "name": "Featured collection",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme"
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Featured Products"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "text",
+      "label": "Text"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "label": "Products to show",
+      "min": 2,
+      "max": 24,
+      "step": 1,
+      "default": 12
+    },
+    {
+      "type": "checkbox",
+      "id": "loop",
+      "label": "Loop carousel",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Link",
+      "info": "Defaults to the selected collection URL if left blank"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "Shop All"
+    },
+    {
+      "type": "header",
+      "content": "Slides per view"
+    },
+    {
+      "type": "range",
+      "id": "slides_per_view_tablet",
+      "label": "Tablet",
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "default": 2
+    },
+    {
+      "type": "range",
+      "id": "slides_per_view_laptop",
+      "label": "Laptop",
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "slides_per_view_desktop",
+      "label": "Desktop",
+      "min": 1,
+      "max": 8,
+      "step": 1,
+      "default": 4
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured collection",
+      "category": "Products"
+    }
+  ],
+  "disabled_on": {
+    "groups": ["*"]
+  }
+}
+{% endschema %}

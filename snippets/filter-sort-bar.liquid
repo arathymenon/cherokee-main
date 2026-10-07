@@ -1,0 +1,61 @@
+{% # snippet: filter-sort-bar %}
+
+{%- comment -%}
+  Renders the Filter/Sort bar shared by collection and search pages.
+
+  @param {string} filter_dialog_id - ID of filter modal opened via show-modal command
+  @param {array}  sort_options     - collection.sort_options or search.sort_options
+  @param {string} current_sort_by  - collection.sort_by or search.sort_by
+  @param {number} results_count    - collection.products_count or search.results_count
+  @param {string} color_scheme     - section setting (e.g. s.filter_color_scheme)
+{%- endcomment -%}
+
+<section class="color-{{ color_scheme }} bg-scheme text-scheme">
+  <div class="container">
+    <div class="grid grid-cols-3 items-center py-4">
+
+      <button
+        type="button"
+        class="justify-self-start flex items-center gap-2 font-heading fw-600"
+        data-vegax-command="show-modal"
+        data-vegax-commandfor="{{ filter_dialog_id }}">
+        <span class="size-5 text-black">{{- 'icon-filter.svg' | inline_asset_content -}}</span>
+        <span>{{- 'facets.filters.open_button' | t -}}</span>
+      </button>
+
+      <div
+        data-facets-form-content="product-count"
+        class="justify-self-center">
+        {{- results_count }} {{ 'facets.types.product' | t | downcase }}
+      </div>
+
+      <openable-component
+        data-close-on-outside-click
+        data-close-on-escape-key
+        class="justify-self-end">
+        <details data-openable class="relative">
+          <summary class="flex items-center gap-2 font-heading fw-600 cursor-pointer list-none">
+            <span>{{ 'facets.sort.open_button' | t }}</span>
+            <span class="size-4 text-black">{{- 'icon-angle-down.svg' | inline_asset_content -}}</span>
+          </summary>
+          <div class="absolute -right-gutter w-screen sm:right-0 sm:w-auto sm:min-w-48 z-10 bg-white shadow-lg py-2">
+            {%- for option in sort_options -%}
+              <label class="flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-black hover:text-white">
+                <input
+                  type="radio"
+                  name="sort_by"
+                  data-facets-form-input
+                  value="{{ option.value | escape }}"
+                  {% if option.value == current_sort_by %}checked{% endif %}
+                  class="sr-only"
+                />
+                <span>{{ option.name | escape }}</span>
+              </label>
+            {%- endfor -%}
+          </div>
+        </details>
+      </openable-component>
+
+    </div>
+  </div>
+</section>

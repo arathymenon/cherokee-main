@@ -1,0 +1,88 @@
+
+{%- comment -%}To avoid flickering when ajax updated {%- endcomment -%}
+
+<html-fetcher id="html-fetcher-orders-pagination-{{ section.id }}">
+  <div class="customer-order-history" data-html-fetcher-loading-class="customer-order-history--loading">
+    {%- paginate customer.orders by 20 -%}
+      <table
+        role="table"
+        class="customer-order-history__table {% if customer.orders.size > 0 %}customer-order-history__table--not-empty{% endif %}"
+      >
+        <caption>
+          <div class="customer-portal__page-heading">
+            <h2 class="customer-portal__page-title">
+              {{- 'orders.history' | t -}}
+            </h2>
+          </div>
+        </caption>
+        <thead role="rowgroup">
+          <tr role="row">
+            <th id="ColumnOrder" scope="col" role="columnheader">{{ 'orders.order.order_number' | t }}</th>
+            <th id="ColumnDate" scope="col" role="columnheader">{{ 'orders.order.date' | t }}</th>
+            <th id="ColumnPayment" scope="col" role="columnheader">{{ 'orders.order.payment_status' | t }}</th>
+            <th id="ColumnFulfillment" scope="col" role="columnheader">
+              {{ 'orders.order.fulfillment_status' | t }}
+            </th>
+            <th id="ColumnTotal" scope="col" role="columnheader">{{ 'orders.order.total' | t }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {%- if customer.orders.size > 0 -%}
+            {%- for order in customer.orders -%}
+              <tr role="row">
+                <td headers="ColumnOrder" data-label="{{ 'orders.order.order_number' | t }}">
+                  <a
+                    href="{{ order.customer_url }}"
+                    aria-label="{{ order.name }}"
+                  >
+                    {{ order.name }}
+                  </a>
+                </td>
+                <td headers="RowOrder ColumnDate" role="cell" data-label="{{ 'orders.order.date' | t }}">
+                  {{ order.created_at | date: '%m/%d/%y' }}
+                </td>
+                <td
+                  headers="RowOrder ColumnPayment"
+                  role="cell"
+                  data-label="{{ 'orders.order.payment_status' | t }}"
+                >
+                  {{ order.financial_status_label }}
+                </td>
+                <td
+                  headers="RowOrder ColumnFulfillment"
+                  role="cell"
+                  data-label="{{ 'orders.order.fulfillment_status' | t }}"
+                >
+                  {{ order.fulfillment_status_label }}
+                </td>
+                <td headers="RowOrder ColumnTotal" role="cell" data-label="{{ 'orders.order.total' | t }}">
+                  {{ order.total_net_amount | money_with_currency }}
+                </td>
+              </tr>
+            {%- endfor -%}
+          {%- else -%}
+            <tr role="row">
+              <td
+                role="cell"
+                colspan="6"
+              >
+                <div class="customer-order-history__no-orders">
+                  {{ 'orders.no_orders' | t }}
+                </div>
+              </td>
+            </tr>
+          {%- endif -%}
+        </tbody>
+      </table>
+      <br>
+   
+      {%- if paginate.pages > 1 -%}
+        {%- if paginate.parts.size > 0 -%}
+          <div class="customer-order-history__pagination">
+            {%- render 'default-pagination', paginate: paginate -%}
+          </div>
+        {%- endif -%}
+      {%- endif -%}
+    {%- endpaginate -%}
+  </div>
+</html-fetcher>

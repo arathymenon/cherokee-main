@@ -1,0 +1,307 @@
+<!-- snippet: product-card-swatches -->
+
+{% doc %}
+  Renders color swatches for a product card (mini size, hides colors with no available variants, with limit). Renders nothing if all colors are sold out.
+
+  @param {object} product - Shopify product object (required)
+  @param {object} [collection_context] - Collection for URL context
+  @param {number} [limit] - Max swatches to show on desktop (default 5)
+  @param {number} [mobile_limit] - Max swatches to show on mobile (default 3)
+  @param {string} [preferred_color_labels] - '||'-delimited list of color labels (case/whitespace-insensitive, validated against the current product's available values). All matching swatches render first in product option-value order; the first rendered match is checked. Blank or no match = default order/checked behavior.
+
+  @example
+  {% render 'product-card-swatches', product: product, collection_context: collection %}
+{% enddoc %}
+
+{%- liquid
+  assign limit = limit | default: 5 | plus: 0
+  assign mobile_limit = mobile_limit | default: 3 | plus: 0
+  assign swatch_option = null
+
+  for option in product.options_with_values
+    for value in option.values
+      if value.swatch
+        if value.swatch.image or value.swatch.color
+          assign swatch_option = option
+          break
+        endif
+      endif
+    endfor
+    if swatch_option
+      break
+    endif
+  endfor
+
+  unless swatch_option
+    break
+  endunless
+
+  assign swatch_option_index = swatch_option.position | minus: 1
+  assign product_group_collection = null
+  assign product_group_handle = product.metafields.product_group.collection_handle | default: blank
+  if swatch_option.position == 1 and product_group_handle != blank
+    assign product_group_collection = collections[product_group_handle]
+  endif
+
+  # Bail early if every color is sold out so we don't emit an empty wrapper.
+  assign _has_available_swatch = false
+  if product_group_collection
+    for group_product in product_group_collection.products
+      assign _group_option = group_product.options_with_values[swatch_option_index]
+      for value in _group_option.values
+        if value.available
+          if value.swatch
+            if value.swatch.image or value.swatch.color
+              assign _has_available_swatch = true
+              break
+            endif
+          endif
+        endif
+      endfor
+      if _has_available_swatch
+        break
+      endif
+    endfor
+  else
+    for value in swatch_option.values
+      if value.available
+        if value.swatch
+          if value.swatch.image or value.swatch.color
+            assign _has_available_swatch = true
+            break
+          endif
+        endif
+      endif
+    endfor
+  endif
+
+  unless _has_available_swatch
+    break
+  endunless
+
+  # Colorway preselection: keep the labels only when at least one matches a
+  # renderable value on this product (must have swatch data and stock) — all
+  # sold-out/missing preferred colors fall back to default order/checked
+  # behavior. Individual invalid matches are skipped by the per-value guards
+  # in the render loops below.
+  # The group branch also only fronts the current product's own matches;
+  # checking a sibling product's swatch would contradict the card image and
+  # corrupt pick seeding in product-fetcher.
+  assign has_target = false
+  assign target_labels = preferred_color_labels | downcase | split: '||'
+  if preferred_color_labels != blank
+    for value in swatch_option.values
+      assign _value_name = value.name | downcase | strip
+      if target_labels contains _value_name
+        if value.available
+          if value.swatch.image or value.swatch.color
+            assign has_target = true
+            break
+          endif
+        endif
+      endif
+    endfor
+  endif
+
+  assign _value_count = 0
+  assign _preferred_checked = false
+-%}
+
+<div class="mt-1">
+  <form>
+    <product-option position="{{ swatch_option.position }}" data-product-fetcher-option-group="default" data-product-color-option>
+      <fieldset>
+        <div class="flex gap-1 flex-wrap items-center">
+
+          {%- if product_group_collection -%}
+            {% # Pass 1 renders only the preferred-color matches (in product option-value order) so they sit first; pass 2 renders the rest. Blank target = pass 1 renders nothing and pass 2 matches the previous single loop. %}
+            {%- for pass in (1..2) -%}
+            {%- for group_product in product_group_collection.products -%}
+              {%- liquid
+                assign group_option = group_product.options_with_values[swatch_option_index]
+                assign group_product_url = group_product.url | within: collection_context
+              -%}
+              {%- for value in group_option.values -%}
+                {%- liquid
+                  assign is_target_match = false
+                  if has_target and group_product.id == product.id
+                    assign _value_name = value.name | downcase | strip
+                    if target_labels contains _value_name
+                      assign is_target_match = true
+                    endif
+                  endif
+                  if pass == 1 and is_target_match == false
+                    continue
+                  endif
+                  if pass == 2 and is_target_match
+                    continue
+                  endif
+
+                  assign swatch_value = null
+                  assign swatch_focal_point = 'initial'
+                  if value.swatch
+                    if value.swatch.image
+                      assign image_url = value.swatch.image | image_url: width: 50
+                      assign swatch_value = 'url(' | append: image_url | append: ')'
+                      assign swatch_focal_point = value.swatch.image.presentation.focal_point | default: 'initial'
+                    elsif value.swatch.color
+                      assign swatch_value = 'rgb(' | append: value.swatch.color.rgb | append: ')'
+                    endif
+                  endif
+
+                  unless swatch_value
+                    continue
+                  endunless
+
+                  if value.available == false
+                    continue
+                  endif
+
+                  assign _value_count = _value_count | plus: 1
+
+                  if _value_count > limit
+                    continue
+                  endif
+
+                  assign is_selected = false
+                  if has_target
+                    if is_target_match and _preferred_checked == false
+                      assign is_selected = true
+                      assign _preferred_checked = true
+                    endif
+                  elsif group_product.id == product.id and value.selected
+                    assign is_selected = true
+                  endif
+
+                  assign _label_responsive_class = ''
+                  if _value_count > mobile_limit
+                    assign _label_responsive_class = ' hidden lg:block'
+                  endif
+                -%}
+
+                <label class="group/swatch p-0.5 border border-transparent border-solid relative cursor-pointer rounded-full outline-offset-2 outline-black hover:border-black has-[:checked]:border-black has-[:focus-visible]:outline-2{{ _label_responsive_class }}">
+                  <input
+                    type="radio"
+                    name="product-option-radio-group-{{ product.id }}"
+                    value="{{ value.name | escape }}"
+                    {% if is_selected %}checked{% endif %}
+                    data-product-option-value-id="{{ value.id }}"
+                    data-product-option-display-value="{{ value.name | escape }}"
+                    data-product-option-url="{{ group_product_url }}"
+                    class="sr-only"
+                  >
+                  <span
+                    class="size-4 block rounded-full overflow-hidden"
+                    style="background: {{ swatch_value }}; background-position: {{ swatch_focal_point }};"
+                  >
+                    <span class="sr-only">{{ value.name | escape }}</span>
+                  </span>
+                  <span class="tooltip" role="tooltip">{{ value.name | escape }}</span>
+                </label>
+              {%- endfor -%}
+            {%- endfor -%}
+            {%- endfor -%}
+
+          {%- else -%}
+            {% # Same two-pass ordering as the group branch above. %}
+            {%- for pass in (1..2) -%}
+            {%- for value in swatch_option.values -%}
+              {%- liquid
+                assign is_target_match = false
+                if has_target
+                  assign _value_name = value.name | downcase | strip
+                  if target_labels contains _value_name
+                    assign is_target_match = true
+                  endif
+                endif
+                if pass == 1 and is_target_match == false
+                  continue
+                endif
+                if pass == 2 and is_target_match
+                  continue
+                endif
+
+                assign value_url = value.product_url
+                if value_url
+                  assign value_url = value_url | within: collection_context
+                endif
+
+                assign swatch_value = null
+                assign swatch_focal_point = 'initial'
+                if value.swatch
+                  if value.swatch.image
+                    assign image_url = value.swatch.image | image_url: width: 50
+                    assign swatch_value = 'url(' | append: image_url | append: ')'
+                    assign swatch_focal_point = value.swatch.image.presentation.focal_point | default: 'initial'
+                  elsif value.swatch.color
+                    assign swatch_value = 'rgb(' | append: value.swatch.color.rgb | append: ')'
+                  endif
+                endif
+
+                unless swatch_value
+                  continue
+                endunless
+
+                if value.available == false
+                  continue
+                endif
+
+                assign _value_count = _value_count | plus: 1
+
+                if _value_count > limit
+                  continue
+                endif
+
+                assign is_selected = false
+                if has_target
+                  if is_target_match and _preferred_checked == false
+                    assign is_selected = true
+                    assign _preferred_checked = true
+                  endif
+                elsif value.selected
+                  assign is_selected = true
+                endif
+
+                assign _label_responsive_class = ''
+                if _value_count > mobile_limit
+                  assign _label_responsive_class = ' hidden lg:block'
+                endif
+              -%}
+
+              <label class="group/swatch p-0.5 border border-transparent border-solid relative cursor-pointer rounded-full outline-offset-2 outline-black hover:border-black has-[:checked]:border-black has-[:focus-visible]:outline-2{{ _label_responsive_class }}">
+                <input
+                  type="radio"
+                  name="product-option-radio-group-{{ product.id }}"
+                  value="{{ value.name | escape }}"
+                  {% if is_selected %}checked{% endif %}
+                  data-product-option-value-id="{{ value.id }}"
+                  data-product-option-display-value="{{ value.name | escape }}"
+                  data-product-option-url="{{ value_url }}"
+                  class="sr-only"
+                >
+                <span
+                  class="size-4 block rounded-full overflow-hidden"
+                  style="background: {{ swatch_value }}; background-position: {{ swatch_focal_point }};"
+                >
+                  <span class="sr-only">{{ value.name | escape }}</span>
+                </span>
+                <span class="tooltip" role="tooltip">{{ value.name | escape }}</span>
+              </label>
+            {%- endfor -%}
+            {%- endfor -%}
+          {%- endif -%}
+
+          {%- if _value_count > mobile_limit -%}
+            {%- assign _mobile_overflow_count = _value_count | minus: mobile_limit -%}
+            <span class="fs-body-sm lg:hidden">+{{ _mobile_overflow_count }} colors</span>
+          {%- endif -%}
+          {%- if _value_count > limit -%}
+            {%- assign _overflow_count = _value_count | minus: limit -%}
+            <span class="fs-body-sm hidden lg:inline">+{{ _overflow_count }} colors</span>
+          {%- endif -%}
+
+        </div>
+      </fieldset>
+    </product-option>
+  </form>
+</div>

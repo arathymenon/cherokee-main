@@ -1,0 +1,69 @@
+<!-- snippet: header-utility-nav -->
+{%- comment -%}
+  Renders the header utility nav: search, account, and cart icons.
+{%- endcomment -%}
+
+{%- if template contains 'search' -%}
+  <a
+    class="size-8 flex items-center justify-center relative text-scheme"
+    href="{{ routes.search_url }}" >
+    <span class="size-4 *:size-full">
+      {{- 'icon-magnifier.svg' | inline_asset_content -}}
+    </span>
+  </a>
+{%- else -%}
+  <button
+    class="size-8 flex items-center justify-center relative text-scheme"
+    data-vegax-command="show-modal"
+    data-vegax-commandfor="search-dialog" >
+    <span class="size-4 *:size-full">
+      {{- 'icon-magnifier.svg' | inline_asset_content -}}
+    </span>
+    <span class="sr-only">{{ 'general.search.search' | t }}</span>
+  </button>
+{%- endif -%}
+
+{%- if shop.customer_accounts_enabled -%}
+  <a
+    class="hidden h-8 lg:flex items-center gap-2 relative whitespace-nowrap no-underline hover:underline underline-offset-4 text-scheme"
+    href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}">
+    <span class="size-4 *:size-full">
+      {{- 'icon-person.svg' | inline_asset_content -}}
+    </span>
+    <span class="fs-body-sm">
+      {%- if customer -%}
+        Welcome {{ customer.first_name | default: customer.name }}
+      {%- else -%}
+        Log In
+      {%- endif -%}
+    </span>
+  </a>
+{%- endif -%}
+
+<div data-ajax-cart-section>
+  {%- capture item_count -%}
+    {%- render 'cart-display-count' -%}
+  {%- endcapture -%}
+  {%- assign item_count = item_count | strip | plus: 0 -%}
+  <a
+    class="flex-center relative px-2 -mr-2 py-2 text-scheme"
+    {% if template.name != 'cart' %}
+      href="{{ routes.cart_url }}"
+      role="button"
+      data-vegax-commandfor="cart-dialog"
+      data-vegax-command="show-modal"
+    {%- endif -%} >
+    <span class="size-4 *:size-full">
+      {{- 'icon-bag.svg' | inline_asset_content -}}
+    </span>
+    <span class="sr-only">{{- 'cart.title' | t -}}</span>
+    {%- if item_count > 0 -%}
+      <span
+        class="absolute flex-center top-2 right-1
+          text-[8px] h-[14px] min-w-[14px] rounded-full bg-brand-blue text-white text-center  " >
+        <span aria-hidden="true">{{ item_count }}</span>
+        <span class="sr-only">{{- 'cart.cart_count' | t: count: item_count -}}</span>
+      </span>
+    {%- endif -%}
+  </a>
+</div>

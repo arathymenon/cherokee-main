@@ -1,0 +1,105 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "header": {
+      "type": "collection-header",
+      "settings": {
+        "color_scheme": "",
+        "image_color_scheme": "scheme-dark",
+        "width": "full-width",
+        "center_content": true,
+        "active_button_style": "underline-button",
+        "linked_button_style": "text-link"
+      }
+    },
+    "visual_nav_BULH8z": {
+      "type": "visual-nav",
+      "blocks": {
+        "nav_item_dApKwJ": {
+          "type": "nav_item",
+          "settings": {
+            "image": "shopify://shop_images/ww-originals-ultra-men-3x1-20260611.png",
+            "title": "Hunter",
+            "link": "https://cherokeeuniforms.com/collections/discountable?filter.v.t.shopify.color-pattern=gid%3A%2F%2Fshopify%2FFilterSettingGroup%2F164856178&filter.v.price.gte=&filter.v.price.lte="
+          }
+        },
+        "nav_item_zUqm74": {
+          "type": "nav_item",
+          "settings": {
+            "image": "shopify://shop_images/ck-hero-desktop-20260623.jpg",
+            "title": "Royal Blue",
+            "link": "https://cherokeeuniforms.com/collections/discountable?filter.v.t.shopify.color-pattern=gid%3A%2F%2Fshopify%2FFilterSettingGroup%2F165151090&filter.v.price.gte=&filter.v.price.lte="
+          }
+        },
+        "nav_item_4wtWiV": {
+          "type": "nav_item",
+          "settings": {
+            "image": "shopify://shop_images/ww-revolution-men-3x1-20260611.jpg",
+            "title": "360 Stretch",
+            "link": "https://cherokeeuniforms.com/collections/discountable?filter.p.m.attributes.features=gid%3A%2F%2Fshopify%2FMetaobject%2F319000641906&filter.v.price.gte=&filter.v.price.lte="
+          }
+        },
+        "nav_item_wcn34F": {
+          "type": "nav_item",
+          "settings": {
+            "image": "shopify://shop_images/infinity-pursuit-men-3x1-20260611.jpg",
+            "title": "Infinity Men",
+            "link": "https://cherokeeuniforms.com/collections/infinity-mens-scrubs"
+          }
+        }
+      },
+      "block_order": [
+        "nav_item_dApKwJ",
+        "nav_item_zUqm74",
+        "nav_item_4wtWiV",
+        "nav_item_wcn34F"
+      ],
+      "name": "Visual Nav",
+      "settings": {
+        "color_scheme": "",
+        "use_max_width": true,
+        "heading": "",
+        "content_align": "left",
+        "shape": "circle",
+        "text_align": "center",
+        "carousel_loop": false,
+        "slides_per_view_mobile": 3,
+        "slides_per_view_mobile_large": 4,
+        "slides_per_view_tablet": 4,
+        "slides_per_view_laptop": 6,
+        "slides_per_view_desktop": 8,
+        "top_padding": "pt-md",
+        "bottom_padding": "pb-md"
+      }
+    },
+    "products": {
+      "type": "collection-products",
+      "settings": {
+        "filter_color_scheme": "scheme-default",
+        "products_per_page": 16
+      }
+    },
+    "seo_text_4tTMd4": {
+      "type": "seo-text",
+      "name": "SEO Text",
+      "settings": {
+        "content": "{{ collection.metafields.seo.content | metafield_tag }}",
+        "color_scheme": "scheme-0d9bed0c-0f1f-4f9d-99af-d15d3a707bfd"
+      }
+    }
+  },
+  "order": [
+    "header",
+    "visual_nav_BULH8z",
+    "products",
+    "seo_text_4tTMd4"
+  ]
+}

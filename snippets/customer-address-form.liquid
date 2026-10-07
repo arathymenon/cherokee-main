@@ -1,0 +1,161 @@
+{%- liquid
+  assign is_new_address = false
+  if address == customer.new_address
+    assign is_new_address = true
+    assign input_id_suffix = "New"
+  else
+    assign input_id_suffix = address.id
+  endif
+-%}
+
+{%- form 'customer_address', address -%}
+  <country-province-selector>
+    <div class="form-section customer-addresses__edit-form-fields">
+      <div>
+        <label class="form-element" for="AddressFirstName_{{ input_id_suffix }}">
+          {{ 'customer.address.first_name' | t }}
+        </label>
+        <input
+          class="form-element"
+          type="text"
+          id="AddressFirstName_{{ input_id_suffix }}"
+          name="address[first_name]"
+          value="{{ form.first_name }}"
+          autocomplete="given-name"
+          placeholder="{{ 'customer.address.first_name' | t }}"
+        >
+      </div>
+      <div>
+        <label class="form-element" for="AddressLastName_{{ input_id_suffix }}">{{ 'customer.address.last_name' | t }}</label>
+        <input
+          class="form-element"
+          type="text"
+          id="AddressLastName_{{ input_id_suffix }}"
+          name="address[last_name]"
+          value="{{ form.last_name }}"
+          autocomplete="family-name"
+          placeholder="{{ 'customer.address.last_name' | t }}"
+        >
+      </div>
+      {% comment %}
+      <div>
+        <label class="form-element" for="AddressCompany_{{ input_id_suffix }}">{{ 'customer.address.company' | t }}</label>
+        <input
+          class="form-element"
+          type="text"
+          id="AddressCompany_{{ input_id_suffix }}"
+          name="address[company]"
+          value="{{ form.company }}"
+          autocomplete="organization"
+          placeholder="{{ 'customer.address.company' | t }}"
+        >
+      </div>
+      {% endcomment %}
+      <div>
+        <label class="form-element" for="AddressAddress1_{{ input_id_suffix }}">{{ 'customer.address.address1' | t }}</label>
+        <input
+          class="form-element"
+          type="text"
+          id="AddressAddress1_{{ input_id_suffix }}"
+          name="address[address1]"
+          value="{{ form.address1 }}"
+          autocomplete="address-line1"
+          placeholder="{{ 'customer.address.address1' | t }}"
+        >
+      </div>
+      <div>
+        <label class="form-element" for="AddressAddress2_{{ input_id_suffix }}">{{ 'customer.address.address2' | t }}</label>
+        <input
+          class="form-element"
+          type="text"
+          id="AddressAddress2_{{ input_id_suffix }}"
+          name="address[address2]"
+          value="{{ form.address2 }}"
+          autocomplete="address-line2"
+          placeholder="{{ 'customer.address.address2' | t }}"
+        >
+      </div>
+      <div>
+        <label class="form-element" for="AddressCity_{{ input_id_suffix }}">{{ 'customer.address.city' | t }}</label>
+        <input
+          class="form-element"
+          type="text"
+          id="AddressCity_{{ input_id_suffix }}"
+          name="address[city]"
+          value="{{ form.city }}"
+          autocomplete="address-level2"
+          placeholder="{{ 'customer.address.city' | t }}"
+        >
+      </div>
+      <div data-country-container>
+        <label class="form-element" for="AddressCountry_{{ input_id_suffix }}">
+          {{ 'customer.address.country' | t }}
+        </label>
+        <select
+          class="form-element"
+          id="AddressCountry_{{ input_id_suffix }}"
+          name="address[country]"
+          data-default="{{ form.country }}"
+          data-form-id="{{ input_id_suffix }}"
+          autocomplete="country"
+        >
+          {{ all_country_option_tags }}
+        </select>
+      </div>
+      <div data-province-container>
+        <label class="form-element" for="AddressProvince_{{ input_id_suffix }}">{{ 'customer.address.province_state' | t }}</label>
+        <select
+          class="form-element"
+          id="AddressProvince_{{ input_id_suffix }}"
+          name="address[province]"
+          data-default="{{ form.province }}"
+          autocomplete="address-level1"
+        ></select>
+      </div>
+      <div>
+        <label class="form-element" for="AddressZip_{{ input_id_suffix }}">{{ 'customer.address.zip_code' | t }}</label>
+        <input
+          class="form-element"
+          type="text"
+          id="AddressZip_{{ input_id_suffix }}"
+          name="address[zip]"
+          value="{{ form.zip }}"
+          autocapitalize="characters"
+          autocomplete="postal-code"
+          placeholder="{{ 'customer.address.zip_code' | t }}"
+        >
+      </div>
+      <div class="form-section__phone">
+        <label class="form-element" for="AddressPhone_{{ input_id_suffix }}">{{ 'customer.address.phone' | t }}</label>
+        <input
+          class="form-element"
+          type="tel"
+          id="AddressPhone_{{ input_id_suffix }}"
+          name="address[phone]"
+          value="{{ form.phone }}"
+          autocomplete="tel"
+          placeholder="{{ 'customer.address.phone' | t }}"
+        >
+      </div>
+      <div class="customer-addresses__edit-form-default">
+        <div class="form-element form-element--bool">
+          {{ form.set_as_default_checkbox }}
+          <label class="form-element"
+                 for="address_default_address_{{ input_id_suffix | downcase }}">{{ 'customer.address.set_default' | t }}</label>
+        </div>
+      </div>
+      <div class="customer-addresses__edit-form-submit">
+        <button type="submit" class="primary-button primary-button--dark">
+          {%- if is_new_address -%}
+            {{ 'customer.address.add' | t }}
+          {%- else -%}
+            {{ 'customer.address.save' | t }}
+          {%- endif -%}
+        </button>
+        <div class="customer-addresses__edit-form-cancel">
+          <a href="#{{ new_address_popup_id }}--close">{{ 'customer.address.cancel' | t }}</a>
+        </div>
+      </div>
+    </div>
+  </country-province-selector>
+{%- endform -%}

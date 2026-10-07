@@ -1,0 +1,46 @@
+<!-- snippet: cart-line-item-quantity -->
+{%- comment -%}
+  Renders the quantity input (with - / + buttons) for a cart line item.
+
+  Accepts:
+  - line_item: {Object}
+  - line_item_index: {Integer} 1-based index of the line item in cart.items
+{%- endcomment -%}
+
+{%- liquid
+  capture product_title
+    render 'product-title', product: line_item.product.title
+  endcapture
+-%}
+
+<div class="h-12">
+  <ajax-cart-quantity class="quantity-input w-[100px] lg:w-[120px]">
+    <a
+      class="quantity-input__button"
+      href="{{ routes.cart_change_url }}?line={{ line_item_index  }}&quantity={{ line_item.quantity | minus: 1 }}"
+      data-ajax-cart-quantity-minus
+      type="button"
+      aria-label="{{ 'products.product.quantity.decrease' | t: product: product_title }}"
+    >
+      {{- 'icon-minus.svg' | inline_asset_content -}}
+    </a>
+    <input
+      class="quantity-input__input"
+      type="number"
+      name="updates[]"
+      maxlength="3"
+      value="{{ line_item.quantity }}"
+      data-ajax-cart-quantity-input="{{ line_item_index }}"
+      aria-label="{{ 'products.product.quantity.input_label' | t: product: product_title }}"
+    >
+    <a
+      class="quantity-input__button"
+      href="{{ routes.cart_change_url }}?line={{ line_item_index  }}&quantity={{ line_item.quantity | plus: 1 }}"
+      data-ajax-cart-quantity-plus
+      type="button"
+      aria-label="{{ 'products.product.quantity.increase' | t: product: product_title }}"
+    >
+      {{- 'icon-plus.svg' | inline_asset_content -}}
+    </a>
+  </ajax-cart-quantity>
+</div>

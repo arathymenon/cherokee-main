@@ -1,0 +1,47 @@
+<!-- snippet: search-form -->
+{% comment %}
+  Renders a search form
+  Accepts:
+  - is_search_page: {Boolean}
+
+  Usage:
+  {%- render 'search-form', is_search_page: true -%}
+{% endcomment %}
+
+<predictive-search data-loading-text="{{ 'accessibility.loading' | t }}">
+  <form action="{{ routes.search_url }}" method="get" role="search">
+    <div class="flex items-center gap-xs w-full {% if is_search_page %} max-w-[720px] mx-auto{% endif %}">
+      <div class="flex items-center border-b border-grey py-3 w-full">
+        <input
+          class="flex-1 outline-none text-base bg-transparent"
+          type="search"
+          name="q"
+          data-predictive-search-input
+          value="{{ search.terms | escape }}"
+          placeholder="{{ 'general.search.search' | t }}"
+          role="combobox"
+          autocorrect="off"
+          autocomplete="off"
+          autocapitalize="off"
+          spellcheck="false"
+        >
+        <button
+          class="flex items-center justify-center size-4"
+          data-predictive-search-loading
+          aria-label="{{ 'general.search.search' | t }}"
+        >
+          {{- 'icon-magnifier.svg' | inline_asset_content -}}
+        </button>
+      </div>
+      {%- unless is_search_page -%}
+        <label class="flex items-center cursor-pointer" for="header-search">
+          {{- 'icon-x.svg' | inline_asset_content -}}
+        </label>
+      {%- endunless -%}
+    </div>
+    <input type="hidden" name="options[prefix]" value="last">
+    <input type="hidden" name="type" value="product">
+
+    <span class="visually-hidden" role="status" aria-hidden="true"></span>
+  </form>
+</predictive-search>

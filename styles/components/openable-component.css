@@ -1,0 +1,34 @@
+@layer components {
+  openable-component > details[data-openable] > *:not(summary) {
+    display: none;
+    opacity: 0;
+    transition: opacity 0.15s ease-in-out, display 0.15s allow-discrete;
+  }
+
+  openable-component > details[data-openable][open] > *:not(summary) {
+    display: block;
+    opacity: 1;
+
+    @starting-style {
+      opacity: 0;
+    }
+  }
+
+  .header-menu-root-item openable-component > details[data-openable] > *:not(summary) {
+    transition: opacity 0.22s ease-in-out, display 0.22s allow-discrete;
+  }
+
+  .header-menu-root-item
+    openable-component
+    > details[data-openable][open].closing
+    > *:not(summary) {
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .header-menu-root-item openable-component > details[data-openable] > *:not(summary) {
+      transition: none;
+    }
+  }
+}

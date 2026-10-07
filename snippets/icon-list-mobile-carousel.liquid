@@ -1,0 +1,65 @@
+<!-- snippet: icon-list-mobile-carousel -->
+
+{% doc %}
+  Mobile carousel layout for the icon-list section.
+  Optional section image above the header, then a tarot-carousel of items.
+  Alignment driven by `s.mobile_align`. Loop driven by `s.carousel_loop`.
+  Parent should wrap with `lg:hidden` (when desktop=image-column) or `md:hidden` (when desktop=horizontal).
+
+  @param {object} section - Shopify section object (required)
+  @param {boolean} show_image - Whether to render section_image above the header (required)
+
+  @example
+  {% render 'icon-list-mobile-carousel', section: section, show_image: false %}
+{% enddoc %}
+
+{%- assign s = section.settings -%}
+
+{% if show_image and s.section_image != blank %}
+  <div class="aspect-square overflow-hidden rounded-theme mb-md">
+    {%- capture content -%}
+      {{- s.section_image
+        | image_url: width: 1600
+        | image_tag:
+            class: 'w-full h-full object-cover',
+            loading: 'lazy',
+            sizes: '100vw',
+            widths: '600, 900, 1200, 1600'
+      -}}
+    {%- endcapture -%}
+    {%- render 'media-loader', content: content, show_skeleton: true -%}
+  </div>
+{% endif %}
+
+
+{% render 'icon-list-header', eyebrow: s.eyebrow, headline: s.heading, align: s.mobile_align %}
+
+
+{% if section.blocks.size > 0 %}
+  <tarot-carousel>
+    <script type="application/json" data-tarot-options>
+      {
+        "effect": "carousel",
+        "loop": {{ s.carousel_loop | json }},
+        "gap": "12px",
+        "slidesPerView": 1,
+        "navigation": {
+          "showButtons": false,
+          "showPagination": true
+        }
+      }
+    </script>
+    <tarot-viewport>
+      <tarot-track>
+        {% for block in section.blocks %}
+          <tarot-slide {{ block.shopify_attributes }}>
+            <div class="py-sm">
+              {% render 'icon-list-item', block: block, align: s.mobile_align %}
+            </div>
+          </tarot-slide>
+        {% endfor %}
+      </tarot-track>
+    </tarot-viewport>
+    <div data-tarot-pagination class="py-sm px-gutter {% if s.mobile_align == 'left' %}justify-end{% endif %}"></div>
+  </tarot-carousel>
+{% endif %}

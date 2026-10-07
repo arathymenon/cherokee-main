@@ -1,0 +1,37 @@
+<!-- snippet: product-meta-collection -->
+
+{% doc %}
+  Renders the product's collection/brand line (metafields.meta.collection).
+
+  Rules:
+  - Tag (meta.collection) AND URL (meta.collection_url) populated -> linked name.
+  - Only tag populated -> plain text, no link.
+  - Tag not populated -> nothing (or a spacer when `spacer` is true).
+
+  @param {object} product - Shopify product object (required)
+  @param {string} [class] - Extra classes appended to the element
+  @param {boolean} [linked] - Allow linking when a collection URL exists (default: true).
+    Pass false for cart items / instant search.
+  @param {boolean} [spacer] - Render an h-3 spacer div when the tag is blank,
+    to preserve layout height (default: false)
+
+  @example
+  {% render 'product-meta-collection', product: product %}
+  {% render 'product-meta-collection', product: product, linked: false, class: 'mb-2' %}
+  {% render 'product-meta-collection', product: card_product, class: 'uppercase', spacer: true %}
+{% enddoc %}
+
+{%- liquid
+  assign meta_tag = product.metafields.meta.collection
+  assign meta_collection = product.metafields.meta.collection_url.value
+-%}
+
+{%- if meta_tag != blank -%}
+  {%- if linked != false and meta_collection != blank -%}
+    <a href="{{ meta_collection.url }}" class="fs-display-6 no-underline text-brand-blue {{ class }}">{{ meta_tag }}</a>
+  {%- else -%}
+    <span class="fs-display-6 text-brand-blue {{ class }}">{{ meta_tag }}</span>
+  {%- endif -%}
+{%- elsif spacer -%}
+  <div class="h-3"></div>
+{%- endif -%}

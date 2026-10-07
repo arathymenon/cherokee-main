@@ -1,0 +1,59 @@
+@import "tailwindcss" source(none);
+
+/*  Tailwind source paths  */
+@source "../blocks/*.liquid";
+@source "../layout/*.liquid";
+@source "../snippets/*.liquid";
+@source "../sections/*.liquid";
+@source "../templates/*.liquid";
+
+@source not inline("float");
+@source not inline("container");
+
+/*  Base styles  */
+@import "./base/base.css";
+@import "./base/typography.css";
+@import "./base/layout.css";
+@import "./base/spacing.css";
+
+/*  Packages  */
+@import "./packages/tarot.css";
+@import "./packages/cart-progress-bar.css";
+@import "./packages/scroll-trigger.css";
+@import "./packages/panel-stack.css";
+@import "./components/image-zoom.css";
+
+/*  Elements  */
+@import "./elements/badges.css";
+@import "./elements/buttons.css";
+@import "./elements/chips.css";
+@import "./elements/hamburger.css";
+@import "./elements/inputs.css";
+@import "./elements/rich-text.css";
+@import "./elements/breadcrumbs.css";
+@import "./elements/scrollbar.css";
+
+/*  Components  */
+@import "./components/accordion.css";
+@import "./components/dialog.css";
+@import "./components/openable-component.css";
+@import "./components/header.css";
+@import "./components/sticky-content.css";
+@import "./components/forms.css";
+@import "./components/labels.css";
+@import "./components/quantity-input.css";
+@import "./components/collection-promo-cards.css";
+@import "./components/icon-list.css";
+@import "./components/size-guide.css";
+@import "./components/tooltips.css";
+@import "./components/mobile-menu-drawer.css";
+
+/*  Apps  */
+@import "./apps/yotpo-stars.css";
+@import "./apps/yotpo-pdp-reviews.css";
+@import "./apps/yotpo-reviews-carousel.css";
+
+/*  Utilities  */
+@import "./utilities/colors.css";
+@import "./utilities/layout.css";
+@import "./utilities/dialog.css";

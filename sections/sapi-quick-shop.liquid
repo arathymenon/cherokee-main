@@ -1,0 +1,179 @@
+<!-- section: sapi-quick-shop -->
+{%- comment -%}
+  For Shopify Section API only
+{%- endcomment -%}
+
+{%- liquid
+  assign current_variant = null
+  if product.has_only_default_variant
+    assign current_variant = product.variants[0]
+  else
+    assign current_variant = product.selected_variant | default: product.selected_or_first_available_variant
+  endif
+
+  assign gallery_variant = current_variant
+  if gallery_variant == null
+    assign selected_color = ''
+    assign color_position = 0
+
+    for option in product.options_with_values
+      assign option_name_lower = option.name | downcase
+      if option_name_lower == 'color'
+        assign color_position = option.position
+        for value in option.values
+          if value.selected
+            assign selected_color = value.name
+            break
+          endif
+        endfor
+        break
+      endif
+    endfor
+
+    if selected_color != ''
+      for variant in product.variants
+        assign variant_color = ''
+        assign option_prop_name = 'option' | append: color_position
+        assign variant_color = variant[option_prop_name]
+
+        if variant_color == selected_color
+          assign gallery_variant = variant
+          break
+        endif
+      endfor
+    endif
+  endif
+
+  assign base_id = 'quick-shop-' | append: section.id
+  assign product_form_id = base_id | append: '-form'
+
+  assign product_details_url = product.url
+  assign current_color_value_id = null
+  for option in product.options_with_values
+    assign option_name_lower = option.name | downcase
+    if option_name_lower == 'color'
+      assign color_position_index = option.position | minus: 1
+      assign current_color_name = current_variant.options[color_position_index]
+      for value in option.values
+        if value.name == current_color_name
+          assign current_color_value_id = value.id
+          break
+        endif
+      endfor
+      break
+    endif
+  endfor
+  if current_color_value_id
+    assign product_details_url = product_details_url | split: '?' | first
+    assign product_details_url = product_details_url | append: '?option_values=' | append: current_color_value_id
+  endif
+
+  capture product_title_html
+    render 'product-title', product: product
+  endcapture
+
+  capture product_fresh_price_html
+    render 'product-price', target: product
+  endcapture
+
+  capture product_variant_price_html
+    render 'product-price', target: current_variant
+  endcapture
+-%}
+
+<html-fetcher>
+  <div data-html-fetcher-area>
+    <product-fetcher
+      section="sapi-quick-shop"
+      id="{{ base_id }}-product-fetcher"
+      sapi-id="{{ base_id }}-product-fetcher"
+      disable-view-transition>
+      {%- # JSON data -%}
+      {% render 'product-fetcher-state',
+        product: product,
+        variant: current_variant,
+        collection_context: collection
+      %}
+
+      {%- # Image and product info -%}
+      <div class="flex gap-4 md:gap-6">
+        {%- # Variant image - in gallery area so it only swaps on color picks -%}
+        <div data-product-fetcher-area="gallery">
+          {%- liquid
+            capture media_list
+              render 'product-media-list', product: product, variant: gallery_variant, list_name: 'featured'
+            endcapture
+
+            assign media_index = media_list | split: ' ' | first | default: '' | plus: 0
+            assign thumb_media = product.media[media_index]
+          -%}
+          {%- if thumb_media -%}
+            {{-
+              thumb_media.preview_image
+              | image_url: width: 480
+              | image_tag:
+                alt: thumb_media.alt,
+                loading: 'lazy',
+                sizes: '160px',
+                style: 'max-width: 160px;'
+            -}}
+          {%- endif -%}
+        </div>
+
+        {%- # Product info column - variant area so title/price update on size picks -%}
+        <div
+          class="flex flex-col gap-1 items-start justify-center"
+          data-product-fetcher-area="variant">
+          {%- render 'product-meta-collection', product: product -%}
+
+          <div class="font-medium">{{ product_title_html }}</div>
+
+          <div class="text-sm" data-quick-shop-price>
+            <div data-quick-shop-price-fresh>
+              {{- product_fresh_price_html -}}
+            </div>
+            <div data-quick-shop-price-variant hidden>
+              {{- product_variant_price_html -}}
+            </div>
+          </div>
+
+          <a
+            href="{{ product_details_url }}"
+            data-product-color-link
+            class="button button-outline-black button-sm mt-1">
+            View Details
+          </a>
+        </div>
+      </div>
+
+      {%- # Description -%}
+      {%- if product.description != blank -%}
+        <div class="pt-md mb-6">
+          <rte-content class="block rte">
+            {{ product.description }}
+          </rte-content>
+        </div>
+      {%- endif -%}
+
+      {%- # Info -%}
+
+      <div
+        data-product-fetcher-area="variant"
+        class="w-full lg:w-auto grow">
+        <div class="empty:hidden">
+          {% render 'product-options-list',
+            product: product,
+            collection_context: collection,
+            hide_size_guide: true
+          %}
+        </div>
+
+        {% render 'product-form',
+          product: product,
+          variant: current_variant,
+          product_form_id: product_form_id
+        %}
+      </div>
+    </product-fetcher>
+  </div>
+</html-fetcher>

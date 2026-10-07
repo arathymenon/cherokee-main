@@ -1,0 +1,106 @@
+<!-- snippet: comparison-swatches -->
+
+{% doc %}
+  Display-only color swatches for the comparison table, matching the Figma:
+  overlapping 24px dots (inner color inset 12.5%, stacked with -12px overlap),
+  capped at `limit` with a trailing "+N" overflow.
+
+  Colors are sourced like the PDP grouped picker (see product-options-bucket): the
+  position-1 color option, pulling the full range from the product-group collection
+  (product_group.collection_handle) when present. All colors are shown at full
+  opacity, including unavailable ones. Renders nothing if the first option carries
+  no swatches.
+
+  @param {object} product - Shopify product object (required)
+  @param {number} [limit] - Max dots before the "+N" overflow (default 6)
+
+  @example
+  {% render 'comparison-swatches', product: product %}
+{% enddoc %}
+
+{%- liquid
+  assign limit = limit | default: 6 | plus: 0
+  assign color_option = product.options_with_values[0]
+
+  assign has_swatch = false
+  for value in color_option.values
+    if value.swatch.image or value.swatch.color
+      assign has_swatch = true
+      break
+    endif
+  endfor
+  unless has_swatch
+    break
+  endunless
+
+  assign product_group_collection = null
+  assign product_group_handle = product.metafields.product_group.collection_handle | default: blank
+  if product_group_handle != blank
+    assign product_group_collection = collections[product_group_handle]
+  endif
+
+  assign shown = 0
+  assign total = 0
+-%}
+
+<div class="flex gap-1 items-center justify-center">
+  <div class="flex -space-x-3">
+    {%- if product_group_collection -%}
+      {%- for group_product in product_group_collection.products -%}
+        {%- assign group_option = group_product.options_with_values[0] -%}
+        {%- for value in group_option.values -%}
+          {%- liquid
+            assign swatch_value = null
+            assign swatch_focal_point = 'initial'
+            if value.swatch.image
+              assign image_url = value.swatch.image | image_url: width: 50
+              assign swatch_value = 'url(' | append: image_url | append: ')'
+              assign swatch_focal_point = value.swatch.image.presentation.focal_point | default: 'initial'
+            elsif value.swatch.color
+              assign swatch_value = 'rgb(' | append: value.swatch.color.rgb | append: ')'
+            endif
+          -%}
+          {%- if swatch_value -%}
+            {%- assign total = total | plus: 1 -%}
+            {%- if shown < limit -%}
+              {%- assign shown = shown | plus: 1 -%}
+              <span class="size-6 rounded-full overflow-hidden relative shrink-0">
+                <span class="absolute inset-[12.5%] rounded-full" style="background: {{ swatch_value }}; background-position: {{ swatch_focal_point }};"></span>
+                <span class="sr-only">{{ value.name | escape }}</span>
+              </span>
+            {%- endif -%}
+          {%- endif -%}
+        {%- endfor -%}
+      {%- endfor -%}
+    {%- else -%}
+      {%- for value in color_option.values -%}
+        {%- liquid
+          assign swatch_value = null
+          assign swatch_focal_point = 'initial'
+          if value.swatch.image
+            assign image_url = value.swatch.image | image_url: width: 50
+            assign swatch_value = 'url(' | append: image_url | append: ')'
+            assign swatch_focal_point = value.swatch.image.presentation.focal_point | default: 'initial'
+          elsif value.swatch.color
+            assign swatch_value = 'rgb(' | append: value.swatch.color.rgb | append: ')'
+          endif
+        -%}
+        {%- if swatch_value -%}
+          {%- assign total = total | plus: 1 -%}
+          {%- if shown < limit -%}
+            {%- assign shown = shown | plus: 1 -%}
+            <span class="size-6 rounded-full overflow-hidden relative shrink-0">
+              <span class="absolute inset-[12.5%] rounded-full" style="background: {{ swatch_value }}; background-position: {{ swatch_focal_point }};"></span>
+              <span class="sr-only">{{ value.name | escape }}</span>
+            </span>
+          {%- endif -%}
+        {%- endif -%}
+      {%- endfor -%}
+    {%- endif -%}
+  </div>
+
+  {%- assign overflow = total | minus: limit -%}
+  {%- if overflow > 0 -%}
+    <span class="fs-body-sm">+{{ overflow }}</span>
+  {%- endif -%}
+</div>

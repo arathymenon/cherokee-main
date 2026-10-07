@@ -1,0 +1,23 @@
+<!-- snippet: cart-line-item-remove -->
+{%- comment -%}
+  Renders the "remove" button (garbage can icon) for a cart line item. Click
+  triggers a liquid-ajax-cart request via the data-ajax-cart-request-button attribute.
+
+  Accepts:
+  - line_item: {Object}
+{%- endcomment -%}
+
+{%- liquid
+  capture product_title
+    render 'product-title', product: line_item.product.title
+  endcapture
+-%}
+
+<a
+  href="{{ line_item.url_to_remove }}"
+  class="flex-center [&_svg]:size-4 shrink-0 pl-4"
+  data-ajax-cart-request-button
+  role="button"
+  aria-label="{{ 'cart.remove_title' | t: title: product_title }}">
+  {{- 'icon-garbage-can.svg' | inline_asset_content -}}
+</a>

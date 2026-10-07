@@ -1,0 +1,17 @@
+<!-- snippet: cart-line-item-selling-plan -->
+{%- comment -%}
+  Renders the selling plan name (subscription / delivery cadence) for a cart
+  line item. Outputs nothing when the line item has no selling plan.
+
+  Accepts:
+  - line_item: {Object}
+{%- endcomment -%}
+
+{%- if line_item.selling_plan_allocation -%}
+  <dl>
+    <div class="mt-[0.125rem]">
+      <dt class="inline">{{ 'cart.selling_plan' }}:</dt>
+      <dd class="inline">{{ line_item.selling_plan_allocation.selling_plan.name | escape }}</dd>
+    </div>
+  </dl>
+{%- endif -%}

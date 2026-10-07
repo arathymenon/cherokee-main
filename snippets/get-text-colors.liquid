@@ -1,0 +1,21 @@
+{% comment %}
+  Renders text colors
+  Accepts:
+  - color: {String} var(--color-accent) | #fff
+
+  Usage:
+  {%- render 'get-text-colors', color: '#fff'; -%}
+{% endcomment %}
+{% comment %} [TODO] add css vars{% endcomment %}
+{%- liquid
+  assign result = 'var(--color-text-dark)'
+
+  case color
+    when 'main'
+      assign result = 'var(--color-accent)'
+    when 'white'
+      assign result = '#fff'
+  endcase
+
+  echo result
+-%}

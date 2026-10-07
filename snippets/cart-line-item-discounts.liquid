@@ -1,0 +1,22 @@
+<!-- snippet: cart-line-item-discounts -->
+{%- comment -%}
+  Renders line-level discount badges for a cart line item. Outputs nothing
+  when no line discounts have been applied.
+
+  Accepts:
+  - line_item: {Object}
+{%- endcomment -%}
+
+{%- if line_item.line_level_discount_allocations.size > 0 -%}
+  <ul role="list" aria-label="{{ 'customer.order.discount' | t }}" 
+    class="flex flex-wrap gap-2">
+    {%- for discount in line_item.line_level_discount_allocations -%}
+      <li class="inline-flex items-center gap-2 py-1 px-2 bg-grey-light-blue text-2xs rounded-full">
+        <span class="w-3.5 h-3.5 flex items-center justify-center text-brand-blue">
+          {{- 'icon-price-tag.svg' | inline_asset_content -}}
+        </span>
+        <span class="{% if discount.discount_application.type == 'discount_code' %}uppercase {% endif %}text-brand-blue font-medium">{{ discount.discount_application.title | escape }}</span>
+      </li>
+    {%- endfor -%}
+  </ul>
+{%- endif -%}

@@ -1,0 +1,39 @@
+<!-- section: product-recommendations -->
+
+<html-fetcher
+  href="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit=8&intent=related"
+  loading="lazy" >
+
+  {%- if recommendations.performed? and recommendations.products.size > 0 -%}
+    {% render 'product-carousel',
+      carousel_collection: recommendations,
+      heading: section.settings.title,
+      products_to_show: 8
+    %}
+  {%- endif -%}
+</html-fetcher>
+
+
+{% schema %}
+{
+  "name": "Product recommendations",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "You may also like"
+    }
+  ],
+  "enabled_on": {
+    "templates": ["product"]
+  },
+  "presets": [
+    {
+      "name": "Product recommendations",
+      "category": "Product"
+    }
+  ]
+}
+{% endschema %}
+ 

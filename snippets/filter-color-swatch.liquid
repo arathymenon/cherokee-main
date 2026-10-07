@@ -1,0 +1,47 @@
+{%- comment -%}
+  Renders a color swatch filter.
+  Accepts:
+  - filter: {Object} Shopify filter object
+{%- endcomment -%}
+
+<div class="grid gap-1 content-start">
+  {%- for value in filter.values -%}
+    {%- if value.count == 0 and value.active == false -%}{%- continue -%}{%- endif -%}
+    {%- liquid
+      assign swatch_bg = null
+      assign swatch_focal_point = 'initial'
+      if value.swatch
+        if value.swatch.image
+          assign image_url = value.swatch.image | image_url: width: 50
+          assign swatch_bg = 'url(' | append: image_url | append: ')'
+          assign swatch_focal_point = value.swatch.image.presentation.focal_point | default: 'initial'
+        elsif value.swatch.color
+          assign swatch_bg = 'rgb(' | append: value.swatch.color.rgb | append: ')'
+        endif
+      endif
+    -%}
+
+    <label class="flex items-center gap-3 cursor-pointer group">
+      <span class="p-0.5 border-2 rounded-full shrink-0 transition-colors
+        {% if value.active %}border-black{% else %}border-transparent group-hover:border-grey{% endif %}">
+        <span
+          class="size-6 block rounded-full overflow-hidden border border-grey-light"
+          style="background: {{ swatch_bg | default: '#ccc' }}; background-size: cover; background-position: {{ swatch_focal_point }};">
+        </span>
+      </span>
+      <input
+        type="checkbox"
+        name="{{ value.param_name }}"
+        data-facets-form-input
+        value="{{ value.value }}"
+        id="facet-filter-{{ filter.label | handle }}-{{ value.value | handleize }}"
+        {% if value.active %}checked{% endif %}
+        class="sr-only"
+      >
+      <span class="fs-body-sm">
+        {{ value.label | escape }}&nbsp;
+        <small class="text-grey-dark">({{ value.count }})</small>
+      </span>
+    </label>
+  {%- endfor -%}
+</div>

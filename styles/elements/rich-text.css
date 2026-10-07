@@ -1,0 +1,352 @@
+@layer components {
+  .rte {
+    max-width: 45rem;
+    font-family: var(--font-body);
+    font-size: var(--fs-body-md);
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1.6;
+    letter-spacing: 0;
+    display: block;
+    overflow-wrap: anywhere;
+
+    > :first-child {
+      margin-top: 0;
+    }
+
+    > :last-child {
+      margin-bottom: 0;
+    }
+
+    /* Override Shopify RTE inline font-weight */
+    [style*="font-weight:"] {
+      font-weight: inherit !important;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      font-weight: bold;
+      color: oklch(var(--color-headings));
+    }
+
+    h1 {
+      margin: var(--spacing-lg) 0 var(--spacing-xs);
+      font-family: var(--font-display);
+      font-size: 24px;
+      font-style: normal;
+      font-weight: 800;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+
+    h2 {
+      padding-top: var(--spacing-sm);
+      margin: 0 0 var(--spacing-xs);
+      font-family: var(--font-body);
+      font-size: 18px;
+      font-style: normal;
+      font-weight: 700;
+      line-height: 1;
+      text-transform: none;
+    }
+
+    h3 {
+      margin: var(--spacing-sm) 0 var(--spacing-xs);
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-style: normal;
+      font-weight: 700;
+      line-height: 1;
+      text-transform: none;
+    }
+
+    h4 {
+      margin: var(--spacing-xs) 0;
+      font-family: var(--font-body);
+      font-size: 12px;
+      font-style: normal;
+      font-weight: 500;
+      line-height: 1.2;
+      text-transform: uppercase;
+    }
+
+    @media (min-width: theme(--breakpoint-md)) {
+      h1 {
+        font-size: 32px;
+      }
+
+      h2 {
+        font-size: 20px;
+      }
+
+      h3,
+      h4 {
+        font-size: 16px;
+      }
+    }
+
+    @media (min-width: 1440px) {
+      h1 {
+        font-size: 40px;
+      }
+    }
+
+    h5 {
+      margin: var(--spacing-xs) 0;
+      font-family: Inter, sans-serif;
+      font-size: 16px;
+      font-weight: 500;
+      font-style: normal;
+      line-height: 1.2;
+      text-transform: uppercase;
+    }
+
+    h6 {
+      margin: var(--spacing-sm) 0 var(--spacing-2xs);
+    }
+
+    dl,
+    dd,
+    p,
+    pre {
+      margin: 0 0 var(--spacing-sm) 0;
+      text-wrap: pretty;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+
+    ol {
+      list-style-type: decimal;
+    }
+
+    ul:not(.tarot-dots-list) {
+      list-style-type: disc;
+    }
+
+    ul:not(.tarot-dots-list),
+    ol {
+      padding-left: 18px;
+      margin: var(--spacing-xs) 0 var(--spacing-sm);
+
+      > li {
+        display: list-item;
+        list-style-position: outside;
+        padding-inline-start: 0;
+      }
+    }
+
+    img {
+      display: inline-block;
+      max-width: 100%;
+      width: auto;
+    }
+
+    a:not([class]) {
+      text-decoration: none;
+      border-bottom: 1px solid currentcolor;
+    }
+
+    button:not(.form-button, .yotpo-sr-bottom-line-button) {
+      display: inline;
+      font-weight: 600;
+      text-decoration: underline;
+
+      &:hover {
+        opacity: 0.7;
+      }
+    }
+
+    .form-button {
+      margin-top: 2rem;
+    }
+
+    blockquote {
+      margin: var(--spacing-md) 0 var(--spacing-sm);
+      padding-inline-start: var(--spacing-md);
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      font-weight: 800;
+      font-style: normal;
+      line-height: 1.2;
+      color: var(--color-text-main-dark);
+
+      > :first-child {
+        margin-top: 0;
+      }
+
+      > :last-child {
+        margin-bottom: 0;
+      }
+
+      > :has(+ cite) {
+        margin-bottom: 0;
+      }
+    }
+
+    cite {
+      display: block;
+      margin-top: 0.5rem;
+      font-size: var(--fs-body-sm);
+      line-height: 1.6;
+      letter-spacing: 0;
+      font-weight: 400;
+      font-style: normal;
+    }
+
+    custom-scroll:has(> table) {
+      display: block;
+      width: 100%;
+      border: 1px solid oklch(var(--color-border));
+      border-radius: var(--radius-theme-sm);
+      overflow-x: auto;
+      margin: var(--spacing-xs) 0 var(--spacing-sm);
+    }
+
+    table {
+      /* width: 85rem !important; */
+
+      /* max-width: 85rem; */
+      min-width: 100%;
+      height: auto !important;
+      table-layout: fixed;
+      border-collapse: separate;
+      border-spacing: 0;
+      text-align: center;
+      font-size: var(--fs-body-md);
+    }
+
+    caption {
+      padding: 0.5rem 1rem;
+      text-align: left;
+      font-weight: 500;
+      border-bottom: 1px solid oklch(var(--color-border));
+      caption-side: top;
+    }
+
+    th,
+    td {
+      padding: 0.5rem 1rem;
+      vertical-align: middle;
+      border-bottom: 1px solid oklch(var(--color-border));
+      overflow-wrap: anywhere;
+    }
+
+    td {
+      color: var(--color-grey-dark);
+    }
+
+    th {
+      background: #f2f3f5;
+      font-weight: 500;
+    }
+
+    /*    thead > tr > th,
+    thead > tr > td,
+    table:not(:has(> thead)) > tbody > tr:first-child > th,
+    table:not(:has(> thead)) > tbody > tr:first-child > td {
+      background: var(--color-grey-light-blue);
+      font-size: var(--fs-body-md);
+      font-weight: 500;
+      line-height: 1.6;
+      letter-spacing: 0;
+      color: var(--color-text-main-dark);
+      text-align: center;
+      text-transform: none;
+    } */
+
+    tr:last-child > td,
+    tr:last-child > th {
+      border-bottom: 0;
+    }
+
+    th + th,
+    td + td {
+      border-left: 1px solid oklch(var(--color-border));
+    }
+
+    figure {
+      margin: var(--spacing-sm) 0;
+    }
+
+    figure img {
+      margin: 0;
+    }
+
+    figcaption {
+      margin-top: 8px;
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-style: italic;
+      font-weight: 400;
+      line-height: 1.6;
+    }
+
+    p:has(img) {
+      max-width: 1280px;
+    }
+
+    iframe {
+      max-width: 100%;
+    }
+  }
+
+  .size-guide .rte {
+    table {
+      table-layout: auto;
+      min-width: max-content;
+    }
+
+    th + th,
+    td + td {
+      border-left: 0;
+    }
+
+    table tr:last-child th,
+    table tr:last-child td {
+      border-bottom: 0;
+    }
+
+    table th:first-child,
+    table td:first-child {
+      position: sticky;
+      left: 0;
+      z-index: 1;
+    }
+
+    table td:first-child {
+      background: oklch(var(--color-background));
+    }
+
+    /*   table tr:nth-child(odd):not(thead tr) td:first-child {
+      background: color-mix(
+        in oklch,
+        oklch(var(--color-background)) 97%,
+        oklch(var(--color-foreground))
+      );
+    } */
+  }
+}
+
+/* .text-center must be with .rte for this to center align lists */
+.rte.text-center ul,
+.rte.text-center ol,
+.rte.text-center li {
+  margin-inline: auto;
+  width: fit-content;
+  list-style-position: inside;
+}
+
+/* so first and last items don't have vertical margin */
+.rte .metafield-rich_text_field > *:first-child {
+  margin-top: 0;
+}
+
+.rte .metafield-rich_text_field > *:last-child {
+  margin-bottom: 0;
+}

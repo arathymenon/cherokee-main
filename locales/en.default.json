@@ -1,0 +1,518 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin language editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "general": {
+    "title": {
+      "tags": "Tagged \"{{ tags }}\"",
+      "page": "Page {{ page }}"
+    },
+    "search": {
+      "breadcrumbs": {
+        "terms": "Search results for “{{ terms }}”",
+        "no_terms": "Search"
+      },
+      "search": "Search"
+    },
+    "pagination": {
+      "current_items": "{{ current }} of {{ total }}",
+      "load_more": "Load more",
+      "load_prev": "Previous page",
+      "prev_page": "Prev",
+      "next_page": "Next"
+    },
+    "product_card": {
+      "price_prefix": "Starting at"
+    }
+  },
+  "accessibility": {
+    "skip_to_text": "Skip to main content",
+    "close": "Close",
+    "unit_price_separator": "per",
+    "home": "Home",
+    "open": "Open",
+    "loading": "Loading",
+    "follow_us_on": "Follow us on {{ title }}"
+  },
+  "customer": {
+    "order": {
+      "discount": "Discount"
+    },
+    "account_fallback": "Account",
+    "log_in": "Log in",
+    "login": {
+      "title": "Log in",
+      "error_text": "Please adjust the following:",
+      "success_text": "We’ve sent you an email with a link to update your password",
+      "email_label": "Email address",
+      "email_placeholder": "Email address",
+      "password_label": "Password",
+      "password_placeholder": "Password",
+      "forgot_password_text": "Forgot Password?",
+      "create_text": "Don't have an account?",
+      "create_link_text": "Create an account",
+      "cta_text": "Log In"
+    },
+    "forgot_password": {
+      "title": "Forgot Password",
+      "sub_text": "Enter your email address below to receive an email to reset your password.",
+      "error_text": "Please adjust the following:",
+      "email_label": "Email address",
+      "email_placeholder": "Enter email",
+      "cancel_text": "Cancel",
+      "cta_text": "Reset Password"
+    },
+    "register": {
+      "title": "Create Account",
+      "login_text": "Already have an account?",
+      "login_link_text": "Log in",
+      "first_name_label": "First Name",
+      "first_name_placeholder": "First name",
+      "last_name_label": "Last Name",
+      "last_name_placeholder": "Last name",
+      "email_label": "Email Address",
+      "email_placeholder": "Email address",
+      "password_label": "Password",
+      "password_placeholder": "Your password",
+      "password_info": "Password must be at least 5 characters",
+      "newsletter_label": "Subscribe to our emails!",
+      "submit": "Create account"
+    },
+    "activate": {
+      "title": "Activate Account",
+      "sub_text": "Enter your new password.",
+      "error_text": "Please adjust the following:",
+      "password_label": "New Password",
+      "password_placeholder": "Enter Password",
+      "password_length_text": "Password must be at least 5 characters",
+      "confirm_password_label": "Confirm Password",
+      "confirm_password_placeholder": "Enter Password",
+      "cancel_text": "Cancel",
+      "cta_text": "Activate"
+    },
+    "reset-password": {
+      "title": "Reset Password",
+      "sub_text": "Enter your new password.",
+      "error_text": "Please adjust the following:",
+      "password_label": "New Password",
+      "password_placeholder": "Enter Password",
+      "password_length_text": "Password must be at least 5 characters",
+      "confirm_password_label": "Confirm Password",
+      "confirm_password_placeholder": "Enter Password",
+      "cancel_text": "Cancel",
+      "cta_text": "Reset password"
+    },
+    "account": {
+      "select_page": "Select",
+      "personal_greeting": "Welcome, {{ name }}!",
+      "greeting": "Welcome!",
+      "info": "Account information",
+      "contact_info": "Contact information",
+      "name": "Name",
+      "email": "Email",
+      "photo": "Photo",
+      "edit": "Edit",
+      "complete_profile": "Complete your profile",
+      "birthday": "Birthday",
+      "height": "Height",
+      "weight": "Weight",
+      "shirt_size": "Shirt Size",
+      "pant_length": "Pant Length",
+      "shoe_size": "Shoe Size"
+    },
+    "account_navigation": {
+      "manage_subscriptions": "Manage your subscriptions",
+      "dashboard": "Account Dashboard",
+      "addresses": "Address Book",
+      "logout": "Log Out"
+    },
+    "address": {
+      "address_book": "Address Book",
+      "view_addresses": "View addresses",
+      "default_address": "Default",
+      "address_i": "Address {{ i }}",
+      "edit": "Edit",
+      "edit_title": "Edit address",
+      "delete": "Remove",
+      "delete_title": "Remove address",
+      "delete_confirmation": "Are you sure you want to remove this address?",
+      "add": "Add New Address",
+      "first_name": "First name",
+      "last_name": "Last name",
+      "address1": "Address 1",
+      "address2": "Address 2",
+      "city": "City",
+      "country": "Country",
+      "province_state": "Province/State",
+      "zip_code": "Zip code",
+      "phone": "Phone",
+      "company": "Company",
+      "set_default": "Set as default address",
+      "cancel": "Cancel",
+      "save": "Save",
+      "no_address": "You have no address in your address book."
+    }
+  },
+  "cart": {
+    "title": "My Bag",
+    "cart_error": "Error adding to cart",
+    "selling_plan": "Plan",
+    "remove": "Remove",
+    "remove_title": "Remove {{ title }}",
+    "empty": "Your cart is empty",
+    "empty_cta": "Continue shopping",
+    "headings": {
+      "product": "Product",
+      "quantity": "Qty",
+      "total": "Total"
+    },
+    "estimated_total": "Estimated total",
+    "subtotal": "Subtotal",
+    "duties_and_taxes_included_shipping_at_checkout_with_policy_html": "Duties and taxes included. Discounts and <a href=\"{{ link }}\">shipping</a> calculated at checkout.",
+    "duties_and_taxes_included_shipping_at_checkout_without_policy": "Duties and taxes included. Discounts and shipping calculated at checkout.",
+    "taxes_included_shipping_at_checkout_with_policy_html": "Taxes included. Discounts and <a href=\"{{ link }}\">shipping</a> calculated at checkout.",
+    "taxes_included_shipping_at_checkout_without_policy": "Taxes included. Discounts and shipping calculated at checkout.",
+    "duties_included_taxes_at_checkout_shipping_at_checkout_with_policy_html": "Duties included. Taxes, discounts and <a href=\"{{ link }}\">shipping</a> calculated at checkout.",
+    "duties_included_taxes_at_checkout_shipping_at_checkout_without_policy": "Duties included. Taxes, discounts and shipping calculated at checkout.",
+    "taxes_at_checkout_shipping_at_checkout_with_policy_html": "Shipping & tax calculated at checkout.",
+    "taxes_at_checkout_shipping_at_checkout_without_policy": "Shipping & tax calculated at checkout.",
+    "checkout": "Secure Checkout",
+    "update": "Update cart",
+    "view_cart": "View cart",
+    "cart_summary": "Order summary",
+    "cart_count": {
+      "one": "{{ count }} item",
+      "other": "{{ count }} items"
+    }
+  },
+  "products": {
+    "product": {
+      "add_to_cart": "Add to bag",
+      "adding_to_cart": "Adding",
+      "added_to_cart": "In cart",
+      "choose_options": "Choose options",
+      "select_size": "Select Size",
+      "please_select": "Please Select",
+      "quantity": {
+        "quantity": "Quantity",
+        "input_label": "Quantity for {{ product }}",
+        "increase": "Increase quantity for {{ product }}",
+        "decrease": "Decrease quantity for {{ product }}",
+        "in_cart": "{{ quantity }} in cart"
+      },
+      "select_amount": "Select Amount",
+      "send_gift": "Send As Gift",
+      "gift_form": {
+        "email": "Recipient Email",
+        "name": "Recipient Name",
+        "message": "Custom Message",
+        "date": "Send on Date"
+      },
+      "pre_order_shipping_message": "Ships on {{ date }}",
+      "sold_out": "Sold out",
+      "variant_sold_out_or_unavailable": "Variant sold out or unavailable",
+      "value_unavailable": "{{ option_value }} — Unavailable",
+      "on_sale": "Sale",
+      "notify_me": "Notify Me",
+      "unavailable": "Unavailable",
+      "combination_unavailable": "Sorry, this option isn't available right now.",
+      "regular_price": "Regular",
+      "badges": {
+        "sale": "Sale",
+        "final_sale": "Final Sale",
+        "sold_out": "Sold Out",
+        "clearance": "Clearance",
+        "low_stock": "Low Stock",
+        "preorder": "Preorder"
+      },
+      "clearance_message": "Clearance while supplies last",
+      "description": "Description",
+      "shipping_returns": "Shipping & Returns",
+      "material": "Material",
+      "care": "Care",
+      "size_chart": "Size Guide",
+      "show_the_look": "Shop the look",
+      "price": {
+        "regular_price": "Regular price",
+        "sale_price": "Sale price",
+        "unit_price": "Unit price",
+        "price_range": "{{ minimum }} — {{ maximum }}"
+      },
+      "back_in_stock": {
+        "submit_button": "Notify Me",
+        "success_message": "Thank you! We will let you know when this item is back in stock.",
+        "error_message": "Something went wrong. Please check your email and try again.",
+        "email": "Email",
+        "accept_marketing": "Subscribe to newsletter",
+        "variant_name": "Product",
+        "title": "Notify Me When Back in Stock",
+        "description": "Enter your email to receive a notification when the product is back in stock."
+      },
+      "media": {
+        "play_model": "Play 3D Viewer",
+        "play_video": "Play video"
+      },
+      "quick_shop": "Quick shop"
+    },
+    "embroidery": {
+      "heading": "Embroidery",
+      "add": "+Add",
+      "starting_at": "Starting at {{ price }}/line",
+      "starting_at_prefix": "Starting at",
+      "starting_at_price": "{{ price }}/line",
+      "price_applied": "+{{ price }}",
+      "final_sale_badge": "Final Sale",
+      "lines_option": {
+        "one": "{{ count }} Line",
+        "other": "{{ count }} Lines"
+      },
+      "position": "Position",
+      "line_count": "Line Count",
+      "thread_color": "Thread Color",
+      "font": "Font",
+      "font_style": "Font Style",
+      "line": "Line {{ number }}",
+      "line_with_price": "Line {{ number }}: {{ price }}",
+      "please_select": "Please Select",
+      "select_thread_color": "Select Thread Color",
+      "select_font": "Select Font",
+      "apply": "Apply",
+      "cancel": "Cancel",
+      "edit": "Edit",
+      "remove": "Remove",
+      "tab_summary": "Summary",
+      "tab_view": "View Embroidery",
+      "tab_add": "Add Embroidery",
+      "error_max_characters": "Max characters reached",
+      "error_invalid_characters": "Special characters are limited to: ! / ' - . , &. Please remove any others.",
+      "error_field_required": "This field is required based on the line count selected",
+      "a11y_status_opened": "Embroidery personalization opened",
+      "a11y_status_applied": "Embroidery applied for {{ position }}",
+      "a11y_status_removed": "Embroidery removed for {{ position }}",
+      "a11y_status_closed": "Embroidery personalization closed",
+      "a11y_status_editing": "Editing embroidery for {{ position }}",
+      "a11y_characters": "{{ count }} of {{ max }} characters"
+    },
+    "product_section_component": {
+      "error": "Error"
+    },
+    "style_it_with": {
+      "title": "Style it with"
+    },
+    "compare": {
+      "label": "Compare",
+      "pill": "Compare Products",
+      "comparing": "Comparing",
+      "items": "Items",
+      "clear_all": "Clear All",
+      "compare_now": "Compare Now",
+      "remove": "Remove {{ title }} from comparison",
+      "empty_slot": "Empty comparison slot",
+      "title": "Comparison Table",
+      "close": "Close comparison",
+      "prev": "Previous products",
+      "next": "Next products",
+      "view_product": "View Product",
+      "remove_short": "Remove",
+      "empty_value": "——",
+      "from": "From",
+      "loading": "Loading comparison…",
+      "error": "We couldn't load the comparison. Please try again.",
+      "attr": {
+        "inseam": "Inseam",
+        "fit_style": "Fit & Style",
+        "waist_rise": "Rise",
+        "leg_shape": "Leg shape",
+        "waistline": "Waistline",
+        "sleeve_length": "Sleeve length",
+        "neckline": "Neckline",
+        "pockets": "Number of Pockets",
+        "pocket_type": "Pocket type",
+        "closure": "Closure"
+      }
+    }
+  },
+  "size_chart": {
+    "title": "Size Guide"
+  },
+  "collections": {
+    "empty_message": "Sorry, no products found"
+  },
+  "search": {
+    "search": "Search",
+    "search_results_for": "Search Results For “{{terms}}”",
+    "nothing_found_try_another": "Sorry, nothing found for {{terms}}. Please, try another keyword."
+  },
+  "facets": {
+    "filters": {
+      "open_button": "Filter",
+      "container_title": "Filter By",
+      "container_apply": "Show Results",
+      "reset_all": "Clear All",
+      "back": "Back",
+      "remove": "Clear",
+      "from": "From",
+      "to": "To",
+      "active_bar_title": "Refine by",
+      "show_more": "Show More",
+      "show_less": "Show Less",
+      "boolean_not": "Not {{ label }}"
+    },
+    "sort": {
+      "open_button": "Sort by"
+    },
+    "types": {
+      "product": "Products",
+      "page": "Pages"
+    },
+    "apply": "Apply",
+    "fits": {
+      "regular": "< 6’0”",
+      "tall": "6’1” - 6’6”",
+      "extra-tall": "> 6’6”"
+    }
+  },
+  "gift_cards": {
+    "issued": {
+      "title": "Here's your {{ value }} gift card for {{ shop }}!",
+      "subtext": "Redeem your gift card",
+      "gift_card_code": "Gift card code",
+      "shop_link": "Back to store",
+      "remaining_html": "Remaining {{ balance }}",
+      "add_to_apple_wallet": "Add to Apple Wallet",
+      "qr_image_alt": "QR code — scan to redeem gift card",
+      "copy_code": "Copy code",
+      "expired": "Expired",
+      "disabled": "Disabled",
+      "copy_code_success": "Code copied successfully",
+      "print_gift_card": "Print",
+      "redeem_html": "Use this code at checkout to redeem your {{ value }} gift card"
+    }
+  },
+  "password": {
+    "login_with_password": "Log in with password",
+    "login_form": {
+      "title": "Log In",
+      "subtext": "Enter the store password to continue.",
+      "password": "Password",
+      "submit": "Enter Site",
+      "cancel": "Cancel"
+    }
+  },
+  "sections": {
+    "predictive_search": {
+      "suggestions": "Suggestions",
+      "no_suggestions": "No suggestions",
+      "products": "Products",
+      "collections": "Collections",
+      "pages": "Pages",
+      "articles": "Articles",
+      "trending_products": "Trending Products",
+      "nothing_found_for": "Sorry, no products found for “{{ terms }}”.",
+      "check_instead": "Check out these items instead?",
+      "see_all_results_for": "Search for \"{{ terms }}\"",
+      "results_with_count": "{{ count }} results for “{{ terms }}”",
+      "no_results": "No results for “{{ terms }}”"
+    },
+    "shop_the_look": {
+      "mini_pdp": {
+        "size_guide": "Size Guide"
+      },
+      "select_size": "Select Your Size",
+      "shop_this_look": "Shop this look"
+    },
+    "header": {
+      "back": "Back",
+      "login": "Login",
+      "my_account": "My Account"
+    },
+    "size_chart": {
+      "tabs": {
+        "size_chart": "Size Guide",
+        "how_to_measure": "How to measure"
+      },
+      "switcher": {
+        "in": "IN",
+        "cm": "CM"
+      },
+      "additionals": {
+        "title": "Still unsure about your size?"
+      },
+      "not_found_title": "Not Found",
+      "not_found_info": "Size chart not found for this product"
+    },
+    "ajax_cart": {
+      "view_bag": "View Cart",
+      "remove": "Remove",
+      "upsell_title": "Need more inspiration?",
+      "button_states": {
+        "create_account": "Create Account and Checkout",
+        "checkout": "Checkout"
+      }
+    }
+  },
+  "orders": {
+    "order": {
+      "order_number": "Order",
+      "fulfillment_status": "Fulfillment status",
+      "payment_status": "Payment status",
+      "date": "Date",
+      "total": "Total",
+      "back": "Back",
+      "order_date": "Placed on",
+      "track_shipment": "Track shipment",
+      "start_return": "Start a return",
+      "billing_address": "Billing address",
+      "shipping_address": "Shipping address",
+      "products": "Products",
+      "subtotal": "Subtotal",
+      "shipping": "Shipping",
+      "tax": "Tax",
+      "cancelled_date": "Order cancelled on {{ date }}",
+      "cancelled_reason": "Reason: {{ reason }}",
+      "fulfilled_at_html": "Fulfilled {{ date }}",
+      "price": "Price",
+      "qty": "Qty",
+      "discount": "Discount",
+      "total_duties": "Duties",
+      "total_refunded": "Refunded"
+    },
+    "history": "Order History",
+    "no_orders": "You haven't placed any orders yet"
+  },
+  "shopify": {
+    "checkout": {
+      "contact": {
+        "phone_placeholder": "Shipping phone",
+        "phone_label": "Phone (required)"
+      }
+    },
+    "notices": {
+      "cart": {
+        "too_many_line_items_error": "Max quantity in cart."
+      }
+    }
+  },
+  "customer_accounts": {
+    "orders": {
+      "order_list": {
+        "sort_by": "Sorted by {{option}}"
+      }
+    }
+  },
+  "blog": {
+    "all_tags_label": "All",
+    "article": {
+      "prev_article": "Prev Article",
+      "next_article": "Next Article",
+      "prev_article_aria": "Previous article: {{ title }}",
+      "next_article_aria": "Next article: {{ title }}"
+    }
+  }
+}

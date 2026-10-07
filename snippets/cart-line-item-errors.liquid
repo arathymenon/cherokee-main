@@ -1,0 +1,16 @@
+<!-- snippet: cart-line-item-errors -->
+
+{% doc %}
+  Line-scoped error container. liquid-ajax-cart clears every
+  [data-ajax-cart-errors] at request-start and populates the matching one (keyed
+  by line_item.key) with the error text when a cart change is rejected (e.g. a
+  422 for exceeding available stock). cart-line-item-errors.js then overrides the
+  text with the localized "Max quantity in cart." copy and auto-hides it.
+
+  @param {object} line_item - Shopify cart line item (required)
+{% enddoc %}
+
+<div
+  data-ajax-cart-errors="{{ line_item.key }}"
+  data-max-qty-text="{{ 'shopify.notices.cart.too_many_line_items_error' | t }}"
+  class="text-red-error fs-body-sm font-medium"></div>

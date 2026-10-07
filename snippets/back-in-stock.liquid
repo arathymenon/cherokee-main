@@ -1,0 +1,73 @@
+<!-- snippet: back-in-stock -->
+{%- comment -%}
+  Renders the inline "Notify Me When Back in Stock" panel + submit button.
+  Always rendered by product-form inside a [data-product-fetcher-bis]
+  wrapper alongside the add-to-cart form; <product-fetcher> toggles which
+  of the two is visible (BIS only for a fully-picked unavailable variant).
+
+  Accepts:
+  - variant: {Object} the out-of-stock variant
+  - product_form_id: {String} used to scope the form ID and field IDs
+{%- endcomment -%}
+
+{%- liquid
+  assign form_id = 'back-in-stock-form-' | append: product_form_id
+  assign email_id = 'back-in-stock-email-' | append: product_form_id
+-%}
+
+<bis-form-klaviyo class="group block my-6">
+  <form id="{{ form_id }}" class="contents">
+    <input type="hidden" name="variant" value="{{ variant.id }}">
+    <input type="hidden" name="klaviyo_company_id" value="{{ settings.klaviyo_id }}">
+
+    {%- if settings.klaviyo_marketing_list_id != blank -%}
+      <input type="hidden" name="klaviyo_marketing_list_id"
+        value="{{ settings.klaviyo_marketing_list_id }}">
+    {%- endif -%}
+
+    <div class="bg-grey-light-blue rounded-theme-sm p-sm flex flex-col gap-4">
+      <div class="flex flex-col gap-2">
+        <div class="fs-body-md font-medium">
+          {{- 'products.product.back_in_stock.title' | t -}}
+        </div>
+        <div class="fs-body-sm">
+          {{- 'products.product.back_in_stock.description' | t -}}
+        </div>
+      </div>
+
+      <div class="hidden group-[[success]]:flex bg-[#006aff] text-white fs-body-sm rounded-theme-sm gap-2 items-center px-4 py-2">
+        <span class="[&_svg]:size-4 inline-flex items-center justify-center shrink-0">
+          {{- 'icon-tick.svg' | inline_asset_content -}}
+        </span>
+        <span>{{- 'products.product.back_in_stock.success_message' | t -}}</span>
+      </div>
+
+      <div class="hidden group-[[error]]:flex bg-danger text-white fs-body-sm rounded-theme-sm gap-2 items-center px-4 py-2">
+        <span>{{- 'products.product.back_in_stock.error_message' | t -}}</span>
+      </div>
+
+      <div class="input-field">
+        <label for="{{ email_id }}">
+          {{- 'products.product.back_in_stock.email' | t -}}
+        </label>
+        <input
+          id="{{ email_id }}"
+          type="email"
+          name="email"
+          autocomplete="email"
+          placeholder="{{- 'products.product.back_in_stock.email' | t -}}"
+          required
+          value="{% if customer %}{{ customer.email }}{% endif %}"
+          class="border-black">
+      </div>
+    </div>
+
+    <button
+      type="submit"
+      class="button button-lg w-full mt-6"
+      disabled
+    >
+      {{- 'products.product.back_in_stock.submit_button' | t -}}
+    </button>
+  </form>
+</bis-form-klaviyo>

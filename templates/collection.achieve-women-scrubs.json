@@ -1,0 +1,109 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "header": {
+      "type": "collection-header",
+      "settings": {
+        "color_scheme": "",
+        "image_color_scheme": "scheme-dark",
+        "width": "container",
+        "center_content": false,
+        "active_button_style": "button",
+        "linked_button_style": "button button-outline-white"
+      }
+    },
+    "products": {
+      "type": "collection-products",
+      "settings": {
+        "filter_color_scheme": "scheme-default",
+        "products_per_page": 16
+      }
+    },
+    "seo_text_4tTMd4": {
+      "type": "seo-text",
+      "name": "SEO Text",
+      "settings": {
+        "content": "{{ collection.metafields.seo.content | metafield_tag }}",
+        "color_scheme": "scheme-0d9bed0c-0f1f-4f9d-99af-d15d3a707bfd"
+      }
+    },
+    "collapsible_content_pYidBX": {
+      "type": "collapsible-content",
+      "blocks": {
+        "item_mpbg6J": {
+          "type": "item",
+          "settings": {
+            "heading": "What are Cherokee Achieve women's scrubs?",
+            "content": "Cherokee Achieve women's scrubs are athletic scrubs and active workwear built for nurses, LPNs, medical assistants, and healthcare professionals who are on their feet for 10 to 12 hours straight. The idea behind Achieve is simple: scrubs that feel like your favorite off-duty clothes and perform like the workwear they are. That starts with Comfort Pro™ — Cherokee's exclusive double-brushed performance knit — and carries through every style in the line. You've got scrub tops in V-neck and crew neck cuts, pull-on jogger pants, straight leg pants, a pintuck <a href=\"https://www.cherokeeuniforms.com/achieve-by-cherokee-womens-3-pocket-wide-leg-pant/ckck162.html\"><span style=\"text-decoration:underline\">wide leg pant</span></a>, and a warm-up jacket."
+          }
+        },
+        "item_AwULga": {
+          "type": "item",
+          "settings": {
+            "heading": "What fabric is used in Cherokee Achieve women's scrubs?",
+            "content": "Cherokee Achieve women's scrubs are made with Comfort Pro™, Cherokee's exclusive performance knit fabric. It features a double-brushed texture on both sides — soft against your skin, smooth on the outside — with 360° stretch that moves with you in every direction. The fabric is breathable, moisture-wicking, and ultra-durable, built to hold its shape through repeated washing. Comfort Pro™ also includes 40% recycled polyester, making it one of Cherokee's more sustainable fabric choices. It's easy care: machine washable with no special handling required."
+          }
+        },
+        "item_4jxeXm": {
+          "type": "item",
+          "settings": {
+            "heading": "How do Cherokee Achieve women's scrubs fit?",
+            "content": "Achieve women's scrubs are cut in relaxed, athletic-inspired silhouettes designed to move freely without excess fabric. The jogger and straight leg pants feature a yoga-style waistband with a higher rise and inner <a href=\"https://www.cherokeeuniforms.com/women-drawstring-scrub-pants\"><span style=\"text-decoration:underline\">drawstring</span></a>, so the fit stays secure through squats, bends, and 12 hours on your feet. The pintuck wide leg pant uses vertical seam details to create a long, lean silhouette. Tops range from tuck-in styles — cut shorter and fitted to stay tucked cleanly — to standard V-neck and tunic lengths with a high-low hem. Cherokee Achieve runs true to size. If you're between sizes or prefer more room through the hip and thigh, size up."
+          }
+        },
+        "item_rhJDet": {
+          "type": "item",
+          "settings": {
+            "heading": "How many pockets do Cherokee Achieve women's scrubs have?",
+            "content": "Pocket count varies by style. The Tuck-In Chest Pocket Crew Neck Top includes a functional chest pocket. The V-Neck Tunic Top has 3 pockets. For pants, both the 5-Pocket Pull-On Jogger and the 5-Pocket Straight Leg Pant include 5 pockets — enough room for your phone, badge, pen, and the essentials you reach for on every shift."
+          }
+        },
+        "item_fyJQxj": {
+          "type": "item",
+          "settings": {
+            "heading": "Who are Cherokee Achieve women's scrubs designed for?",
+            "content": "Cherokee Achieve women's scrubs are built for nurses, LPNs, RNs, medical assistants, CNAs, and other healthcare professionals who spend 10 to 12 hours on their feet in hospital, clinic, and outpatient settings. Achieve is athletic scrubs and active workwear — designed for professionals who move constantly through patient rounds, high-movement care environments, and back-to-back shifts. The athletic aesthetic means you get scrubs that feel comfortable enough to wear before and after the shift without compromising the clean, put-together look clinical settings require. If you need scrubs that can keep up with everything your shift demands without restricting how you move, Achieve was built for that."
+          }
+        },
+        "item_FDg7jH": {
+          "type": "item",
+          "settings": {
+            "heading": "How do I care for Cherokee Achieve women's scrubs?",
+            "content": "Cherokee Achieve scrubs are designed for easy, everyday care. Machine wash cold or warm with like colors. Tumble dry low. Do not bleach. The Comfort Pro™ fabric is built to maintain its softness, stretch, and color through repeated washing — so your scrubs come out of the laundry looking as good as when you first wore them. For best results, turn garments inside out before washing to protect the fabric surface and extend color life."
+          }
+        }
+      },
+      "block_order": [
+        "item_mpbg6J",
+        "item_AwULga",
+        "item_4jxeXm",
+        "item_rhJDet",
+        "item_fyJQxj",
+        "item_FDg7jH"
+      ],
+      "name": "Collapsible Content",
+      "settings": {
+        "color_scheme": "",
+        "heading": "Frequently Asked Questions",
+        "text": "",
+        "button_text": "",
+        "button_link": "",
+        "button_style": "button"
+      }
+    }
+  },
+  "order": [
+    "header",
+    "products",
+    "seo_text_4tTMd4",
+    "collapsible_content_pYidBX"
+  ]
+}

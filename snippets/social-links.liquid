@@ -1,0 +1,21 @@
+<!-- snippet: social-links -->
+<ul role="list" class="flex flex-wrap items-center gap-md">
+  {%- for link in socials.links -%}
+    {%- assign filename = 'icon-' | append: link.title | handleize | append: '.svg' -%}
+    {%- assign svg = filename | inline_asset_content -%}
+    <li>
+      <a
+        href="{{ link.url }}"
+        target="_blank"
+        rel="noopener"
+        aria-label="{{ 'accessibility.follow_us_on' | t: title: link.title }}"
+      >
+        {%- if svg != blank -%}
+          {{- svg -}}
+        {%- else -%}
+          <span class="fs-body-sm">{{- link.title | escape -}}</span>
+        {%- endif -%}
+      </a>
+    </li>
+  {%- endfor -%}
+</ul>

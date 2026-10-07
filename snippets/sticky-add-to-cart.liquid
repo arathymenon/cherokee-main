@@ -1,0 +1,83 @@
+<!-- snippet: sticky-add-to-cart -->
+{%- comment -%}
+  Renders a mobile-only sticky add-to-cart bar that mirrors the main product form.
+  Rendered inside <product-fetcher>, so variant state always matches the main button.
+
+  Behavior:
+    - Picks incomplete: button renders disabled (<product-fetcher> gates it)
+    - Variant available + fully picked: enabled bag icon + "Add to bag",
+      submits the main product form
+    - Fully picked but sold out / no variant record: bar is hidden — the BIS
+      panel / the main form's unavailable notice owns that state
+
+  The bar carries [data-product-fetcher-atc] so <product-fetcher> hides it
+  exactly when the back-in-stock or unavailable state is active.
+  The server can't decide this itself: variant is Shopify's auto-resolved
+  variant, which can be sold out mid-flow while the shopper's picks are
+  still incomplete.
+
+  Accepts:
+    - product: {Object}
+    - variant: {Object} current variant (may be null)
+    - product_form_id: {String} id of the <form> this bar submits to
+{%- endcomment -%}
+
+{%- liquid
+  assign check_against_inventory = true
+  if variant.inventory_management != 'shopify' or variant.inventory_policy == 'continue'
+    assign check_against_inventory = false
+  endif
+  if variant.quantity_rule.min > variant.inventory_quantity and check_against_inventory
+    assign quantity_rule_soldout = true
+  endif
+
+  assign is_sold_out = false
+  if variant and variant.available == false
+    assign is_sold_out = true
+  endif
+  if quantity_rule_soldout
+    assign is_sold_out = true
+  endif
+
+  # Initial server guess — same logic as product-form's show_bis;
+  # <product-fetcher> reconciles [hidden] from client pick state.
+  assign show_bis = false
+  if is_sold_out
+    if product.has_only_default_variant or product.selected_variant != blank
+      assign show_bis = true
+    endif
+  endif
+-%}
+
+<sticky-add-to-cart
+  data-product-fetcher-atc
+  {% if show_bis %}hidden{% endif %}
+  class="lg:hidden fixed inset-x-0 bottom-0 z-20 bg-white
+  border-t border-grey translate-y-full transition-transform [&[visible]]:translate-y-0" >
+    <div class="group/ajax-cart-product-form px-gutter py-3">
+      {%- comment -%}
+        Rendered even when variant is null: a nil variant usually just means
+        the picks are partial and Shopify's auto-defaulted size doesn't exist
+        for the picked color — <product-fetcher> keeps the button disabled.
+        When the shopper has FULLY picked a non-existent combination, the
+        gate hides this whole bar (it carries [data-product-fetcher-atc]) and
+        the main form's unavailable notice owns that state.
+      {%- endcomment -%}
+        <button
+          type="submit"
+          name="add"
+          form="{{ product_form_id }}"
+          class="button button-lg w-full inline-flex items-center justify-center gap-2" >
+          <span class="group-[[processing]]/ajax-cart-product-form:hidden inline-flex items-center gap-3">
+            <span class="inline-flex items-center [&_svg]:size-4">
+              {{- 'icon-bag.svg' | inline_asset_content -}}
+            </span>
+            {{- 'products.product.add_to_cart' | t -}}
+          </span>
+          <span class="hidden group-[[processing]]/ajax-cart-product-form:inline-flex items-center">
+            <span class="size-3 border border-transparent border-l-current animate-spin rounded-full inline-block me-2"></span>
+            {{- 'products.product.adding_to_cart' | t -}}
+          </span>
+        </button>
+    </div>
+  </sticky-add-to-cart>

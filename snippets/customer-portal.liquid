@@ -1,0 +1,60 @@
+<script>
+  {%- if cart.item_count > 0 -%}
+  if (window.location.search === "?from-form")
+    window.location.href = "/checkout";
+  {%- endif -%}
+</script>
+
+{%- capture account_menu -%}
+  {{ 'customer.account_navigation.dashboard' | t }}:{{routes.account_url}},
+  {{ 'customer.account_navigation.addresses' | t }}:{{routes.account_addresses_url}},
+  {{ 'customer.account_navigation.logout' | t }}:{{routes.account_logout_url}}
+{%- endcapture -%}
+{% assign account_menu = account_menu |  strip |  split: "," %}
+{% assign active_label = 'customer.account.select_page' | t %}
+{%- capture links_html -%}
+  {%- for menu_item in account_menu -%}
+    {%- liquid
+      assign label_url = menu_item | split: ":"
+      assign label = label_url.first
+      assign url = label_url.last
+      
+      assign is_active = false
+      if url == request.path
+        assign is_active = true
+      endif
+
+      assign link_class = 'customer-portal__menu-item'
+      if is_active
+        assign link_class = link_class | append: ' customer-portal__menu-item--active'
+        assign active_label = label
+      endif
+
+    -%}
+    <a href="{{ url }}" class="{{ link_class }}" data-customer-portal-menu-link
+       onclick="this.parentNode.parentElement.querySelector('[type=checkbox]').checked = false;">
+      {{ label | escape }}
+    </a>
+  {%- endfor -%}
+{%- endcapture -%}
+
+<customer-portal>
+  <div class="customer-portal">
+    <aside class="customer-portal__aside">
+      {% render 'customer-portal-title' %}
+      
+      <div class="customer-portal__menu">
+        <input id="customer-portal__menu-header" type="checkbox" hidden="hidden" data-customer-portal-menu-toggler>
+        <label class="customer-portal__menu-header" for="customer-portal__menu-header">
+          {{ active_label }}
+        </label>
+        <div class="customer-portal__menu-item-list">
+          {{ links_html }}
+        </div>
+      </div>
+    </aside>
+    <div class="customer-portal__content">
+      {{ content_for_layout }}
+    </div>
+  </div>
+</customer-portal>

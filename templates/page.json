@@ -1,0 +1,32 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "page_header": {
+      "type": "page-header",
+      "settings": {
+        "heading": "",
+        "padding_top": "pt-md",
+        "padding_bottom": "pb-sm"
+      }
+    },
+    "page_content": {
+      "type": "page-content",
+      "settings": {
+        "padding_top": "pt-sm",
+        "padding_bottom": "pb-lg"
+      }
+    }
+  },
+  "order": [
+    "page_header",
+    "page_content"
+  ]
+}

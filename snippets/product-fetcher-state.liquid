@@ -1,0 +1,55 @@
+{%- comment -%}
+  Renders JSON state for product-fetcher.
+
+  Accepts:
+  - product: {Object}
+  - variant: {Object}
+  - collection_context: {Object} optional
+  - include_public_data: {Boolean} optional — when true, include the compare
+    snapshot fields (handle, title, type, image, collection_label, url) read by
+    the product comparison flow. Note: url is always populated (unconditional
+    product field); the gated fields are handle/title/type/image/collection_label.
+    Kept off everywhere else so the state stays lean.
+{%- endcomment -%}
+
+{% comment %}
+{%- liquid
+  capture page_title_html
+    render 'layout-partials', name: 'head_title'
+  endcapture
+-%}
+{% endcomment %}
+
+{%- if include_public_data -%}
+  {%- # Cherokee stores the product's collection/brand line under metafields.meta.collection (non-standard namespace) -%}
+  {%- capture compare_collection_label -%}{{ product.metafields.meta.collection }}{%- endcapture -%}
+{%- endif -%}
+
+<script type="application/json" data-product-fetcher-state>
+  {
+    "product": {
+      "url": "{{ product.url | within: collection_context }}"
+      {%- if include_public_data -%}
+      ,
+      "handle": {{ product.handle | json }},
+      "title": {{ product.title | json }},
+      "type": {{ product.type | json }},
+      "image": {{ product.featured_image | image_url: width: 200 | json }},
+      "collection_label": {{ compare_collection_label | strip | json }}
+      {%- endif -%}
+    },
+    "page_title": {{ page_title_html | json }},
+    {%- unless variant -%}
+    "variant": null
+    {%- else -%}
+    "variant": {
+      "id": "{{ variant.id }}",
+      "available": {{ variant.available | json }},
+      "price": {{ variant.price }},
+      "compare_at_price": {{ variant.compare_at_price | default: variant.price }},
+      "sale": {{ variant.metafields.meta.sale.value | default: false | json }},
+      "final_sale": {{ variant.metafields.meta.finalSale.value | default: false | json }}
+    }
+    {%- endunless -%}
+  }
+</script>

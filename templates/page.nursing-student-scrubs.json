@@ -1,0 +1,274 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "page_header": {
+      "type": "page-header",
+      "disabled": true,
+      "settings": {
+        "heading": "",
+        "padding_top": "pt-md",
+        "padding_bottom": "pb-sm"
+      }
+    },
+    "hero_banner_Hj4bPG": {
+      "type": "hero-banner",
+      "name": "Hero Banner",
+      "settings": {
+        "color_scheme": "scheme-dark",
+        "transparent_header": false,
+        "width": "full-width",
+        "add_padding": false,
+        "section_height": 50,
+        "horizontal_position": "justify-center",
+        "vertical_position": "items-center",
+        "text_alignment": "text-center",
+        "image": "shopify://shop_images/ck-hero-nursing-student-3x1-2026.jpg",
+        "overlay_color": "#000000",
+        "overlay_opacity": 10,
+        "eyebrow": "",
+        "heading": "Nursing Student Scrubs",
+        "use_h1": true,
+        "heading_tag": "2",
+        "content_image_max_height": 80,
+        "richtext": "",
+        "fine_print": "",
+        "button_1_text": "",
+        "button_1_link": "",
+        "button_1_style": "button",
+        "button_2_text": "",
+        "button_2_link": "",
+        "button_2_style": "button button-outline-white"
+      }
+    },
+    "page_content": {
+      "type": "page-content",
+      "settings": {
+        "padding_top": "pt-sm",
+        "padding_bottom": "pb-lg"
+      }
+    },
+    "shop_by_color_tetyMQ": {
+      "type": "shop-by-color",
+      "blocks": {
+        "collection_FBkKy7": {
+          "type": "collection",
+          "settings": {
+            "collection": "womens-royal-blue-scrubs",
+            "label_override": "",
+            "color_override": ""
+          }
+        },
+        "collection_Tm9tC8": {
+          "type": "collection",
+          "settings": {
+            "collection": "womens-ceil-blue-scrubs",
+            "label_override": "",
+            "color_override": ""
+          }
+        },
+        "collection_RVNYW8": {
+          "type": "collection",
+          "settings": {
+            "collection": "womens-navy-blue-scrubs",
+            "label_override": "",
+            "color_override": ""
+          }
+        },
+        "collection_j7qUyW": {
+          "type": "collection",
+          "settings": {
+            "collection": "womens-black-scrubs",
+            "label_override": "",
+            "color_override": ""
+          }
+        },
+        "collection_UyJdq8": {
+          "type": "collection",
+          "settings": {
+            "collection": "womens-white-scrubs",
+            "label_override": "",
+            "color_override": ""
+          }
+        },
+        "collection_K3DzyK": {
+          "type": "collection",
+          "settings": {
+            "collection": "womens-grey-scrubs",
+            "label_override": "",
+            "color_override": ""
+          }
+        },
+        "collection_aLTN7h": {
+          "type": "collection",
+          "settings": {
+            "collection": "womens-caribbean-blue-scrubs",
+            "label_override": "",
+            "color_override": ""
+          }
+        },
+        "collection_8YCb9J": {
+          "type": "collection",
+          "settings": {
+            "collection": "womens-teal-scrubs",
+            "label_override": "",
+            "color_override": ""
+          }
+        },
+        "collection_NqUGqn": {
+          "type": "collection",
+          "settings": {
+            "collection": "womens-green-scrubs",
+            "label_override": "",
+            "color_override": ""
+          }
+        },
+        "collection_wAJH6C": {
+          "type": "collection",
+          "settings": {
+            "collection": "womens-wine-scrubs",
+            "label_override": "",
+            "color_override": ""
+          }
+        },
+        "collection_jDVwkR": {
+          "type": "collection",
+          "settings": {
+            "collection": "womens-red-scrubs",
+            "label_override": "",
+            "color_override": ""
+          }
+        }
+      },
+      "block_order": [
+        "collection_FBkKy7",
+        "collection_Tm9tC8",
+        "collection_RVNYW8",
+        "collection_j7qUyW",
+        "collection_UyJdq8",
+        "collection_K3DzyK",
+        "collection_aLTN7h",
+        "collection_8YCb9J",
+        "collection_NqUGqn",
+        "collection_wAJH6C",
+        "collection_jDVwkR"
+      ],
+      "name": "Shop by Color",
+      "settings": {
+        "color_scheme": "",
+        "eyebrow": "",
+        "heading": "Need Your School's Color?",
+        "richtext": "Start clinicals looking (and feeling) prepared. Shop scrubs in your required color, made to survive daily washing and long shifts.",
+        "products_to_show": 12,
+        "loop": false,
+        "button_text": "Shop all",
+        "slides_per_view_tablet": 2,
+        "slides_per_view_laptop": 3,
+        "slides_per_view_desktop": 4
+      }
+    },
+    "shop_the_look_wC6t6W": {
+      "type": "shop-the-look",
+      "blocks": {
+        "slide_xBzpN3": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/ck-wworiginals-4700_4200_ck773_look.jpg",
+            "product_1": "womens-v-neck-2-pocket-solid-scrub-top-ck4700",
+            "product_1_color_label": "teal blue",
+            "product_2": "womens-scrubs-elastic-waist-utility-scrub-pants-ck4200",
+            "product_2_color_label": "teal blue",
+            "product_3": "womens-long-sleeve-underscrub-knit-tee-ckck773",
+            "product_3_color_label": "white"
+          }
+        },
+        "slide_3adanf": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/ck-ww-revolution-ww620_ww120_look.jpg",
+            "product_1": "womens-3-pocket-v-neck-stretch-scrub-top-ckww620",
+            "product_1_color_label": "white",
+            "product_2": "womens-drawstring-flare-scrub-pant-ckww120",
+            "product_2_color_label": "white",
+            "product_3": "",
+            "product_3_color_label": ""
+          }
+        },
+        "slide_WrjDpp": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/ck-wwrevolution-ww620_ww120_look.jpg",
+            "product_1": "womens-3-pocket-v-neck-stretch-scrub-top-ckww620",
+            "product_1_color_label": "navy",
+            "product_2": "womens-drawstring-flare-scrub-pant-ckww120",
+            "product_2_color_label": "navy",
+            "product_3": "womens-long-sleeve-underscrub-knit-tee-ckck773",
+            "product_3_color_label": "white"
+          }
+        }
+      },
+      "block_order": [
+        "slide_xBzpN3",
+        "slide_3adanf",
+        "slide_WrjDpp"
+      ],
+      "name": "Shop the Look",
+      "settings": {
+        "color_scheme": "scheme-default",
+        "card_color_scheme": "scheme-0d9bed0c-0f1f-4f9d-99af-d15d3a707bfd",
+        "heading": "Shop The Look",
+        "richtext": "Three outfits, curated and ready to shop."
+      }
+    },
+    "featured_collection_XPDYEx": {
+      "type": "featured-collection",
+      "name": "Featured collection",
+      "settings": {
+        "color_scheme": "",
+        "heading": "Reliable. Relaxed. Ready for Clinicals.",
+        "text": "<strong>WORKWEAR ORIGINALS: </strong>durable poly-cotton that resists fading and shrinking, with a relaxed fit built for all-day comfort in clinical settings.",
+        "collection": "workwear-originals-womens-scrubs",
+        "products_to_show": 12,
+        "loop": false,
+        "button_link": "shopify://collections/workwear-originals-womens-scrubs",
+        "button_text": "Shop All",
+        "slides_per_view_tablet": 2,
+        "slides_per_view_laptop": 3,
+        "slides_per_view_desktop": 4
+      }
+    },
+    "featured_collection_aTABwz": {
+      "type": "featured-collection",
+      "name": "Featured collection",
+      "settings": {
+        "color_scheme": "",
+        "heading": "Stretch That Keeps Up With You",
+        "text": "<strong>WORKWEAR REVOLUTION: </strong>soft, cloud-like fabric with two-way stretch for all-day movement. Inclusive sizing from XXS to 6XL, plus maternity styles.",
+        "collection": "workwear-revolution-womens-scrubs",
+        "products_to_show": 12,
+        "loop": false,
+        "button_link": "shopify://collections/workwear-revolution-womens-scrubs",
+        "button_text": "Shop All",
+        "slides_per_view_tablet": 2,
+        "slides_per_view_laptop": 3,
+        "slides_per_view_desktop": 4
+      }
+    }
+  },
+  "order": [
+    "page_header",
+    "hero_banner_Hj4bPG",
+    "page_content",
+    "shop_by_color_tetyMQ",
+    "shop_the_look_wC6t6W",
+    "featured_collection_XPDYEx",
+    "featured_collection_aTABwz"
+  ]
+}

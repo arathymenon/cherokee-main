@@ -1,0 +1,86 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "settings": {
+        "incentive_1_image": "shopify://shop_images/icon-truck.png",
+        "incentive_1_text": "Free shipping over $79",
+        "incentive_2_image": "shopify://shop_images/icon-package.png",
+        "incentive_2_text": "30 days Free Return Policy"
+      }
+    },
+    "size_guide": {
+      "type": "size-guide",
+      "settings": {}
+    },
+    "complete_the_look_UF49Jd": {
+      "type": "complete-the-look",
+      "name": "Complete the look",
+      "settings": {
+        "color_scheme": "",
+        "heading": "Wear it with",
+        "products_to_show": 4
+      }
+    },
+    "product_reviews_KizP3b": {
+      "type": "product-reviews",
+      "blocks": {
+        "reviews_yftLap": {
+          "type": "reviews",
+          "settings": {
+            "heading": "Customer Reviews",
+            "instance_id": "1307631"
+          }
+        },
+        "qa_TDYrfL": {
+          "type": "qa",
+          "settings": {
+            "heading": "Questions & Answers",
+            "instance_id": "1319640"
+          }
+        }
+      },
+      "block_order": [
+        "reviews_yftLap",
+        "qa_TDYrfL"
+      ],
+      "name": "Product Reviews",
+      "settings": {
+        "section_id": "yotpoReviewsWidget",
+        "color_scheme": "",
+        "max_width": "container",
+        "max_width_custom": "",
+        "side_padding": true,
+        "min_height": "",
+        "heading": "",
+        "heading_size": "2",
+        "align_text": "left",
+        "tab1_label": "Reviews",
+        "tab2_label": "Q&A"
+      }
+    },
+    "product_recommendations_M7gaFy": {
+      "type": "product-recommendations",
+      "name": "Product recommendations",
+      "settings": {
+        "title": "You may also like"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "size_guide",
+    "complete_the_look_UF49Jd",
+    "product_reviews_KizP3b",
+    "product_recommendations_M7gaFy"
+  ]
+}

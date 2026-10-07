@@ -1,0 +1,64 @@
+<recipient-form class="product__gift-block">
+  <div class="form-element form-element--bool">
+    <input
+      type="checkbox"
+      name="properties[__shopify_send_gift_card_to_recipient]"
+      id="product-gift-checkbox-{{ product.id }}"
+      data-recipient-form-toggler
+    >
+    <label for="product-gift-checkbox-{{ product.id }}">
+      {{- 'products.product.send_gift' | t -}}
+    </label>
+  </div>
+
+  <div class="form-section" data-recipient-form-inputs>
+    <input
+      type="hidden"
+      name="properties[__shopify_offset]"
+      value=""
+      disabled
+      data-recipient-form-offset
+    >
+    <div class="input-field">
+      <input
+        required
+        disabled
+        name="properties[Recipient email]"
+        type="email"
+        id="gift-email"
+        placeholder="{{ 'products.product.gift_form.email' | t }}"
+      >
+      <label for="gift-email">{{ 'products.product.gift_form.email' | t }}</label>
+    </div>
+    <div class="input-field">
+      <input
+        disabled
+        name="properties[Recipient name]"
+        type="text"
+        id="gift-name"
+        placeholder="{{ 'products.product.gift_form.name' | t }}"
+      >
+      <label for="gift-name">{{ 'products.product.gift_form.name' | t }}</label>
+    </div>
+    <div class="input-field">
+      <input
+        disabled
+        name="properties[Send on]"
+        type="date"
+        id="gift-date"
+        placeholder="{{ 'products.product.gift_form.date' | t }}"
+      >
+      <label for="gift-date">{{ 'products.product.gift_form.date' | t }}</label>
+    </div>
+    <div>
+      <label class="form-element" for="gift-message">{{ 'products.product.gift_form.message' | t }}</label>
+      <textarea
+        rows="4"
+        disabled
+        name="properties[Message]"
+        class="form-element"
+        id="gift-message"
+      ></textarea>
+    </div>
+  </div>
+</recipient-form>

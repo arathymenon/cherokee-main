@@ -1,0 +1,34 @@
+{% comment %}
+  Renders a button class for hero banner
+  Accepts:
+  - color: {String} 'main' | 'dark' | 'white'
+  - button_type {String} 'full-pill' | 'border-pill' | 'underline'
+
+  Usage:
+  {%- render 'get-button-class', color: 'main', button_type: 'full-pill' -%}
+{% endcomment %}
+
+{%- liquid
+  case color
+    when 'main', 'dark'
+      case button_type
+        when 'full-pill'
+          echo 'button'
+        when 'border-pill'
+          echo 'button button-outline-black'
+        when 'underline'
+          echo 'underline-button'
+      endcase
+    when 'white'
+      case button_type
+        when 'full-pill'
+          echo 'button button-secondary'
+        when 'border-pill'
+          echo 'button button-outline-white'
+        when 'underline'
+          echo 'underline-button'
+      endcase
+    else
+      echo 'button'
+  endcase
+-%}

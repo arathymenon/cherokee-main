@@ -1,0 +1,52 @@
+<!-- snippet: product-options-list -->
+{%- comment %}
+  Renders the full list of product options (e.g. Color, Size).
+  Loops through product.options_with_values and renders each
+  with the product-options snippet.
+
+  Accepts:
+  - product: {Object}
+  - collection_context: {Object} optional
+  - hide_size_guide: {Boolean} optional - when true, the Size Guide button is not rendered
+  - is_main_product_form: {Boolean} optional - true only for the main PDP form;
+    enables ?variant= deep-link preselection of size/inseam in product-options
+{%- endcomment %}
+
+{%- unless product.has_only_default_variant -%}
+  {%- for option in product.options_with_values -%}
+    {%- capture prefix_html %}
+      <div class="flex justify-between gap-3 mb-2">
+
+        <legend class="">
+          {%- render 'product-option-legend', product_option: option -%}
+        </legend>
+
+        {%- if option.name == 'Size' and product.metafields.meta.sizeChart != blank and hide_size_guide != true -%}
+          <div class="fs-body-sm">
+            <html-fetcher-trigger
+              selector="#size-guide-dialog html-fetcher"
+              href="{{ product.url }}"
+              data-vegax-command="show-modal"
+              data-vegax-commandfor="size-guide-dialog">
+              <button type="button" class="underline">
+                {{- 'size_chart.title' | t -}}
+              </button>
+            </html-fetcher-trigger>
+          </div>
+        {%- endif -%}
+
+      </div>
+    {%- endcapture -%}
+
+    <div class="mb-6">
+      {%- render 'product-options',
+        product: product,
+        collection_context: collection_context,
+        product_option: option,
+        picker_type: 'radio',
+        prefix_html: prefix_html,
+        is_main_product_form: is_main_product_form
+      -%}
+    </div>
+  {%- endfor -%}
+{%- endunless -%}

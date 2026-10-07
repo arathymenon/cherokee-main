@@ -1,0 +1,78 @@
+<!-- section: main-cart -->
+{%- liquid
+  assign cart_form_id = 'cart_page_form'
+
+  capture line_item_list_html
+    render 'cart-line-item-list'
+  endcapture
+
+  capture cart_footer_html
+    render 'cart-footer', cart_form_id: cart_form_id
+  endcapture
+-%}
+{%- capture item_count -%}
+  {%- render 'cart-display-count' -%}
+{%- endcapture -%}
+{%- assign item_count = item_count | strip | plus: 0 -%}
+
+{%- # title -%}
+<div class="container">
+  <h1 class="fs-display-2 mb-4" data-ajax-cart-section>{{ 'cart.title' | t }} ({{ item_count }})</h1>
+</div>
+
+{%- # content -%}
+<div class="container mb-6 md:mb-16 xl:mb-20">
+  <div class="lg:flex lg:gap-8 xl:gap-20">
+
+    {%- # main column -%}
+    <div class="flex-1" data-ajax-cart-section>
+      {%- if item_count > 0 -%}
+        {%- form 'cart', cart, id: cart_form_id -%}
+          {{- line_item_list_html -}}
+        {%- endform -%}
+      {%- else -%}
+        <div>{{ 'cart.empty' | t }}</div>
+      {%- endif -%}
+    </div>
+
+    {%- # side column -%}
+    <div
+      class="
+        pt-4 border-t border-black border-solid
+        lg:pt-0 lg:border-0 lg:w-80 lg:shrink-0
+        xl:w-96
+        has-[[data-ajax-cart-section]:empty]:hidden
+      "
+    >
+      <div class="sr-only lg:not-sr-only">
+        <div class="mb-4">
+          {{- 'cart.cart_summary' | t -}}
+        </div>
+      </div>
+      <div data-ajax-cart-section>
+        {%- if item_count > 0 -%}
+          {{- cart_footer_html -}}
+        {%- endif -%}
+      </div>
+      {%- comment -%}
+        Additional checkout buttons should be outside of the data-ajax-cart-section
+        because there is no way to reinitialize the PayPal buttons iframe
+        when the iframe gets removed and re-added to the DOM.
+      {%- endcomment -%}
+      {%- if additional_checkout_buttons -%}
+        <div class="mt-3">
+          {{- content_for_additional_checkout_buttons -}}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+<script type="application/json" data-ajax-cart-initial-state>{{ cart | json }}</script>
+
+{% schema %}
+{
+  "name": "Cart page",
+  "settings": []
+}
+{% endschema %}

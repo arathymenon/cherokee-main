@@ -1,0 +1,67 @@
+<!-- section: main-product-redirect -->
+
+{%- liquid
+  # Assign the product.redirect template to a product to send visitors to a
+  # collection instead of showing the product page. Used for discontinued
+  # products whose URLs still receive traffic. Liquid cannot send an HTTP
+  # redirect, so this relies on a meta refresh with a JavaScript fallback,
+  # and the layout marks the page noindex.
+  assign s = section.settings
+  assign target_collection = s.collection
+
+  if target_collection != blank
+    assign redirect_url = target_collection.url
+    assign redirect_label = target_collection.title
+  else
+    assign redirect_url = routes.all_products_collection_url
+    assign redirect_label = 'Shop All'
+  endif
+-%}
+
+{%- unless request.design_mode -%}
+  <meta http-equiv="refresh" content="0; url={{ redirect_url }}">
+  <script>window.location.replace({{ redirect_url | json }});</script>
+{%- endunless -%}
+
+<section class="py-section">
+  <div class="container flex flex-col items-center text-center">
+    {%- if request.design_mode -%}
+      <div class="rte text-pretty mb-md max-w-xl">
+        <p>Products using this template redirect to <strong>{{ redirect_label | escape }}</strong>. The redirect is paused in the theme editor.</p>
+      </div>
+    {%- else -%}
+      {%- if s.message != blank -%}
+        <div class="rte text-pretty mb-md max-w-xl">
+          {{- s.message | escape -}}
+        </div>
+      {%- endif -%}
+      <a class="button button-lg" href="{{ redirect_url }}">
+        {{- redirect_label | escape -}}
+      </a>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Product redirect",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Assign the \"redirect\" product template to a product to send visitors to the collection below instead of the product page."
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Redirect to collection",
+      "info": "Defaults to the Shop All collection when empty."
+    },
+    {
+      "type": "text",
+      "id": "message",
+      "label": "Fallback message",
+      "default": "This product is no longer available. Taking you to our full collection."
+    }
+  ]
+}
+{% endschema %}

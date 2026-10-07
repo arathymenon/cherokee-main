@@ -1,0 +1,430 @@
+{%- comment -%}
+  Renders facets (filtering and sorting)
+
+  Accepts:
+  - results: {Object} Collection or Search object
+
+  Usage:
+  {%- render 'facets', results: collection -%}
+{%- endcomment -%}
+
+{%- liquid
+  assign has_active_values = false
+  assign reset_filters_url = results.url
+  if reset_filters_url
+    if results.sort_by != ''
+      assign reset_filters_url = reset_filters_url | append: '?sort_by=' | append: results.sort_by
+    endif
+  else
+    assign terms = results.terms | escape
+    assign reset_filters_url = '?q=' | append: terms | append: '&options%5Bprefix%5D=last&type=product&sort_by=' | append: results.sort_by
+  endif
+
+  assign sort_toggle_label = '<span data-facets-form-sort-label></span>'
+  if results.sort_by != ''
+    assign current_sort_option = results.sort_options | where: 'value', results.sort_by | first
+    if current_sort_option.name
+      assign sort_toggle_label = '<span data-facets-form-sort-label>: ' | append: current_sort_option.name | append: '</span>'
+    endif
+  endif
+
+  assign available_types = 'product,page' | split: ','
+-%}
+
+{%- capture sort_options_html -%}
+  {%- for option in results.sort_options -%}
+      <label>
+        <input
+          type="radio"
+          name="sort_by"
+          data-facets-form-input
+          value="{{ option.value | escape }}"
+          data-label="{{ option.name | escape }}"
+          {% if option.value == results.sort_by %}checked{% endif %} />
+        <span>{{ option.name | escape }}</span>
+      </label>
+  {%- endfor -%}
+{%- endcapture -%}
+
+<input type="checkbox" id="facets-form-toggle-checkbox">
+<div class="facets-bar">
+  {%- if results.terms -%}
+    <div class="facets-bar__types-bar">
+      {%- for available_types_item in available_types -%}
+        {%- liquid
+          assign is_only_active_type = false
+          if results.types.size == 1 and results.types[0] == available_types_item
+            assign is_only_active_type = true
+          endif
+
+          assign is_active_type = false
+          if results.types.size == 0 or results.types contains available_types_item
+            assign is_active_type = true
+          endif
+        -%}
+
+        <form class="facets-bar__types-bar-item-wrapper">
+          <input type="hidden" name="q" value="{{ results.terms | escape }}">
+          <input name="options[prefix]" type="hidden" value="last">
+          <input type="hidden" name="type" value="{{ available_types_item }}">
+          <button
+            type="submit"
+            class="facets-bar__types-bar-item {% if is_active_type %}facets-bar__types-bar-item--active{% endif %}"
+          >
+            {{ 'facets.types.' | append: available_types_item | t }}
+            {%- if is_only_active_type -%}
+              <span data-facets-form-content="current-count">
+                <span
+                  class="facets-bar__types-bar-item-count"
+                  data-facets-form-count-type="{{ available_types_item }}"
+                >
+                  <span>({{ results.results_count }})</span>
+                </span>
+              </span>
+            {%- else -%}
+              <facet-form-count
+                class="facets-bar__types-bar-item-count"
+                data-facets-form-count-type="{{ available_types_item }}"
+                {% if results.results_count == 0 %}
+                  data-facets-form-count-redirect
+                {% endif %}
+              ></facet-form-count>
+            {%- endif -%}
+          </button>
+        </form>
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+
+  {%- if search.filters != empty -%}
+    <facets-form>
+      <form>
+        {%- if results.current_vendor or results.current_type -%}
+          <input type="hidden" name="q" value="{{ results.current_vendor }}{{ results.current_type }}">
+        {%- endif -%}
+
+        <div>
+          {%- if results.terms -%}
+            <input type="hidden" name="q" value="{{ results.terms | escape }}">
+            <input name="options[prefix]" type="hidden" value="last">
+            {%- if results.types.size > 0 -%}
+              <input type="hidden" name="type" value="{{ results.types | join: ',' }}">
+            {%- endif -%}
+          {%- endif -%}
+
+          <input
+            type="radio"
+            class="facets-bar__popup-toggle-radio"
+            name="facets-bar__popup-toggle-radio"
+            id="facets-bar__popup-toggle-radio--none"
+            checked
+          >
+          <label class="facets-bar__global-overlay" for="facets-bar__popup-toggle-radio--none">
+            {{ 'accessibility.close' | t }}
+          </label>
+        </div>
+
+        <div class="facets-bar__wrapper">
+          <div class="facets-bar__filters-wrapper">
+            <label class="facets-bar__filters-toggle-button" for="facets-form-toggle-checkbox">
+              <span>{{- 'facets.filters.open_button' | t -}}</span>
+            </label>
+            <div class="facets-bar__filters-container">
+              <label
+                class="facets-bar__filters-container-close"
+                data-facets-form-loading-class="facets-bar__filters-container-close--loading"
+                for="facets-form-toggle-checkbox"
+              >
+                {{ 'accessibility.close' | t }}
+              </label>
+
+              <div class="facets-bar__filters-container-header">
+                <div class="facets-bar__filters-container-title">
+                  {{- 'facets.filters.container_title' | t -}}
+                </div>
+                <a href="{{ reset_filters_url }}" class="facets-bar__filter-reset-all" data-facets-form-link>
+                  {{ 'facets.filters.reset_all' | t }}
+                </a>
+              </div>
+              <div class="facets-bar__filters-list">
+                {%- for filter in results.filters -%}
+                  {%- liquid
+                    assign filter_summary = ''
+                    assign columns = 1
+                    if filter.type == 'price_range'
+                      assign currencies_using_comma_decimals = 'ANG,ARS,BRL,BYN,BYR,CLF,CLP,COP,CRC,CZK,DKK,EUR,HRK,HUF,IDR,ISK,MZN,NOK,PLN,RON,RUB,SEK,TRY,UYU,VES,VND' | split: ','
+                      assign uses_comma_decimals = false
+                      if currencies_using_comma_decimals contains cart.currency.iso_code
+                        assign uses_comma_decimals = true
+                      endif
+
+                      assign from_value = ''
+                      if filter.min_value.value
+                        if uses_comma_decimals
+                          assign from_value = filter.min_value.value | money_without_currency | replace: '.', '' | replace: ',', '.'
+                        else
+                          assign from_value = filter.min_value.value | money_without_currency | replace: ',', ''
+                        endif
+                        assign filter_summary = 'facets.filters.from' | t | append: ': ' | append: cart.currency.symbol | append: from_value
+                      endif
+
+                      assign to_value = ''
+                      if filter.max_value.value
+                        if uses_comma_decimals
+                          assign to_value = filter.max_value.value | money_without_currency | replace: '.', '' | replace: ',', '.'
+                        else
+                          assign to_value = filter.max_value.value | money_without_currency | replace: ',', ''
+                        endif
+                        if filter_summary != ''
+                          assign filter_summary = filter_summary | append: ', '
+                        endif
+                        assign to_value_t = 'facets.filters.to' | t
+                        assign filter_summary = filter_summary | append: to_value_t | append: ': ' | append: cart.currency.symbol | append: to_value
+                      endif
+
+                      assign range_max = ''
+                      if uses_comma_decimals
+                        assign range_max = filter.range_max | money_without_currency | replace: '.', '' | replace: ',', '.'
+                      else
+                        assign range_max = filter.range_max | money_without_currency | replace: ',', ''
+                      endif
+                    else
+                      assign filter_summary = filter.active_values | map: 'label' | join: ', ' | escape
+                      assign columns = filter.values.size | divided_by: 12.0 | ceil
+                      if columns > 4
+                        assign columns = 4
+                      endif
+                    endif
+
+                    if filter_summary != ''
+                      assign has_active_values = true
+                    endif
+                  -%}
+                  <div
+                    class="facets-bar__filter"
+                    {% comment %} data-facets-form-content="filter-block-{{ forloop.index }}" {% endcomment %}
+                  >
+                    <input
+                      type="radio"
+                      class="facets-bar__popup-toggle-radio"
+                      name="facets-bar__popup-toggle-radio"
+                      id="facets-bar__popup-toggle-radio--{{ forloop.index }}"
+                    >
+                    <div class="facets-bar__filter-title-wrapper">
+                      <div class="facets-bar__filter-title">
+                        {{- filter.label | escape -}}
+                      </div>
+                      <div
+                        class="facets-bar__filter-summary"
+                        data-facets-form-content="filter-status-{{ forloop.index }}"
+                      >
+                        {{- filter_summary -}}
+                      </div>
+                      <label
+                        class="facets-bar__popup-label-trigger facets-bar__popup-label-trigger--open"
+                        for="facets-bar__popup-toggle-radio--{{ forloop.index }}"
+                      >
+                        {{ 'accessibility.open' | t }}
+                        {{ filter.label | escape }}
+                      </label>
+                      <label
+                        class="facets-bar__popup-label-trigger facets-bar__popup-label-trigger--close"
+                        for="facets-bar__popup-toggle-radio--none"
+                      >
+                        {{ 'accessibility.close' | t }}
+                        {{ filter.label | escape }}
+                      </label>
+                    </div>
+                    <div class="facets-bar__filter-block">
+                      <label class="facets-bar__filter-block-back" for="facets-bar__popup-toggle-radio--none">
+                        {{- 'facets.filters.back' | t -}}
+                      </label>
+                      <label
+                        class="facets-bar__filters-container-close"
+                        data-facets-form-loading-class="facets-bar__filters-container-close--loading"
+                        for="facets-form-toggle-checkbox"
+                      >
+                        {{- 'accessibility.close' | t -}}
+                      </label>
+                      <div class="facets-bar__filter-block-header">
+                        <div class="facets-bar__filter-block-title">
+                          {{- filter.label | escape -}}
+                        </div>
+                        <span data-facets-form-content="filter-reset-{{ forloop.index }}">
+                          {%- if filter.active_values.size > 0
+                            or filter.min_value.value > -1
+                            or filter.max_value.value > -1
+                          -%}
+                            <a
+                              href="{{ filter.url_to_remove }}"
+                              class="facets-bar__filter-block-reset"
+                              data-facets-form-link
+                            >
+                              {{ 'facets.filters.remove' | t }}
+                            </a>
+                          {%- endif -%}
+                        </span>
+                      </div>
+                      <div
+                        class="facets-bar__filter-block-content"
+                        data-facets-form-content="filter-child-block-{{ forloop.index }}"
+                        {% if columns > 1 %}
+                          style="columns: {{ columns }}"
+                        {% endif %}
+                      >
+                        {%- case filter.type -%}
+                          {%- when 'boolean' -%}
+                            {%- render 'filter-boolean-values', filter: filter -%}
+                          {%- when 'list' -%}
+                            {%- liquid
+                              assign filter_label_handle = filter.label | handle
+                              if filter_label_handle == 'size'
+                                render 'filter-size-list', filter: filter
+                              else
+                                for value in filter.values
+                                  render 'filter-list-value', filter: filter, value: value
+                                endfor
+                              endif
+                            -%}
+                          {%- when 'price_range' -%}
+                            <div
+                              data-facets-form-content="filter-block-{{ forloop.index }}"
+                            >
+                              <price-range class="facets-bar__price-group">
+                                <div class="facets-bar__price-item">
+                                  <label
+                                    for="Filter-{{ filter.label | escape | handle }}-GTE"
+                                  >
+                                    {{- cart.currency.symbol -}}
+                                  </label>
+                                  <input
+                                    data-facets-form-input
+                                    name="{{ filter.min_value.param_name }}"
+                                    id="Filter-{{ filter.label | escape | handle }}-GTE"
+                                    value="{{ from_value }}"
+                                    type="number"
+                                    placeholder="{{ 'facets.filters.from' | t }}"
+                                    min="0"
+                                    max="{{ range_max }}"
+                                  >
+                                </div>
+
+                                <div class="facets-bar__price-item">
+                                  <label
+                                    for="Filter-{{ filter.label | escape | handle }}-LTE"
+                                  >
+                                    {{- cart.currency.symbol -}}
+                                  </label>
+                                  <input
+                                    data-facets-form-input
+                                    name="{{ filter.max_value.param_name }}"
+                                    id="Filter-{{ filter.label | escape | handle }}-LTE"
+                                    value="{{ to_value }}"
+                                    type="number"
+                                    min="0"
+                                    max="{{ range_max }}"
+                                    placeholder="{{ 'facets.filters.to' | t }}"
+                                  >
+                                </div>
+                              </price-range>
+                            </div>
+                        {%- endcase -%}
+                      </div>
+                      <div class="facets-bar__filter-block-footer">
+                        <button type="submit" class="primary-button">
+                          {{- 'facets.apply' | t -}}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                {%- endfor -%}
+              </div>
+              <div class="facets-bar__filters-container-footer">
+                <button type="submit" class="primary-button">
+                  {{ 'facets.filters.container_apply' | t }}
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="facets-bar__sort-wrapper"
+            data-facets-form-content="sort-block"
+          >
+            <input
+              type="radio"
+              name="facets-bar__popup-toggle-radio"
+              class="facets-bar__popup-toggle-radio"
+              id="facets-bar__popup-toggle-radio--sort"
+            >
+            <div
+              class="facets-bar__sort-toggle-button"
+            >
+              <span>
+                {{ 'facets.sort.open_button' | t -}}
+                <span>{{ sort_toggle_label }}</span>
+              </span>
+              <label
+                class="facets-bar__popup-label-trigger facets-bar__popup-label-trigger--open"
+                for="facets-bar__popup-toggle-radio--sort"
+              >
+                {{ 'accessibility.open' | t }}
+                {{ 'facets.sort.open_button' | t }}
+              </label>
+              <label
+                class="facets-bar__popup-label-trigger facets-bar__popup-label-trigger--close"
+                for="facets-bar__popup-toggle-radio--none"
+              >
+                {{ 'accessibility.close' | t }}
+                {{ 'facets.sort.open_button' | t }}
+              </label>
+            </div>
+            <div class="facets-bar__sort-container">
+              {{ sort_options_html }}
+              <div class="facets-bar__sort-submit">
+                <button class="primary-button" type="submit">{{ 'facets.apply' | t }}</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </facets-form>
+  {%- endif -%}
+
+  <div data-facets-form-content="active-filters">
+    {%- if has_active_values -%}
+      <div class="facets-bar__active-bar" data-facets-form-loading-class="facets-bar__active-bar--loading">
+        <div class="facets-bar__active-bar-title">{{ 'facets.filters.active_bar_title' | t }}:</div>
+        {%- for filter in results.filters -%}
+          {%- for value in filter.active_values -%}
+            <a href="{{ value.url_to_remove }}" class="facets-bar__active-bar-item" data-facets-form-link>
+              {%- render 'filter-active-value-label', filter: filter, value: value -%}
+            </a>
+          {%- endfor -%}
+          {%- if filter.type == 'price_range' -%}
+            {%- if filter.min_value.value != null or filter.max_value.value != null -%}
+              <a href="{{ filter.url_to_remove }}" class="facets-bar__active-bar-item" data-facets-form-link>
+                {%- liquid
+                  if filter.min_value.value
+                    echo filter.min_value.value | money
+                  else
+                    echo '0' | money
+                  endif
+                  echo '—'
+                  if filter.max_value.value
+                    echo filter.max_value.value | money
+                  else
+                    echo filter.range_max | money
+                  endif
+                -%}
+              </a>
+            {%- endif -%}
+          {%- endif -%}
+        {%- endfor -%}
+        <a href="{{ reset_filters_url }}" class="facets-bar__active-bar-reset" data-facets-form-link>
+          {{ 'facets.filters.reset_all' | t }}
+        </a>
+      </div>
+    {%- endif -%}
+  </div>
+</div>

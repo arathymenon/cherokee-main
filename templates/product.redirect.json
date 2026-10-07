@@ -1,0 +1,15 @@
+{
+  "layout": "redirect",
+  "sections": {
+    "main": {
+      "type": "main-product-redirect",
+      "settings": {
+        "collection": "all",
+        "message": "This product is no longer available. Taking you to our full collection."
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

@@ -1,0 +1,245 @@
+<!-- snippet: mobile-menu -->
+{%- comment -%}
+  Slide-out mobile menu drawer rendered below the sticky header.
+
+  Accepts:
+    - blocks: {Array} section.blocks from the header section
+{%- endcomment -%}
+
+<mobile-menu-drawer class="border-t border-grey">
+  <panel-stack initial="root" effect="slide">
+
+    {%- # Root panel: lists section blocks -%}
+    <stack-panel handle="root">
+      <ul class="flex flex-col py-sm">
+        {%- for block in blocks -%}
+          {%- liquid
+            assign menu = block.settings.menu
+            assign root_title = block.settings.title | default: menu.title
+            assign title_html = root_title | escape
+          -%}
+
+          {%- case block.type -%}
+
+            {%- when 'nav_link' -%}
+              {%- assign nav_title = block.settings.title | escape -%}
+              <li>
+                <a href="{{ block.settings.url }}"
+                  class="block fs-body-lg no-underline px-gutter py-4 leading-none">
+                  {{- nav_title -}}
+                </a>
+              </li>
+
+            {%- when 'dropdown_menu' or 'mega_menu' -%}
+              <li>
+                <button type="button"
+                  data-action-stack-push
+                  target="panel-{{ block.id }}"
+                  class="w-full flex items-center justify-between gap-3 px-gutter py-4 fs-body-lg cursor-pointer text-left leading-none">
+                  <span>{{- title_html -}}</span>
+                  <span class="size-4 shrink-0 *:size-full">
+                    {{- 'icon-angle-right.svg' | inline_asset_content -}}
+                  </span>
+                </button>
+              </li>
+
+          {%- endcase -%}
+        {%- endfor -%}
+      </ul>
+
+      {%- if shop.customer_accounts_enabled -%}
+        <div class="mt-auto px-gutter pb-6">
+          <a
+            class="flex items-center gap-2 whitespace-nowrap no-underline"
+            href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}">
+            <span class="size-4 *:size-full">
+              {{- 'icon-person.svg' | inline_asset_content -}}
+            </span>
+            <span class="fs-body-sm">
+              {%- if customer -%}
+                Welcome {{ customer.first_name | default: customer.name }}
+              {%- else -%}
+                Log In
+              {%- endif -%}
+            </span>
+          </a>
+        </div>
+      {%- endif -%}
+    </stack-panel>
+
+    {%- # Sub-panels: one per dropdown_menu / mega_menu block -%}
+    {%- for block in blocks -%}
+      {%- liquid
+        assign menu = block.settings.menu
+        assign root_title = block.settings.title | default: menu.title
+        assign title_html = root_title | escape
+      -%}
+
+      {%- case block.type -%}
+
+        {%- when 'dropdown_menu' -%}
+          <stack-panel handle="panel-{{ block.id }}">
+            <div class="sticky top-0 z-1 bg-white border-b border-grey flex items-center justify-between px-gutter h-12">
+              <button type="button"
+                data-action-stack-pop
+                aria-label="Back"
+                class="flex items-center -ml-2 p-2 cursor-pointer">
+                <span class="size-4 shrink-0 *:size-full">
+                  {{- 'icon-angle-left.svg' | inline_asset_content -}}
+                </span>
+              </button>
+              <span class="fs-body font-medium">{{- title_html -}}</span>
+              <div class="size-8 -mr-2" aria-hidden="true"></div>
+            </div>
+
+            <ul class="flex flex-col py-4 gap-4">
+              {%- for link in menu.links -%}
+                <li>
+                  {%- if link.links.size > 0 -%}
+                    <accordion-block>
+                      <details class="group/acc px-gutter">
+                        <summary class="w-full flex items-center justify-between gap-3 py-4 fs-body cursor-pointer">
+                          <span>{{- link.title | escape -}}</span>
+                        </summary>
+                        <div>
+                          <ul class="flex flex-col pb-2">
+                            {%- for sublink in link.links -%}
+                              <li>
+                                <a href="{{ sublink.url }}" class="block fs-body no-underline pl-8 pr-4 py-2">
+                                  {{- sublink.title | escape -}}
+                                </a>
+                              </li>
+                            {%- endfor -%}
+                          </ul>
+                        </div>
+                      </details>
+                    </accordion-block>
+                  {%- else -%}
+                    <a href="{{ link.url }}" 
+                      class="block fs-body no-underline px-gutter ">
+                      {{- link.title | escape -}}
+                    </a>
+                  {%- endif -%}
+                </li>
+              {%- endfor -%}
+            </ul>
+          </stack-panel>
+
+        {%- when 'mega_menu' -%}
+          <stack-panel handle="panel-{{ block.id }}">
+            <div class="sticky top-0 z-1 bg-white border-b border-grey flex items-center justify-between px-gutter h-12">
+              <button type="button"
+                data-action-stack-pop
+                aria-label="Back"
+                class="flex items-center -ml-2 p-2 cursor-pointer">
+                <span class="size-4 shrink-0 *:size-full">
+                  {{- 'icon-angle-left.svg' | inline_asset_content -}}
+                </span>
+              </button>
+              <span class="fs-body font-medium">{{- title_html -}}</span>
+              <div class="size-8 -mr-2" aria-hidden="true"></div>
+            </div>
+
+            <div class="flex flex-col pb-6">
+              {%- for top_link in menu.links -%}
+                {%- assign key = top_link.title | downcase | strip -%}
+                {%- case key -%}
+
+                  {%- when 'highlights' -%}
+                    <div class="px-gutter py-4">
+                      {%- render 'header-mega-column-highlights', top_link: top_link -%}
+                    </div>
+
+                  {%- when 'shop by color' -%}
+                    <div>
+                      <accordion-block class="border-none">
+                        <details class="group/acc px-gutter">
+                          <summary class="w-full flex items-center justify-between gap-3 py-4 fs-body font-medium cursor-pointer">
+                            <span>{{- top_link.title | escape -}}</span>
+                          </summary>
+                          <div class="pb-3">
+                            <ul class="grid grid-cols-2 gap-4">
+                              {%- for link in top_link.links -%}
+                                {%- liquid
+                                  assign cw = link.object.metafields.custom.colorway.value
+                                  unless cw
+                                    for item in link.object.metafields.custom.colorway_list.value limit: 1
+                                      assign cw = item
+                                    endfor
+                                  endunless
+                                  assign swatch_color = cw.color | default: '#cccccc'
+                                  assign swatch_label = cw.label | default: link.title
+                                -%}
+                                <li>
+                                  <a class="color-chip fs-body-sm" href="{{ link.url }}">
+                                    <span
+                                      class="w-[18px] h-[18px] rounded-full shrink-0"
+                                      style="background-color: {{ swatch_color }};"
+                                      aria-hidden="true"></span>
+                                    <span>{{- swatch_label | escape -}}</span>
+                                  </a>
+                                </li>
+                              {%- endfor -%}
+                            </ul>
+                          </div>
+                        </details>
+                      </accordion-block>
+                    </div>
+
+                  {%- else -%}
+                    {%- if top_link.links.size > 0 -%}
+                      <div>
+                        <accordion-block class="border-none">
+                          <details class="group/acc px-gutter">
+                            <summary class="w-full flex items-center justify-between py-4 fs-body font-medium cursor-pointer">
+                              <span>{{- top_link.title | escape -}}</span>
+                              </summary>
+                            <div class="p-0">
+                              <ul class="flex flex-col gap-4 pb-4">
+                                {%- for link in top_link.links -%}
+                                  {%- liquid
+                                    assign label_text = link.object.metafields.meta.badges.value.text
+                                    assign link_key = link.title | downcase | strip
+                                    assign accent_class = ''
+                                    if link_key == 'sale' or link_key == 'clearance'
+                                      assign accent_class = 'text-[#B21C02]'
+                                    endif
+                                  -%}
+                                  <li>
+                                    <a 
+                                      href="{{ link.url }}"
+                                      class="flex items-center gap-1 no-underline {{ accent_class }} min-h-6" >
+                                      <span class="fs-body-sm ">{{- link.title | escape -}}</span>
+                                      {%- render 'menu-item-label', text: label_text -%}
+                                    </a>
+                                  </li>
+                                {%- endfor -%}
+                              </ul>
+                            </div>
+                          </details>
+                        </accordion-block>
+                      </div>
+                    {%- else -%}
+                      <a 
+                        href="{{ top_link.url }}" 
+                        class="block px-gutter py-4 fs-body font-medium no-underline">
+                        {{- top_link.title | escape -}}
+                      </a>
+                    {%- endif -%}
+
+                {%- endcase -%}
+              {%- endfor -%}
+
+              {%- if block.settings.image != blank -%}
+                <div class="p-4">
+                  {%- render 'header-mega-promo', block: block -%}
+                </div>
+              {%- endif -%}
+            </div>
+          </stack-panel>
+
+      {%- endcase -%}
+    {%- endfor -%}
+
+  </panel-stack>
+</mobile-menu-drawer>

@@ -1,0 +1,27 @@
+<!-- section: sapi-set-product -->
+{%- comment -%}
+  For Shopify Section API only. Renders one set component card, fetched
+  per-component by <product-fetcher> when the user picks options.
+{%- endcomment -%}
+
+{%- liquid
+  # Shopify's SAPI strips option_values from request.params and always
+  # resolves a full variant, so the server can't tell which size/inseam the
+  # shopper picked. <product-fetcher> owns pick state client-side and
+  # <product-set-group> decides completion. The server only supplies a
+  # display/thumbnail variant (selected_or_first_available already reflects
+  # the URL-selected color) so state.variant has price/available for the JS.
+  if product.has_only_default_variant
+    assign current_variant = product.variants[0]
+  else
+    assign current_variant = product.selected_or_first_available_variant
+  endif
+  assign gallery_variant = current_variant
+-%}
+
+{%- render 'product-set-item',
+  product: product,
+  current_variant: current_variant,
+  gallery_variant: gallery_variant,
+  collection_context: collection
+-%}

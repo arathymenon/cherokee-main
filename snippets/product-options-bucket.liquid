@@ -1,0 +1,104 @@
+<!-- snippet: product-options-bucket -->
+{%- comment %}
+  Renders one bucket of color swatches for the grouped PDP color picker.
+  Filters product option values by their first-matching swatch_group membership
+  and emits the matching values via product-option-partials.
+
+  Accepts:
+  - product: {Object}
+  - product_option: {Object} the position-1 (color) option
+  - collection_context: {Object} optional
+  - product_group_collection: {Object} optional — when set, iterate cross-product
+  - target_group_idx: {Number} -1 for ungrouped; 0..N for the n-th swatch_group
+  - color_group_lookup: {String} pre-built "|name=idx|" lookup
+  - option_value_normal_partial: {String}
+  - option_value_swatch_partial: {String}
+  - preselected_value_id: {Number} value.id to mark checked (computed by caller)
+{%- endcomment -%}
+
+{%- liquid
+  if product_group_collection
+    for group_product in product_group_collection.products
+      assign group_product_option = group_product.options_with_values[0]
+      assign group_product_url = group_product.url | within: collection_context
+      for value in group_product_option.values
+        assign _vn_lc = value.name | downcase
+        assign _key_marker = '|' | append: _vn_lc | append: '='
+        assign _vgi = -1
+        if color_group_lookup contains _key_marker
+          assign _after = color_group_lookup | split: _key_marker | last
+          assign _vgi = _after | split: '|' | first | plus: 0
+        endif
+        if _vgi != target_group_idx
+          continue
+        endif
+
+        assign swatch_value = null
+        assign swatch_focal_point = 'initial'
+        if value.swatch
+          if value.swatch.image
+            assign image_url = value.swatch.image | image_url: width: 50
+            assign swatch_value = 'url(' | append: image_url | append: ')'
+            assign swatch_focal_point = value.swatch.image.presentation.focal_point | default: swatch_focal_point
+          elsif value.swatch.color
+            assign swatch_value = 'rgb(' | append: value.swatch.color.rgb | append: ')'
+          endif
+        endif
+
+        assign is_selected = false
+        if value.id == preselected_value_id
+          assign is_selected = true
+        endif
+
+        assign value_partial = option_value_normal_partial
+        if swatch_value
+          assign value_partial = option_value_swatch_partial
+        endif
+
+        render 'product-option-partials', name: value_partial, id: value.id, is_available: value.available, is_selected: is_selected, value_name: value.name, value_display_name: value.name, product_url: group_product_url, swatch_value: swatch_value, swatch_focal_point: swatch_focal_point
+      endfor
+    endfor
+  else
+    for value in product_option.values
+      assign _vn_lc = value.name | downcase
+      assign _key_marker = '|' | append: _vn_lc | append: '='
+      assign _vgi = -1
+      if color_group_lookup contains _key_marker
+        assign _after = color_group_lookup | split: _key_marker | last
+        assign _vgi = _after | split: '|' | first | plus: 0
+      endif
+      if _vgi != target_group_idx
+        continue
+      endif
+
+      assign value_url = value.product_url
+      if value_url
+        assign value_url = value_url | within: collection_context
+      endif
+
+      assign swatch_value = null
+      assign swatch_focal_point = 'initial'
+      if value.swatch
+        if value.swatch.image
+          assign image_url = value.swatch.image | image_url: width: 50
+          assign swatch_value = 'url(' | append: image_url | append: ')'
+          assign swatch_focal_point = value.swatch.image.presentation.focal_point | default: swatch_focal_point
+        elsif value.swatch.color
+          assign swatch_value = 'rgb(' | append: value.swatch.color.rgb | append: ')'
+        endif
+      endif
+
+      assign is_selected = false
+      if value.id == preselected_value_id
+        assign is_selected = true
+      endif
+
+      assign value_partial = option_value_normal_partial
+      if swatch_value
+        assign value_partial = option_value_swatch_partial
+      endif
+
+      render 'product-option-partials', name: value_partial, id: value.id, is_available: value.available, is_selected: is_selected, value_name: value.name, value_display_name: value.name, product_url: value_url, swatch_value: swatch_value, swatch_focal_point: swatch_focal_point
+    endfor
+  endif
+-%}

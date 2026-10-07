@@ -1,0 +1,21 @@
+<!-- snippet: cart-line-item-unit-price -->
+{%- comment -%}
+  Renders the unit price for measurement-priced products (e.g. $4.99/100ml).
+  Outputs nothing when the variant has no unit price measurement.
+
+  Accepts:
+  - line_item: {Object}
+{%- endcomment -%}
+
+{%- if line_item.variant.available and line_item.unit_price_measurement -%}
+  <div>
+    <span class="sr-only">{{ 'products.product.price.unit_price' | t }}</span>
+    {{ line_item.unit_price | money }}
+    <span aria-hidden="true">/</span>
+    <span class="sr-only">&nbsp;{{ 'accessibility.unit_price_separator' | t }}&nbsp;</span>
+    {%- if line_item.unit_price_measurement.reference_value != 1 -%}
+      {{- line_item.unit_price_measurement.reference_value -}}
+    {%- endif -%}
+    {{ line_item.unit_price_measurement.reference_unit }}
+  </div>
+{%- endif -%}

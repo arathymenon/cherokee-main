@@ -1,0 +1,51 @@
+{% comment %}
+  Renders a shop the look product card
+  Accepts:
+  - product: {Object} Shopify Product object
+  - fetcher_selector: {String} Fetcher selector
+  - fetcher_toggler: {String} Fetcher toggler,
+  - body_attr: {String}
+
+  Usage:
+  {%- render 'shop-the-look-product', product: product -%}
+{% endcomment %}
+
+{%- assign selector = fetcher_selector | default: "[data-mini-pdp-fetcher]" -%}
+{%- assign toggler = fetcher_toggler | default: "mini-pdp-drawer-toggler" -%}
+{%- assign body_attr = body_attr | default: "look" -%}
+
+<div class="shop-the-look-product">
+  <div class="shop-the-look-product__media">
+    {%- if product.featured_image -%}
+      <media-loader>
+        {{-
+          product.featured_image
+          | image_url: width: 320
+          | image_tag: class: 'shop-the-look-product__media-item', loading: 'lazy'
+        -}}
+      </media-loader>
+    {%- endif -%}
+  </div>
+  <div class="shop-the-look-product__info">
+    <div class="shop-the-look-product__title">
+      <a href="{{ product.url | within: collection }}">{{- product.title | escape -}}</a>
+    </div>
+
+    <div class="shop-the-look-product__price">
+      <div>{{ product.price | money }}</div>
+    </div>
+
+    <div class="shop-the-look-product__colors-number">
+      {% comment %} {%- render 'product-colors-count', product: product -%} {% endcomment %}
+    </div>
+    
+    <html-fetcher-trigger body-attribute="{{ body_attr }}" only-base-url selector="{{ selector }}" url="{{ product.url }}">
+      <label
+        for="{{ toggler }}"
+        class="shop-the-look-product__select-size primary-button "
+      >
+        {{- 'sections.shop_the_look.select_size' | t -}}
+      </label>
+    </html-fetcher-trigger>
+  </div>
+</div>

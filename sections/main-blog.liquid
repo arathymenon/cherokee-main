@@ -1,0 +1,119 @@
+<!-- section: main-blog -->
+
+{%- liquid
+  assign s = section.settings
+-%}
+
+<section class="color-{{ s.color_scheme }} pb-lg">
+  {% #  Sticky category chip bar %}
+  {% if blog.all_tags.size > 0 %}
+    <sticky-content class="bg-scheme">
+      <div
+        role="navigation"
+        aria-label="{{ blog.title | escape }} categories"
+        class="flex md:px-sm items-center gap-2 max-w-230 mx-auto py-sm overflow-x-auto hide-scrollbar md:flex-wrap md:justify-center md:overflow-visible">
+        <a
+          href="{{ blog.url }}"
+          class="chip chip--article md:ml-0 ml-gutter{% if current_tags == blank %} chip--active{% endif %} shrink-0"
+          {% if current_tags == blank %}
+            aria-current="page"
+          {% endif %}>
+          {{- 'blog.all_tags_label' | t -}}
+        </a>
+
+        {%- for tag in blog.all_tags -%}
+          {%- assign is_active = false -%}
+          {%- if current_tags contains tag -%}
+            {%- assign is_active = true -%}
+          {%- endif -%}
+          <a
+            href="{{ blog.url }}/tagged/{{ tag | handleize }}"
+            class="chip chip--article{% if is_active %} chip--active{% endif %}{% if forloop.last %} md:mr-0 mr-gutter{% endif %} shrink-0"
+            {% if is_active %}
+              aria-current="page"
+            {% endif %}>
+            {{ tag }}
+          </a>
+        {%- endfor -%}
+      </div>
+    </sticky-content>
+  {% endif %}
+
+  {%- paginate blog.articles by s.articles_per_page -%}
+    <div class="container pt-sm">
+      {% if s.show_title and blog.title != blank %}
+        <div
+          role="heading"
+          aria-level="1"
+          class="fs-display-2 text-pretty mb-md text-center">
+          {{ blog.title | escape }}
+        </div>
+      {% endif %}
+
+      {%- render 'blog-pagination', type: 'prev', paginate: paginate -%}
+
+      <div
+        data-ajax-pagination="content"
+        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {%- for article in blog.articles -%}
+          {%- render 'article-card',
+            blog: blog,
+            article: article,
+            show_image: s.show_image,
+            show_date: s.show_date,
+            show_author: s.show_author
+          -%}
+        {%- endfor -%}
+      </div>
+
+      {%- render 'blog-pagination', type: 'more', paginate: paginate -%}
+    </div>
+  {%- endpaginate -%}
+</section>
+
+{% schema %}
+{
+  "name": "Blog Page",
+  "settings": [
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme" },
+
+    { "type": "header", "content": "Layout" },
+    {
+      "type": "range",
+      "id": "articles_per_page",
+      "label": "Articles per page",
+      "min": 3,
+      "max": 24,
+      "step": 3,
+      "default": 12
+    },
+    {
+      "type": "checkbox",
+      "id": "show_title",
+      "default": false,
+      "label": "Show blog title",
+      "info": "Hidden by default since the hero banner above already shows it."
+    },
+
+    { "type": "header", "content": "Article content" },
+    {
+      "type": "checkbox",
+      "id": "show_image",
+      "default": true,
+      "label": "Show image"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_date",
+      "default": true,
+      "label": "Show date"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_author",
+      "default": false,
+      "label": "Show author"
+    }
+  ]
+}
+{% endschema %}

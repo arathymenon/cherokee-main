@@ -1,0 +1,204 @@
+<!-- section: collection-products -->
+
+{%- liquid
+  assign s = section.settings
+  assign filter_dialog_id = 'collection-filter-dialog-' | append: section.id
+  # compare.enable is a boolean metafield — use .value (the metafield object is
+  # truthy whenever it exists, regardless of the stored true/false).
+  assign compare_enabled = collection.metafields.compare.enable.value
+  # Colorway collections preselect their color(s) on every card (image + swatch).
+  capture colorway_labels
+    render 'colorway-labels', collection: collection
+  endcapture
+  # colorway_labels is non-blank only on color PLPs (collections with a
+  # colorway_list metafield), so use it to opt those collections into hiding
+  # sold-out cards.
+  assign hide_if_no_color = false
+  if colorway_labels != blank
+    assign hide_if_no_color = true
+  endif
+-%}
+
+
+{%- if collection.filters != empty or collection.products.size > 0 -%}
+
+  <facets-form class="block scroll-mt-[var(--header-group-height)]">
+    <form>
+
+      <sticky-content>
+        {%- render 'filter-sort-bar',
+          filter_dialog_id: filter_dialog_id,
+          sort_options: collection.sort_options,
+          current_sort_by: collection.sort_by,
+          results_count: collection.products_count,
+          color_scheme: s.filter_color_scheme -%}
+      </sticky-content>
+
+      {%- assign reset_url = collection.url -%}
+      {%- if collection.sort_by != blank -%}
+        {%- assign reset_url = reset_url | append: '?sort_by=' | append: collection.sort_by -%}
+      {%- endif -%}
+
+      {%- render 'filter-dialog',
+        dialog_id: filter_dialog_id,
+        filters: collection.filters,
+        reset_url: reset_url -%}
+
+      {% #  Active Filter Chips  %}
+      <div data-facets-form-content="active-filters-bar">
+        {%- liquid
+          assign has_active_filters = false
+          for filter in collection.filters
+            if filter.active_values.size > 0
+              assign has_active_filters = true
+              break
+            endif
+            if filter.type == 'price_range'
+              if filter.min_value.value != null or filter.max_value.value != null
+                assign has_active_filters = true
+                break
+              endif
+            endif
+          endfor
+        -%}
+        {%- if has_active_filters -%}
+          <div class="container py-3">
+            <div class="flex flex-wrap items-center gap-2">
+              {%- for filter in collection.filters -%}
+                {%- for value in filter.active_values -%}
+                  <a href="{{ value.url_to_remove }}" class="chip" data-facets-form-link>
+                    <span>{%- render 'filter-active-value-label', filter: filter, value: value -%}</span>
+                    <span class="size-3">{{- 'icon-x.svg' | inline_asset_content -}}</span>
+                  </a>
+                {%- endfor -%}
+                {%- if filter.type == 'price_range' -%}
+                  {%- if filter.min_value.value != null or filter.max_value.value != null -%}
+                    <a href="{{ filter.url_to_remove }}" class="chip" data-facets-form-link>
+                      <span>
+                        {%- if filter.min_value.value -%}{{ filter.min_value.value | money }}{%- else -%}{{ 0 | money }}{%- endif -%}
+                        &mdash;
+                        {%- if filter.max_value.value -%}{{ filter.max_value.value | money }}{%- else -%}{{ filter.range_max | money }}{%- endif -%}
+                      </span>
+                      <span class="size-3">{{- 'icon-x.svg' | inline_asset_content -}}</span>
+                    </a>
+                  {%- endif -%}
+                {%- endif -%}
+              {%- endfor -%}
+              <a href="{{ collection.url }}{% if collection.sort_by != blank %}?sort_by={{ collection.sort_by }}{% endif %}"
+                class="text-sm underline ml-2"
+                data-facets-form-link>
+                {{ 'facets.filters.reset_all' | t }}
+              </a>
+            </div>
+          </div>
+        {%- endif -%}
+      </div>
+
+    </form>
+
+    {% #  Product Grid  %}
+    <section class="md:px-gutter">
+        <div class="max-w-container mx-auto  lg:pt-6 pb-lg">
+          <div data-facets-form-content="products-list">
+            {%- if collection.products.size > 0 -%}
+              {%- paginate collection.products by s.products_per_page -%}
+
+                {%- render 'product-listing-pagination', type: 'prev', paginate: paginate -%}
+
+                <div
+                  data-ajax-pagination="content"
+                  class="grid grid-cols-2 lg:grid-cols-4 gap-px md:gap-2 pb-lg lg:pb-sm" >
+                  {%- if paginate.current_page == 1 and has_active_filters == false -%}
+                    {%- render 'collection-promo-card', collection: collection -%}
+                  {%- endif -%}
+                  {%- for product in collection.products -%}
+                    {%- render 'product-card', product: product, collection_context: collection, compare_enabled: compare_enabled, preferred_color_labels: colorway_labels, hide_if_no_color: hide_if_no_color -%}
+                  {%- endfor -%}
+                </div>
+
+                {%- render 'product-listing-pagination', type: 'more', paginate: paginate -%}
+
+                <script type="application/ld+json">
+                  {
+                    "@context": "https://schema.org",
+                    "@type": "ItemList",
+                    "itemListElement": [
+                      {%- for product in collection.products -%}
+                        {%- unless forloop.first %},{% endunless -%}
+                        {
+                          "@type": "ListItem",
+                          "position": {{ forloop.index | plus: paginate.current_offset }},
+                          "name": {{ product.title | json }},
+                          "url": {{ request.origin | append: product.url | json }}
+                        }
+                      {%- endfor -%}
+                    ]
+                  }
+                </script>
+
+              {%- endpaginate -%}
+            {%- else -%}
+              <div class="py-section text-center">
+                {{- 'collections.empty_message' | t -}}
+              </div>
+            {%- endif -%}
+          </div>
+        </div>
+      </section>
+
+  </facets-form>
+
+
+  {%- if compare_enabled -%}
+    {%- render 'compare-bar' -%}
+    {%- render 'comparison-modal', collection: collection -%}
+  {%- endif -%}
+
+{%- else -%}
+
+  <section>
+    <div class="py-lg text-center">
+      {{- 'collections.empty_message' | t -}}
+    </div>
+  </section>
+
+  {% #  Empty collection carousel  %}
+  {%- assign empty_collection = settings.empty_state_collection -%}
+  {%- if empty_collection != blank and empty_collection.products_count > 0 -%}
+    {%- render 'product-carousel',
+      carousel_collection: empty_collection,
+      heading: 'You may also like' -%}
+  {%- endif -%}
+
+{%- endif -%}
+
+<script>
+  document.addEventListener('change', (event) => {
+    const details = event.target.closest('details');
+    if (details && event.target.name === 'sort_by') {
+      details.open = false;
+    }
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Collection Products",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "filter_color_scheme",
+      "label": "Filter bar color scheme"
+    },
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "label": "Products per page",
+      "min": 8,
+      "max": 48,
+      "step": 4,
+      "default": 24
+    }
+  ]
+}
+{% endschema %}

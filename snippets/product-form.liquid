@@ -1,0 +1,193 @@
+<!-- snippet: product-form -->
+{%- comment -%}
+  Renders the product form with quantity input, buy button, and back-in-stock elements.
+
+  Accepts:
+  - product: {Object}
+  - variant: {Object}
+  - product_form_id: {String}
+  - hide_quantity: {Boolean} optional — omit the quantity stepper and render
+    a content-hugging, left-aligned buy button (used by complete-the-look).
+
+  The buy button starts disabled and is enabled by <product-fetcher> once
+  the selection is complete.
+
+  The add-to-cart form, the back-in-stock panel, and the unavailable notice
+  are ALL rendered, each in its own wrapper ([data-product-fetcher-atc] /
+  [data-product-fetcher-bis] / [data-product-fetcher-unavailable]).
+  The server can't know whether the shopper's picks are complete (Shopify
+  auto-resolves a full variant even for partial option_values), so
+  <product-fetcher> toggles [hidden] on the wrappers from its client-owned
+  pick state: BIS shows only for a fully-picked unavailable variant, the
+  notice only for a fully-picked combination with no variant record.
+  BIS is the exception: it needs a variant id, so it is skipped entirely
+  when the server resolved no variant.
+{%- endcomment -%}
+
+{%- liquid
+  assign quantity_input_id = product_form_id | append: '-qty'
+
+  assign buy_button_class = 'button w-full button-lg'
+  if hide_quantity
+    assign buy_button_class = 'button button-lg min-w-[220px]'
+  endif
+
+  capture product_title
+    render 'product-title', product: product
+  endcapture
+
+  assign in_cart_result = ''
+  if variant
+    assign cart_qty = cart | item_count_for_variant: variant.id
+    if cart_qty > 0
+      assign in_cart_result = 'products.product.quantity.in_cart' | t: quantity: cart_qty
+    endif
+  endif
+
+  assign check_against_inventory = true
+  if variant.inventory_management != 'shopify' or variant.inventory_policy == 'continue'
+    assign check_against_inventory = false
+  endif
+  if variant.quantity_rule.min > variant.inventory_quantity and check_against_inventory
+    assign quantity_rule_soldout = true
+  endif
+
+  assign is_sold_out = false
+  if variant and variant.available == false
+    assign is_sold_out = true
+  elsif variant and quantity_rule_soldout
+    assign is_sold_out = true
+  endif
+
+  # Server's best guess at "full selection + sold out" for the initial
+  # [hidden] state. selected_variant is populated on ?variant= deep links
+  # AND on SAPI option_values renders (Shopify auto-resolves a full variant
+  # either way), so this is wrong for partial picks mid-flow —
+  # <product-fetcher> reconciles [hidden] on both wrappers before paint.
+  assign show_bis = false
+  if is_sold_out
+    if product.has_only_default_variant or product.selected_variant != blank
+      assign show_bis = true
+    endif
+  endif
+-%}
+
+{%- comment -%}
+  Unavailable notice: Shopify resolves option_values to nil both when a
+  fully-picked combination has no variant record (never created in admin)
+  AND when the picks are partial (color only) and the auto-defaulted first
+  size doesn't exist for that color. Liquid can't tell the two apart —
+  selected_variant is nil and value.selected reads as a full selection in
+  both cases — so, like BIS vs ATC, the notice and the form are BOTH
+  rendered and <product-fetcher> toggles [hidden] from its client-owned
+  pick state: the notice shows only for a fully-picked combination that
+  resolves no variant.
+{%- endcomment -%}
+<div data-product-fetcher-unavailable hidden>
+  <div class="bg-grey-light rounded-theme-sm p-sm my-6 fs-body-md">
+    {{- 'products.product.combination_unavailable' | t -}}
+  </div>
+</div>
+{%- if variant != blank -%}
+  <div
+    data-product-fetcher-bis
+    {% unless show_bis %}
+      hidden
+    {% endunless %}>
+    {%- render 'back-in-stock', variant: variant, product_form_id: product_form_id -%}
+  </div>
+{%- endif -%}
+<div
+  data-product-fetcher-atc
+  {% if show_bis %}
+    hidden
+  {% endif %}>
+  {%- comment -%}
+    selection-incomplete: server assumes the shopper hasn't picked
+    size/inseam yet (only color is preselected). <product-fetcher> removes
+    it once all options are picked and the variant resolves.
+  {%- endcomment -%}
+  <ajax-cart-product-form class="group/ajax-cart-product-form" selection-incomplete>
+    {%- form 'product', product, id: product_form_id -%}
+      <div class="flex gap-2 my-6">
+        {%- # Quantity input -%}
+        {%- unless hide_quantity -%}
+          <fieldset class="max-w-30 w-30" data-embroidery-quantity-host>
+            <label for="{{ quantity_input_id }}" class="hidden text-grey-dark block mb-3">
+              {{- 'products.product.quantity.quantity' | t }}
+              {%- if in_cart_result != '' -%}
+                <span>({{ in_cart_result }})</span>
+              {%- endif -%}
+            </label>
+
+            <quantity-input class="quantity-input w-[120px]">
+              <button
+                data-quantity-input-decrease
+                type="button"
+                aria-label="{{ 'products.product.quantity.decrease' | t: product: product_title }}"
+                class="quantity-input__button pl-4">
+                {{- 'icon-minus.svg' | inline_asset_content -}}
+              </button>
+              <input
+                class="quantity-input__input"
+                type="number"
+                name="quantity"
+                id="{{ quantity_input_id }}"
+                data-min="{{ variant.quantity_rule.min | default: 1 }}"
+                min="{{ variant.quantity_rule.min | default: 1 }}"
+                {% if variant.quantity_rule.max != null %}
+                  data-max="{{ variant.quantity_rule.max }}"
+                  max="{{ variant.quantity_rule.max }}"
+                {% endif %}
+                step="{{ variant.quantity_rule.increment | default: 1 }}"
+                value="{{ variant.quantity_rule.min | default: 1 }}"
+                aria-label="{{ 'products.product.quantity.quantity' | t }}"
+                form="{{ product_form_id }}">
+              <button
+                type="button"
+                data-quantity-input-increase
+                aria-label="{{ 'products.product.quantity.increase' | t: product: product_title }}"
+                class="quantity-input__button pr-4">
+                {{- 'icon-plus.svg' | inline_asset_content -}}
+              </button>
+            </quantity-input>
+          </fieldset>
+        {%- endunless -%}
+
+        {%- comment -%}
+          Buy button. Disabled by default (server can't know which
+          size/inseam the shopper picked); <product-fetcher> enables it
+          and drops [selection-incomplete] once the selection
+          resolves a full, available variant.
+        {%- endcomment -%}
+        <input type="hidden" name="id" value="{{ variant.id }}" disabled>
+
+        {%- if variant.metafields.meta.finalSale.value == true -%}
+          <input type="hidden" name="properties[_final_sale]" value="true">
+        {%- endif -%}
+
+        <button type="submit" name="add" class="{{ buy_button_class }}" disabled>
+          {%- # Incomplete selection -%}
+          <span class="hidden group-[[selection-incomplete]]/ajax-cart-product-form:inline-flex items-center">
+            {{- 'products.product.select_size' | t -}}
+          </span>
+          {%- # Ready to add (hidden while incomplete or processing) -%}
+          <span class="inline-flex items-center gap-3 group-[[selection-incomplete]]/ajax-cart-product-form:hidden group-[[processing]]/ajax-cart-product-form:hidden">
+            <span class="inline-flex items-center [&_svg]:size-4">
+              {{- 'icon-bag.svg' | inline_asset_content -}}
+            </span>
+            {{- 'products.product.add_to_cart' | t -}}
+          </span>
+          {%- # Processing -%}
+          <span class="hidden group-[[processing]]/ajax-cart-product-form:block animate-[fade-in_0.3s]">
+            <span
+              class="size-3 border border-transparent border-l-current animate-spin rounded-full inline-block me-2"></span>
+            {{- 'products.product.adding_to_cart' | t -}}
+          </span>
+        </button>
+      </div>
+
+      <div data-ajax-cart-errors="form" class="text-danger fs-body-sm empty:hidden mt-1"></div>
+    {%- endform -%}
+  </ajax-cart-product-form>
+</div>

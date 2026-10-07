@@ -1,0 +1,400 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "AvexTheme",
+    "theme_version": "2.0",
+    "theme_author": "Sanjar S",
+    "theme_documentation_url": "https:\/\/github.com\/avex-designs\/avex-codebase",
+    "theme_support_email": "sanjar@avexdesigns.com"
+  },
+  {
+    "name": "Analytics",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Google Tag Manager"
+      },
+      {
+        "type": "text",
+        "id": "gtm_container_id",
+        "label": "GTM Container ID",
+        "info": "Example: GTM-XXXXXXX. Leave blank to disable."
+      },
+      {
+        "type": "header",
+        "content": "Navistone"
+      },
+      {
+        "type": "text",
+        "id": "navistone_id",
+        "label": "Navistone ID",
+        "info": "Example: D2D5BE2640037F. Do not include .js. Leave blank to disable."
+      },
+      {
+        "type": "header",
+        "content": "Yotpo"
+      },
+      {
+        "type": "text",
+        "id": "yotpo_widget_instance_id",
+        "label": "Yotpo Widget Instance ID",
+        "info": "The instance ID used by Yotpo star rating widgets. Leave blank to disable."
+      }
+    ]
+  },
+  {
+    "name": "Embroidery",
+    "settings": [
+      {
+        "type": "textarea",
+        "id": "embroidery_lead_time_pdp",
+        "label": "PDP lead time message",
+        "default": "Personalization adds 7-14 days to processing and shipping.",
+        "info": "Shown on the PDP embroidery summary."
+      },
+      {
+        "type": "textarea",
+        "id": "embroidery_lead_time_cart",
+        "label": "Cart lead time message",
+        "default": "Adding personalization to your item may delay your order by up to 21 business days.",
+        "info": "Shown on cart embroidery items."
+      },
+      {
+        "type": "text",
+        "id": "embroidery_terms_intro",
+        "label": "Terms intro",
+        "default": "By clicking ADD TO BAG, you agree to the following terms."
+      },
+      {
+        "type": "richtext",
+        "id": "embroidery_terms_body",
+        "label": "Terms body",
+        "default": "<p>Embroidery preview is meant as a sample only. Depending on the style, size and embroidery customizations, lapels may partially or fully cover the requested embroidery (standard text or logo). This is more common in smaller sizes due to the increase in limited embroidery space. Our team will best place the embroidery in a position that offers the most visibility and clarity but cannot guarantee no coverage. <strong>Please note that all embroidery is final and cannot be returned, exchanged or refunded - including due to lapel coverage.</strong> For further information, please view our <a href=\"/pages/faq\" title=\"FAQ page\">FAQ page</a>.</p>",
+        "info": "Supports bold and links (e.g. FAQ page). Shown on the PDP embroidery summary."
+      }
+    ]
+  },
+  {
+    "name": "Brand",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Logo"
+      },
+      {
+        "type": "image_picker",
+        "id": "logo_colored",
+        "label": "Colored Logo"
+      },
+      {
+        "type": "image_picker",
+        "id": "logo_white",
+        "label": "White Logo"
+      }
+    ]
+  },
+  {
+    "name": "Colors",
+    "settings": [
+      {
+        "type": "color",
+        "id": "color_theme",
+        "label": "Site theme color",
+        "default": "#ffffff",
+        "info": "Used on mobile to style the browser window."
+      },
+      {
+        "type": "color",
+        "id": "color_white",
+        "label": "White",
+        "default": "#ffffff",
+        "info": "Default white value for the entire theme."
+      },
+      {
+        "type": "color",
+        "id": "color_black",
+        "label": "Black",
+        "default": "#000000",
+        "info": "Default black value for the entire theme."
+      },
+      {
+        "type": "color_scheme",
+        "id": "default_color_scheme",
+        "label": "Default color scheme",
+        "info": "The base color scheme used throughout the theme."
+      },
+      {
+        "type": "color_scheme_group",
+        "id": "color_schemes",
+        "definition": [
+          {
+            "type": "header",
+            "content": "Basic Content"
+          },
+          {
+            "type": "color",
+            "id": "background",
+            "label": "Background",
+            "default": "#ffffff"
+          },
+          {
+            "type": "color_background",
+            "id": "background_gradient",
+            "label": "Background gradient"
+          },
+          {
+            "type": "color",
+            "id": "foreground",
+            "label": "Text",
+            "default": "#262626"
+          },
+          {
+            "type": "color",
+            "id": "headings",
+            "label": "Headings",
+            "default": "#262626"
+          },
+          {
+            "type": "color",
+            "id": "border",
+            "label": "Border",
+            "default": "#e0e0e0"
+          },
+          {
+            "type": "header",
+            "content": "Inputs"
+          },
+          {
+            "type": "color",
+            "id": "input_border",
+            "label": "Border",
+            "default": "#e0e0e0"
+          },
+          {
+            "type": "header",
+            "content": "Chips"
+          },
+          {
+            "type": "color",
+            "id": "chip_background",
+            "label": "Background",
+            "default": "#f0f0f0"
+          },
+          {
+            "type": "color",
+            "id": "chip_foreground",
+            "label": "Text",
+            "default": "#262626"
+          },
+          {
+            "type": "color",
+            "id": "chip_border",
+            "label": "Border",
+            "default": "#e0e0e0"
+          },
+          {
+            "type": "color",
+            "id": "chip_selected_background",
+            "label": "Selected background",
+            "default": "#343B45"
+          },
+          {
+            "type": "color",
+            "id": "chip_selected_foreground",
+            "label": "Selected text",
+            "default": "#ffffff"
+          },
+          {
+            "type": "color",
+            "id": "chip_selected_border",
+            "label": "Selected border",
+            "default": "#343B45"
+          },
+          {
+            "type": "header",
+            "content": "Additional"
+          },
+          {
+            "type": "color",
+            "id": "icons",
+            "label": "Icons",
+            "default": "#262626"
+          },
+          {
+            "type": "color",
+            "id": "links",
+            "label": "Links",
+            "default": "#007FAE"
+          },
+          {
+            "type": "color",
+            "id": "links_hover",
+            "label": "Link hover",
+            "default": "#007FAE"
+          }
+        ],
+        "role": {
+          "background": "background",
+          "text": "foreground",
+          "icons": "icons",
+          "links": "links",
+          "primary_button": "headings",
+          "on_primary_button": "background",
+          "primary_button_border": "foreground",
+          "secondary_button": "background",
+          "on_secondary_button": "foreground",
+          "secondary_button_border": "border"
+        }
+      }
+    ]
+  },
+  {
+    "name": "Layout and design",
+    "settings": [
+      {
+        "type": "range",
+        "id": "content_radius",
+        "label": "Content corner radius",
+        "min": 0,
+        "max": 25,
+        "step": 1,
+        "unit": "px",
+        "default": 4,
+        "info": "This is used across the site in many areas to round the corners on images and sections."
+      },
+      {
+        "type": "select",
+        "id": "container_max_width",
+        "label": "Container Max Width",
+        "default": "none",
+        "options": [
+          {
+            "value": "1024",
+            "label": "Small - 1024px"
+          },
+          {
+            "value": "1280",
+            "label": "Medium - 1280px"
+          },
+          {
+            "value": "1440",
+            "label": "Large - 1440px"
+          },
+          {
+            "value": "1680",
+            "label": "XLarge - 1680px"
+          },
+          {
+            "value": "1920",
+            "label": "2XL - 1920px"
+          },
+          {
+            "value": "2400",
+            "label": "3XL - 2400px"
+          },
+          {
+            "value": "none",
+            "label": "Full Width"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Global",
+    "settings": [
+      {
+        "type": "collection",
+        "id": "empty_state_collection",
+        "label": "Empty state collection",
+        "info": "Shown as a recommended products carousel when a collection page, cart, search results, etc. are empty."
+      }
+    ]
+  },
+  {
+    "name": "SEO",
+    "settings": [
+      {
+        "type": "text",
+        "id": "google_site_verification",
+        "label": "Google site verification code",
+        "info": "Paste only the content value from the <meta name=\"google-site-verification\"> tag provided by Google Search Console."
+      }
+    ]
+  },
+  {
+    "name": "Search",
+    "settings": [
+      {
+        "type": "collection",
+        "id": "trending_products_collection",
+        "label": "Trending products collection"
+      }
+    ]
+  },
+  {
+    "name": "Klaviyo settings",
+    "settings": [
+      {
+        "id": "klaviyo_id",
+        "type": "text",
+        "label": "Klaviyo Public API Key (Site ID)",
+        "info": "6-character ID from Klaviyo → Account → Settings → API Keys. Used as company_id for back-in-stock subscriptions and other client-side Klaviyo calls."
+      },
+      {
+        "id": "klaviyo_marketing_list_id",
+        "type": "text",
+        "label": "Marketing list ID",
+        "info": "Klaviyo list ID for general newsletter / marketing opt-ins. Found in Klaviyo → Audience → Lists & Segments."
+      }
+    ]
+  },
+  {
+    "name": "Cart",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Upsell Carousel"
+      },
+      {
+        "type": "checkbox",
+        "id": "cart_upsell_carousel_enabled",
+        "label": "Show 'You might also like' carousel",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "cart_upsell_carousel_title",
+        "label": "Carousel heading",
+        "default": "You might also like"
+      },
+      {
+        "type": "header",
+        "content": "Empty State"
+      },
+      {
+        "type": "text",
+        "id": "cart_empty_text",
+        "label": "Empty Text",
+        "default": "Oops, your cart is empty!"
+      },
+      {
+        "type": "header",
+        "content": "Progress Bar"
+      },
+      {
+        "type": "text",
+        "id": "free_shipping_message_below",
+        "label": "Message below threshold",
+        "default": "$[amount] more for FREE shipping!",
+        "info": "Use [amount] as a placeholder for the remaining amount."
+      },
+      {
+        "type": "text",
+        "id": "free_shipping_message_above",
+        "label": "Message above threshold",
+        "default": "You got FREE shipping!"
+      }
+    ]
+  }
+]

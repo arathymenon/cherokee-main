@@ -1,0 +1,303 @@
+{% doc %}
+  Renders a basic product card with image, title, price, and color swatches.
+
+  @param {object} product - Shopify product object (required)
+  @param {object} [collection_context] - Collection for URL context
+  @param {boolean} [loading_eager] - Set true for above-fold images
+  @param {string} [preferred_color_labels] - '||'-delimited list of Color option labels (case/whitespace-insensitive). The first in-stock matching color (in product option order) drives the card image, swatch preselect, and quick-shop URL; matches render first in the swatch row. No in-stock match = falls back to selected_or_first_available_variant for the image.
+  @param {boolean} [hide_swatches] - Skip the color swatches row (used when the surrounding UI already selects a color).
+  @param {boolean} [hide_if_no_color] - When true (color PLPs / Shop by Color), hide the whole card unless at least one preferred_color_labels color is in stock. Hides both when the product has none of those colors and when it has them but they're all sold out.
+  @param {boolean} [compare_enabled] - When true (compare-enabled collections), populate product-fetcher public data and render the Compare checkbox.
+
+  @example
+  {% render 'product-card', product: product, collection_context: collection %}
+  {% render 'product-card', product: product, preferred_color_labels: 'caribbean blue||royal', hide_swatches: true %}
+{% enddoc %}
+
+{%- liquid
+  # Hide set cards where any component is fully out of stock.
+  # A "set" is detected by the bundle.products metafield being non-empty
+  # (matches the quick-shop suppression pattern further down).
+  assign hide_card = false
+  assign is_set = false
+  assign set_price_min = 0
+  assign set_compare_min = 0
+  if product.metafields.bundle.products.value.size > 0
+    assign is_set = true
+    for component in product.metafields.bundle.products.value
+      unless component.available
+        assign hide_card = true
+        break
+      endunless
+      # Combined starting-at: sum each component's lowest price + lowest
+      # compare-at. compare_at_price_min is 0 when none of the component's
+      # variants are on sale, so fall back to price_min in that case.
+      assign set_price_min = set_price_min | plus: component.price_min
+      assign comp_compare = component.compare_at_price_min
+      if comp_compare < component.price_min
+        assign comp_compare = component.price_min
+      endif
+      assign set_compare_min = set_compare_min | plus: comp_compare
+    endfor
+  endif
+
+  assign variant = null
+  assign match_found = false
+  assign preferred_color = ''
+  assign preferred_color_value_id = null
+  assign preferred_color_variant_id = null
+
+  if preferred_color_labels != blank
+    assign target_labels = preferred_color_labels | downcase | split: '||'
+    # Resolve the card color from option values, not product.variants (capped at
+    # 250). value.available is computed across all variants, so it's cap-safe;
+    # value.variant is unreliable here because Shopify only populates it when
+    # Color is the product's first option.
+    for option in product.options_with_values
+      assign option_name_lower = option.name | downcase
+      if option_name_lower == 'color'
+        # First in-stock colorway color (in option-value order) drives the image,
+        # swatch preselect, and quick-shop URL.
+        for value in option.values
+          assign value_name = value.name | downcase | strip
+          if target_labels contains value_name and value.available and match_found == false
+            assign preferred_color = value_name
+            assign preferred_color_value_id = value.id
+            assign match_found = true
+            # Use the matched color's variant for badges when available (only
+            # populated when Color is option1); the image is driven by name below.
+            if value.variant
+              assign variant = value.variant
+              assign preferred_color_variant_id = value.variant.id
+            endif
+          endif
+        endfor
+        break
+      endif
+    endfor
+  endif
+
+  # Color PLP / Shop by Color: hide the card when no listed colorway color is in
+  # stock. match_found requires a colorway color that's available, so this single
+  # check covers both "product has none of the colorway colors" and "it has them
+  # but they're all sold out".
+  if hide_if_no_color and match_found == false
+    assign hide_card = true
+  endif
+
+  if variant == null
+    assign variant = product.selected_or_first_available_variant
+  endif
+
+  assign product_url = product.url | within: collection_context
+  if preferred_color_value_id
+    if preferred_color_variant_id
+      assign product_url = product_url | split: '?' | first | append: '?variant=' | append: preferred_color_variant_id
+    else
+      assign product_url = product_url | split: '?' | first | append: '?option_values=' | append: preferred_color_value_id
+    endif
+  endif
+
+  # Quick shop URL: pre-select color via option_values (not variant=ID), so
+  # the section can detect "fresh load" (partial selection) and render "From: $X"
+  # until the user picks the remaining options.
+  # Strip any existing query string (within: collection_context can add
+  # _pos/_fid/_ss/variant tracking params), otherwise appending '?option_values='
+  # produces a URL with two '?' and Shopify silently uses the variant= param.
+  assign quick_shop_url = product.url | within: collection_context | split: '?' | first
+  # Prefer the resolved colorway color so the modal opens on the same color the
+  # card shows; otherwise derive it from the (fallback) variant's color option.
+  assign color_value_id = preferred_color_value_id
+  if color_value_id == null
+    for option in product.options_with_values
+      assign option_name_lower = option.name | downcase
+      if option_name_lower == 'color'
+        assign color_position_index = option.position | minus: 1
+        assign variant_color_name = variant.options[color_position_index]
+        for value in option.values
+          if value.name == variant_color_name
+            assign color_value_id = value.id
+            break
+          endif
+        endfor
+        break
+      endif
+    endfor
+  endif
+  if color_value_id
+    assign quick_shop_url = quick_shop_url | append: '?option_values=' | append: color_value_id
+  endif
+
+  assign loading = 'lazy'
+  if loading_eager
+    assign loading = 'eager'
+  endif
+-%}
+
+
+
+{%- unless hide_card -%}
+<!-- snippet: product-card -->
+{% # preserve-options: swatch clicks swap only the areas below (image, text, compare) so the swatch row DOM — its order and checked state — survives grouped-product card swaps. %}
+<product-fetcher section="sapi-product-card" preserve-options>
+
+  {%- render 'product-fetcher-state',
+    product: product,
+    variant: variant,
+    collection_context: collection_context,
+    include_public_data: compare_enabled -%}
+
+  <div class="product-card">
+
+    {% #  Image  %}
+    <div class="group/product-card-media aspect-product-image relative overflow-hidden" data-product-fetcher-area="variant">
+      <a href="{{ product_url }}" data-product-color-link
+        class="no-underline ">
+        <span class="sr-only">View {{ product.title }}</span>
+        {%- liquid
+          capture media_list
+            render 'product-media-list', product: product, variant: variant, list_name: 'featured_hover', selected_color: preferred_color
+          endcapture
+          assign media_list = media_list | split: ' '
+        -%}
+        <div class="size-full relative overflow-hidden rounded-theme-sm">
+          {%- for index_string in media_list -%}
+            {%- liquid
+              assign index = index_string | plus: 0
+              assign media = product.media[index]
+              assign img_loading_eager = loading_eager
+              assign show_skeleton = true
+              assign img_loading = 'lazy'
+              assign hover_img_class = ""
+
+              # hover image
+              unless forloop.first
+                assign img_loading_eager = false
+                assign show_skeleton = false
+                assign img_loading = 'lazy'
+                assign hover_img_class = "opacity-0 z-1 transition-opacity duration-300 group-hover/product-card-media:opacity-100"
+              endunless
+            -%}
+            <div class="absolute size-full inset-0 {{ hover_img_class }}" >
+              <media-loader class="block size-full relative group/media-loader">
+                <div class="size-full duration-300 opacity-0 transition-opacity
+                  group-[[ready]]/media-loader:opacity-100">
+                  {{- media.preview_image
+                    | image_url: width: 2048
+                    | image_tag: loading: img_loading, sizes: '(min-width: 1024px) 25vw, 50vw', class: 'size-full object-cover'
+                  -}}
+                </div>
+                {%- if show_skeleton -%}
+                  <div class="absolute duration-300 inset-0 size-full transition-opacity group-[[ready]]/media-loader:opacity-0">
+                    <div class="skeleton-pulse bg-grey-light size-full"></div>
+                  </div>
+                {%- endif -%}
+              </media-loader>
+            </div>
+
+          {%- else -%}
+            <div class="absolute size-full inset-0 bg-grey-light"></div>
+          {%- endfor -%}
+
+        </div>
+      </a>
+
+      {% #  Badges  %}
+      <div class="absolute top-1 left-1 lg:top-2 lg:left-2 z-1">
+        {%- render 'product-badges',
+          product: product,
+          variant: variant -%}
+      </div>
+
+      {% #  Quick Shop — hidden for set products since the modal can't configure them  %}
+      {%- unless product.metafields.bundle.products.value.size > 0 -%}
+        <html-fetcher-trigger
+          selector="#quick-shop-dialog html-fetcher"
+          href="{{ quick_shop_url }}"
+          data-vegax-command="show-modal"
+          data-vegax-commandfor="quick-shop-dialog" >
+          <button type="button"
+            class="button button-secondary p-0 min-w-0
+              absolute bottom-2 right-2 lg:bottom-4 lg:right-4 size-8 lg:size-10
+              flex-center rounded-full z-1"
+            aria-label="Quick shop {{ product.title }}">
+            <span class="block size-4 lg:size-5 [&>svg]:size-full">
+              {{- 'icon-plus.svg' | inline_asset_content -}}
+            </span>
+          </button>
+        </html-fetcher-trigger>
+      {%- endunless -%}
+    </div>
+
+    {%- #  Text  -%}
+    <div class="flex flex-col gap-1 mt-4 mb-6 px-4 lg:px-0">
+      <div class="contents" data-product-fetcher-area="variant">
+        {%- render 'product-meta-collection', product: product, spacer: true -%}
+
+        {%- #  Product title  -%}
+        <a href="{{ product_url }}" data-product-color-link class="fs-body-md font-medium no-underline line-clamp-2">{{ product.title }}</a>
+      </div>
+
+      {%- #  Yotpo star rating — outside any fetcher area so swatch swaps don't tear down and re-render it (rating is per product, not per variant)  -%}
+      {% if settings.yotpo_widget_instance_id != blank %}
+        <a href="{{ product_url }}#yotpoReviewsWidget" data-product-color-link class="no-underline">
+          <yotpo-stars class="block min-h-5.25">
+            <div
+              data-yotpo-instance-id="{{ settings.yotpo_widget_instance_id | escape }}"
+              data-yotpo-product-id="{{ product.id }}"
+              data-yotpo-section-id="{{ section.id | default: template.name }}"
+              class="yotpo-star-rating"></div>
+          </yotpo-stars>
+        </a>
+      {% endif %}
+
+      <div class="contents" data-product-fetcher-area="variant">
+        {%- #  Price  -%}
+        <p class="flex items-center gap-1 text-sm">
+          {%- if is_set -%}
+            <span class="text-xs">From: </span>
+            {%- if set_compare_min > set_price_min -%}
+              <span class="text-red-sale">{{ set_price_min | money }}</span>
+              <s class="text-grey-dark opacity-30 font-medium">{{ set_compare_min | money }}</s>
+            {%- else -%}
+              <span>{{ set_price_min | money }}</span>
+            {%- endif -%}
+          {%- else -%}
+            {%- if product.price_varies -%}
+              <span class="text-xs">From: </span>
+            {%- endif -%}
+            {%- if product.compare_at_price_min > product.price_min -%}
+              <span class="text-red-sale">{{ product.price_min | money }}</span>
+              <s class="text-grey-dark opacity-30 font-medium">{{ product.compare_at_price_min | money }}</s>
+            {%- else -%}
+              <span>{{ product.price_min | money }}</span>
+            {%- endif -%}
+          {%- endif -%}
+        </p>
+      </div>
+
+      {%- #  Color swatches — outside any fetcher area so the row (order + checked state) survives card swaps  -%}
+      {%- unless hide_swatches -%}
+        {%- liquid
+          # Only forward when the image actually resolved to the preferred
+          # color, so the fronted/checked swatch can't disagree with the photo.
+          assign swatch_preferred_labels = ''
+          if match_found
+            assign swatch_preferred_labels = preferred_color_labels
+          endif
+        -%}
+        {%- render 'product-card-swatches',
+          product: product,
+          collection_context: collection_context,
+          preferred_color_labels: swatch_preferred_labels -%}
+      {%- endunless -%}
+
+      {%- #  Compare checkbox (renders only on compare-enabled collections)  -%}
+      <div class="contents" data-product-fetcher-area="variant">
+        {%- render 'compare-checkbox', product: product, collection_context: collection_context -%}
+      </div>
+    </div>
+
+  </div>
+</product-fetcher>
+{%- endunless -%}

@@ -1,0 +1,133 @@
+<!-- snippet: product-set-item -->
+{%- comment -%}
+  Renders one set component card. Shared between the initial server
+  render (sections/main-product-set.liquid) and the section-API refetch
+  (sections/sapi-set-product.liquid). Producing identical markup in both
+  contexts means the section-API swap is a clean drop-in.
+
+  Accepts:
+  - product: {Object} the component product
+  - current_variant: {Object|null} resolved variant, null in fresh-load state
+  - gallery_variant: {Object} variant whose image shows in the thumbnail
+  - collection_context: {Object} optional
+{%- endcomment -%}
+
+{%- liquid
+  capture thumbnail_media_list
+    render 'product-media-list', product: product, variant: gallery_variant, list_name: 'featured'
+  endcapture
+  assign thumbnail_media_index = thumbnail_media_list | strip | split: ' ' | first | plus: 0
+  assign thumb_image = product.media[thumbnail_media_index].preview_image
+  if thumb_image == blank
+    assign thumb_image = gallery_variant.featured_image | default: product.featured_image
+  endif
+-%}
+
+<product-set-item
+  options-count="{{ product.options.size }}"
+  class="block border-b border-grey my-6">
+  <product-fetcher
+    section="sapi-set-product"
+    product-handle="{{ product.handle }}">
+    {%- render 'product-fetcher-state',
+      product: product,
+      variant: current_variant,
+      collection_context: collection_context
+    -%}
+
+    {%- # Top row: thumbnail + title/stars/view details -%}
+    <div class="flex gap-4 mb-6">
+      <div
+        data-product-fetcher-area="gallery"
+        class="w-20 shrink-0">
+        {%- if thumb_image -%}
+          {{-
+            thumb_image
+            | image_url: width: 240
+            | image_tag:
+              alt: thumb_image.alt,
+              loading: 'lazy',
+              sizes: '80px',
+              class: 'w-full h-auto rounded-theme-sm'
+          -}}
+        {%- endif -%}
+      </div>
+
+      {%- # Title column + desktop collapse button -%}
+      <div class="grow flex items-start justify-between gap-4">
+        {%- # Title / stars / view details -%}
+        <div
+          data-product-fetcher-area="variant"
+          class="grow lg:grow-0 flex flex-col gap-2 max-w-[240px]">
+          <div class="font-medium">
+            {%- render 'product-title', product: product -%}
+          </div>
+
+          {% if settings.yotpo_widget_instance_id != blank %}
+            <a href="{{ product.url }}#yotpoReviewsWidget" class="no-underline">
+              <yotpo-stars class="block min-h-5.25">
+                <div
+                  data-yotpo-instance-id="{{ settings.yotpo_widget_instance_id | escape }}"
+                  data-yotpo-product-id="{{ product.id }}"
+                  data-yotpo-section-id="{{ section.id | default: template.name }}"
+                  class="yotpo-star-rating"></div>
+              </yotpo-stars>
+            </a>
+          {% endif %}
+
+          <a href="{{ product.url }}" data-product-color-link class="fs-body-sm underline"
+            >View Details</a
+          >
+        </div>
+
+        {%- # Desktop collapse button -%}
+        <button
+          type="button"
+          data-product-set-item-toggle
+          aria-expanded="true"
+          aria-controls="set-item-options-{{ product.id }}-{{ section.id | default: 'set' }}"
+          class="group/toggle hidden lg:flex items-center justify-end gap-1 min-w-[103px] cursor-pointer">
+          <span class="fs-body-sm hidden group-aria-expanded/toggle:inline">Collapse</span>
+          <span class="fs-body-sm whitespace-nowrap group-aria-expanded/toggle:hidden"
+            >Select Options</span
+          >
+          <span class="size-4 inline-flex items-center transition-transform duration-200 group-aria-expanded/toggle:rotate-180 [&>svg]:size-full">
+            {{- 'icon-angle-down.svg' | inline_asset_content -}}
+          </span>
+        </button>
+      </div>
+    </div>
+
+    {%- # Collapsible options panel — <accordion-block> animates height via WAAPI -%}
+    <accordion-block class="border-none">
+      <details
+        id="set-item-options-{{ product.id }}-{{ section.id | default: 'set' }}"
+        data-product-set-item-panel
+        open>
+        <summary class="sr-only" aria-hidden="true" tabindex="-1">Toggle product options</summary>
+        <div
+          data-product-fetcher-area="variant"
+          class="empty:hidden p-0 m-0">
+          {%- render 'product-options-list',
+            product: product,
+            collection_context: collection_context
+          -%}
+        </div>
+      </details>
+    </accordion-block>
+
+    {%- # Mobile collapse button -%}
+    <button
+      type="button"
+      data-product-set-item-toggle
+      aria-expanded="true"
+      aria-controls="set-item-options-{{ product.id }}-{{ section.id | default: 'set' }}"
+      class="group/toggle lg:hidden flex items-center gap-1 mb-6 cursor-pointer">
+      <span class="hidden group-aria-expanded/toggle:inline">Collapse</span>
+      <span class="group-aria-expanded/toggle:hidden">Select Options</span>
+      <span class="size-3 inline-flex items-center transition-transform duration-200 group-aria-expanded/toggle:rotate-180 [&>svg]:size-full">
+        {{- 'icon-angle-down.svg' | inline_asset_content -}}
+      </span>
+    </button>
+  </product-fetcher>
+</product-set-item>

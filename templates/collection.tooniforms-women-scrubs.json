@@ -1,0 +1,111 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "header": {
+      "type": "collection-header",
+      "settings": {
+        "color_scheme": "",
+        "image_color_scheme": "scheme-dark",
+        "width": "container",
+        "center_content": false,
+        "active_button_style": "button",
+        "linked_button_style": "button button-outline-white"
+      }
+    },
+    "products": {
+      "type": "collection-products",
+      "settings": {
+        "filter_color_scheme": "scheme-default",
+        "products_per_page": 16
+      }
+    },
+    "seo_text_4tTMd4": {
+      "type": "seo-text",
+      "name": "SEO Text",
+      "settings": {
+        "content": "{{ collection.metafields.seo.content | metafield_tag }}",
+        "color_scheme": "scheme-0d9bed0c-0f1f-4f9d-99af-d15d3a707bfd"
+      }
+    },
+    "empty_collection_carousel_zApKLV": {
+      "type": "featured-collection",
+      "name": "Product carousel",
+      "settings": {
+        "color_scheme": "",
+        "heading": "Featured Products",
+        "text": "",
+        "collection": "",
+        "products_to_show": 12,
+        "loop": false,
+        "button_link": "",
+        "button_text": "Shop All",
+        "slides_per_view_tablet": 2,
+        "slides_per_view_laptop": 3,
+        "slides_per_view_desktop": 4
+      }
+    },
+    "collapsible_content_aNx7EB": {
+      "type": "collapsible-content",
+      "blocks": {
+        "item_zgwyxW": {
+          "type": "item",
+          "settings": {
+            "heading": "What are Cherokee Tooniforms women's scrubs?",
+            "content": "Cherokee Tooniforms women's scrubs are cartoon-themed healthcare uniforms designed for professionals who love to express their personality on shift. Built for durability and all-day comfort, Tooniforms feature prints inspired by beloved licensed characters — from Disney and Pixar to Peanuts, Bluey, and more — so you can stay on-trend with pop culture while looking polished and professional."
+          }
+        },
+        "item_CXhqm7": {
+          "type": "item",
+          "settings": {
+            "heading": "What fabric are Cherokee Tooniforms women's scrubs made from?",
+            "content": "Tooniforms tops and jackets are made from a blend of recycled polyester, spandex, and cotton — a breathable, moisture-wicking fabric crafted for durability and all-day comfort. The blend keeps you cool through every shift while holding up through repeated washing, so the <a href=\"https://www.cherokeeuniforms.com/womens-scrubs-prints\"><span style=\"text-decoration:underline\">prints </span></a>stay vibrant and the scrubs keep their shape."
+          }
+        },
+        "item_Y8Umyx": {
+          "type": "item",
+          "settings": {
+            "heading": "What character prints are available in Cherokee Tooniforms for women?",
+            "content": "Tooniforms features an extensive and regularly updated range of licensed character prints. Current prints include characters from Disney (Mickey, Minnie, Cinderella, Ariel, Bambi, Lady and the Tramp, The Lion King, Tinker Bell, Dumbo, Lilo & Stitch, The Aristocats, Eeyore, Tigger, Winnie the Pooh, Frozen, Toy Story, and Disney Villains), Pixar (Finding Nemo/Dory, Monsters Inc.), Peanuts (Snoopy), Bluey, Wonder Woman, Scooby-Doo, Sesame Street, The Smurfs, and Tom and Jerry. New styles and prints are released regularly."
+          }
+        },
+        "item_NaBfAK": {
+          "type": "item",
+          "settings": {
+            "heading": "Are Cherokee Tooniforms good for pediatric and family care settings?",
+            "content": "Tooniforms are specifically designed as perfect for pediatric and family care settings. The character-themed prints — from Disney favorites to classic cartoons — are designed to lift spirits and spread smiles, making them a natural fit for working with children and families. Any healthcare professional who wants to add a playful, personalized touch to their uniform will find something in the Tooniforms lineup."
+          }
+        }
+      },
+      "block_order": [
+        "item_zgwyxW",
+        "item_CXhqm7",
+        "item_Y8Umyx",
+        "item_NaBfAK"
+      ],
+      "name": "Collapsible Content",
+      "settings": {
+        "color_scheme": "",
+        "heading": "Frequently Asked Questions",
+        "text": "",
+        "button_text": "",
+        "button_link": "",
+        "button_style": "button"
+      }
+    }
+  },
+  "order": [
+    "header",
+    "products",
+    "seo_text_4tTMd4",
+    "empty_collection_carousel_zApKLV",
+    "collapsible_content_aNx7EB"
+  ]
+}

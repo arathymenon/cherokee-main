@@ -1,0 +1,145 @@
+<!-- section: sapi-predictive-search -->
+{%- if predictive_search.performed -%}
+  {%- liquid
+    assign search_queries = predictive_search.resources.queries
+    assign search_products = predictive_search.resources.products
+    assign search_collections = predictive_search.resources.collections
+    assign search_pages = predictive_search.resources.pages
+    assign search_articles = predictive_search.resources.articles
+
+    # Total non-suggestion results across every type S&D may return.
+    assign result_count = search_products.size | plus: search_collections.size | plus: search_pages.size | plus: search_articles.size
+    assign total_count = result_count | plus: search_queries.size
+  -%}
+
+  {%- if predictive_search.terms != 'empty_string' -%}
+    {%- if total_count > 0 -%}
+      <div class="grid grid-cols-1 md:grid-cols-[304px_400px] gap-4 pt-sm">
+
+        {%- # Suggestions / collections / pages / articles column -%}
+        <div class="flex flex-col gap-md">
+          {%- # Suggestions -%}
+          <div>
+            <p class="mb-5">{{ 'sections.predictive_search.suggestions' | t }}</p>
+            {%- if search_queries.size > 0 -%}
+              <ul class="flex flex-col gap-2">
+                {%- for query in search_queries -%}
+                  <li>
+                    <a
+                      href="{{ routes.search_url }}?q={{ query.text | url_encode }}&type=product"
+                      class="text-sm no-underline hover:underline">
+                      {{- query.text -}}
+                    </a>
+                  </li>
+                {%- endfor -%}
+              </ul>
+            {%- else -%}
+              <p class="text-sm">{{ 'sections.predictive_search.no_suggestions' | t }}</p>
+            {%- endif -%}
+          </div>
+
+          {%- # Collections -%}
+          {%- if search_collections.size > 0 -%}
+            <div>
+              <p class="mb-5">{{ 'sections.predictive_search.collections' | t }}</p>
+              <ul class="flex flex-col gap-2">
+                {%- for collection in search_collections -%}
+                  <li>
+                    <a href="{{ collection.url }}" class="text-sm no-underline hover:underline">
+                      {{- collection.title -}}
+                    </a>
+                  </li>
+                {%- endfor -%}
+              </ul>
+            </div>
+          {%- endif -%}
+
+          {%- # Pages -%}
+          {%- if search_pages.size > 0 -%}
+            <div>
+              <p class="mb-3">{{ 'sections.predictive_search.pages' | t }}</p>
+              <ul class="flex flex-col gap-2">
+                {%- for page in search_pages -%}
+                  <li>
+                    <a href="{{ page.url }}" class="text-sm no-underline hover:underline">
+                      {{- page.title -}}
+                    </a>
+                  </li>
+                {%- endfor -%}
+              </ul>
+            </div>
+          {%- endif -%}
+
+          {%- # Articles -%}
+          {%- if search_articles.size > 0 -%}
+            <div>
+              <p class="mb-3">{{ 'sections.predictive_search.articles' | t }}</p>
+              <ul class="flex flex-col gap-2">
+                {%- for article in search_articles -%}
+                  <li>
+                    <a href="{{ article.url }}" class="text-sm no-underline hover:underline">
+                      {{- article.title -}}
+                    </a>
+                  </li>
+                {%- endfor -%}
+              </ul>
+            </div>
+          {%- endif -%}
+        </div>
+
+        {%- # Products column -%}
+        {%- if search_products.size > 0 -%}
+          <div>
+            <p class="mb-3">{{ 'sections.predictive_search.products' | t }}</p>
+            <ul class="flex flex-col gap-0">
+              {%- for product in search_products limit: 4 -%}
+                <li>
+                  {%- render 'product-card-search', product: product -%}
+                </li>
+              {%- endfor -%}
+            </ul>
+          </div>
+        {%- endif -%}
+
+      </div>
+    {%- else -%}
+
+      {%- # Trending Products -%}
+      {%- assign empty_collection = settings.empty_state_collection -%}
+      <div class="pt-sm">
+        <p class="text-sm mb-5">
+          {{ 'sections.predictive_search.no_results' | t: terms: predictive_search.terms }}
+          {{ 'sections.predictive_search.check_instead' | t }}
+        </p>
+        {%- if empty_collection != blank and empty_collection.products_count > 0 -%}
+          <p class="mb-3">{{ 'sections.predictive_search.trending_products' | t }}</p>
+          <ul class="flex flex-col gap-0 max-w-[400px]">
+            {%- for product in empty_collection.products limit: 4 -%}
+              <li>
+                {%- render 'product-card-search', product: product -%}
+              </li>
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- # Search for xxxx -%}
+    <button type="submit"
+      class="flex items-center justify-between w-full py-4 border-t border-grey mt-4 text-sm no-underline">
+      <span>{{ 'sections.predictive_search.see_all_results_for' | t: terms: predictive_search.terms }}</span>
+      {{- 'icon-arrow-right.svg' | inline_asset_content -}}
+    </button>
+  {%- endif -%}
+
+  <span data-predictive-search-live-region-count-value class="sr-only">
+    {%- if result_count == 0 -%}
+      {{ 'sections.predictive_search.no_results' | t: terms: predictive_search.terms }}
+    {%- else -%}
+      {{
+        'sections.predictive_search.results_with_count'
+        | t: terms: predictive_search.terms, count: result_count
+      }}
+    {%- endif -%}
+  </span>
+{%- endif -%}

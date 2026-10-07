@@ -1,0 +1,51 @@
+<!-- snippet: blog-pagination -->
+
+{% doc %}
+  Renders AJAX "Load previous" / "Load more" controls for the blog listing.
+
+  @param {string} type - 'prev' or 'more'
+  @param {object} paginate - Shopify paginate object
+
+  @example
+  {% render 'blog-pagination', type: 'more', paginate: paginate %}
+{% enddoc %}
+
+{%- if type == 'prev' -%}
+  <div data-ajax-pagination="load_prev">
+    {%- if paginate.previous.is_link -%}
+      <div class="flex justify-center pb-md">
+        <pagination-link data-pagination-link-mode="prepend">
+          <a href="{{ paginate.previous.url }}"
+            class="button button-outline-black"
+            data-ajax-pagination-loading="opacity-50">
+            Load previous
+          </a>
+        </pagination-link>
+      </div>
+    {%- endif -%}
+  </div>
+
+{%- elsif type == 'more' -%}
+  <div data-ajax-pagination="load_more">
+    {%- if paginate.next.is_link -%}
+      {%- liquid
+        assign current_items = paginate.page_size | times: paginate.current_page
+        if current_items > paginate.items
+          assign current_items = paginate.items
+        endif
+      -%}
+      <div class="flex flex-col items-center gap-4 py-lg">
+        <p class="fs-body-sm text-scheme-icons">
+          Showing {{ current_items }} of {{ paginate.items }}
+        </p>
+        <pagination-link data-pagination-link-mode="append">
+          <a href="{{ paginate.next.url }}"
+            class="button button-outline-black"
+            data-ajax-pagination-loading="opacity-50">
+            Load more
+          </a>
+        </pagination-link>
+      </div>
+    {%- endif -%}
+  </div>
+{%- endif -%}

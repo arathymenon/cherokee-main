@@ -1,0 +1,45 @@
+<div role="navigation" aria-label="Pagination" class="pagination">
+  <div class="pagination__prev">
+    <a
+      {% if paginate.previous.is_link %}
+        href="{{ paginate.previous.url }}"
+      {% endif %}
+      aria-label="Previous page"
+      data-html-fetcher-link="{{ paginate.previous.url }}&section_id={{ section.id }}"
+    >
+      {{- 'general.pagination.prev_page' | t -}}
+    </a>
+  </div>
+
+  <div class="pagination__parts">
+    {%- for part in paginate.parts -%}
+      <div>
+        {%- if part.is_link -%}
+          <a href="{{ part.url }}" aria-label="Page number {{ part.title }}" data-html-fetcher-link="{{ part.url }}&section_id={{ section.id }}">
+            {{- part.title -}}
+          </a>
+        {%- else -%}
+          {%- if part.title == paginate.current_page -%}
+            <span aria-current="page" aria-label="Page number {{ part.title }}" class="pagination__current">
+              {{- part.title -}}
+            </span>
+          {%- else -%}
+            <span>{{ part.title }}</span>
+          {%- endif -%}
+        {%- endif -%}
+      </div>
+    {%- endfor -%}
+  </div>
+
+  <div class="pagination__next">
+    <a
+      {% if paginate.next.is_link %}
+        href="{{ paginate.next.url }}"
+      {% endif %}
+      aria-label="Next page"
+      data-html-fetcher-link="{{ paginate.next.url }}&section_id={{ section.id }}"
+    >
+      {{- 'general.pagination.next_page' | t -}}
+    </a>
+  </div>
+</div>

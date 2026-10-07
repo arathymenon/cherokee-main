@@ -1,0 +1,104 @@
+<!-- section: main-activate-account -->
+
+{%- liquid
+  assign image = settings.account_image
+  assign return_to = routes.account_url | append: '?from-form'
+-%}
+
+<section class="account-section">
+  <div class="account-section__container-image">
+    {%- if image != blank -%}
+      <media-loader>
+        {{
+          image
+          | image_url: width: image.width
+          | image_tag: class: 'account-section__image', sizes: '(min-width: 540px) 100vw, 50vw'
+        }}
+      </media-loader>
+    {%- endif -%}
+  </div>
+  <div class="account-section__container-content">
+    <div class="account-section__content-activate">
+      <h1 class="account-section__title">
+        {{- 'customer.activate.title' | t -}}
+      </h1>
+      <div class="account-section__sub-text">
+        {{- 'customer.activate.sub_text' | t -}}
+      </div>
+      <smart-form>
+        {%- form 'activate_customer_password', class: 'account-section__form', return_to: return_to -%}
+          {%- if form.errors -%}
+            {%- assign form_errors = 'form-element--error' -%}
+            <div class="account-section__error">
+              {{- 'icon-error.svg' | inline_asset_content -}}
+              <div class="account-section__error-content">
+                <span class="account-section__error-text">{{- 'customer.activate.error_text' | t -}}</span>
+                {%- for error in form.errors -%}
+                  <li class="account-section__error-text--sub">
+                    {{- form.errors.messages[error] -}}
+                  </li>
+                {%- endfor -%}
+              </div>
+            </div>
+          {%- endif -%}
+
+          <div class="account-section__input-container">
+            <label
+              class="form-element {{ form_errors }} account-section__label"
+              for="AccountPassword"
+            >
+              {{- 'customer.activate.password_label' | t -}}
+            </label>
+            <input
+              class="form-element {{ form_errors }} account-section__input"
+              type="password"
+              name="customer[password]"
+              placeholder="{{- 'customer.activate.password_placeholder' | t -}}"
+              id="AccountPassword"
+              aria-required="true"
+              required
+            >
+            <small class="form-element">{{- 'customer.activate.password_length_text' | t -}}</small>
+          </div>
+
+          <div class="account-section__input-container">
+            <label
+              class="form-element {{ form_errors }} account-section__label"
+              for="AccountPasswordConfirmation"
+            >
+              {{- 'customer.activate.confirm_password_label' | t -}}
+            </label>
+            <input
+              class="form-element {{ form_errors }} account-section__input"
+              type="password"
+              name="customer[password_confirmation]"
+              placeholder="{{- 'customer.activate.confirm_password_placeholder' | t -}}"
+              id="AccountPasswordConfirmation"
+              aria-required="true"
+              required
+            >
+          </div>
+
+          <input
+            class="account-section__button account-section__button--smaller-margin primary-button"
+            type="submit"
+            value="{{- 'customer.activate.cta_text' | t -}}"
+          >
+        {%- endform -%}
+      </smart-form>
+
+      <div class="account-section__cancel">
+        <a href="{{- routes.account_login_url -}}" class="form-element secondary-button">
+          {{- 'customer.activate.cancel_text' | t -}}
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Account Section",
+  "settings": []
+}
+{% endschema %}

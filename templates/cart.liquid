@@ -1,0 +1,16 @@
+{%- # The cart has no standalone page — it lives in the #cart-dialog drawer. -%}
+{%- # Bounce /cart to the homepage with #cart so cart-hash-open.js opens the drawer. -%}
+{%- layout none -%}
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}">
+  <head>
+    <meta charset="utf-8">
+    <meta name="robots" content="noindex">
+    <title>{{ 'cart.title' | t }}</title>
+    <script>window.location.replace({{ routes.root_url | append: '#cart' | json }});</script>
+    <meta http-equiv="refresh" content="0; url={{ routes.root_url | append: '#cart' }}">
+  </head>
+  <body>
+    <a href="{{ routes.root_url | append: '#cart' }}">{{ 'general.continue_shopping' | t | default: 'Continue' }}</a>
+  </body>
+</html>

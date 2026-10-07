@@ -1,0 +1,37 @@
+<!-- snippet: icon-list-header -->
+
+{% doc %}
+  Renders the icon-list header (eyebrow + headline).
+  Returns nothing if both are blank.
+
+  @param {string} eyebrow - Small label/eyebrow shown above the headline (optional)
+  @param {string} headline - Main heading text (optional)
+  @param {string} align - 'center' or 'left' (required)
+
+  @example
+  {% render 'icon-list-header',
+    eyebrow: section.settings.eyebrow,
+    headline: section.settings.heading,
+    align: 'center' %}
+{% enddoc %}
+
+{%- liquid
+  if align == 'left'
+    assign align_class = 'text-left items-start'
+  else
+    assign align_class = 'text-center items-center'
+  endif
+-%}
+
+{% if eyebrow != blank or headline != blank %}
+  <div class="flex flex-col {{ align_class }}">
+    {% if eyebrow != blank %}
+      <p class="fs-eyebrow mb-2">{{ eyebrow | escape }}</p>
+    {% endif %}
+    {% if headline != blank %}
+      <div role="heading" aria-level="2" class="fs-display-2 mb-md text-pretty">
+        {{ headline | escape }}
+      </div>
+    {% endif %}
+  </div>
+{% endif %}

@@ -1,0 +1,121 @@
+<!-- section: liquid-code -->
+
+{%- liquid
+  assign s = section.settings
+  assign heading_size = s.heading_size | default: 'fs-display-2'
+
+  assign width_class = ''
+  if s.width == 'container'
+    assign width_class = 'max-w-container mx-auto'
+  endif
+
+  assign side_padding = ''
+  if s.add_side_padding
+    assign side_padding = 'px-gutter'
+  endif
+-%}
+
+<section class="color-{{ s.color_scheme }} {{ s.top_padding }} {{ s.bottom_padding }} {{ side_padding }}">
+  <div class="{{ width_class }}">
+
+    {% if s.heading != blank %}
+      <div class="mb-md">
+        {%- if s.heading_tag == 'h1' -%}
+          <h1 class="{{ heading_size }}">{{ s.heading | escape }}</h1>
+        {%- else -%}
+          <div role="heading" aria-level="2" class="{{ heading_size }}">{{ s.heading | escape }}</div>
+        {%- endif -%}
+      </div>
+    {% endif %}
+
+    <div>
+      {{ s.liquid_code }}
+    </div>
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Liquid Code",
+  "settings": [
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme" },
+
+    { "type": "header", "content": "Heading" },
+    { "type": "text", "id": "heading", "label": "Heading" },
+    {
+      "type": "select",
+      "id": "heading_tag",
+      "label": "Heading tag",
+      "info": "Use H1 only when this is the main heading of the page.",
+      "options": [
+        { "value": "div", "label": "Heading (aria-level 2)" },
+        { "value": "h1", "label": "H1" }
+      ],
+      "default": "div"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading size",
+      "options": [
+        { "value": "fs-display-1", "label": "Display 1" },
+        { "value": "fs-display-2", "label": "Display 2" },
+        { "value": "fs-display-3", "label": "Display 3" }
+      ],
+      "default": "fs-display-2"
+    },
+
+    { "type": "header", "content": "Layout" },
+    {
+      "type": "select",
+      "id": "width",
+      "label": "Width",
+      "options": [
+        { "value": "full-width", "label": "Full width" },
+        { "value": "container", "label": "Container" }
+      ],
+      "default": "full-width"
+    },
+    {
+      "type": "checkbox",
+      "id": "add_side_padding",
+      "label": "Add side padding",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "top_padding",
+      "label": "Top padding",
+      "options": [
+        { "value": "pt-0", "label": "None" },
+        { "value": "pt-sm", "label": "Small" },
+        { "value": "pt-md", "label": "Medium" },
+        { "value": "pt-lg", "label": "Large" }
+      ],
+      "default": "pt-md"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding",
+      "label": "Bottom padding",
+      "options": [
+        { "value": "pb-0", "label": "None" },
+        { "value": "pb-sm", "label": "Small" },
+        { "value": "pb-md", "label": "Medium" },
+        { "value": "pb-lg", "label": "Large" }
+      ],
+      "default": "pb-md"
+    },
+
+    { "type": "header", "content": "Code" },
+    { "type": "liquid", "id": "liquid_code", "label": "Code input" }
+  ],
+  "presets": [
+    {
+      "name": "Liquid Code",
+      "category": "Custom"
+    }
+  ]
+}
+{% endschema %}

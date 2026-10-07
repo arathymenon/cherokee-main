@@ -1,0 +1,18 @@
+.collection-promo-card {
+  grid-column: var(--card-mobile-col, 1) / span var(--card-mobile-span, 2);
+  grid-row: var(--card-mobile-row, 5);
+  aspect-ratio: var(--aspect-product-image);
+  margin-bottom: 1rem;
+}
+
+.collection-promo-card[style*="--card-desktop-span: 2"] {
+  aspect-ratio: 676 / 514;
+}
+
+@media (min-width: 1024px) {
+  .collection-promo-card {
+    grid-column: var(--card-desktop-col, 1) / span var(--card-desktop-span, 2);
+    grid-row: var(--card-desktop-row, 3);
+    margin-bottom: 0;
+  }
+}

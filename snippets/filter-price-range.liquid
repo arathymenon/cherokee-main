@@ -1,0 +1,107 @@
+{%- comment -%}
+  Renders a price range filter with text inputs and dual-handle slider.
+  Accepts:
+  - filter: {Object} Shopify filter object (type == 'price_range')
+{%- endcomment -%}
+
+{%- liquid
+  assign currencies_using_comma_decimals = 'ANG,ARS,BRL,BYN,BYR,CLF,CLP,COP,CRC,CZK,DKK,EUR,HRK,HUF,IDR,ISK,MZN,NOK,PLN,RON,RUB,SEK,TRY,UYU,VES,VND' | split: ','
+  assign uses_comma_decimals = false
+  if currencies_using_comma_decimals contains cart.currency.iso_code
+    assign uses_comma_decimals = true
+  endif
+
+  assign from_value = ''
+  if filter.min_value.value
+    if uses_comma_decimals
+      assign from_value = filter.min_value.value | money_without_currency | replace: '.', '' | replace: ',', '.'
+    else
+      assign from_value = filter.min_value.value | money_without_currency | replace: ',', ''
+    endif
+  endif
+
+  assign to_value = ''
+  if filter.max_value.value
+    if uses_comma_decimals
+      assign to_value = filter.max_value.value | money_without_currency | replace: '.', '' | replace: ',', '.'
+    else
+      assign to_value = filter.max_value.value | money_without_currency | replace: ',', ''
+    endif
+  endif
+
+  assign range_max = ''
+  if uses_comma_decimals
+    assign range_max = filter.range_max | money_without_currency | replace: '.', '' | replace: ',', '.'
+  else
+    assign range_max = filter.range_max | money_without_currency | replace: ',', ''
+  endif
+-%}
+
+<price-range-slider data-range-max="{{ range_max }}">
+  <div class="flex items-center gap-3 mb-4">
+    <div class="flex-1">
+      <label for="Filter-{{ filter.label | handle }}-GTE" class="text-xs mb-1 block">
+        {{ 'facets.filters.from' | t }}
+      </label>
+      <div class="flex items-center border border-black px-2 py-1.5">
+        <span class="text-sm mr-1">{{ cart.currency.symbol }}</span>
+        <input
+          data-facets-form-input
+          data-price-range-input="min"
+          name="{{ filter.min_value.param_name }}"
+          id="Filter-{{ filter.label | handle }}-GTE"
+          value="{{ from_value }}"
+          type="number"
+          placeholder="0"
+          min="0"
+          max="{{ range_max }}"
+          class="w-full text-sm border-none outline-none bg-transparent p-0"
+        >
+      </div>
+    </div>
+
+    <span class="pt-5">&mdash;</span>
+
+    <div class="flex-1">
+      <label for="Filter-{{ filter.label | handle }}-LTE" class="text-xs mb-1 block">
+        {{ 'facets.filters.to' | t }}
+      </label>
+      <div class="flex items-center border border-black px-2 py-1.5">
+        <span class="text-sm mr-1">{{ cart.currency.symbol }}</span>
+        <input
+          data-facets-form-input
+          data-price-range-input="max"
+          name="{{ filter.max_value.param_name }}"
+          id="Filter-{{ filter.label | handle }}-LTE"
+          value="{{ to_value }}"
+          type="number"
+          placeholder="{{ range_max }}"
+          min="0"
+          max="{{ range_max }}"
+          class="w-full text-sm border-none outline-none bg-transparent p-0"
+        >
+      </div>
+    </div>
+  </div>
+
+  <div class="relative h-6 flex items-center">
+    <div class="absolute w-full h-1 bg-grey-light rounded"></div>
+    <div class="absolute h-1 bg-black rounded" data-price-range-fill></div>
+    <input type="range"
+      data-price-range-handle="min"
+      min="0"
+      max="{{ range_max }}"
+      value="{{ from_value | default: 0 }}"
+      step="1"
+      class="absolute w-full appearance-none bg-transparent pointer-events-none [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:size-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-black [&::-webkit-slider-thumb]:cursor-grab [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-white [&::-webkit-slider-thumb]:shadow [&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:size-4 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-black [&::-moz-range-thumb]:cursor-grab [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-white [&::-moz-range-thumb]:shadow [&::-moz-range-thumb]:border-solid"
+    >
+    <input type="range"
+      data-price-range-handle="max"
+      min="0"
+      max="{{ range_max }}"
+      value="{{ to_value | default: range_max }}"
+      step="1"
+      class="absolute w-full appearance-none bg-transparent pointer-events-none [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:size-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-black [&::-webkit-slider-thumb]:cursor-grab [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-white [&::-webkit-slider-thumb]:shadow [&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:size-4 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-black [&::-moz-range-thumb]:cursor-grab [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-white [&::-moz-range-thumb]:shadow [&::-moz-range-thumb]:border-solid"
+    >
+  </div>
+</price-range-slider>

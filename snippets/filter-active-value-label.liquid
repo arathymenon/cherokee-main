@@ -1,0 +1,15 @@
+{%- if filter.type == 'boolean' -%}
+  {%- liquid
+    assign is_true = false
+    if filter.true_value and value.value == filter.true_value.value
+      assign is_true = true
+    endif
+  -%}
+  {%- if is_true -%}
+    {{- filter.label | escape -}}
+  {%- else -%}
+    {{- 'facets.filters.boolean_not' | t: label: filter.label -}}
+  {%- endif -%}
+{%- else -%}
+  {{- value.label | escape -}}
+{%- endif -%}

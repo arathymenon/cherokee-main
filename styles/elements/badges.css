@@ -1,0 +1,29 @@
+@layer components {
+  .badge {
+    font-weight: 500;
+    font-size: 10px;
+    letter-spacing: 4%;
+    text-transform: uppercase;
+  }
+
+  /* Sale, Low Stock, and Sold Out are hard coded */
+  .badge-sale {
+    background-color: var(--color-red-sale);
+    color: #fff;
+  }
+
+  .badge-final-sale {
+    background-color: var(--color-red-sale);
+    color: #fff;
+  }
+
+  .badge-low-stock {
+    background-color: #fff;
+    color: #000193;
+  }
+
+  .badge-sold-out {
+    background-color: #fff;
+    color: #333;
+  }
+}

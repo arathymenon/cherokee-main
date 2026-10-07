@@ -1,0 +1,264 @@
+<!-- snippet: product-option-partials -->
+{%- comment %}
+  Renders product option partials.
+
+  Accepts:
+  - name: {String} The name of the partial to render
+{%- endcomment %}
+
+{%- case name -%}
+  {%- when 'value_radio_normal' -%}
+    {%- comment -%}
+      Renders a non-swatch radio button.
+
+      Accepts:
+      - id: {String} ID of the product option value
+      - value_name: {String} Original name of the product option value
+      - value_display_name: {String} Used if we want to show different from original value name (optional)
+      - is_available: {Boolean}
+      - is_selected: {Boolean}
+      - product_url: {String} URL of the product (optional)
+      - is_size_option: {Boolean} true only for the Size option; gates the notification icon (optional)
+      - value_exists: {Boolean} false when no variant record exists for this value given the
+        selected preceding option (e.g. color) — hides the notification icon (optional, default true)
+    {%- endcomment -%}
+
+    {% assign value_display_name = value_display_name | default: value_name %}
+    {% assign value_exists = value_exists | default: true, allow_false: true %}
+
+    <label
+      class="
+        group px-4 py-2.5 border border-grey relative cursor-pointer text-center
+        outline-offset-2 outline-black rounded-xs min-w-15
+        hover:border-black
+        has-checked:border-black has-focus-visible:outline-2
+        leading-normal
+        {% unless is_available %}
+          text-grey hover:text-black has-checked:text-black
+        {% endunless %}
+      ">
+      <input
+        type="radio"
+        name="product-option-radio-group"
+        value="{{ value_name | escape }}"
+        {% if is_selected %}
+          checked
+        {% endif %}
+        {% if id %}
+          data-product-option-value-id="{{ id }}"
+        {% endif %}
+        data-product-option-display-value="{{ value_display_name | escape }}"
+        data-product-option-url="{{ product_url }}"
+        class="sr-only"
+      >
+      <span>
+        {{- value_display_name | escape }}
+
+        {% unless is_available %}
+          <span class="sr-only"> ({{ 'products.product.variant_sold_out_or_unavailable' | t }}) </span>
+
+          {%- # Strike-through -%}
+          <svg
+            class="absolute inset-0 h-full w-full text-grey group-hover:text-black group-has-checked:text-black"
+            viewBox="0 0 71 40"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            preserveAspectRatio="none">
+            <line
+              x1="0"
+              y1="0"
+              x2="71"
+              y2="40"
+              stroke="currentColor"
+              vector-effect="non-scaling-stroke" />
+          </svg>
+
+          {%- # Notification icon (Size option only, and only when the variant exists) -%}
+          {%- if is_size_option and value_exists -%}
+            <span class="absolute -top-[3px] -right-[3px] size-[14px] [&_svg]:size-[14px]">
+              {{- 'icon-notification.svg' | inline_asset_content -}}
+            </span>
+          {%- endif -%}
+        {% endunless %}
+      </span>
+    </label>
+
+  {%- when 'value_radio_swatch' -%}
+    {%- comment -%}
+      Renders a swatch radio button.
+
+      Accepts:
+      - id: {String} ID of the product option value
+      - value_name: {String} Original name of the product option value
+      - value_display_name: {String} Used if we want to show different from original value name (optional)
+      - is_available: {Boolean}
+      - is_selected: {Boolean}
+      - swatch_value: {String} URL of the swatch image or RGB color
+      - swatch_focal_point: {String} Focal point of the swatch image (optional)
+      - product_url: {String} URL of the product (optional)
+    {%- endcomment -%}
+
+    {% liquid
+      assign value_display_name = value_display_name | default: value_name
+      assign swatch_focal_point = swatch_focal_point | default: 'initial'
+    %}
+
+    <label
+      class="
+        p-0.5 border border-transparent border-solid relative cursor-pointer rounded-full
+        outline-offset-2 outline-black
+        hover:border-black
+        has-[:checked]:border-black has-[:focus-visible]:outline-2
+      "
+    >
+      <input
+        type="radio"
+        name="product-option-radio-group"
+        value="{{ value_name | escape }}"
+        {% if is_selected %}
+          checked
+        {% endif %}
+        {% if id %}
+          data-product-option-value-id="{{ id }}"
+        {% endif %}
+        data-product-option-display-value="{{ value_display_name | escape }}"
+        data-product-option-url="{{ product_url }}"
+        class="sr-only"
+      >
+      <span
+        class="size-[18px] block rounded-full relative overflow-hidden"
+        style="background: {{ swatch_value }}; background-position: {{ swatch_focal_point }};"
+      >
+        <span class="sr-only">
+          {{- value_display_name | escape }}
+        </span>
+
+        {% unless is_available %}
+          <span class="sr-only"> ({{ 'products.product.variant_sold_out_or_unavailable' | t }}) </span>
+
+          {%- # Strike-through -%}
+          <svg class="absolute inset-0 w-full h-full" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <line x1="0.353553" y1="0.353539" x2="18.3536" y2="18.3535" stroke="white"/>
+          </svg>
+        {% endunless %}
+      </span>
+    </label>
+
+  {%- when 'value_radio_mini_normal' %}
+    {%- comment -%}
+      Renders a non-swatch radio button mini size.
+
+      Accepts:
+      - id: {String} ID of the product option value
+      - value_name: {String} Original name of the product option value
+      - value_display_name: {String} Used if we want to show different from original value name (optional)
+      - is_available: {Boolean}
+      - is_selected: {Boolean}
+      - product_url: {String} URL of the product (optional)
+    {%- endcomment -%}
+
+    {% assign value_display_name = value_display_name | default: value_name %}
+
+    <label
+      class="
+        cursor-pointer relative
+        outline-offset-2 outline-black
+        has-[:checked]:underline has-[:focus-visible]:outline-2
+      "
+    >
+      <input
+        type="radio"
+        name="product-option-radio-group"
+        value="{{ value_name | escape }}"
+        {% if is_selected %}
+          checked
+        {% endif %}
+        {% if id %}
+          data-product-option-value-id="{{ id }}"
+        {% endif %}
+        data-product-option-display-value="{{ value_display_name | escape }}"
+        data-product-option-url="{{ product_url }}"
+        class="sr-only"
+      >
+      <span>
+        {{- value_display_name | escape }}
+
+        {% unless is_available %}
+          <span class="sr-only"> ({{ 'products.product.variant_sold_out_or_unavailable' | t }}) </span>
+
+          {%- # Strike-through -%}
+          <span
+            class="absolute left-0 top-1/2 w-full border border-solid border-current pointer-events-none"
+          >
+          </span>
+        {% endunless %}
+      </span>
+    </label>
+
+  {%- when 'value_radio_mini_swatch' -%}
+    {%- comment -%}
+      Renders a swatch radio button.
+
+      Accepts:
+      - id: {String} ID of the product option value
+      - value_name: {String} Original name of the product option value
+      - value_display_name: {String} Used if we want to show different from original value name (optional)
+      - is_available: {Boolean}
+      - is_selected: {Boolean}
+      - swatch_value: {String} URL of the swatch image or RGB color
+      - swatch_focal_point: {String} Focal point of the swatch image (optional)
+      - product_url: {String} URL of the product (optional)
+    {%- endcomment -%}
+
+    {% liquid
+      assign value_display_name = value_display_name | default: value_name
+      assign swatch_focal_point = swatch_focal_point | default: 'initial'
+    %}
+
+    <label
+      class="
+        p-0.5 border border-transparent border-solid relative cursor-pointer rounded-full
+        outline-offset-2 outline-black
+        hover:border-black
+        has-[:checked]:border-black has-[:focus-visible]:outline-2
+      "
+    >
+      <input
+        type="radio"
+        name="product-option-radio-group"
+        value="{{ value_name | escape }}"
+        {% if is_selected %}
+          checked
+        {% endif %}
+        {% if id %}
+          data-product-option-value-id="{{ id }}"
+        {% endif %}
+        data-product-option-display-value="{{ value_display_name | escape }}"
+        data-product-option-url="{{ product_url }}"
+        class="sr-only"
+      >
+      <span
+        class="size-4 block rounded-full relative overflow-hidden"
+        style="background: {{ swatch_value }}; background-position: {{ swatch_focal_point }};"
+      >
+        <span class="sr-only">
+          {{- value_display_name | escape }}
+        </span>
+
+        {% unless is_available %}
+          <span class="sr-only"> ({{ 'products.product.variant_sold_out_or_unavailable' | t }}) </span>
+
+          {%- # Strike-through -%}
+          <span class="absolute overflow-hidden inset-0 w-full h-full pointer-events-none">
+            <span
+              class="
+                absolute left-1/2 top-1/2 -translate-x-1/2 w-[400%]
+                border border-current border-solid origin-center -rotate-45
+              "
+            >
+            </span>
+          </span>
+        {% endunless %}
+      </span>
+    </label>
+{%- endcase -%}

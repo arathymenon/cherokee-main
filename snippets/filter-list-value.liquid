@@ -1,0 +1,25 @@
+{%- comment -%}
+  Renders filters' list option (checkbox)
+  Accepts:
+  - filter: {Object} Shopify filter object
+  - value: {Object} Shopify filter_value object
+{%- endcomment -%}
+
+{%- unless value.count == 0 and value.active == false -%}
+<div class="form-boolean">
+  <input
+    type="checkbox"
+    name="{{ value.param_name }}"
+    data-facets-form-input
+    value="{{ value.value }}"
+    id="facet-filter-{{ filter.label | handle }}-{{ value.value | handleize }}"
+    {% if value.active %}checked{% endif %}
+  >
+  <label for="facet-filter-{{ filter.label | handle }}-{{ value.value | handleize }}">
+    <span>
+      {{ value.label | escape }}&nbsp;
+      <small>({{ value.count }})</small>
+    </span>
+  </label>
+</div>
+{%- endunless -%}

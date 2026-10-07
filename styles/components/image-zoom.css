@@ -1,0 +1,41 @@
+@layer components {
+  image-zoom {
+    display: block;
+    overflow: hidden;
+    touch-action: pan-y;
+    cursor: zoom-in;
+  }
+
+  image-zoom[zoomed] {
+    touch-action: none;
+    cursor: grab;
+  }
+
+  image-zoom[gesturing] {
+    touch-action: none;
+    cursor: grabbing;
+  }
+
+  image-zoom img {
+    transform-origin: 0 0;
+    will-change: transform;
+    display: block;
+    max-width: none;
+    max-height: none;
+    width: auto;
+    height: auto;
+    opacity: 0;
+    transition: opacity 0.18s ease-out;
+    user-select: none;
+    -webkit-user-drag: none;
+    pointer-events: none;
+  }
+
+  image-zoom[ready] img {
+    opacity: 1;
+  }
+
+  image-zoom[transitioning] img {
+    transition: transform 0.3s ease-out, opacity 0.18s ease-out;
+  }
+}

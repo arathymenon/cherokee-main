@@ -1,0 +1,42 @@
+@utility thin-scrollbar {
+  &::-webkit-scrollbar {
+    width: 0.75rem;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: linear-gradient(
+      90deg,
+      theme(--color-transparent),
+      theme(--color-transparent) 75%,
+      theme(--color-grey-dark) 75%,
+      theme(--color-grey-dark)
+    );
+  }
+}
+
+@utility thin-h-scrollbar {
+  &::-webkit-scrollbar {
+    height: 0.75rem;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: theme(--color-grey-dark);
+  }
+}
+
+@utility no-scrollbar {
+  scrollbar-width: none; /* Firefox */
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@utility input-no-spinner {
+  appearance: textfield;
+
+  &::-webkit-inner-spin-button,
+  &.input-no-spinner::-webkit-outer-spin-button {
+    appearance: none;
+    margin: 0;
+  }
+}

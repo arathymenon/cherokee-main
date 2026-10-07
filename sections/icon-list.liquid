@@ -1,0 +1,147 @@
+<!-- section: icon-list -->
+
+{%- liquid
+  assign s = section.settings
+
+  assign use_image_layout = false
+  if s.section_image != blank
+    assign use_image_layout = true
+  endif
+-%}
+
+<section class="color-{{ s.color_scheme }} py-section" style="--icon-h-mobile: {{ s.icon_height_mobile }}px; --icon-h-desktop: {{ s.icon_height_desktop }}px;">
+  <div class="container">
+    {% if use_image_layout %}
+      <div class="lg:hidden">
+        {% if s.mobile_layout == 'carousel' %}
+          {% render 'icon-list-mobile-carousel', section: section, show_image: use_image_layout %}
+        {% else %}
+          {% render 'icon-list-mobile-list', section: section, show_image: use_image_layout %}
+        {% endif %}
+      </div>
+      <div class="hidden lg:block">
+        {% render 'icon-list-desktop-column', section: section %}
+      </div>
+    {% else %}
+      <div class="md:hidden">
+        {% if s.mobile_layout == 'carousel' %}
+          {% render 'icon-list-mobile-carousel', section: section, show_image: false %}
+        {% else %}
+          {% render 'icon-list-mobile-list', section: section, show_image: false %}
+        {% endif %}
+      </div>
+      <div class="hidden md:block">
+        {% render 'icon-list-desktop-row', section: section %}
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Icon List",
+  "settings": [
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme" },
+
+    { "type": "header", "content": "Content" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow" },
+    { "type": "text", "id": "heading", "label": "Heading" },
+
+    { "type": "header", "content": "Icons" },
+    {
+      "type": "range",
+      "id": "icon_height_desktop",
+      "label": "Icon height (desktop)",
+      "min": 24,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "icon_height_mobile",
+      "label": "Icon height (mobile)",
+      "min": 24,
+      "max": 56,
+      "step": 2,
+      "unit": "px",
+      "default": 40
+    },
+
+    { "type": "header", "content": "Layout" },
+    {
+      "type": "image_picker",
+      "id": "section_image",
+      "label": "Section image",
+      "info": "Adding an image switches desktop to image + column layout."
+    },
+    {
+      "type": "select",
+      "id": "image_position",
+      "label": "Image position (desktop)",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "left",
+      "visible_if": "{{ section.settings.section_image != blank }}"
+    },
+    {
+      "type": "select",
+      "id": "mobile_layout",
+      "label": "Mobile layout",
+      "options": [
+        { "value": "list", "label": "Vertical list" },
+        { "value": "carousel", "label": "Carousel" }
+      ],
+      "default": "list"
+    },
+    {
+      "type": "select",
+      "id": "mobile_align",
+      "label": "Mobile alignment",
+      "options": [
+        { "value": "center", "label": "Centered" },
+        { "value": "left", "label": "Left aligned" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "checkbox",
+      "id": "carousel_loop",
+      "label": "Loop carousel",
+      "default": false,
+      "visible_if": "{{ section.settings.mobile_layout == 'carousel' }}"
+    }
+  ],
+  "max_blocks": 4,
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Item",
+      "settings": [
+        { "type": "image_picker", "id": "icon", "label": "Icon" },
+        { "type": "text", "id": "title", "label": "Title", "default": "Item title" },
+        { "type": "richtext", "id": "text", "label": "Text" },
+        { "type": "text", "id": "link_text", "label": "Link text" },
+        { "type": "url", "id": "link_url", "label": "Link URL" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Icon List",
+      "category": "Media & Content",
+      "blocks": [
+        { "type": "item" },
+        { "type": "item" },
+        { "type": "item" }
+      ]
+    }
+  ],
+  "disabled_on": {
+    "groups": ["*"]
+  }
+}
+{% endschema %}

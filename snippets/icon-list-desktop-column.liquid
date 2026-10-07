@@ -1,0 +1,57 @@
+<!-- snippet: icon-list-desktop-column -->
+
+{% doc %}
+  Desktop image+column layout for the icon-list section.
+  Image on one side, content column (header + vertical list) on the other.
+  Always left-aligned. Image position controlled by `s.image_position`.
+  Parent should wrap with `hidden lg:block`.
+
+  @param {object} section - Shopify section object (required)
+
+  @example
+  {% render 'icon-list-desktop-column', section: section %}
+{% enddoc %}
+
+{%- liquid
+  assign s = section.settings
+
+  if s.image_position == 'right'
+    assign image_order_class = 'order-last'
+  else
+    assign image_order_class = 'order-first'
+  endif
+-%}
+
+<div class="flex gap-lg items-center">
+  <div class="flex-1 aspect-square overflow-hidden rounded-theme {{ image_order_class }}">
+    {% if s.section_image != blank %}
+      {%- capture content -%}
+        {{- s.section_image
+          | image_url: width: 1600
+          | image_tag:
+              class: 'w-full h-full object-cover',
+              loading: 'lazy',
+              sizes: '50vw',
+              widths: '600, 900, 1200, 1600'
+        -}}
+      {%- endcapture -%}
+      {%- render 'media-loader', content: content, show_skeleton: true -%}
+    {% else %}
+      {{ 'lifestyle-2' | placeholder_svg_tag: 'w-full h-full object-cover' }}
+    {% endif %}
+  </div>
+
+  <div class="flex-1 flex flex-col gap-0">
+    {% render 'icon-list-header', eyebrow: s.eyebrow, headline: s.heading, align: 'left' %}
+
+    {% if section.blocks.size > 0 %}
+      <ul class="flex flex-col gap-0">
+        {% for block in section.blocks %}
+          <li class="py-sm" {{ block.shopify_attributes }}>
+            {% render 'icon-list-item', block: block, align: 'left' %}
+          </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  </div>
+</div>

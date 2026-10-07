@@ -1,0 +1,501 @@
+{%- # --- Gate --------------------------------------------------------------- -%}
+{%- liquid
+  assign embroidery_config = product.metafields.embroidery.config.value
+  assign monogram_product = embroidery_config.monogram_control.value
+  assign is_embroidery_enabled = false
+
+  if product.metafields.embroidery.status.value == true and embroidery_config != blank and monogram_product != blank
+    assign is_embroidery_enabled = true
+  endif
+-%}
+
+{%- if is_embroidery_enabled -%}
+  {%- # --- Setup ------------------------------------------------------------ -%}
+  {%- liquid
+    assign embroidery_uid = product.id
+
+    assign positions = monogram_product.options_with_values.first.values
+    assign line_option = monogram_product.options_with_values[1]
+    assign fonts = embroidery_config.fonts.value
+    assign thread_colors = embroidery_config.thread_colors.value
+    assign starting_price = monogram_product.price_min | money
+    assign monogram_icon = monogram_product.featured_image
+
+    assign right_chest_image = blank
+    assign left_chest_image = blank
+    for image in monogram_product.images
+      assign image_alt = image.alt | downcase
+      if image_alt == 'icon right chest'
+        assign right_chest_image = image
+      elsif image_alt == 'icon left chest'
+        assign left_chest_image = image
+      endif
+    endfor
+
+    assign input_class = 'w-full border border-grey rounded-[2px] p-3 bg-white fs-body-md outline-none focus-visible:border-black'
+    assign dropdown_card_class = 'relative w-full'
+    assign dropdown_trigger_class = 'w-full flex items-center justify-between gap-3 border border-grey rounded-[4px] p-4 bg-white fs-body-md text-left text-black cursor-pointer outline-none focus-visible:border-black aria-expanded:rounded-none aria-expanded:border-b-0 aria-expanded:[&_[data-embroidery-dropdown-chevron]]:rotate-180'
+    assign dropdown_list_class = 'absolute z-30 left-0 right-0 top-full m-0 px-4 pb-4 pt-0 list-none flex flex-col gap-2 max-h-[156px] overflow-y-auto bg-white border border-t-0 border-grey rounded-none'
+    assign focus_ring = 'peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-black'
+  -%}
+
+  {%- # --- Font faces ------------------------------------------------------- -%}
+  {%- capture embroidery_font_faces -%}
+    {%- for font in fonts -%}
+      {%- liquid
+        assign font_name = font.name.value | default: font.name
+        assign font_file = font.file.value | default: font.file
+        assign font_url = font_file.url | default: blank
+        assign font_family = 'embroidery-font-' | append: font_name | handle
+        assign font_format = 'woff'
+        assign font_url_down = font_url | downcase
+        if font_url_down contains '.woff2'
+          assign font_format = 'woff2'
+        endif
+      -%}
+      {%- if font_url != blank -%}
+        @font-face {
+          font-family: {{ font_family | json }};
+          src: url({{ font_url | json }}) format({{ font_format | json }});
+          font-display: swap;
+        }
+        [data-embroidery-font-family="{{ font_family }}"] {
+          font-family: {{ font_family | json }}, sans-serif;
+        }
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endcapture -%}
+
+  {%- if embroidery_font_faces != blank -%}
+    <style>
+      {{ embroidery_font_faces }}
+    </style>
+  {%- endif -%}
+
+  <embroidery-configurator class="block my-6">
+    {%- # --- Config + open card --------------------------------------------- -%}
+    <script type="application/json" data-embroidery-config>
+      {%- render 'embroidery-config-data', product: product -%}
+    </script>
+
+    <p class="sr-only" data-embroidery-status role="status" aria-live="polite"></p>
+
+    <button
+      type="button"
+      class="w-full flex items-center gap-6 bg-grey-light-blue rounded-sm p-4 text-left cursor-pointer min-h-23"
+      data-embroidery-open
+      aria-expanded="false"
+      aria-controls="embroidery-panel-{{ embroidery_uid }}">
+      <span class="flex flex-1 min-w-0 items-center gap-2">
+        <span class="size-15 shrink-0 overflow-hidden rounded-sm" aria-hidden="true">
+          {{
+            monogram_icon
+            | image_url: width: 240
+            | image_tag: loading: 'lazy', class: 'size-full object-cover', alt: ''
+          }}
+        </span>
+
+        <span class="min-w-0">
+          <span class="block fs-body-md font-medium text-black">
+            {{- 'products.embroidery.heading' | t -}}
+          </span>
+          <span class="flex gap-1 items-baseline fs-body-md">
+            <span class="text-grey-dark">{{ 'products.embroidery.starting_at_prefix' | t }}</span>
+            <span class="text-black">
+              {{- 'products.embroidery.starting_at_price' | t: price: starting_price -}}
+            </span>
+          </span>
+        </span>
+      </span>
+
+      <span class="fs-body-md font-semibold shrink-0 text-black capitalize border-b border-transparent hover:border-black transition-colors">
+        {{- 'products.embroidery.add' | t -}}
+      </span>
+    </button>
+
+    {%- # --- Panel ---------------------------------------------------------- -%}
+    <div
+      id="embroidery-panel-{{ embroidery_uid }}"
+      class="bg-grey-light-blue rounded-sm p-4 flex flex-col gap-6"
+      data-embroidery-panel
+      role="region"
+      aria-labelledby="embroidery-heading-{{ embroidery_uid }}"
+      hidden>
+      {%- # --- Header / price ----------------------------------------------- -%}
+      <div>
+        <p
+          id="embroidery-heading-{{ embroidery_uid }}"
+          class="fs-body-md font-medium text-black">
+          {{ 'products.embroidery.heading' | t }}
+        </p>
+        <p
+          class="fs-body-md"
+          data-embroidery-price
+          data-state="starting"
+          aria-live="polite">
+          <span data-embroidery-price-starting class="inline-flex gap-1 items-baseline">
+            <span class="text-grey-dark">{{ 'products.embroidery.starting_at_prefix' | t }}</span>
+            <span class="text-black" data-embroidery-price-starting-value>
+              {{- 'products.embroidery.starting_at_price' | t: price: starting_price -}}
+            </span>
+          </span>
+          <span class="text-black" data-embroidery-price-applied hidden></span>
+        </p>
+      </div>
+
+      {%- # --- Position tabs ------------------------------------------------ -%}
+      <fieldset class="m-0 p-0 border-0 min-w-0">
+        <legend
+          class="fs-body-md mb-2 flex gap-2 items-center p-0 text-black"
+          data-embroidery-position-legend>
+          <span>{{ 'products.embroidery.position' | t }}:</span>
+          <span data-embroidery-position-value class="capitalize"></span>
+        </legend>
+
+        <div class="flex gap-2 w-full" role="presentation">
+          {%- for position in positions -%}
+            {%- liquid
+              assign position_down = position | downcase
+              assign is_right = false
+              if position_down contains 'right'
+                assign is_right = true
+              endif
+
+              if is_right
+                assign position_image = right_chest_image
+              else
+                assign position_image = left_chest_image
+              endif
+            -%}
+
+            <label class="flex-1 min-w-0 cursor-pointer">
+              <input
+                type="radio"
+                name="embroidery-position-{{ embroidery_uid }}"
+                class="peer sr-only"
+                value="{{ position | escape }}"
+                data-embroidery-tab
+                {% if position_image != blank %}
+                  data-position-image="{{ position_image | image_url: width: 180 }}"
+                {% endif %}
+                {% if forloop.first %}
+                  checked
+                {% endif %}>
+
+              <span class="flex gap-2 items-center h-14.25 p-2 bg-white border border-grey rounded-sm hover:border-black peer-checked:border-black transition-colors {{ focus_ring }}">
+                <span
+                  class="max-lg:hidden size-10 shrink-0 overflow-hidden rounded-sm bg-grey-light-blue flex-center"
+                  aria-hidden="true">
+                  {%- if position_image != blank -%}
+                    {{
+                      position_image
+                      | image_url: width: 180
+                      | image_tag: loading: 'lazy', class: 'size-full object-contain', alt: ''
+                    }}
+                  {%- endif -%}
+                </span>
+
+                <span class="flex-1 min-w-0 flex flex-col items-start">
+                  <span class="fs-body-md text-black capitalize">{{ position }}</span>
+                  <span class="fs-body-sm text-brand-blue empty:hidden" data-embroidery-tab-label></span>
+                </span>
+              </span>
+            </label>
+          {%- endfor -%}
+        </div>
+      </fieldset>
+
+      {%- # --- Editor ------------------------------------------------------- -%}
+      <div class="flex flex-col gap-6" data-embroidery-editor>
+        {%- # --- Line count ------------------------------------------------- -%}
+        <fieldset class="m-0 p-0 border-0 min-w-0">
+          <legend
+            class="fs-body-md mb-2 flex gap-2 items-center p-0 text-black"
+            data-embroidery-line-count-legend>
+            <span>{{ 'products.embroidery.line_count' | t }}:</span>
+            <span data-embroidery-line-count-value></span>
+          </legend>
+
+          <div class="flex flex-wrap gap-2" role="presentation">
+            {%- for value in line_option.values -%}
+              <label class="cursor-pointer">
+                <input
+                  type="radio"
+                  name="embroidery-line-count-{{ embroidery_uid }}"
+                  class="peer sr-only"
+                  value="{{ forloop.index }}"
+                  data-embroidery-line-count-input
+                  {% if forloop.first %}
+                    checked
+                  {% endif %}>
+
+                <span class="inline-flex items-center justify-center min-w-18 px-4 py-3 bg-white border border-grey rounded-xs fs-body-md text-black whitespace-nowrap capitalize hover:border-black peer-checked:border-black transition-colors {{ focus_ring }}">
+                  {{- value -}}
+                </span>
+              </label>
+            {%- endfor -%}
+          </div>
+        </fieldset>
+
+        {%- # --- Thread color + font ---------------------------------------- -%}
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="flex flex-col gap-2 fs-body-md text-black">
+            <label class="flex gap-2 items-center" for="embroidery-color-{{ embroidery_uid }}">
+              <span>{{ 'products.embroidery.thread_color' | t }}:</span>
+              <span data-embroidery-color-value aria-hidden="true">
+                {{- 'products.embroidery.please_select' | t -}}
+              </span>
+            </label>
+
+            <div
+              class="{{ dropdown_card_class }}"
+              data-embroidery-dropdown
+              data-embroidery-color-input
+              data-value=""
+              data-placeholder="{{ 'products.embroidery.select_thread_color' | t | escape }}">
+              <button
+                type="button"
+                id="embroidery-color-{{ embroidery_uid }}"
+                class="{{ dropdown_trigger_class }}"
+                aria-haspopup="listbox"
+                aria-expanded="false"
+                aria-controls="embroidery-color-list-{{ embroidery_uid }}"
+                data-embroidery-dropdown-trigger>
+                <span class="min-w-0 truncate" data-embroidery-dropdown-label>
+                  {{- 'products.embroidery.select_thread_color' | t -}}
+                </span>
+                <span
+                  class="size-4 shrink-0 text-black [&>svg]:size-full"
+                  data-embroidery-dropdown-chevron
+                  aria-hidden="true">
+                  {{- 'icon-angle-down.svg' | inline_asset_content -}}
+                </span>
+              </button>
+
+              <ul
+                id="embroidery-color-list-{{ embroidery_uid }}"
+                class="{{ dropdown_list_class }}"
+                role="listbox"
+                hidden
+                data-embroidery-dropdown-list>
+                {%- for color in thread_colors -%}
+                  {%- liquid
+                    assign color_name = color.color_name.value | default: color.name.value | default: color.name
+                    assign color_code = color.color_code.value | default: color.code.value
+                    assign swatch_value = color.swatch.value | default: color.swatch_color.value
+                  -%}
+                  <li
+                    class="
+                      flex items-center gap-2 cursor-pointer text-black outline-none focus:outline-2 focus:outline-offset-2 focus:outline-black focus:**:data-embroidery-color-swatch-ring:border-black aria-selected:**:data-embroidery-color-swatch-ring:border-black
+                      hover:**:data-embroidery-color-swatch-ring:border-black
+                    "
+                    role="option"
+                    tabindex="-1"
+                    aria-selected="false"
+                    data-embroidery-dropdown-option
+                    data-value="{{ color_name | escape }}"
+                    data-color-code="{{ color_code | escape }}">
+                    <span
+                      class="block p-0.75 shrink-0 rounded-full border border-transparent box-border"
+                      aria-hidden="true"
+                      data-embroidery-color-swatch-ring>
+                      <span
+                        class="block size-4.5 rounded-full border border-grey box-border"
+                        {% if swatch_value != blank %}
+                          style="background-color: {{ swatch_value }};"
+                        {% endif %}
+                        data-embroidery-color-swatch></span>
+                    </span>
+                    <span class="fs-body-sm">{{ color_name | escape }}</span>
+                  </li>
+                {%- endfor -%}
+              </ul>
+            </div>
+          </div>
+
+          <div class="flex flex-col gap-2 fs-body-md text-black">
+            <label class="flex gap-2 items-center" for="embroidery-font-{{ embroidery_uid }}">
+              <span>{{ 'products.embroidery.font' | t }}:</span>
+              <span data-embroidery-font-value aria-hidden="true">
+                {{- 'products.embroidery.please_select' | t -}}
+              </span>
+            </label>
+
+            <div
+              class="{{ dropdown_card_class }}"
+              data-embroidery-dropdown
+              data-embroidery-font-input
+              data-value=""
+              data-placeholder="{{ 'products.embroidery.select_font' | t | escape }}">
+              <button
+                type="button"
+                id="embroidery-font-{{ embroidery_uid }}"
+                class="{{ dropdown_trigger_class }}"
+                aria-haspopup="listbox"
+                aria-expanded="false"
+                aria-controls="embroidery-font-list-{{ embroidery_uid }}"
+                data-embroidery-dropdown-trigger>
+                <span class="min-w-0 truncate" data-embroidery-dropdown-label>
+                  {{- 'products.embroidery.select_font' | t -}}
+                </span>
+                <span
+                  class="size-4 shrink-0 text-black [&>svg]:size-full"
+                  data-embroidery-dropdown-chevron
+                  aria-hidden="true">
+                  {{- 'icon-angle-down.svg' | inline_asset_content -}}
+                </span>
+              </button>
+
+              <ul
+                id="embroidery-font-list-{{ embroidery_uid }}"
+                class="{{ dropdown_list_class }}"
+                role="listbox"
+                hidden
+                data-embroidery-dropdown-list>
+                {%- for font in fonts -%}
+                  {%- liquid
+                    assign font_name = font.name.value | default: font.name
+                    assign font_family = 'embroidery-font-' | append: font_name | handle
+                    assign font_file = font.file.value | default: font.file
+                    assign font_url = font_file.url | default: blank
+                  -%}
+                  <li
+                    class="cursor-pointer text-black w-fit pb-0.5 border-b border-transparent outline-none focus:outline-2 focus:outline-offset-2 focus:outline-black focus:border-black aria-selected:border-black hover:border-black leading-[normal]"
+                    role="option"
+                    tabindex="-1"
+                    aria-selected="false"
+                    data-embroidery-dropdown-option
+                    data-value="{{ font_name | escape }}"
+                    {% if font_url != blank %}
+                      data-embroidery-font-family="{{ font_family }}"
+                    {% endif %}>
+                    {{- font_name | escape -}}
+                  </li>
+                {%- endfor -%}
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        {%- # --- Lines ------------------------------------------------------ -%}
+        <div class="flex flex-col gap-2">
+          {%- for i in (1..3) -%}
+            <div
+              class="flex flex-col gap-1"
+              data-embroidery-line-field="{{ i }}"
+              {% unless i == 1 %}
+                hidden
+              {% endunless %}>
+              <label
+                class="flex gap-2 items-center fs-body-md text-black"
+                for="embroidery-line-{{ embroidery_uid }}-{{ i }}">
+                <span>{{ 'products.embroidery.line' | t: number: i }}:</span>
+                <span data-embroidery-line-price>{{ starting_price }}</span>
+              </label>
+
+              <div class="relative flex items-center">
+                <input
+                  id="embroidery-line-{{ embroidery_uid }}-{{ i }}"
+                  type="text"
+                  class="{{ input_class }} pr-12 aria-invalid:border-red-error!"
+                  maxlength="20"
+                  data-embroidery-line-input="{{ i }}"
+                  autocomplete="off"
+                  aria-describedby="embroidery-line-{{ embroidery_uid }}-{{ i }}-count">
+
+                <span
+                  class="absolute right-3 fs-body-sm text-grey-dark pointer-events-none"
+                  data-embroidery-line-count-display="{{ i }}"
+                  id="embroidery-line-{{ embroidery_uid }}-{{ i }}-count"
+                  aria-live="polite">
+                  0/20
+                </span>
+              </div>
+
+              <p
+                class="fs-body-sm text-black"
+                id="embroidery-line-{{ embroidery_uid }}-{{ i }}-error"
+                data-embroidery-line-error="{{ i }}"
+                role="alert"
+                hidden></p>
+            </div>
+          {%- endfor -%}
+        </div>
+
+        {%- # --- Actions ---------------------------------------------------- -%}
+        <div class="flex items-center justify-between gap-4">
+          <button
+            type="button"
+            class="underline-button cursor-pointer bg-transparent text-black"
+            data-embroidery-cancel>
+            {{- 'products.embroidery.cancel' | t -}}
+          </button>
+
+          <button
+            type="button"
+            class="button px-6 py-3 min-w-0 text-[14px]"
+            data-embroidery-apply
+            disabled>
+            {{- 'products.embroidery.apply' | t -}}
+          </button>
+        </div>
+      </div>
+
+      {%- # --- Summary ------------------------------------------------------ -%}
+      <div
+        class="flex flex-col gap-4"
+        data-embroidery-summary
+        aria-label="{{ 'products.embroidery.tab_summary' | t | escape }}"
+        hidden>
+        <div class="relative flex gap-3">
+          <span
+            class="size-15 p-[1.5px] shrink-0 overflow-hidden rounded-md bg-white flex-center"
+            data-embroidery-summary-icon
+            aria-hidden="true">
+            {%- if monogram_icon -%}
+              {{
+                monogram_icon
+                | image_url: width: 180
+                | image_tag: loading: 'lazy', class: 'size-full object-contain', alt: ''
+              }}
+            {%- endif -%}
+          </span>
+
+          <div class="flex-1 min-w-0 pr-14">
+            <dl class="fs-body-md text-grey-dark" data-embroidery-summary-details></dl>
+
+            <button
+              type="button"
+              class="underline-button mt-2 mb-0 py-0 cursor-pointer bg-transparent text-black"
+              data-embroidery-edit>
+              {{- 'products.embroidery.edit' | t -}}
+            </button>
+          </div>
+
+          <button
+            type="button"
+            class="underline-button absolute top-3 right-3 mb-0 py-0 cursor-pointer bg-transparent text-black"
+            data-embroidery-remove>
+            {{- 'products.embroidery.remove' | t -}}
+          </button>
+        </div>
+
+        <p class="fs-body-sm text-black">{{ settings.embroidery_lead_time_pdp | escape }}</p>
+
+        <div class="flex flex-col gap-2 pt-2">
+          {%- if settings.embroidery_terms_intro != blank -%}
+            <p class="fs-body-sm font-medium text-brand-blue">
+              {{ settings.embroidery_terms_intro | escape }}
+            </p>
+          {%- endif -%}
+
+          {%- if settings.embroidery_terms_body != blank -%}
+            <div class="fs-body-sm rte text-black [&_a]:text-black [&_a]:border-b-0 [&_a]:underline [&_strong]:font-medium">
+              {{ settings.embroidery_terms_body }}
+            </div>
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+  </embroidery-configurator>
+{%- endif -%}

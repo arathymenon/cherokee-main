@@ -1,0 +1,138 @@
+<!-- snippet: comparison-modal -->
+
+{% doc %}
+  Comparison table modal shell (Phase 2). Rendered once per compare-enabled
+  collection page (gated by the caller). Behavior is owned by <comparison-modal>
+  (scripts/components/comparison-modal.js): it listens for the bubbling
+  `compare:open` event from <compare-bar>, fetches one column per product via the
+  Section Rendering API (`comparison-table-column`), assembles the grid, and opens
+  the dialog. The grid is filled by JS; banner + value cells are placed by data-key.
+
+  @param {object} collection - The current collection (provides the sessionStorage scope handle)
+
+  @example
+  {% render 'comparison-modal', collection: collection %}
+{% enddoc %}
+
+<comparison-modal
+  data-collection-handle="{{ collection.handle }}"
+  data-compare-max="4">
+  <dialog
+    data-comparison-dialog
+    aria-labelledby="comparison-modal-title"
+    class="dialog-popup-sheet w-full lg:w-[min(72rem,95vw)] rounded-t-theme lg:rounded-b-theme bg-white text-black pt-10">
+
+    {%- # Close button — 16px from the dialog's top-right corner -%}
+    <button
+      type="button"
+      data-comparison-close
+      aria-label="{{ 'products.compare.close' | t }}"
+      onclick="this.closest('dialog').close()"
+      class="absolute top-4 right-4 z-1 size-5 flex-center hover:opacity-70 transition-opacity">
+      <span class="size-4 [&>svg]:size-full">{{- 'icon-x.svg' | inline_asset_content -}}</span>
+    </button>
+
+    <div class="flex flex-col max-h-[85dvh]">
+
+      {%- # Header — centered title -%}
+      <div class="shrink-0 pb-4">
+        <h2 id="comparison-modal-title" class="text-left lg:text-center pr-8 lg:pr-0 fs-display-4 lg:fs-display-3 uppercase mb-0">
+          {{ 'products.compare.title' | t }}
+        </h2>
+      </div>
+
+      {%- # Body -%}
+      <div class="flex-1 min-h-0 overflow-y-auto">
+
+        {%- # Product images — scroll away on vertical scroll; mirror the horizontal scroll. -%}
+        {%- # Top padding lives here (not on the scroll pane) so the sticky info below pins flush. -%}
+        <div data-comparison-images class="overflow-x-hidden pt-4">
+          <div
+            data-comparison-image-grid
+            aria-hidden="true"
+            style="--cols: 2;"
+            class="grid items-end gap-x-2 lg:gap-x-4
+              grid-cols-[repeat(var(--cols),calc(50%-0.25rem))]
+              lg:grid-cols-[repeat(var(--cols),minmax(0,1fr))]">
+          </div>
+        </div>
+
+        {%- # Product info (brand/title/price) — pinned on vertical scroll, mirrors horizontal scroll. -%}
+        <div data-comparison-headers class="sticky top-0 z-10 bg-white overflow-x-hidden">
+          <div
+            data-comparison-header-grid
+            style="--cols: 2;"
+            class="grid items-start gap-x-2 lg:gap-x-4
+              grid-cols-[repeat(var(--cols),calc(50%-0.25rem))]
+              lg:grid-cols-[repeat(var(--cols),minmax(0,1fr))]">
+          </div>
+        </div>
+
+        {%- # Mobile slide controls — sit between headers and attributes; JS hides when ≤2 columns. -%}
+        <div class="flex justify-center gap-3 lg:hidden my-4" data-comparison-nav>
+          <button
+            type="button"
+            data-comparison-prev
+            aria-label="{{ 'products.compare.prev' | t }}"
+            class="size-10 rounded-full border border-grey flex-center disabled:opacity-30 transition-opacity">
+            <span class="size-3 [&>svg]:size-full">{{- 'icon-angle-left.svg' | inline_asset_content -}}</span>
+          </button>
+          <button
+            type="button"
+            data-comparison-next
+            aria-label="{{ 'products.compare.next' | t }}"
+            class="size-10 rounded-full border border-grey flex-center disabled:opacity-30 transition-opacity">
+            <span class="size-3 [&>svg]:size-full">{{- 'icon-angle-right.svg' | inline_asset_content -}}</span>
+          </button>
+        </div>
+
+        {%- # Loading / error states -%}
+        <p data-comparison-loading class="hidden text-center fs-body-md py-10">
+          {{ 'products.compare.loading' | t }}
+        </p>
+        <p data-comparison-error class="hidden text-center fs-body-md py-10 text-red-sale">
+          {{ 'products.compare.error' | t }}
+        </p>
+
+        {%- # Attribute rows + footer — user scrolls this; the headers mirror it. -%}
+        {%- # Banners span all columns; value cells are placed per column by the controller. -%}
+        <div data-comparison-scroll class="overflow-x-auto lg:overflow-x-visible scroll-smooth snap-x snap-mandatory lg:snap-none">
+          <div
+            data-comparison-grid
+            style="--cols: 2;"
+            class="grid items-stretch gap-x-2 lg:gap-x-4
+              grid-cols-[repeat(var(--cols),calc(50%-0.25rem))]
+              lg:grid-cols-[repeat(var(--cols),minmax(0,1fr))]">
+          </div>
+        </div>
+      </div>
+    </div>
+  </dialog>
+
+  {%- # Templates cloned by the controller (grid-column/grid-row set in JS). -%}
+  {%- # Full-width banner row; the label span stays pinned while values scroll. -%}
+  <template data-comparison-banner-template>
+    <div class="bg-grey-light rounded">
+      <span
+        data-comparison-banner-label
+        class="sticky left-0 inline-block md:px-4 md:py-2 px-2 py-1 fs-body-md md:fs-body-lg font-medium"></span>
+    </div>
+  </template>
+
+  {%- # Loading skeletons (one per kind). -%}
+  <template data-comparison-skeleton-image>
+    <div class="flex justify-center">
+      <div class="skeleton-pulse bg-grey-light rounded-theme-sm aspect-product-image md:w-36 w-24"></div>
+    </div>
+  </template>
+  <template data-comparison-skeleton-header>
+    <div class="px-2 py-4">
+      <div class="skeleton-pulse bg-grey-light rounded h-4 w-24 mx-auto"></div>
+    </div>
+  </template>
+  <template data-comparison-skeleton-value>
+    <div class="px-4 py-4">
+      <div class="skeleton-pulse bg-grey-light rounded h-4 w-16 mx-auto"></div>
+    </div>
+  </template>
+</comparison-modal>

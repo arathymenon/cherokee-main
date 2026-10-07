@@ -1,0 +1,137 @@
+<!doctype html>
+<html class="no-js group/html" lang="{{ request.locale.iso_code }}">
+  <head>
+    {%- render 'yett-scripts' -%}
+
+    {% # Google Tag Manager %}
+    {% if settings.gtm_container_id != blank %}
+      <script nonce="null">(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+      'https://www.googletagmanager.com/gtm.js?id='+i+dl;var n=d.querySelector('[nonce]');
+      n&&j.setAttribute('nonce',n.nonce||n.getAttribute('nonce'));f.parentNode.insertBefore(j,f);
+      })(window,document,'script','dataLayer',{{ settings.gtm_container_id | json }});</script>
+    {% endif %}
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="canonical" href="{{ canonical_url }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="{{ settings.color_primary }}">
+
+
+    {% # Preloads %}
+    <link rel="preload" href="{{ 'styles.min.css' | asset_url }}" as="style" />
+    <link rel="preload" href="{{ 'font-Inter-Regular.woff2' | asset_url | split: '?' | first }}" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="{{ 'font-Inter-Medium.woff2' | asset_url | split: '?' | first }}" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="{{ 'font-GT-Walsheim-Black.woff2' | asset_url | split: '?' | first }}" as="font" type="font/woff2" crossorigin />
+    <script src="{{ 'scripts-preload.min.js' | asset_url }}" type="module"></script>
+    <script src="{{ 'scripts.min.js' | asset_url }}" type="module"></script>
+   
+
+    {% # Favicons %}
+    <link rel="icon" type="image/svg+xml" href="{{ 'favicon.svg' | file_url | split: '?' | first }}">
+    <link rel="icon" type="image/png" href="{{ 'favicon.png' | file_img_url: '96x96' | split: '?' | first }}" sizes="96x96" >
+    <link rel="apple-touch-icon" href="{{ 'apple-touch-icon.png' | file_img_url: '180x180' | split: '?' | first }}" sizes="180x180">
+    <link rel="shortcut icon" href="{{ 'favicon.ico' | file_url | split: '?' | first }}">
+    <meta name="apple-mobile-web-app-title" content="{{ shop.name }}">
+    <link rel="manifest" href="{{ 'site.webmanifest' | file_url | split: '?' | first }}">
+
+
+    <title>
+      {%- liquid
+        if template.name == 'gift_card'
+          assign formatted_initial_value = gift_card.initial_value | money_without_trailing_zeros | strip_html
+          echo 'gift_cards.issued.title' | t: value: formatted_initial_value, shop: shop.name
+        elsif template.name == 'password'
+          echo shop.name
+        else
+          echo page_title
+          if current_tags
+            assign current_tags_joined = current_tags | join: ', '
+            echo ' &ndash; '
+            echo 'general.title.tags' | t: tags: current_tags_joined
+          endif
+          if current_page != 1
+            echo ' &ndash; '
+            echo 'general.title.page' | t: page: current_page
+          endif
+          unless page_title contains shop.name
+            echo ' &ndash; '
+            echo shop.name
+          endunless
+        endif
+      -%}
+    </title>
+
+    <!-- Meta Desc -->
+    {%- if template.name == 'gift_card' -%}
+      <meta name="description" content="{{ 'gift_cards.issued.subtext' | t }}">
+    {% elsif page_description %}
+      <meta name="description" content="{{ page_description | escape }}">
+    {%- endif -%}
+
+
+    {%- if settings.google_site_verification != blank -%}
+      <meta name="google-site-verification" content="{{ settings.google_site_verification }}">
+    {%- endif -%}
+
+    {%- liquid
+      render 'site-social-cards'
+      render 'site-structured-data'
+      render 'theme-styles'
+    -%}
+
+    <script type="text/javascript">
+      document.querySelector('html').classList.remove('no-js', 'beforeunload');
+    </script>
+
+    {{ content_for_header }}
+
+  {%- if settings.navistone_id != blank -%}
+      <script src="//cdn.datasteam.io/js/{{- settings.navistone_id -}}.js" async defer></script>
+  {%- endif -%} 
+  </head>
+
+  <body class="color-{{ settings.default_color_scheme }}">
+
+    {% if settings.gtm_container_id != blank %}
+      <noscript><iframe src="https://www.googletagmanager.com/ns.html?id={{ settings.gtm_container_id }}"
+          height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    {% endif %}
+
+    <a class="absolute left-0 top-0 -translate-y-20 focus:translate-0 bg-black text-white p-4" 
+      style="z-index: 9999;" href="#MainContent">
+      {{- 'accessibility.skip_to_text' | t -}}
+    </a>
+
+    {%- liquid
+      sections 'header-group'
+      assign breadcrumbs_excluded_templates = 'index,product' | split: ','
+      unless breadcrumbs_excluded_templates contains template.name
+        render 'breadcrumbs'
+      endunless
+    -%}
+
+    <main role="main" id="MainContent">
+      {%- if request.path contains '/policies' -%}
+        <section class="pt-md pb-lg px-gutter">
+          <div class="max-w-[720px] mx-auto">
+            <rte-content 
+              class="rte [&_h1]:fs-display-2 [&_h1]:mt-0 [&_h1]:mb-md">{{- content_for_layout -}}</rte-content>    
+          </div>
+        </section>
+      {%- else -%}
+        {{ content_for_layout}}
+      {%- endif -%}
+    </main>
+
+   {%- liquid
+      sections 'footer-group'
+      sections 'panel-group'
+      render 'quick-shop'
+      render 'theme-scripts'
+    -%}
+
+  </body>
+</html>

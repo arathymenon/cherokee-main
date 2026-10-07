@@ -1,0 +1,41 @@
+# ignore all files starting with . or ~
+
+.*
+~*
+!.github/
+
+/node_modules
+/config.yml
+/notes
+CLAUDE.local.md
+docs
+# /config/settings_data.json
+
+constellation/
+
+# ignore packaged files
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+
+# track these files, if they exist
+!.vscode
+!.gitignore
+!.shopifyignore
+!.editorconfig
+!.eslintrc.json
+!.eslintignore
+!.prettierrc.json
+!.prettierignore
+!.stylelintrc.json
+!.husky
+!.prettier
+!README.md
+!CHANGELOG.md
+!composer.json
+

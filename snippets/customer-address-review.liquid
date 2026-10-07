@@ -1,0 +1,22 @@
+<div class="customer-address-review">
+  
+  <div class="customer-address-review__container">
+    <div class="customer-portal__page-heading customer-portal__page-heading--flex">
+      <h2 class="customer-portal__page-title">
+        {{- 'customer.address.address_book' | t -}}
+      </h2>
+      <a href="{{ routes.account_addresses_url }}" class="customer-address-review__view-link secondary-button">
+        {{- 'customer.address.view_addresses' | t }} ({{ customer.addresses_count }})
+      </a>
+    </div>
+    <div class="customer-address-review__address">
+      {%- liquid
+        if customer.default_address != nil
+          echo customer.default_address | format_address
+        else
+          echo 'customer.address.no_address' | t
+        endif
+      -%}
+    </div>
+  </div>
+</div>

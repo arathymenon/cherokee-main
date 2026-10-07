@@ -1,0 +1,31 @@
+{% doc %}
+  Renders a pair of tarot-carousel navigation buttons (prev + next).
+  Buttons are emitted at the root with no wrapper — callers control layout.
+
+  @param {string} [prev_class] - Extra classes for the previous button
+  @param {string} [next_class] - Extra classes for the next button
+  @param {string} [unique_id] - When set, adds `id="prev-{unique_id}"` / `id="next-{unique_id}"` for use with tarot's previousButtonSelector/nextButtonSelector
+
+  @example
+  {% render 'carousel-buttons' %}
+  {% render 'carousel-buttons',
+    unique_id: section.id,
+    prev_class: 'absolute left-4 top-1/2 -translate-y-1/2 z-10',
+    next_class: 'absolute right-4 top-1/2 -translate-y-1/2 z-10'
+  %}
+{% enddoc %}
+
+<button
+  {% if unique_id %}id="prev-{{ unique_id }}"{% endif %}
+  class="tarot-button tarot-prev {{ prev_class }}"
+  data-action-tarot-previous
+  aria-label="Previous">
+  {{ 'icon-angle-left.svg' | inline_asset_content }}
+</button>
+<button
+  {% if unique_id %}id="next-{{ unique_id }}"{% endif %}
+  class="tarot-button tarot-next {{ next_class }}"
+  data-action-tarot-next
+  aria-label="Next">
+  {{ 'icon-angle-right.svg' | inline_asset_content }}
+</button>

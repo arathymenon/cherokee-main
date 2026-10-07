@@ -1,0 +1,11 @@
+<!-- snippet: menu-item-label -->
+{%- comment -%}
+  Renders a pill-shaped label next to a menu item.
+
+  Accepts:
+    - text: {String} label text. Renders nothing if blank.
+{%- endcomment -%}
+
+{%- if text != blank -%}
+  <span class="label">{{- text | escape -}}</span>
+{%- endif -%}

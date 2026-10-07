@@ -1,0 +1,72 @@
+{% doc %}
+  Renders a primary "Share" button. Uses navigator.share where available,
+  falls back to copying the URL to the clipboard and showing a brief
+  confirmation label.
+
+  @param {string} url - URL to share (relative or absolute; relative URLs are prefixed with shop.url)
+  @param {string} [title] - Title passed to navigator.share
+  @param {string} [text] - Optional descriptive text passed to navigator.share
+  @param {string} [label] - Button label (default: 'Share')
+  @param {string} [copied_label] - Label shown briefly after copying (default: 'Link copied')
+  @param {string} [class] - Extra classes to merge onto the button
+{% enddoc %}
+
+{%- liquid
+  assign label = label | default: 'Share'
+  assign copied_label = copied_label | default: 'Link copied'
+  if url contains '://'
+    assign url = url
+  else
+    assign url = shop.url | append: url
+  endif
+-%}
+
+<share-button>
+  <button
+    type="button"
+    class="button button-outline-black gap-2 {{ class }}"
+    data-share-title="{{ title | default: shop.name | escape }}"
+    data-share-text="{{ text | escape }}"
+    data-share-url="{{ url | escape }}"
+    data-default-label="{{ label | escape }}"
+    data-copied-label="{{ copied_label | escape }}">
+    <span class="inline-flex items-center justify-center [&_svg]:size-full size-5 shrink-0" aria-hidden="true">
+      {{- 'icon-share.svg' | inline_asset_content -}}
+    </span>
+    <span data-share-label aria-live="polite">{{ label }}</span>
+  </button>
+</share-button>
+
+<script>
+  if (!customElements.get('share-button')) {
+    customElements.define(
+      'share-button',
+      class extends HTMLElement {
+        connectedCallback() {
+          const button = this.querySelector('button');
+          const label = this.querySelector('[data-share-label]');
+          if (!button || !label) return;
+
+          button.addEventListener('click', async () => {
+            const { shareTitle, shareText, shareUrl, defaultLabel, copiedLabel } = button.dataset;
+
+            try {
+              if (navigator.share) {
+                await navigator.share({ title: shareTitle, text: shareText, url: shareUrl });
+                return;
+              }
+              await navigator.clipboard.writeText(shareUrl);
+              label.textContent = copiedLabel;
+              window.setTimeout(() => {
+                label.textContent = defaultLabel;
+              }, 2000);
+            } catch (error) {
+              if (error.name === 'AbortError') return;
+              label.textContent = defaultLabel;
+            }
+          });
+        }
+      }
+    );
+  }
+</script>

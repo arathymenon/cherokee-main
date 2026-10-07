@@ -1,0 +1,194 @@
+{% comment %}
+  Renders a cart item
+  Accepts:
+  - line_item: {Object} Cart line item
+  - is_cart_page: {Boolean} Different style for cart page
+  - is_order_page: {Boolean} Different style for order page
+{% endcomment %}
+
+{%- if line_item.product_id != settings.cart_gift_wrap_product.id -%}
+  <div
+    class="cart-item{% if is_cart_page %} cart-item--for-cart{% endif %}{% if is_order_page %} cart-item--for-order{% endif %}"
+  >
+    <a href="{{ line_item.url }}" class="cart-item__image">
+      <div class="cart-item__image-wrapper" data-ajax-cart-static-element="image-{{ line_item.key }}">
+        {%- if line_item.image != blank -%}
+          {{- line_item.image | image_url: width: 200 | image_tag: class: 'cover' -}}
+        {%- endif -%}
+      </div>
+    </a>
+    {%- capture discounts -%}
+      {%- if line_item.line_level_discount_allocations.size > 0 -%}
+        <ul role="list" class="cart-item__discounts">
+          {%- for discount_allocation in line_item.line_level_discount_allocations -%}
+            <li>
+              <span>{{- discount_allocation.discount_application.title -}}</span>
+            </li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+    {%- endcapture -%}
+    {%- capture line_price_html -%}
+      <div class="cart-item__price">
+        {%- if line_item.original_line_price != line_item.final_line_price -%}
+          <span class="cart-item__final-price">
+            {{ line_item.final_line_price | money }}
+          </span>
+        {%- endif -%}
+        <span class="cart-item__price-current">{{ line_item.original_line_price | money }}</span>
+      </div>
+    {%- endcapture -%}
+    {%- capture item_price_html -%}
+      <div class="cart-item__price">
+        {%- if line_item.original_price != line_item.final_price -%}
+          <span class="cart-item__final-price">
+            {{ line_item.final_price | money }}
+          </span>
+        {%- endif -%}
+        <span class="cart-item__price-current">{{ line_item.original_price | money }}</span>
+        {{ discounts }}
+      </div>
+    {%- endcapture -%}
+    <div class="cart-item__details">
+      <div class="cart-item__info">
+        <a class="cart-item__title" href="{{ line_item.url }}">{{ line_item.product.title }}</a>
+        {{- line_price_html -}}
+        <div class="cart-item__extra">
+          {%- unless line_item.product.has_only_default_variant -%}
+            <ul class="cart-item__options">
+              {%- for option in line_item.options_with_values -%}
+                <li>{{ option.name }}: {{ option.value }}</li>
+              {%- endfor -%}
+            </ul>
+          {%- endunless -%}
+          {%- unless line_item.properties == empty -%}
+            <ul class="cart-item__properties">
+              {%- for property in line_item.properties -%}
+                {%- liquid
+                  assign property_first_char = property.first | slice: 0
+                  if property_first_char == '_'
+                    continue
+                  endif
+                -%}
+                {%- if property.last != blank -%}
+                  <li>{{ property.first }}: {{ property.last }}</li>
+                {%- endif -%}
+              {%- endfor -%}
+            </ul>
+          {%- endunless -%}
+          {%- unless is_order_page or line_item.selling_plan_allocation == blank -%}
+            <div class="cart-item__selling-plan">
+              {{- line_item.selling_plan_allocation.selling_plan.name -}}
+            </div>
+          {%- endunless -%}
+          {%- if is_order_page -%}
+            <div>{{ 'orders.order.qty' | t }}: {{ line_item.quantity }}</div>
+          {%- endif -%}
+          {% unless is_order_page %}
+            {{ discounts }}
+          {% endunless %}
+        </div>
+        {%- if is_cart_page -%}
+          <a
+            href="{{ routes.cart_change_url }}?line={{ forloop.index }}&quantity=0"
+            data-ajax-cart-request-button
+            class="cart-item__remove cart-item__remove--for-cart"
+          >
+            {{- 'cart.remove' | t -}}
+          </a>
+        {%- endif -%}
+        {%- unless is_order_page -%}
+          <div class="cart-item__actions">
+            {%- capture qty_html -%}
+              {%- assign product_type = line_item.product.type | downcase -%}
+              {%- unless product_type == 'subscription' -%}
+                <ajax-cart-quantity>
+                  <div class="cart-item__quantity-picker">
+                    <a
+                      href="{{ routes.cart_change_url }}?line={{ forloop.index  }}&quantity={{ line_item.quantity | minus: 1 }}"
+                      data-ajax-cart-quantity-minus
+                      type="button"
+                      aria-label="{{ 'products.product.quantity.decrease' | t: product: line_item.product.title | escape }}"
+                    >
+                      {{- 'icon-minus.svg' | inline_asset_content -}}
+                    </a>
+                    <input
+                      class="count"
+                      type="number"
+                      name="updates[]"
+                      value="{{ line_item.quantity }}"
+                      data-ajax-cart-quantity-input="{{ forloop.index }}"
+                      aria-label="{{ 'products.product.quantity.input_label' | t: product: line_item.product.title | escape }}"
+                    >
+                    <a
+                      href="{{ routes.cart_change_url }}?line={{ forloop.index  }}&quantity={{ line_item.quantity | plus: 1 }}"
+                      data-ajax-cart-quantity-plus
+                      type="button"
+                      aria-label="{{ 'products.product.quantity.increase' | t: product: line_item.product.title | escape }}"
+                    >
+                      {{- 'icon-plus.svg' | inline_asset_content -}}
+                    </a>
+                  </div>
+                </ajax-cart-quantity>
+              {%- endunless -%}
+            {%- endcapture -%}
+
+            {{- qty_html -}}
+            <a
+              href="{{ routes.cart_change_url }}?line={{ forloop.index }}&quantity=0"
+              data-ajax-cart-request-button
+              class="secondary-button cart-item__remove"
+            >
+              {{- 'cart.remove' | t -}}
+            </a>
+          </div>
+        {%- endunless -%}
+        {%- if line_item.fulfillment -%}
+          <div class="cart-item__fulfillment">
+            {%- assign created_at = line_item.fulfillment.created_at | date: '%m/%d/%y' -%}
+            <div class="cart-item__fulfillment-date">
+              {{ 'orders.order.fulfilled_at_html' | t: date: created_at }}
+            </div>
+
+            {%- if line_item.fulfillment.tracking_number -%}
+              <div class="cart-item__fulfillment-tracking">
+                {%- if line_item.fulfillment.tracking_url -%}
+                  <a href="{{ line_item.fulfillment.tracking_url }}" target="_blank">
+                    {{ 'orders.order.track_shipment' | t }}
+                  </a>
+                  <br>
+                {%- endif -%}
+                {{ line_item.fulfillment.tracking_company }}
+                {%- if line_item.fulfillment.tracking_number -%}
+                  #{{ line_item.fulfillment.tracking_number }}
+                {%- endif -%}
+              </div>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+      </div>
+      {%- unless is_order_page -%}
+        <div class="cart-item__error" data-ajax-cart-errors="{{ line_item.key }}"></div>
+      {%- endunless -%}
+    </div>
+    {%- if is_cart_page -%}
+      <div class="cart-item__for-cart">
+        {{ item_price_html }}
+        <div class="cart-item__for-cart-qty">
+          {{- qty_html -}}
+        </div>
+        <div class="cart-item__total">
+          {{- line_item.final_line_price | money -}}
+        </div>
+      </div>
+    {%- endif -%}
+    {%- if is_order_page -%}
+      <div class="cart-item__for-order">
+        {{ item_price_html }}
+        <div class="cart-item__total">
+          {{- line_item.final_line_price | money -}}
+        </div>
+      </div>
+    {%- endif -%}
+  </div>
+{%- endif -%}

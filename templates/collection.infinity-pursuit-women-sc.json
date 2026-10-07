@@ -1,0 +1,111 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "header": {
+      "type": "collection-header",
+      "settings": {
+        "color_scheme": "",
+        "image_color_scheme": "scheme-dark",
+        "width": "container",
+        "center_content": false,
+        "active_button_style": "button",
+        "linked_button_style": "button button-outline-white"
+      }
+    },
+    "products": {
+      "type": "collection-products",
+      "settings": {
+        "filter_color_scheme": "scheme-default",
+        "products_per_page": 16
+      }
+    },
+    "seo_text_4tTMd4": {
+      "type": "seo-text",
+      "name": "SEO Text",
+      "settings": {
+        "content": "{{ collection.metafields.seo.content | metafield_tag }}",
+        "color_scheme": "scheme-0d9bed0c-0f1f-4f9d-99af-d15d3a707bfd"
+      }
+    },
+    "empty_collection_carousel_zApKLV": {
+      "type": "featured-collection",
+      "name": "Product carousel",
+      "settings": {
+        "color_scheme": "",
+        "heading": "Featured Products",
+        "text": "",
+        "collection": "",
+        "products_to_show": 12,
+        "loop": false,
+        "button_link": "",
+        "button_text": "Shop All",
+        "slides_per_view_tablet": 2,
+        "slides_per_view_laptop": 3,
+        "slides_per_view_desktop": 4
+      }
+    },
+    "collapsible_content_68wYTq": {
+      "type": "collapsible-content",
+      "blocks": {
+        "item_Pq4GyC": {
+          "type": "item",
+          "settings": {
+            "heading": "What are Cherokee Infinity Pursuit women's scrubs?",
+            "content": "Cherokee Infinity Pursuit women's scrubs are healthcare workwear built for caregivers who want flexibility, durability, and confidence without compromise — scrubs that go where you do, from shift to street. Pursuit takes <a href=\"https://www.cherokeeuniforms.com/cherokee-womens-scrubs\"><span style=\"text-decoration:underline\">women's scrubs</span></a> and reimagines them with refined tailoring, athletic polish, and performance-driven comfort. The women's lineup includes shaped and tuck-in V-neck scrub tops, a rib trim crew neck top, straight leg and jogger scrub pants, a high rise wide leg pant, a zip front warm up jacket, and a varsity bomber jacket — all in a range of versatile colors including Retro Green, Butterscotch, Wine, and Pewter."
+          }
+        },
+        "item_djYmAc": {
+          "type": "item",
+          "settings": {
+            "heading": "What fabric and technology is used in Infinity Pursuit women's scrubs?",
+            "content": "Pursuit women's scrubs are made with a premium, breathable knit that delivers 360° stretch for freedom of movement in every direction. The fabric features moisture control to keep you cool and dry and wrinkle recovery so you stay looking sharp through a long shift. PROTX2® antimicrobial technology is built in to fight odors, prevent sweat stains, and inhibit the growth of microorganisms that cause odor and fabric damage — so your scrubs hold up and feel fresh from start to finish."
+          }
+        },
+        "item_Ch44Ld": {
+          "type": "item",
+          "settings": {
+            "heading": "What makes Infinity Pursuit different from standard Infinity scrubs?",
+            "content": "Pursuit takes the performance foundation of <a href=\"/collections/infinity-womens-scrubs\" title=\"Infinity Women\"><span style=\"text-decoration:underline\">Infinity </span></a>and adds a streetwear-inspired aesthetic that works on and off the clock. Where Infinity focuses on the clinical setting, Pursuit draws cues from vintage athletic uniforms and elevated streetwear — varsity jackets, crisp lines, tonal trims, and rich colorways that look fresh after hours. The fabric adds wrinkle recovery on top of Infinity's moisture-wicking stretch, and the styling is polished but never stiff."
+          }
+        },
+        "item_Ew7Jkm": {
+          "type": "item",
+          "settings": {
+            "heading": "Can Cherokee Infinity Pursuit women's scrubs be worn off duty?",
+            "content": "Pursuit is designed specifically for shift-to-street wear — scrubs that perform under pressure and still look fresh after hours. The styling draws from vintage athletic uniforms and elevated streetwear: varsity jackets, crisp lines, tonal trims, and colorways like Retro Green, Butterscotch, and Pewter that work outside a clinical setting. Polished but never stiff, Pursuit delivers confidence from shift to street — because style never clocks out."
+          }
+        }
+      },
+      "block_order": [
+        "item_Pq4GyC",
+        "item_djYmAc",
+        "item_Ch44Ld",
+        "item_Ew7Jkm"
+      ],
+      "name": "Collapsible Content",
+      "settings": {
+        "color_scheme": "",
+        "heading": "Frequently Asked Questions",
+        "text": "",
+        "button_text": "",
+        "button_link": "",
+        "button_style": "button"
+      }
+    }
+  },
+  "order": [
+    "header",
+    "products",
+    "seo_text_4tTMd4",
+    "empty_collection_carousel_zApKLV",
+    "collapsible_content_68wYTq"
+  ]
+}

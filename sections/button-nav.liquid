@@ -1,0 +1,121 @@
+<!-- section: button-nav -->
+
+{%- liquid
+  assign s = section.settings
+  assign current_path = request.path
+
+  assign buttons_justify = 'justify-center'
+  if s.alignment == 'left'
+    assign buttons_justify = 'justify-start'
+  elsif s.alignment == 'right'
+    assign buttons_justify = 'justify-end'
+  endif
+-%}
+
+<section class="color-{{ s.color_scheme }} {{ s.top_padding }} {{ s.bottom_padding }}">
+  <div class="container">
+    <div class="flex flex-wrap items-center gap-4 {{ buttons_justify }}">
+
+      {% for block in section.blocks %}
+        {%- liquid
+          assign b = block.settings
+
+          if b.button_text != blank and b.button_link != blank
+            assign link_path = b.button_link | split: '?' | first | split: '#' | first
+
+            assign is_current = false
+            if link_path == current_path
+              assign is_current = true
+            elsif s.match_nested and link_path != '/' and current_path contains link_path
+              assign is_current = true
+            endif
+
+            assign nav_class = 'text-link'
+            if is_current
+              assign nav_class = 'underline-button'
+            endif
+          endif
+        -%}
+
+        {% if b.button_text != blank and b.button_link != blank %}
+          <a
+            class="{{ nav_class }}"
+            href="{{ b.button_link }}"
+            {% if is_current %}aria-current="page"{% endif %}
+            {{ block.shopify_attributes }}
+          >
+            {{ b.button_text | escape }}
+          </a>
+        {% endif %}
+      {% endfor %}
+
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Button nav",
+  "max_blocks": 8,
+  "settings": [
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme" },
+
+    { "type": "header", "content": "Layout" },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "checkbox",
+      "id": "match_nested",
+      "label": "Highlight on nested pages",
+      "info": "Also mark a button as selected when the current URL is below its link (e.g. a product under its collection).",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "top_padding",
+      "label": "Top padding",
+      "default": "pt-md",
+      "options": [
+        { "value": "pt-0", "label": "None" },
+        { "value": "pt-sm", "label": "Small" },
+        { "value": "pt-md", "label": "Medium" },
+        { "value": "pt-lg", "label": "Large" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding",
+      "label": "Bottom padding",
+      "default": "pb-md",
+      "options": [
+        { "value": "pb-0", "label": "None" },
+        { "value": "pb-sm", "label": "Small" },
+        { "value": "pb-md", "label": "Medium" },
+        { "value": "pb-lg", "label": "Large" }
+      ]
+    }
+  ],
+  "blocks": [
+    {
+      "type": "button",
+      "name": "Nav item",
+      "settings": [
+        { "type": "text", "id": "button_text", "label": "Button text", "default": "Shop Now" },
+        { "type": "url", "id": "button_link", "label": "Button link" }
+      ]
+    }
+  ],
+  "disabled_on": {
+    "groups": ["*"]
+  }
+}
+{% endschema %}

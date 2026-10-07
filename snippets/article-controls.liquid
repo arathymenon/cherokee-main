@@ -1,0 +1,65 @@
+{% doc %}
+  Renders previous/next article navigation on an article page.
+
+  Maps the visible "Prev" / "Next" controls to reading order:
+  - "Prev" links to the older article (`blog.next_article`)
+  - "Next" links to the newer article (`blog.previous_article`)
+
+  Shopify exposes these natively when the current template is `article`.
+  The side without a neighbor renders as a disabled control; renders
+  nothing only if neither neighbor exists.
+
+  @example
+  {% render 'article-controls' %}
+{% enddoc %}
+
+{%- liquid
+  assign older_article = blog.next_article
+  assign newer_article = blog.previous_article
+-%}
+
+{%- if older_article or newer_article -%}
+  <nav class="flex items-center justify-between py-4" aria-label="Article navigation">
+    {%- if older_article -%}
+      <a
+        href="{{ older_article.url }}"
+        class="inline-flex items-center gap-2 fs-body-md no-underline transition-opacity hover:opacity-70 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-current"
+        rel="prev">
+        <span class="inline-flex items-center justify-center w-4 h-4 shrink-0" aria-hidden="true">
+          {{- 'icon-angle-left.svg' | inline_asset_content -}}
+        </span>
+        <span>{{ 'blog.article.prev_article' | t }}</span>
+      </a>
+    {%- else -%}
+      <span
+        class="inline-flex items-center gap-2 fs-body-md no-underline opacity-40 cursor-not-allowed"
+        aria-disabled="true">
+        <span class="inline-flex items-center justify-center w-4 h-4 shrink-0" aria-hidden="true">
+          {{- 'icon-angle-left.svg' | inline_asset_content -}}
+        </span>
+        <span>{{ 'blog.article.prev_article' | t }}</span>
+      </span>
+    {%- endif -%}
+
+    {%- if newer_article -%}
+      <a
+        href="{{ newer_article.url }}"
+        class="inline-flex items-center gap-2 fs-body-md no-underline transition-opacity hover:opacity-70 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-current"
+        rel="next">
+        <span>{{ 'blog.article.next_article' | t }}</span>
+        <span class="inline-flex items-center justify-center w-4 h-4 shrink-0" aria-hidden="true">
+          {{- 'icon-angle-right.svg' | inline_asset_content -}}
+        </span>
+      </a>
+    {%- else -%}
+      <span
+        class="inline-flex items-center gap-2 fs-body-md no-underline opacity-40 cursor-not-allowed"
+        aria-disabled="true">
+        <span>{{ 'blog.article.next_article' | t }}</span>
+        <span class="inline-flex items-center justify-center w-4 h-4 shrink-0" aria-hidden="true">
+          {{- 'icon-angle-right.svg' | inline_asset_content -}}
+        </span>
+      </span>
+    {%- endif -%}
+  </nav>
+{%- endif -%}

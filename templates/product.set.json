@@ -1,0 +1,30 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-product-set",
+      "settings": {
+        "incentive_1_image": "shopify://shop_images/icon-truck.png",
+        "incentive_1_text": "Free shipping over $79",
+        "incentive_2_image": "shopify://shop_images/icon-package.png",
+        "incentive_2_text": "30 days Free Return Policy"
+      }
+    },
+    "size_guide": {
+      "type": "size-guide",
+      "settings": {}
+    }
+  },
+  "order": [
+    "main",
+    "size_guide"
+  ]
+}

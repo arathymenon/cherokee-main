@@ -1,0 +1,330 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "08361350-8c56-4cf2-89b7-6efa2d0a6feb": {
+      "type": "hero-banner",
+      "settings": {
+        "color_scheme": "scheme-dark",
+        "transparent_header": false,
+        "width": "full-width",
+        "add_padding": false,
+        "section_height": 50,
+        "horizontal_position": "justify-center",
+        "vertical_position": "items-center",
+        "text_alignment": "text-center",
+        "image": "shopify://shop_images/ck-hero-in-pursuit-women.jpg",
+        "overlay_color": "#000000",
+        "overlay_opacity": 15,
+        "eyebrow": "",
+        "heading": "{{ page.title }}",
+        "use_h1": false,
+        "heading_tag": "1",
+        "content_image_max_height": 80,
+        "richtext": "",
+        "fine_print": "",
+        "button_1_text": "",
+        "button_1_link": "",
+        "button_1_style": "button",
+        "button_2_text": "",
+        "button_2_link": "",
+        "button_2_style": "button button-outline-white"
+      }
+    },
+    "faq_content_GJ8iac": {
+      "type": "faq-content",
+      "blocks": {
+        "heading_cf9abP": {
+          "type": "heading",
+          "settings": {
+            "heading": "Orders"
+          }
+        },
+        "qa_y9WiQF": {
+          "type": "qa",
+          "settings": {
+            "question": "How do I place an order?",
+            "answer": "<p>Placing an order on the website is quick and easy.</p><p>Add at least one item to your shopping bag, then click the shopping bag icon in the top right corner. During checkout, enter your email address, shipping/billing address, shipping option, and payment information. Preview your order and click \"Place Order\"</p><p>You will receive a shipment confirmation email as soon as your order is shipped. Please note Canadian orders will be billed in USD. If items disappear from your cart, make sure Cookies are enabled in your browser.</p>"
+          }
+        },
+        "qa_FRxJjc": {
+          "type": "qa",
+          "settings": {
+            "question": "How can I place a group order?",
+            "answer": "<p>Visit the \"Groups | Become a Dealer page on <a href=\"https://www.careismatic.com/groups\" target=\"_blank\">www.careismatic.com</a> website to get started.</p>"
+          }
+        },
+        "qa_Bty9KR": {
+          "type": "qa",
+          "settings": {
+            "question": "How can I cancel or change my order?",
+            "answer": "<p>Our goal is to deliver your order as quickly as possible, which means we are unfortunately unable to make changes once an order has been placed. If you need to attempt a cancellation, please call us at <a href=\"tel:1-800-372-2201\">1-800-372-2201</a> or email: <a href=\"mailto:help@cherokeeuniforms.com\" target=\"_blank\" title=\"mailto:help@cherokeeuniforms.com\">help@cherokeeuniforms.com </a>as soon as possible. Because we use automated order processing, we may not be able to cancel before the order ships. Please refer to our returns policy for next steps.</p>"
+          }
+        },
+        "qa_iHNDep": {
+          "type": "qa",
+          "settings": {
+            "question": "How do I track my order?",
+            "answer": "<p>Once your order ships, you'll receive a shipping confirmation email with your order and tracking number. Follow the link in the email or visit the Order Status page and enter your order number along with your email address or billing zip code. You can also access order status through <a href=\"/account\" title=\"/account\">My Account</a>.</p>"
+          }
+        },
+        "qa_tjNEeJ": {
+          "type": "qa",
+          "settings": {
+            "question": "How do I view my past orders?",
+            "answer": "<p>Go to <a href=\"/account\" title=\"/account\">My Account</a> and log in. In the Order History section you'll find all orders associated with your account email.</p><p>Note: orders placed as a guest or under a different email will not appear here.</p>"
+          }
+        },
+        "qa_D77axk": {
+          "type": "qa",
+          "settings": {
+            "question": "What if an item is not in stock?",
+            "answer": "<p>We do our best to keep inventory accurate, but on occasion an item may sell out before your order is processed. If an item is unavailable at the time of purchase, your order for that item will be cancelled and you will not be charged. You will receive an email notification if any part of your order is affected. We recommend checking back on the site as inventory is updated regularly.</p>"
+          }
+        },
+        "qa_aCnhJY": {
+          "type": "qa",
+          "settings": {
+            "question": "What if Cherokee Uniforms is unable to accept my order?",
+            "answer": "<p>We reserve the right to refuse or cancel any order for any reason, including quantity limitations, pricing errors, or fraud concerns. We cannot complete personalization or gift card messages containing profanity. If your order is cancelled after payment has been processed, a full credit will be issued to your original payment method. Customer Care will contact you if any portion of your order is affected.</p>"
+          }
+        },
+        "heading_Hgtrr9": {
+          "type": "heading",
+          "settings": {
+            "heading": "Shipping"
+          }
+        },
+        "qa_XAcM3h": {
+          "type": "qa",
+          "settings": {
+            "question": "How will my order be shipped?",
+            "answer": "<p>Orders ship via FedEx.</p>"
+          }
+        },
+        "qa_tze6pD": {
+          "type": "qa",
+          "settings": {
+            "question": "When will my order ship?",
+            "answer": "<ul><li>Orders containing in-stock items, placed before 12:00 PM EST, will ship the same business day.</li><li>Orders placed after 12:00 PM EST will ship the following business day.</li></ul>"
+          }
+        },
+        "qa_GbJikP": {
+          "type": "qa",
+          "settings": {
+            "question": "How much does U.S. shipping cost?",
+            "answer": "<p>Economy shipping is complimentary on continental U.S. orders with a subtotal of $79 or more, applied automatically at checkout. Other options include Upgraded (3–5 business days) and Express/Premium (2-day or next-day). Shipping and handling charges are non-refundable.</p><p>See our <a href=\"/policies/shipping-policy\" title=\"Shipping Policy\">Shipping policy</a> for complete rates.</p>"
+          }
+        },
+        "qa_VgFRH3": {
+          "type": "qa",
+          "settings": {
+            "question": "When will I receive my order",
+            "answer": "<p>See checkout for delivery times in your area.</p><p>If your order shipped more than 30 days ago and hasn't arrived, contact customer service at <a href=\"tel:1-800-372-2201\">1-800-372-2201</a> or email: <a href=\"mailto:help@cherokeeuniforms.com\" target=\"_blank\" title=\"mailto:help@cherokeeuniforms.com\">help@cherokeeuniforms.com</a>.</p>"
+          }
+        },
+        "qa_PLBLby": {
+          "type": "qa",
+          "settings": {
+            "question": "Can you ship to FPO/APO addresses, Alaska, Hawaii, or U.S. territories?",
+            "answer": "<p>Yes. These locations are served via USPS Economy shipping only. Upgraded and Express delivery options are not available. Delivery estimates and tracking will be provided by email once shipped.</p>"
+          }
+        },
+        "qa_FWY8FQ": {
+          "type": "qa",
+          "settings": {
+            "question": "Do you ship to Canada?",
+            "answer": "<p>Yes. Canadian orders typically arrive within 5–7 business days, allowing time for customs processing. Shipping costs, duties, and taxes are calculated and added at checkout. Please note that Canadian orders are billed in USD.</p><p>By ordering, Canadian customers authorize a licensed customs broker to act as their agent with the Canada Border Security Agency (CBSA) to clear merchandise and handle applicable duties and taxes.</p>"
+          }
+        },
+        "qa_GcVGhV": {
+          "type": "qa",
+          "settings": {
+            "question": "Do you ship internationally?",
+            "answer": "<p>Yes, we ship to many countries via UPS International. International orders (excluding Canada) typically arrive within 7–14 business days. Shipping costs are calculated at checkout; duties, taxes, and customs fees are the responsibility of the recipient and are assessed upon delivery. International orders do not qualify for free shipping.</p><p>For Saudi Arabia orders, please contact our customer service team at <a href=\"tel:1-800-372-2201\">1-800-372-2201</a> or email: <a href=\"mailto:help@cherokeeuniforms.com\" target=\"_blank\" title=\"mailto:help@cherokeeuniforms.com\">help@cherokeeuniforms.com</a></p><p>If you have any questions, contact customer service at <a href=\"tel:1-800-372-2201\">1-800-372-2201</a> or email: <a href=\"mailto:help@shop.careismatic.com\">help@shop.careismatic.com</a>.</p>"
+          }
+        },
+        "heading_BQdFCm": {
+          "type": "heading",
+          "settings": {
+            "heading": "Returns & Exchanges"
+          }
+        },
+        "qa_FjG7AL": {
+          "type": "qa",
+          "settings": {
+            "question": "What is your return policy?",
+            "answer": "<p>We accept returns within 30 days of the shipment date. We do not accept returns on:</p><ul><li>Embroidered items</li><li>Garments that are worn, stained, damaged or laundered</li><li>Items marked Final Sale or Non-Returnable</li><li>Items outside the 30-day return window</li></ul>"
+          }
+        },
+        "qa_wk8Ngf": {
+          "type": "qa",
+          "settings": {
+            "question": "How do I return an item?",
+            "answer": "<p><a href=\"https://www.cherokeeuniforms.com/apps/returns\" title=\"https://www.cherokeeuniforms.com/apps/returns\">Visit our online returns page </a>to print a complimentary return label (available within 30 days of delivery), then mail the items back to us.</p><p>For international returns, fill out and include the form found <a href=\"https://cdn.shopify.com/s/files/1/0919/3311/4738/files/cherokee-mail-return-form.pdf?v=1780184625\" target=\"_blank\" title=\"International Returns Form\"><span style=\"text-decoration:underline\">here</span>.</a></p>"
+          }
+        },
+        "qa_4NLATn": {
+          "type": "qa",
+          "settings": {
+            "question": "How do I make an exchange?",
+            "answer": "<p>Exchanges are processed as a return and a new purchase. Start a return through our online returns page then place a new order on our website. Clearance, Final Sale, and customized items cannot be exchanged. If items are worn, laundered or soiled, exchanges may be refused. For quality concerns, contact our Customer Experience Team at 1-800-372-2201 or <a href=\"mailto:help@shop.careismatic.com\">help@cherokeeuniforms.com.</a></p>"
+          }
+        },
+        "heading_fy8HqX": {
+          "type": "heading",
+          "settings": {
+            "heading": "Our Products"
+          }
+        },
+        "qa_dryzBA": {
+          "type": "qa",
+          "settings": {
+            "question": "How do I find the right size?",
+            "answer": "<p>Each product page includes a Size Guide with garment-specific measurements displayed in inches. </p><p>To find your size:</p><ol><li>Select the item you are interested in.</li><li>Click \"Size Guide\" (located under the size options) for detailed measurements. A full size chart is also at the bottom of each product page.</li><li>Follow the measuring instructions and use the chart to determine your recommended size.</li></ol><p></p><ul><li>Bust/Chest: Measure under your arms around the fullest part of your bust/chest.</li><li>Waist: Measure around your natural waistline, just above your belly button.</li><li>Hip: Stand with heels together and measure around the fullest part of your hip.</li><li>Inseam: Using well-fitting pants, measure from the crotch seam to the hem.</li><li>Garment Length: Measure from where the shoulder meets the neck to the bottom hem.</li></ul>"
+          }
+        },
+        "qa_UE9KJF": {
+          "type": "qa",
+          "settings": {
+            "question": "Why do colors look different on my screen?",
+            "answer": "<p>We do our best to accurately represent product colors online. However, if your monitor's color settings have been adjusted from their defaults, colors may appear differently than they do in person.</p>"
+          }
+        },
+        "qa_kyh834": {
+          "type": "qa",
+          "disabled": true,
+          "settings": {
+            "question": "What can I embroider?",
+            "answer": "<p>You can customize scrub tops, scrub jackets, and lab coats with our embroidery service. On any eligible product page, use the embroidery interface to add up to three lines of text and choose from a variety of colors and fonts. Stock logos and custom logos are also available.</p>"
+          }
+        },
+        "qa_apgmVa": {
+          "type": "qa",
+          "disabled": true,
+          "settings": {
+            "question": "How many lines and characters can I add?",
+            "answer": "<p>Most garments allow up to 3 lines of text, with a maximum of 25 characters per line. Space may be more limited on certain sizes or styles due to pocket placement or lapels. Embroidery is centered above the pocket at a standard size to ensure legibility.</p>"
+          }
+        },
+        "qa_eE38tg": {
+          "type": "qa",
+          "disabled": true,
+          "settings": {
+            "question": "Can I add my own logo or design?",
+            "answer": "<p>Custom logo embroidery is currently unavailable on the website for new logos. If you already have a custom logo code, you can use that for your product using the embroidery interface. Contact customer service at <a href=\"tel:1-800-372-2201\">1-800-372-2201</a> or email: <a href=\"mailto:help@shop.careismatic.com\">help@cherokeeuniforms.com</a> if you need custom logo service.</p>"
+          }
+        },
+        "qa_JNMQwf": {
+          "type": "qa",
+          "disabled": true,
+          "settings": {
+            "question": "How much does embroidery cost?",
+            "answer": "<p>Orders with embroidery can require up to 21 business days for personalization. U.S. orders ship after all items are processed. International orders ship once all items are available.</p>"
+          }
+        },
+        "qa_3MB3EY": {
+          "type": "qa",
+          "disabled": true,
+          "settings": {
+            "question": "Can I return or exchange embroidered items?",
+            "answer": "<p>No. Embroidered garments are final sale and cannot be returned, exchanged, or refunded unless the item is defective. Please verify all instructions carefully before submitting your order.</p>"
+          }
+        },
+        "qa_4XamWV": {
+          "type": "qa",
+          "disabled": true,
+          "settings": {
+            "question": "Can I order embroidered items in bulk for a large team?",
+            "answer": "<p>Yes. Contact customer service at <a href=\"tel:1-800-372-2201\">1-800-372-2201</a> or email: <a href=\"mailto:help@cherokeeuniforms.com\" target=\"_blank\" title=\"mailto:help@cherokeeuniforms.com\">help@cherokeeuniforms.com</a>for assistance.</p>"
+          }
+        },
+        "qa_pEzC43": {
+          "type": "qa",
+          "settings": {
+            "question": "Do you have a printed catalog?",
+            "answer": "<p>We do not publish a printed catalog. Instead, we maintain a live online catalog so you always have access to the newest products, everyday low prices, and a broader selection than any print catalog.</p>"
+          }
+        },
+        "heading_CjJMKK": {
+          "type": "heading",
+          "settings": {
+            "heading": "Discount & Promotion"
+          }
+        },
+        "qa_FYJeKD": {
+          "type": "qa",
+          "settings": {
+            "question": "What forms of payment does Cherokee Uniforms accept?",
+            "answer": "<p>We accept Visa, MasterCard, Discover, and American Express for online orders.</p><p>For debit card orders, a pre-authorization hold will be placed on your account before processing. The funds are only charged when the order ships. You may temporarily see both the hold and the charge, but this is not a duplicate — the hold will be released within a few days.</p>"
+          }
+        },
+        "qa_VdiYhA": {
+          "type": "qa",
+          "settings": {
+            "question": "How do I use a promotion or coupon code?",
+            "answer": "<p>On the Checkout page, enter your code in the \"Discount code\" box and click \"Apply\" to update your order subtotal.</p>"
+          }
+        },
+        "qa_UhqhiX": {
+          "type": "qa",
+          "settings": {
+            "question": "Are there exclusions to promotions and coupons?",
+            "answer": "<p>Select styles and products may be excluded from sale events or from applying coupon codes.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "heading_cf9abP",
+        "qa_y9WiQF",
+        "qa_FRxJjc",
+        "qa_Bty9KR",
+        "qa_iHNDep",
+        "qa_tjNEeJ",
+        "qa_D77axk",
+        "qa_aCnhJY",
+        "heading_Hgtrr9",
+        "qa_XAcM3h",
+        "qa_tze6pD",
+        "qa_GbJikP",
+        "qa_VgFRH3",
+        "qa_PLBLby",
+        "qa_FWY8FQ",
+        "qa_GcVGhV",
+        "heading_BQdFCm",
+        "qa_FjG7AL",
+        "qa_wk8Ngf",
+        "qa_4NLATn",
+        "heading_fy8HqX",
+        "qa_dryzBA",
+        "qa_UE9KJF",
+        "qa_kyh834",
+        "qa_apgmVa",
+        "qa_eE38tg",
+        "qa_JNMQwf",
+        "qa_3MB3EY",
+        "qa_4XamWV",
+        "qa_pEzC43",
+        "heading_CjJMKK",
+        "qa_FYJeKD",
+        "qa_VdiYhA",
+        "qa_UhqhiX"
+      ],
+      "name": "FAQ content",
+      "settings": {
+        "color_scheme": "scheme-default"
+      }
+    }
+  },
+  "order": [
+    "08361350-8c56-4cf2-89b7-6efa2d0a6feb",
+    "faq_content_GJ8iac"
+  ]
+}

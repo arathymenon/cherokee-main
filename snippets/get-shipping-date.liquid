@@ -1,0 +1,16 @@
+{%- comment -%}
+  Renders a shipping date in structured format
+
+  Accepts:
+  - product: {Object} price in cents
+  - current_variant: {Object}
+{%- endcomment -%}
+
+
+{%- comment -%}
+  When you change shipping date property date make sure to change it in common.js file, inside preOrderPropertyValidator function
+{%- endcomment -%}
+{%- assign shipping_date = current_variant.metafields.custom.pre_order_shipping_date | default: product.metafields.custom.pre_order_shipping_date -%}
+{%- assign shipping_date_formatted = shipping_date | date: '%B %d, %Y' -%}
+
+{{ shipping_date }}||{{ shipping_date_formatted }}

@@ -1,0 +1,26 @@
+@import "@magic-spells/panel-stack/css/min";
+
+panel-stack {
+  --ps-transition-duration: 220ms;
+  --ps-translate-previous: -100%;
+  --ps-translate-next: 100%;
+  --ps-scale-x-previous: 1;
+  --ps-scale-y-previous: 1;
+  --ps-scale-x-next: 1;
+  --ps-scale-y-next: 1;
+  --ps-blur-previous: 0;
+  --ps-blur-next: 0;
+  --ps-opacity-previous: 1;
+  --ps-opacity-next: 1;
+  --ps-brightness-previous: 1;
+}
+
+stack-panel {
+  background: transparent;
+  transition: transform var(--ps-transition-duration) var(--ps-transition-timing);
+  will-change: transform;
+}
+
+stack-panel[state] {
+  filter: none;
+}

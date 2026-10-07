@@ -1,0 +1,34 @@
+<!-- section: spacer -->
+
+{%- liquid
+  assign s = section.settings
+-%}
+
+<div aria-hidden="true" style="height: {{ s.height }}px;"></div>
+
+{% schema %}
+{
+  "name": "Spacer",
+  "settings": [
+    {
+      "type": "range",
+      "id": "height",
+      "label": "Height",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "default": 32,
+      "unit": "px"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Spacer",
+      "category": "Layout"
+    }
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  }
+}
+{% endschema %}

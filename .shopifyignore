@@ -1,0 +1,24 @@
+# Development files
+.husky/*
+node_modules/*
+scripts/*
+styles/*
+assets/*.map
+
+# Config files
+.DS_Store
+.eslintignore
+.eslintrc
+.gitattributes
+.gitignore
+.prettierignore
+.prettierrc
+.shopifyignore
+.theme-check.yml
+CLAUDE.md
+LICENSE.txt
+README.md
+package.json
+package-lock.json
+rollup.config.js
+webpack.config.js

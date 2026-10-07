@@ -1,0 +1,117 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "header": {
+      "type": "collection-header",
+      "settings": {
+        "color_scheme": "",
+        "image_color_scheme": "scheme-dark",
+        "width": "container"
+      }
+    },
+    "products": {
+      "type": "collection-products",
+      "settings": {
+        "filter_color_scheme": "scheme-default",
+        "products_per_page": 16
+      }
+    },
+    "seo_text_4tTMd4": {
+      "type": "seo-text",
+      "disabled": true,
+      "name": "SEO Text",
+      "settings": {
+        "content": "{{ collection.metafields.seo.content | metafield_tag }}",
+        "color_scheme": "scheme-0d9bed0c-0f1f-4f9d-99af-d15d3a707bfd"
+      }
+    },
+    "empty_collection_carousel_zApKLV": {
+      "type": "featured-collection",
+      "name": "Product carousel",
+      "settings": {
+        "color_scheme": "",
+        "heading": "Featured Products",
+        "text": "",
+        "collection": "",
+        "products_to_show": 12,
+        "loop": false,
+        "button_link": "",
+        "button_text": "Shop All",
+        "slides_per_view_tablet": 2,
+        "slides_per_view_laptop": 3,
+        "slides_per_view_desktop": 4
+      }
+    },
+    "collapsible_content_akx8KX": {
+      "type": "collapsible-content",
+      "blocks": {
+        "item_UdW3Qn": {
+          "type": "item",
+          "settings": {
+            "heading": "What are Workwear Revolution men's scrubs?",
+            "content": "Cherokee Workwear Revolution men's scrubs are professional healthcare uniforms built for male nurses, LPNs, RNs, medical assistants, surgical techs, and other healthcare professionals who need comfort, durability, and a modern, professional look through long shifts. Revolution is one of Cherokee's bestselling lines \u2014 offering quality you can trust at value that works for individuals and entire teams. The men's line includes a range of tops: chest pocket V-neck, utility 3-pocket V-neck, mesh panel V-neck, polo, and mesh trim styles. For <a href=\"https://www.cherokeeuniforms.com/mens-scrubs-pants\"><span style=\"text-decoration:underline\">scrub pants:</span></a> zip fly cargo, jogger, and mesh trim jogger options. A zip front scrub jacket rounds out the line, and scrub sets pairing a top and pant are available. Sizes run from XXS to 5XL."
+          }
+        },
+        "item_jMVD9L": {
+          "type": "item",
+          "settings": {
+            "heading": "What fabric are Workwear Revolution men's scrubs made from?",
+            "content": "Workwear Revolution men's scrubs are made from a specially engineered blend of polyester, rayon, and spandex twill. The fabric delivers a cloud-like softness with two-way stretch for unrestricted movement during your shift. Select styles feature contrast mesh panels for added breathability and a sporty aesthetic. Some styles also include reflective accents."
+          }
+        },
+        "item_W9xjrH": {
+          "type": "item",
+          "settings": {
+            "heading": "What sizes do Workwear Revolution men's scrubs come in?",
+            "content": "Workwear Revolution men's scrubs are available from XXS to 5XL. The broad size range is designed so every healthcare professional on the team can find the right fit, whether you're outfitting yourself or ordering for a group. You can also shop <a href=\"https://www.cherokeeuniforms.com/men-scrub-sets\"><span style=\"text-decoration:underline\">scrub sets</span></a> with coordinating tops and pants in multiple colors and sizes."
+          }
+        },
+        "item_g7Jw7A": {
+          "type": "item",
+          "settings": {
+            "heading": "What pockets and functional features do Workwear Revolution men's scrubs have?",
+            "content": "Pocket count and features vary by style. The Men's Utility V-Neck Scrub Top has 3 pockets. The Men's Mesh Panel V-Neck Scrub Top has 2 pockets. For the highest storage option in the line, the<a href=\"https://www.cherokeeuniforms.com/mens-12-pocket-scrub-pant/ckck0001.html\"> <span style=\"text-decoration:underline\">Men's 12-Pocket Scrub Pant</span></a> includes 12 thoughtfully placed pockets \u2014 zip, cargo, and dedicated tool storage \u2014 plus a badge ID loop, elastic waistband with adjustable drawstring, and 2-way stretch fabric. It\u2019s built for professionals who need everything within reach through a full shift."
+          }
+        },
+        "item_URbgee": {
+          "type": "item",
+          "settings": {
+            "heading": "Who are Workwear Revolution men's scrubs designed for?",
+            "content": "Workwear Revolution men's scrubs are built for male nurses, LPNs, RNs, CNAs, medical assistants, surgical techs, and other healthcare professionals who need reliable, professional scrubs through demanding hospital and clinic shifts. The line is designed for individuals and teams alike \u2014 with sizes from XXS to 5XL, a wide range of colors, and styles that cover everything from sporty to classic professional looks. If you need <a href=\"https://www.cherokeeuniforms.com/cherokee-mens-scrubs\"><span style=\"text-decoration:underline\">men\u2019s scrubs</span></a> that hold up through 12 hours of constant movement, keep you looking sharp on the floor, and work for the whole team, Revolution delivers."
+          }
+        }
+      },
+      "block_order": [
+        "item_UdW3Qn",
+        "item_jMVD9L",
+        "item_W9xjrH",
+        "item_g7Jw7A",
+        "item_URbgee"
+      ],
+      "name": "Collapsible Content",
+      "settings": {
+        "color_scheme": "",
+        "heading": "Frequently Asked Questions",
+        "text": "",
+        "button_text": "",
+        "button_link": "",
+        "button_style": "button"
+      }
+    }
+  },
+  "order": [
+    "header",
+    "products",
+    "seo_text_4tTMd4",
+    "empty_collection_carousel_zApKLV",
+    "collapsible_content_akx8KX"
+  ]
+}

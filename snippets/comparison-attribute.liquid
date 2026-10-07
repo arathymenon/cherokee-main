@@ -1,0 +1,53 @@
+<!-- snippet: comparison-attribute -->
+
+{% doc %}
+  Renders one comparison attribute cell from a product metafield, looked up by
+  namespace + key (bracket access, so hyphenated keys like 'pocket-type' work).
+  Always emits a cell: comparison-cell renders "——" for a blank value (and flags it
+  data-empty), so the controller can show a row when at least one product has a value
+  and hide rows blank across all products. `order` keeps the row in canonical order.
+
+  @param {object} product - Shopify product object (required)
+  @param {string} namespace - Metafield namespace, e.g. 'attributes' or 'shopify' (required)
+  @param {string} key - Metafield key, e.g. 'inseam' or 'pocket-type' (required)
+  @param {string} label_key - Locale key for the row banner label (required)
+  @param {string} type - 'text' | 'list_text' | 'metaobject_list' | 'richtext' (required)
+  @param {number} order - Canonical row order (its position in the section list) (required)
+  @param {string} [field] - Metaobject display field for 'metaobject_list' (default 'label')
+
+  @example
+  {% render 'comparison-attribute', product: product, namespace: 'attributes', key: 'inseam', label_key: 'products.compare.attr.inseam', type: 'list_text', order: 1 %}
+{% enddoc %}
+
+{%- liquid
+  assign mf = product.metafields[namespace][key]
+  assign field_name = field | default: 'label'
+  assign out = ''
+
+  if mf != blank
+    case type
+      when 'text'
+        assign out = mf.value
+      when 'list_text'
+        assign out = mf.value | join: ', '
+      when 'metaobject_list'
+        assign out = mf | metafield_text: field: field_name
+      when 'richtext'
+        capture out
+          echo mf | metafield_tag
+        endcapture
+    endcase
+  endif
+
+  # The `t` filter HTML-escapes its output; comparison-cell escapes the label again
+  # for the attribute, so decode the ampersand here to avoid a double-escape (e.g.
+  # "Fit & Style" → "Fit &amp;amp; Style").
+  assign label = label_key | t | replace: '&amp;', '&'
+  assign cell_key = 'mf:' | append: namespace | append: '.' | append: key
+-%}
+
+{%- comment -%}
+  Always emit a cell — comparison-cell renders "——" for a blank value and flags it
+  data-empty so the controller can hide rows that are blank on every product.
+{%- endcomment -%}
+{%- render 'comparison-cell', group: 'attribute', key: cell_key, label: label, value: out, handle: product.handle, order: order -%}

@@ -1,0 +1,21 @@
+{
+  "trailingComma": "es5",
+  "tabWidth": 2,
+  "useTabs": false,
+  "semi": true,
+  "singleQuote": false,
+  "bracketSpacing": true,
+  "arrowParens": "always",
+  "bracketSameLine": true,
+  "printWidth": 100,
+  "overrides": [
+    {
+      "files": "*.liquid",
+      "options": {
+        "plugins": ["@shopify/prettier-plugin-liquid"]
+      }
+    }
+  ]
+}
+
+

@@ -1,0 +1,134 @@
+{%- comment %}
+  Renders product card partials.
+
+  Accepts:
+  - name: {String} The name of the partial to render
+{%- endcomment %}
+
+{%- case name -%}
+  {%- when 'media' -%}
+    {%- comment -%}
+      Renders product/variant price
+
+      Accepts:
+      - product: {Object}
+      - variant: {Object} optional
+      - image_sizes: {String} The "sizes" attribute value for the product image
+      - loading_eager: {Boolean}
+    {%- endcomment -%}
+
+    {%- liquid
+      assign loading_eager = loading_eager | default: false
+
+      capture media_list
+        render 'product-media-list', product: product, variant: variant, list_name: 'featured_hover'
+      endcapture
+
+      assign media_list = media_list | split: ' '
+    -%}
+    <div class="size-full relative group/product-card-media">
+      {%- for index_string in media_list -%}
+        {%- liquid
+          assign index = index_string | plus: 0
+          assign media = product.media[index]
+          assign show_skeleton = true
+          unless forloop.first
+            assign loading_eager = false
+            assign show_skeleton = false
+          endunless
+        -%}
+        <div
+          class="
+            absolute size-full inset-0
+            {% unless forloop.first %} hidden z-1 group-hover/product-card-media:block {% endunless %}
+          "
+        >
+          {%- render 'product-gallery-partials',
+            name: 'image',
+            media: media,
+            sizes: image_sizes,
+            loading_eager: loading_eager,
+            show_skeleton: show_skeleton
+          -%}
+        </div>
+      {%- else -%}
+        <div class="absolute size-full inset-0 bg-grey-light"></div>
+      {%- endfor -%}
+    </div>
+
+  {%- when 'options' -%}
+    {%- comment -%}
+      Renders product options
+
+      Accepts:
+      - product: {Object}
+      - collection_context: {Object} optional
+    {%- endcomment -%}
+
+    {%- unless product.has_only_default_variant -%}
+      {%- for option in product.options_with_values -%}
+        {%- capture prefix_html %}
+          <legend class="fs-body-sm mb-1">
+            {%- render 'product-option-legend', product_option: option -%}
+          </legend>
+        {%- endcapture -%}
+
+        <div class="my-4">
+          {%- render 'product-options',
+            product: product,
+            collection_context: collection_context,
+            product_option: option,
+            picker_type: 'radio_mini',
+            prefix_html: prefix_html
+          -%}
+        </div>
+      {%- endfor -%}
+    {%- endunless -%}
+
+  {%- when 'quickshop_button' -%}
+    {%- comment -%}
+      Renders a link/button that triggers the "Product quick shop" modal
+      TODO: replace with link with href for non-js fallback
+
+      Accepts:
+      - product: {Object}
+      - variant: {Object} optional
+      - collection_context: {Object} optional
+    {%- endcomment -%}
+
+    {%- liquid
+      capture dialog_id
+        render 'quick-shop-partials', name: 'dialog_id'
+      endcapture
+
+      assign url = product.url | within: collection_context
+      if variant
+        assign url = variant.url | within: collection_context
+      endif
+    -%}
+
+    <html-fetcher-trigger
+      selector="#{{ dialog_id }} html-fetcher"
+      href="{{ url }}"
+      data-vegax-command="show-modal"
+      data-vegax-commandfor="{{ dialog_id }}"
+    >
+      <button>{{- 'products.product.quick_shop' | t -}}</button>
+    </html-fetcher-trigger>
+
+  {%- when 'skeleton' -%}
+    {%- comment -%}
+      Renders a product card skeleton
+    {%- endcomment -%}
+
+    <div class="skeleton-pulse">
+      <div class="aspect-product-image relative bg-grey-light"></div>
+      <div class="mt-5">
+        <div class="flex-1 space-y-3 py-1">
+          <div class="h-2 bg-grey-light rounded"></div>
+          <div class="h-2 bg-grey-light rounded"></div>
+          <div class="h-2 bg-grey-light rounded"></div>
+        </div>
+      </div>
+    </div>
+{%- endcase -%}

@@ -1,0 +1,31 @@
+{%- comment -%}
+  Outputs a '||'-delimited string of preferred color labels (downcased,
+  whitespace-stripped) for a collection's product cards.
+  Labels come exclusively from custom.colorway_list; outputs nothing when the
+  list is empty. custom.colorway is display-only (chip label/color override)
+  and is never used for filtering or preselection.
+
+  Accepts:
+  - collection: {Object} collection with colorway metafields
+
+  Usage:
+  {%- capture preferred_color_labels -%}
+    {%- render 'colorway-labels', collection: collection -%}
+  {%- endcapture -%}
+{%- endcomment -%}
+
+{%- liquid
+  assign _labels = ''
+  for item in collection.metafields.custom.colorway_list.value
+    assign _label = item.label | strip
+    if _label != blank
+      assign _label = _label | downcase
+      if _labels == blank
+        assign _labels = _label
+      else
+        assign _labels = _labels | append: '||' | append: _label
+      endif
+    endif
+  endfor
+  echo _labels
+-%}

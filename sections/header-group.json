@@ -1,0 +1,151 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "type": "header",
+  "name": "Header group",
+  "sections": {
+    "announcement-bar": {
+      "type": "announcement-bar",
+      "blocks": {
+        "announcement_VKy8Ay": {
+          "type": "announcement",
+          "name": "Bar [fs-fr]",
+          "settings": {
+            "title": "<p>Free Shipping + Returns* $79+ <a href=\"/pages/faq\" title=\"FAQ\">Learn More</a></p>",
+            "text_color": "#f5f5f5"
+          }
+        },
+        "announcement_GmtdKH": {
+          "type": "announcement",
+          "name": "Bar [sale]",
+          "settings": {
+            "title": "<p>THE TWO-DAY SALE. <a href=\"/collections/sale\" title=\"Sale\">Shop 20% Off</a></p>",
+            "text_color": ""
+          }
+        },
+        "announcement_fBnTFt": {
+          "type": "announcement",
+          "name": "Bar [clearance]",
+          "settings": {
+            "title": "<p>End of Season up to 30% Off <a href=\"/collections/sale\" title=\"Sale\">Shop New to Sale Styles</a></p>",
+            "text_color": ""
+          },
+          "disabled": true
+        },
+        "announcement_eccJ93": {
+          "type": "announcement",
+          "name": "Bar [GWP]",
+          "disabled": true,
+          "settings": {
+            "title": "<p><a href=\"/collections/halloween-print-scrubs\" title=\"Halloween Print Scrubs\">Free Halloween Scrub Top</a> on Orders $50+</p>",
+            "text_color": ""
+          }
+        }
+      },
+      "block_order": [
+        "announcement_VKy8Ay",
+        "announcement_GmtdKH",
+        "announcement_fBnTFt",
+        "announcement_eccJ93"
+      ],
+      "settings": {
+        "color_scheme": "scheme-ed7cfcf6-92f5-4ca1-a444-303e46eb99fc",
+        "timer": 5
+      }
+    },
+    "header": {
+      "type": "header",
+      "blocks": {
+        "mega_menu_844UQU": {
+          "type": "mega_menu",
+          "settings": {
+            "title": "",
+            "menu": "women",
+            "image_url": "shopify://collections/womens-new-arrivals",
+            "image_text": ""
+          }
+        },
+        "mega_menu_6nnwML": {
+          "type": "mega_menu",
+          "settings": {
+            "title": "Men",
+            "menu": "men",
+            "image_url": "",
+            "image_text": ""
+          }
+        },
+        "nav_link_Qt8nmy": {
+          "type": "nav_link",
+          "settings": {
+            "title": "Sale",
+            "url": "shopify://collections/sale"
+          }
+        },
+        "nav_link_BAAKHM": {
+          "type": "nav_link",
+          "disabled": true,
+          "settings": {
+            "title": "Free Gift",
+            "url": "shopify://collections/halloween-print-scrubs"
+          }
+        },
+        "nav_link_TPqKTW": {
+          "type": "nav_link",
+          "settings": {
+            "title": "Blog",
+            "url": "shopify://blogs/scrub-hub"
+          }
+        },
+        "mega_menu_PkJ3Ye": {
+          "type": "mega_menu",
+          "disabled": true,
+          "settings": {
+            "title": "Unisex",
+            "menu": "women",
+            "image_url": "",
+            "image_text": ""
+          }
+        },
+        "dropdown_menu_8DUEKB": {
+          "type": "dropdown_menu",
+          "disabled": true,
+          "settings": {
+            "title": "",
+            "url": "",
+            "menu": "blog"
+          }
+        },
+        "nav_link_htEWm6": {
+          "type": "nav_link",
+          "settings": {
+            "title": "Store Locator",
+            "url": "shopify://pages/store-locator"
+          }
+        }
+      },
+      "block_order": [
+        "mega_menu_844UQU",
+        "mega_menu_6nnwML",
+        "nav_link_Qt8nmy",
+        "nav_link_BAAKHM",
+        "nav_link_TPqKTW",
+        "mega_menu_PkJ3Ye",
+        "dropdown_menu_8DUEKB",
+        "nav_link_htEWm6"
+      ],
+      "name": "Main menu",
+      "settings": {}
+    }
+  },
+  "order": [
+    "announcement-bar",
+    "header"
+  ]
+}

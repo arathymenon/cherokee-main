@@ -1,0 +1,40 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "page_content": {
+      "type": "page-content",
+      "disabled": true,
+      "settings": {
+        "padding_top": "pt-sm",
+        "padding_bottom": "pb-lg"
+      }
+    },
+    "liquid_code_EPn8GA": {
+      "type": "liquid-code",
+      "name": "Liquid Code",
+      "settings": {
+        "color_scheme": "",
+        "heading": "Store Locator",
+        "heading_tag": "h1",
+        "heading_size": "fs-display-3",
+        "width": "container",
+        "add_side_padding": true,
+        "top_padding": "pt-md",
+        "bottom_padding": "pb-lg",
+        "liquid_code": "<!-- Start Stockist.co widget -->\n<stockist-store-locator data-stockist-widget-tag=\"map_r32ne2w3\">\n  Loading store locator from <a href=\"https://stockist.co\">Stockist store locator</a>...\n</stockist-store-locator>\n<script async src=\"https://stockist.co/embed/v1/widget.min.js\"></script>\n<!-- End Stockist.co widget -->"
+      }
+    }
+  },
+  "order": [
+    "page_content",
+    "liquid_code_EPn8GA"
+  ]
+}

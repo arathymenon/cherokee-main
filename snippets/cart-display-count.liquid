@@ -1,0 +1,28 @@
+{%- liquid
+  assign embroidery_group_ids = '|'
+  assign embroidery_set_codes = '|'
+  for item in cart.items
+    if item.properties._cart_template == 'embroidery' and item.properties._group_id != blank
+      assign embroidery_group_ids = embroidery_group_ids | append: item.properties._group_id | append: '|'
+    endif
+    if item.properties._cart_template == 'embroidery' and item.properties['_Set code'] != blank
+      assign embroidery_set_codes = embroidery_set_codes | append: item.properties['_Set code'] | append: '|'
+    endif
+  endfor
+
+  assign display_count = 0
+  for item in cart.items
+    assign set_marker = '|' | append: item.properties['_Set code'] | append: '|'
+    if item.properties._cart_template == blank and item.properties['_Set code'] != blank and embroidery_set_codes contains set_marker
+      continue
+    endif
+    if item.properties._group_role == 'child'
+      assign group_marker = '|' | append: item.properties._group_id | append: '|'
+      if embroidery_group_ids contains group_marker
+        continue
+      endif
+    endif
+    assign display_count = display_count | plus: item.quantity
+  endfor
+-%}
+{{- display_count -}}

@@ -1,0 +1,94 @@
+<!-- snippet: article-card -->
+
+{% doc %}
+  Renders a blog article card: image, tag chips, title, excerpt, date.
+
+  @param {object} article - Article object (required)
+  @param {object} [blog] - Parent blog object; required for clickable tag chips
+  @param {boolean} [show_image] - Show the article image (default: true)
+  @param {boolean} [show_date] - Show the published date (default: true)
+  @param {boolean} [show_author] - Show the author name (default: false)
+
+  @example
+  {% render 'article-card', article: article, blog: blog, show_image: section.settings.show_image %}
+{% enddoc %}
+
+{%- liquid
+  assign show_image = show_image | default: true, allow_false: true
+  assign show_date = show_date | default: true, allow_false: true
+  assign show_author = show_author | default: false, allow_false: true
+-%}
+
+<div class="group/article relative flex flex-col">
+
+  <a
+    href="{{ article.url }}"
+    class="absolute inset-0 z-1 no-underline"
+    aria-label="{{ article.title | escape }}"></a>
+
+  {%- if show_image -%}
+    <div class="aspect-3/2 w-full rounded-theme overflow-hidden">
+      {%- if article.image -%}
+        {%- capture article_image -%}
+          {{- article.image
+            | image_url: width: 1000
+            | image_tag:
+                class: 'w-full h-full object-cover transition-transform duration-300 group-hover/article:scale-[1.03]',
+                loading: 'lazy',
+                sizes: '(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw',
+                widths: '375, 442, 600, 800, 1000'
+          -}}
+        {%- endcapture -%}
+        {%- render 'media-loader', content: article_image, show_skeleton: true -%}
+      {%- else -%}
+        {{ 'lifestyle-1' | placeholder_svg_tag: 'w-full h-full object-cover' }}
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+
+  <div class="flex flex-col gap-2 pt-4 pb-10">
+    <div class="flex flex-col gap-2">
+
+      {%- if article.tags.size > 0 -%}
+        <div class="relative z-1 flex flex-wrap items-end gap-1 pb-2">
+          {%- for tag in article.tags limit: 3 -%}
+            {%- if blog -%}
+              <a href="{{ blog.url }}/tagged/{{ tag | handleize }}" class="chip no-underline chip--article px-3 py-1">{{ tag }}</a>
+            {%- else -%}
+              <span class="chip chip--article px-3 py-1">{{ tag }}</span>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+
+      <div class="flex flex-col gap-1">
+        <div
+          role="heading"
+          aria-level="3"
+          class="fs-body-lg font-medium text-pretty">
+          {{ article.title | escape }}
+        </div>
+        {%- if article.excerpt.size > 0 or article.content.size > 0 -%}
+          <p class="fs-body-md text-scheme opacity-70">
+            {%- if article.excerpt.size > 0 -%}
+              {{ article.excerpt | strip_html | truncatewords: 24 }}
+            {%- else -%}
+              {{ article.content | strip_html | truncatewords: 24 }}
+            {%- endif -%}
+          </p>
+        {%- endif -%}
+      </div>
+    </div>
+
+    {%- if show_date or show_author -%}
+      <div class="flex items-center justify-between gap-2 fs-body-sm text-scheme opacity-70">
+        {%- if show_date -%}
+          <span>{{ article.published_at | date: '%B %-d, %Y' }}</span>
+        {%- endif -%}
+        {%- if show_author -%}
+          <span>{{ article.author }}</span>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  </div>
+</div>

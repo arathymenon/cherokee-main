@@ -1,0 +1,135 @@
+/* Selected text */
+::selection {
+  /* TODO: style selected text */
+}
+
+button[disabled],
+input[disabled] {
+  cursor: default;
+}
+
+@layer base {
+  /* Base input styles — scoped to .input-field */
+  select,
+  textarea {
+    --tw-border-opacity: 10.2%;
+
+    display: block;
+    width: 100%;
+    color: oklch(var(--color-foreground) / var(--tw-text-opacity));
+    background: transparent;
+    border: 1px solid oklch(var(--color-input-border) / var(--tw-border-opacity));
+    border-radius: var(--input-radius);
+    box-shadow: none;
+    font-size: inherit;
+    margin: 0;
+    padding-left: 1.25rem;
+    appearance: none;
+    min-height: 3.375rem;
+  }
+
+  input[type="search"]::-webkit-search-cancel-button {
+    appearance: none;
+    display: none;
+  }
+
+  input[hidden] {
+    display: none;
+  }
+
+  textarea {
+    padding: 0.5rem 1rem;
+  }
+
+  /* Input field — floating label text input */
+
+  /* HTML order: label before input */
+  .input-field {
+    position: relative;
+    width: 100%;
+
+    label {
+      display: block;
+      pointer-events: none;
+      font-size: 0.75rem;
+      padding: 0;
+      margin: 0;
+      background: transparent;
+      color: oklch(var(--color-foreground) / var(--tw-text-opacity));
+      transition: all 300ms ease-out;
+      transform: translateY(0%);
+      opacity: 1;
+      margin-bottom: 4px;
+    }
+
+    /* When input is empty and not focused, pull label down over input */
+    &:has(input:placeholder-shown:not(:focus)) label {
+      transform: translateY(calc(100% + 4px));
+      opacity: 0.7;
+    }
+
+    input {
+      display: block;
+      width: 100%;
+      font-weight: 500;
+      font-size: 0.875em;
+      line-height: 160%;
+      color: oklch(var(--color-foreground) / var(--tw-text-opacity));
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid oklch(var(--color-input-border) / var(--tw-border-opacity));
+      margin: 0;
+      padding: 0 0 0.5em;
+    }
+
+    input::placeholder {
+      color: transparent;
+    }
+
+    input:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    input[aria-invalid="true"] {
+      border-color: var(--color-red-error);
+    }
+
+    &:has(input[hidden]) {
+      display: none;
+    }
+  }
+
+  /* Remove default focus styles and only use focus-visible */
+
+  /* Remove focus rings from all inputs by default */
+  input:focus {
+    outline: none;
+    box-shadow: none;
+  }
+
+  /* Only show focus rings with focus-visible (keyboard navigation) */
+  input:focus-visible {
+    outline: none;
+  }
+
+  /* Radio button labels get focus-visible ring */
+
+  /* input[type="radio"]:focus-visible + label {
+		outline: none;
+	} */
+
+  /* Remove focus ring from input-field on regular focus */
+
+  /*	.input-field:has(input:focus) {
+		outline: none;
+		box-shadow: none;
+	}
+*/
+
+  /* Input field containers only get focus-visible ring */
+
+  /* .input-field:has(input:focus-visible) {
+		outline: none;
+	} */
+}

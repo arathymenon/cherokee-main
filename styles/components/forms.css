@@ -1,0 +1,64 @@
+@layer components {
+  .form-label {
+    margin-bottom: 0.25rem;
+    display: block;
+  }
+
+  select.form-input {
+    appearance: none;
+    border: 1px solid black;
+    padding: 0.5rem 0.8rem;
+    padding-right: 1.5rem;
+    display: block;
+    width: 100%;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: currentcolor;
+    background-color: transparent;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E")
+      no-repeat right 0.75rem center;
+    background-size: 1rem;
+    outline-offset: 0.25rem;
+    border-radius: 0;
+    text-overflow: ellipsis;
+  }
+
+  select.form-input:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+
+  .form-boolean {
+    font-size: var(--fs-body-sm);
+    display: inline-flex;
+    gap: 0.5rem;
+  }
+
+  .form-boolean:has(input:disabled) {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .form-boolean input {
+    appearance: none;
+    border: 1px solid #e5e5e5;
+    width: 1rem;
+    height: 1rem;
+    box-sizing: border-box;
+    margin: 0.1rem 0;
+    flex: 0 0 auto;
+    outline-offset: 0.25rem;
+  }
+
+  .form-boolean input[type="radio"] {
+    border-radius: 100%;
+  }
+
+  .form-boolean input[type="checkbox"]:checked {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' fill='none'%3E%3Cpath d='m4.4 7.95-2.1-2.1-.7.7 2.8 2.8 6-6-.7-.7z' fill='%23000'/%3E%3C/svg%3E");
+  }
+
+  .form-boolean input[type="radio"]:checked {
+    background: radial-gradient(circle, black 50%, transparent 51%);
+  }
+}

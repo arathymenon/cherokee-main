@@ -1,0 +1,29 @@
+{%- comment -%}
+  Renders "Size" filter
+  Accepts:
+  - filter: {Object} Shopify filter object
+{%- endcomment -%}
+
+{%- liquid
+  assign sizes_order = shop.metafields.accentuate.size_filter_order | default: ''
+  assign sizes_order_array = sizes_order | split: ','
+  assign result_html = ''
+  for size_item in sizes_order_array
+    assign value = filter.values | where: 'value', size_item | first
+    if value
+      capture item_html
+        render 'filter-list-value', filter: filter, value: value
+      endcapture
+      assign result_html = result_html | append: item_html
+    endif
+  endfor
+  for value in filter.values
+    unless sizes_order_array contains value.value
+      capture item_html
+        render 'filter-list-value', filter: filter, value: value
+      endcapture
+      assign result_html = result_html | append: item_html
+    endunless
+  endfor
+  echo result_html
+-%}

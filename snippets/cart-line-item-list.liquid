@@ -1,0 +1,46 @@
+<!-- snippet: cart-line-item-list -->
+{%- comment -%}
+  Renders the cart items as a <ul>. One <li> per cart entry — a default line
+  item, a "set", or an embroidered group. Child line items of a group are
+  skipped here; the parent's template renders them.
+{%- endcomment -%}
+
+<div class="px-5">
+  <ul role="list" class="divide-y divide-grey-light border-b border-grey-light border-solid">
+    {%- liquid
+      for line_item in cart.items
+        assign group_role = line_item.properties._group_role
+        assign set_code = line_item.properties['_Set code']
+        assign is_embroidery_child = false
+        if set_code != blank and line_item.properties._cart_template == blank
+          for possible_parent in cart.items
+            if possible_parent.properties._cart_template == 'embroidery' and possible_parent.properties['_Set code'] == set_code
+              assign is_embroidery_child = true
+              break
+            endif
+          endfor
+        endif
+        if is_embroidery_child
+          continue
+        endif
+        if group_role == 'child'
+          continue
+        endif
+
+        if line_item.properties._cart_template == 'embroidery'
+          render 'cart-template-embroidery', parent: line_item, line_item_index: forloop.index
+        elsif group_role == 'parent'
+          assign cart_template = line_item.properties._cart_template
+          case cart_template
+            when 'set'
+              render 'cart-template-set', parent: line_item, line_item_index: forloop.index
+            else
+              render 'cart-line-item', line_item: line_item, line_item_index: forloop.index
+          endcase
+        else
+          render 'cart-line-item', line_item: line_item, line_item_index: forloop.index
+        endif
+      endfor
+    -%}
+  </ul>
+</div>

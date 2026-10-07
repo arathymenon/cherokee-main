@@ -1,0 +1,979 @@
+<!-- template: page.style-guide -->
+{%- liquid
+  assign demo_collection = collections['all']
+  if demo_collection == empty or demo_collection.products.size == 0
+    assign demo_collection = collections.all
+  endif
+  assign demo_product = demo_collection.products.first
+  assign demo_blog = blogs.first
+  assign demo_article = demo_blog.articles.first
+-%}
+<div class="container py-8">
+  <h1 class="fs-display-1 mb-8">Style Guide</h1>
+
+  {%- comment -%} Font Families {%- endcomment -%}
+  <section class="mb-12">
+    <h2 class="fs-display-3 mb-6 pb-2 border-b border-black">Font Families</h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      {%- comment -%} GT Walsheim {%- endcomment -%}
+      <div class="border border-grey-light p-6 font-display">
+        <p class="fs-body-sm text-grey-medium mb-1 font-body">Display Font</p>
+        <p class="fs-display-3">GT Walsheim</p>
+        <p class="fs-body-sm text-grey-medium mb-4 font-body">Black (900)</p>
+        <div class="space-y-3">
+          <div>
+            <span class="fs-body-sm text-grey-medium block mb-1 font-body">Uppercase</span>
+            <p class="text-lg font-display">ABCDEFGHIJKLMNOPQRSTUVWXYZ</p>
+          </div>
+          <div>
+            <span class="fs-body-sm text-grey-medium block mb-1 font-body">Lowercase</span>
+            <p class="text-lg font-display">abcdefghijklmnopqrstuvwxyz</p>
+          </div>
+          <div>
+            <span class="fs-body-sm text-grey-medium block mb-1 font-body">Numbers</span>
+            <p class="ftext-lg font-display">0123456789</p>
+          </div>
+          <div>
+            <span class="fs-body-sm text-grey-medium block mb-1 font-body">Characters</span>
+            <p class="text-lg font-display">!@#$%^&amp;*()_+-=[]{}|;:&rsquo;,./&lt;&gt;?</p>
+          </div>
+        </div>
+      </div>
+
+      {%- comment -%} Inter {%- endcomment -%}
+      <div class="border border-grey-light p-6 font-body">
+        <p class="fs-body-sm text-grey-medium mb-1">Body Font</p>
+        <p class="text-3xl font-body">Inter</p>
+        <p class="fs-body-sm text-grey-medium mb-4">Regular (400) · Medium (500)</p>
+        <div class="space-y-3">
+          <div>
+            <span class="fs-body-sm text-grey-medium block mb-1">Uppercase</span>
+            <p class="fs-display-5">ABCDEFGHIJKLMNOPQRSTUVWXYZ</p>
+          </div>
+          <div>
+            <span class="fs-body-sm text-grey-medium block mb-1">Lowercase</span>
+            <p class="fs-display-5">abcdefghijklmnopqrstuvwxyz</p>
+          </div>
+          <div>
+            <span class="fs-body-sm text-grey-medium block mb-1">Numbers</span>
+            <p class="fs-display-5">0123456789</p>
+          </div>
+          <div>
+            <span class="fs-body-sm text-grey-medium block mb-1">Characters</span>
+            <p class="fs-display-5">!@#$%^&amp;*()_+-=[]{}|;:&rsquo;,./&lt;&gt;?</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} Typography {%- endcomment -%}
+  <section class="mb-12">
+    <h2 class="fs-display-3 mb-6 pb-2 border-b border-black">Typography</h2>
+
+    <div class="mb-8">
+      <h3 class="fs-display-5 mb-4 text-grey-dark">Display Headings</h3>
+      <div class="space-y-4">
+        <div>
+          <span class="fs-body-sm text-grey-medium block mb-1">Display 1 (fs-display-1)</span>
+          <p class="fs-display-1">The quick brown fox jumps over the lazy dog</p>
+        </div>
+        <div>
+          <span class="fs-body-sm text-grey-medium block mb-1">Display 2 (fs-display-2)</span>
+          <p class="fs-display-2">The quick brown fox jumps over the lazy dog</p>
+        </div>
+        <div>
+          <span class="fs-body-sm text-grey-medium block mb-1">Display 3 (fs-display-3)</span>
+          <p class="fs-display-3">The quick brown fox jumps over the lazy dog</p>
+        </div>
+        <div>
+          <span class="fs-body-sm text-grey-medium block mb-1">Display 4 (fs-display-4)</span>
+          <p class="fs-display-4">The quick brown fox jumps over the lazy dog</p>
+        </div>
+        <div>
+          <span class="fs-body-sm text-grey-medium block mb-1">Display 5 (fs-display-5)</span>
+          <p class="fs-display-5">The quick brown fox jumps over the lazy dog</p>
+        </div>
+        <div>
+          <span class="fs-body-sm text-grey-medium block mb-1">Display 6 (fs-display-6)</span>
+          <p class="fs-display-6">The quick brown fox jumps over the lazy dog</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="mb-8">
+      <div role="heading" aria-level="3" class="fs-display-5 mb-4 text-grey-dark">Eyebrow</div>
+      <div>
+        <span class="fs-body-sm text-grey-medium block mb-1">Eyebrow (fs-eyebrow)</span>
+        <p class="fs-eyebrow">New Arrivals</p>
+      </div>
+    </div>
+
+    <div class="mb-8">
+      <h3 class="fs-display-5 mb-4 text-grey-dark">Body Text</h3>
+      <div class="space-y-4 max-w-prose">
+        <div>
+          <span class="fs-body-sm text-grey-medium block mb-1">Body Large (fs-body-lg) · Regular</span>
+          <p class="fs-body-lg">Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet.</p>
+        </div>
+        <div>
+          <span class="fs-body-sm text-grey-medium block mb-1">Body Large (fs-body-lg) · Medium</span>
+          <p class="fs-body-lg font-medium">Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet.</p>
+        </div>
+        <div>
+          <span class="fs-body-sm text-grey-medium block mb-1">Body Medium (fs-body-md) · Regular</span>
+          <p class="fs-body-md">Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet.</p>
+        </div>
+        <div>
+          <span class="fs-body-sm text-grey-medium block mb-1">Body Medium (fs-body-md) · Medium</span>
+          <p class="fs-body-md font-medium">Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet.</p>
+        </div>
+        <div>
+          <span class="fs-body-sm text-grey-medium block mb-1">Body Small (fs-body-sm) · Regular</span>
+          <p class="fs-body-sm">Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet.</p>
+        </div>
+        <div>
+          <span class="fs-body-sm text-grey-medium block mb-1">Body Small (fs-body-sm) · Medium</span>
+          <p class="fs-body-sm font-medium">Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} Buttons {%- endcomment -%}
+  <section class="mb-12">
+    <h2 class="fs-display-3 mb-6 pb-2 border-b border-black">Buttons</h2>
+
+    <div class="mb-8">
+      <h3 class="fs-display-5 mb-4 text-grey-dark">Primary</h3>
+      <div class="bg-white p-6 mb-4">
+        <div class="flex flex-wrap gap-4 items-center">
+          <button class="button">Primary Button</button>
+          <button class="button" disabled>Disabled</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="mb-8">
+      <h3 class="fs-display-5 mb-4 text-grey-dark">Secondary</h3>
+      <div class="bg-black p-6">
+        <div class="flex flex-wrap gap-4 items-center">
+          <button class="button button-secondary">Secondary Button</button>
+          <button class="button button-secondary" disabled>Disabled</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="mb-8">
+      <h3 class="fs-display-5 mb-4 text-grey-dark">Outline Black</h3>
+      <div class="bg-white p-6 mb-4">
+        <div class="flex flex-wrap gap-4 items-center">
+          <button class="button button-outline-black">Outline Black</button>
+          <button class="button button-outline-black" disabled>Disabled</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="mb-8">
+      <h3 class="fs-display-5 mb-4 text-grey-dark">Outline White</h3>
+      <div class="bg-black p-6">
+        <div class="flex flex-wrap gap-4 items-center">
+          <button class="button button-outline-white">Outline White</button>
+          <button class="button button-outline-white" disabled>Disabled</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="mb-8">
+      <h3 class="fs-display-5 mb-4 text-grey-dark">Arrow Button</h3>
+      <div class="bg-white p-6 mb-4">
+        <div class="flex flex-wrap gap-4 items-center">
+          <a href="" class="arrow-button">
+            <span>Arrow Button</span>
+            <span>
+              {{- 'icon-arrow-right.svg' | inline_asset_content -}}
+            </span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="mb-8">
+      <h3 class="fs-display-5 mb-4 text-grey-dark">Underline Button</h3>
+      <div class="bg-white p-6 mb-4">
+        <div class="flex flex-wrap gap-4 items-center">
+          <a href="" class="underline-button">Underline Button</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} Chips {%- endcomment -%}
+  <section class="mb-12">
+    <div role="heading" aria-level="2" class="fs-display-3 mb-6 pb-2 border-b border-black">Chips</div>
+
+    {%- comment -%} Chips are scheme-aware: they resolve --color-chip-* tokens, so demos must sit inside a color-* wrapper. {%- endcomment -%}
+    <div class="color-{{ settings.color_schemes.first.id }} bg-white p-6">
+      <div class="mb-8">
+        <span class="fs-body-sm text-grey-medium block mb-2">Default (.chip)</span>
+        <div class="flex flex-wrap gap-2 items-center">
+          <span class="chip">Scrubs</span>
+          <span class="chip">Lab Coats</span>
+          <span class="chip">Footwear</span>
+        </div>
+      </div>
+
+      <div>
+        <span class="fs-body-sm text-grey-medium block mb-2">Active (.chip.chip--active)</span>
+        <div class="flex flex-wrap gap-2 items-center">
+          <span class="chip chip--active">Scrubs</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} Badges & Labels {%- endcomment -%}
+  <section class="mb-12">
+    <div role="heading" aria-level="2" class="fs-display-3 mb-6 pb-2 border-b border-black">Badges &amp; Labels</div>
+
+    <div class="mb-8">
+      <div role="heading" aria-level="3" class="fs-display-5 mb-4 text-grey-dark">Badges</div>
+      <div class="bg-white p-6">
+        <div class="flex flex-wrap gap-3 items-center">
+          <span class="badge badge-sale inline-block py-1 px-2 rounded-[2px] text-nowrap">Sale</span>
+          <span class="badge badge-low-stock inline-block py-1 px-2 rounded-[2px] text-nowrap">Low Stock</span>
+          <span class="badge badge-sold-out inline-block py-1 px-2 rounded-[2px] text-nowrap">Sold Out</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="mb-8">
+      <div role="heading" aria-level="3" class="fs-display-5 mb-4 text-grey-dark">Labels</div>
+      <div class="bg-white p-6">
+        <div class="flex flex-wrap gap-3 items-center">
+          <span class="label">New</span>
+          <span class="label">Best Seller</span>
+          <span class="label">Exclusive</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} Colors {%- endcomment -%}
+  <section class="mb-12">
+    <h2 class="fs-display-3 mb-6 pb-2 border-b border-black">Colors</h2>
+
+    <div class="flex flex-wrap gap-4 mb-4">
+      <div class="text-center">
+        <div class="w-20 h-20 bg-black border border-grey-light"></div>
+        <span class="fs-body-sm">Black</span>
+      </div>
+      <div class="text-center">
+        <div class="w-20 h-20 bg-white border border-grey-light"></div>
+        <span class="fs-body-sm">White</span>
+      </div>
+    </div>
+
+    <div class="flex flex-wrap gap-4 mb-4">
+      <div class="text-center">
+        <div class="w-20 h-20 bg-grey-dark border border-grey-light"></div>
+        <span class="fs-body-sm">Gray Dark</span>
+      </div>
+      <div class="text-center">
+        <div class="w-20 h-20 bg-grey-medium border border-grey-light"></div>
+        <span class="fs-body-sm">Gray Medium</span>
+      </div>
+      <div class="text-center">
+        <div class="w-20 h-20 bg-grey border border-grey-light"></div>
+        <span class="fs-body-sm">Gray</span>
+      </div>
+      <div class="text-center">
+        <div class="w-20 h-20 bg-grey-light border border-grey-light"></div>
+        <span class="fs-body-sm">Gray Light</span>
+      </div>
+      <div class="text-center">
+        <div class="w-20 h-20 bg-grey-light-blue border border-grey-light"></div>
+        <span class="fs-body-sm">Gray Light Blue</span>
+      </div>
+    </div>
+
+    <div class="flex flex-wrap gap-4">
+      <div class="text-center">
+        <div class="w-20 h-20 bg-brand-blue border border-grey-light"></div>
+        <span class="fs-body-sm">Brand Blue</span>
+      </div>
+      <div class="text-center">
+        <div class="w-20 h-20 bg-midnight-blue border border-grey-light"></div>
+        <span class="fs-body-sm">Midnight Blue</span>
+      </div>
+      <div class="text-center">
+        <div class="w-20 h-20 bg-electric-blue border border-grey-light"></div>
+        <span class="fs-body-sm">Electric Blue</span>
+      </div>
+      <div class="text-center">
+        <div class="w-20 h-20 bg-optimistic-blue border border-grey-light"></div>
+        <span class="fs-body-sm">Optimistic Blue</span>
+      </div>
+      <div class="text-center">
+        <div class="w-20 h-20 bg-red-sale border border-grey-light"></div>
+        <span class="fs-body-sm">Red Sale</span>
+      </div>
+      <div class="text-center">
+        <div class="w-20 h-20 bg-danger border border-grey-light"></div>
+        <span class="fs-body-sm">Danger</span>
+      </div>
+    </div>
+
+    <div class="mt-8">
+      <h3 class="fs-display-5 mb-4 text-grey-dark">Color Schemes</h3>
+
+      <div class="mb-6">
+        <label for="styleguide-color-scheme" class="form-label">Select a color scheme</label>
+        <select class="form-input" id="styleguide-color-scheme" style="max-width: 20rem;">
+          {%- for scheme in settings.color_schemes -%}
+            <option value="color-{{ scheme.id }}"{% if forloop.first %} selected{% endif %}>{{ scheme.id }}</option>
+          {%- endfor -%}
+        </select>
+      </div>
+
+      <div id="styleguide-color-scheme-preview" class="color-{{ settings.color_schemes.first.id }} p-8 border border-grey-light rounded-lg">
+        <div class="max-w-prose space-y-6">
+
+          <div>
+            <h4 class="fs-display-3">Heading Example</h4>
+          </div>
+
+          <div>
+            <p class="fs-body-md">Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet.</p>
+          </div>
+
+          <div class="flex flex-wrap gap-4 items-center">
+            <button class="button">Primary Button</button>
+            <button class="button button-secondary">Secondary Button</button>
+          </div>
+
+          <div>
+            <span class="fs-body-sm block mb-2 opacity-60">Chips (scheme tokens)</span>
+            <div class="flex flex-wrap gap-2 items-center">
+              <span class="chip">Default Chip</span>
+              <span class="chip">Another Tag</span>
+              <span class="chip chip--active">Active Chip</span>
+            </div>
+          </div>
+
+          <div class="input-field" style="max-width: 20rem;">
+            <label for="styleguide-cs-input">Input Label</label>
+            <input id="styleguide-cs-input" type="text" placeholder="Input Label">
+          </div>
+
+          <div>
+            <accordion-block class="accordion--first">
+              <details>
+                <summary>What is your return policy?</summary>
+                <div><p class="fs-body-md">We offer a 30-day return policy on all unworn items. Items must be in their original packaging with tags attached.</p></div>
+              </details>
+            </accordion-block>
+            <accordion-block>
+              <details>
+                <summary>How long does shipping take?</summary>
+                <div><p class="fs-body-md">Standard shipping takes 5–7 business days. Expedited shipping is available at checkout for 2–3 business day delivery.</p></div>
+              </details>
+            </accordion-block>
+            <accordion-block>
+              <details>
+                <summary>Do you offer bulk ordering?</summary>
+                <div><p class="fs-body-md">Yes, we offer bulk discounts for orders of 12 or more units. Contact our sales team for a custom quote.</p></div>
+              </details>
+            </accordion-block>
+          </div>
+
+        </div>
+      </div>
+
+      <script>
+        (function() {
+          var select = document.getElementById('styleguide-color-scheme');
+          var preview = document.getElementById('styleguide-color-scheme-preview');
+          if (!select || !preview) return;
+
+          select.addEventListener('change', function() {
+            preview.className = preview.className.replace(/\bcolor-\S+/g, '');
+            preview.classList.add(this.value);
+          });
+        })();
+      </script>
+    </div>
+  </section>
+
+  {%- comment -%} Spacing {%- endcomment -%}
+  <section class="mb-12">
+    <div role="heading" aria-level="2" class="fs-display-3 mb-6 pb-2 border-b border-black">Spacing</div>
+    <p class="fs-body-sm text-grey-medium mb-4">Values are responsive — they scale up at the <code>lg</code> breakpoint.</p>
+
+    <div class="space-y-3">
+      <div>
+        <span class="fs-body-sm text-grey-medium block mb-1">2XS (--spacing-2xs)</span>
+        <div class="bg-brand-blue h-6" style="width: var(--spacing-2xs);"></div>
+      </div>
+      <div>
+        <span class="fs-body-sm text-grey-medium block mb-1">XS (--spacing-xs)</span>
+        <div class="bg-brand-blue h-6" style="width: var(--spacing-xs);"></div>
+      </div>
+      <div>
+        <span class="fs-body-sm text-grey-medium block mb-1">SM (--spacing-sm)</span>
+        <div class="bg-brand-blue h-6" style="width: var(--spacing-sm);"></div>
+      </div>
+      <div>
+        <span class="fs-body-sm text-grey-medium block mb-1">MD (--spacing-md)</span>
+        <div class="bg-brand-blue h-6" style="width: var(--spacing-md);"></div>
+      </div>
+      <div>
+        <span class="fs-body-sm text-grey-medium block mb-1">LG (--spacing-lg)</span>
+        <div class="bg-brand-blue h-6" style="width: var(--spacing-lg);"></div>
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} Border Radius {%- endcomment -%}
+  <section class="mb-12">
+    <div role="heading" aria-level="2" class="fs-display-3 mb-6 pb-2 border-b border-black">Border Radius</div>
+
+    <div class="flex flex-wrap gap-8">
+      <div class="text-center">
+        <div class="w-32 h-20 bg-grey-light border border-grey rounded-theme"></div>
+        <span class="fs-body-sm text-grey-medium block mt-1">rounded-theme</span>
+      </div>
+      <div class="text-center">
+        <div class="w-32 h-20 bg-grey-light border border-grey rounded-theme-sm"></div>
+        <span class="fs-body-sm text-grey-medium block mt-1">rounded-theme-sm</span>
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} Form Elements {%- endcomment -%}
+  <section class="mb-12">
+    <h2 class="fs-display-3 mb-6 pb-2 border-b border-black">Form Elements</h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-16">
+      <fieldset>
+        <legend class="fs-display-4 font-bold uppercase mb-4">Text Fields</legend>
+
+        <div class="input-field mb-8">
+          <label for="styleguide-input-text-empty">Empty</label>
+          <input
+            id="styleguide-input-text-empty"
+            type="text"
+            placeholder="Empty"
+          >
+        </div>
+
+        <div class="input-field mb-8">
+          <label for="styleguide-input-text-filled">Filled</label>
+          <input
+            id="styleguide-input-text-filled"
+            type="text"
+            placeholder="Filled"
+            value="Value"
+          >
+        </div>
+
+        <div class="input-field mb-8">
+          <label for="styleguide-input-text-disabled">Disabled</label>
+          <input
+            id="styleguide-input-text-disabled"
+            type="text"
+            placeholder="Disabled"
+            value="Disabled value"
+            disabled
+          >
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend class="fs-display-4 font-bold uppercase mb-4">Quantity Input</legend>
+
+        <div class="mb-4">
+          <label for="styleguide-quantity" class="form-label">Normal</label>
+          <div class="h-12" style="max-width: 8rem;">
+            <quantity-input class="quantity-input">
+              <button
+                class="quantity-input__button"
+                data-quantity-input-decrease
+                type="button"
+                aria-label="Decrease quantity"
+              >
+                {{- 'icon-minus.svg' | inline_asset_content -}}
+              </button>
+              <input
+                class="quantity-input__input"
+                type="number"
+                id="styleguide-quantity"
+                value="1"
+                min="1"
+                max="99"
+              >
+              <button
+                class="quantity-input__button"
+                type="button"
+                data-quantity-input-increase
+                aria-label="Increase quantity"
+              >
+                {{- 'icon-plus.svg' | inline_asset_content -}}
+              </button>
+            </quantity-input>
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <label for="styleguide-quantity-disabled" class="form-label">Disabled</label>
+          <div class="h-12" style="max-width: 8rem;">
+            <quantity-input class="quantity-input">
+              <button
+                class="quantity-input__button"
+                data-quantity-input-decrease
+                type="button"
+                aria-label="Decrease quantity"
+                disabled
+              >
+                {{- 'icon-minus.svg' | inline_asset_content -}}
+              </button>
+              <input
+                class="quantity-input__input"
+                type="number"
+                id="styleguide-quantity-disabled"
+                value="3"
+                min="1"
+                max="99"
+                disabled
+              >
+              <button
+                class="quantity-input__button"
+                type="button"
+                data-quantity-input-increase
+                aria-label="Increase quantity"
+                disabled
+              >
+                {{- 'icon-plus.svg' | inline_asset_content -}}
+              </button>
+            </quantity-input>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend class="fs-display-4 font-bold uppercase mb-4">Select</legend>
+
+        <div class="mb-4">
+          <label for="styleguide-select" class="form-label">Normal</label>
+          <select class="form-input" id="styleguide-select">
+            <option>Option 1</option>
+            <option>Option 2</option>
+            <option>Option 3</option>
+          </select>
+        </div>
+
+        <div class="mb-4">
+          <label for="styleguide-select-disabled" class="form-label">Disabled</label>
+          <select class="form-input" id="styleguide-select-disabled" disabled>
+            <option>Option 1</option>
+            <option>Option 2</option>
+            <option>Option 3</option>
+          </select>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend class="fs-display-4 font-bold uppercase mb-4">Checkboxes</legend>
+
+        <div class="mb-2">
+          <label class="form-boolean">
+            <input type="checkbox" checked>
+            <span>Checked</span>
+          </label>
+        </div>
+
+        <div class="mb-2">
+          <label class="form-boolean">
+            <input type="checkbox">
+            <span>Unchecked</span>
+          </label>
+        </div>
+
+        <div class="mb-2">
+          <label class="form-boolean">
+            <input type="checkbox" checked disabled>
+            <span>Disabled checked</span>
+          </label>
+        </div>
+
+        <div class="mb-2">
+          <label class="form-boolean">
+            <input type="checkbox" disabled>
+            <span>Disabled unchecked</span>
+          </label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend class="fs-display-4 font-bold uppercase mb-4">Radio Buttons</legend>
+
+        <div class="mb-2">
+          <label class="form-boolean">
+            <input type="radio" name="styleguide-radio" checked>
+            <span>Selected</span>
+          </label>
+        </div>
+
+        <div class="mb-2">
+          <label class="form-boolean">
+            <input type="radio" name="styleguide-radio">
+            <span>Unselected</span>
+          </label>
+        </div>
+
+        <div class="mb-2">
+          <label class="form-boolean">
+            <input type="radio" name="styleguide-radio-disabled" checked disabled>
+            <span>Disabled selected</span>
+          </label>
+        </div>
+
+        <div class="mb-2">
+          <label class="form-boolean">
+            <input type="radio" name="styleguide-radio-disabled" disabled>
+            <span>Disabled unselected</span>
+          </label>
+        </div>
+      </fieldset>
+    </div>
+  </section>
+
+  {%- comment -%} Rich Text — documents the .rte content block; no separate RTE section needed. {%- endcomment -%}
+  <section class="mb-12">
+    <h2 class="fs-display-3 mb-6 pb-2 border-b border-black">Rich Text</h2>
+
+    <rte-content class="rte mx-auto">
+      <p>Lorem ipsum dolor sit amet, <strong>consectetur adipiscing elit</strong>. Text links <a href="#">Default</a> <a href="#">Hover</a> <a href="#">Visited</a> <strong>Bold</strong>. Integer a pharetra elit. Vestibulum consequat quis eros vitae auctor. Integer mauris lacus, sollicitudin vitae imperdiet vitae, pharetra nec purus. Aliquet ut justo quis, efficitur congue lectus. Phasellus scelerisque nisl dolor.</p>
+
+      <blockquote>
+        <p>Block quote, lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer mauris lacus, sollicitudin vitae imperdiet vitae.</p>
+        <cite>– First last name</cite>
+      </blockquote>
+
+      <h2>Headline 2 Lorem ipsum dolor sit amet</h2>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer a pharetra elit. Vestibulum consequat quis eros vitae auctor. Integer mauris lacus, sollicitudin vitae imperdiet vitae, pharetra nec purus. Aliquet ut justo quis, efficitur congue lectus. Phasellus scelerisque nisl dolor. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.</p>
+
+      <h3>Headline 3 Lorem ipsum dolor sit amet</h3>
+      <h4>Headline 4</h4>
+      <p>Lorem ipsum dolor sit amet, <strong>consectetur adipiscing elit</strong>. Text links <a href="#">Default</a> <a href="#">Hover</a> <a href="#">Visited</a> <strong>Bold</strong>. Integer a pharetra elit. Vestibulum consequat quis eros vitae auctor. Integer mauris lacus, sollicitudin vitae imperdiet vitae, pharetra nec purus. Aliquet ut justo quis, efficitur congue lectus. Phasellus scelerisque nisl dolor.</p>
+
+      <h4>Headline 4</h4>
+      <h5>Headline 5</h5>
+      <ul>
+        <li>Bullet point list lorem ipsum dolor sit amet</li>
+        <li>Bullet point list</li>
+        <li>Bullet point list</li>
+        <li>Bullet point list</li>
+        <li>Bullet point list</li>
+        <li>Bullet point list phasellus scelerisque nisl dolor.</li>
+      </ul>
+
+      <h5>Headline 5</h5>
+      <ol>
+        <li>Number list</li>
+        <li>Number list lorem ipsum dolor sit amet</li>
+        <li>Number list lorem ipsum dolor sit amet</li>
+        <li>Number list lorem ipsum dolor sit amet</li>
+        <li>Number list lorem ipsum dolor sit amet consequat quis eros vitae auctor. Integer mauris lacus, sollicitudin vitae imperdiet vitae.</li>
+      </ol>
+
+      <h3>Headline 3 Lorem ipsum dolor sit amet</h3>
+      <h4>Headline 4</h4>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer a pharetra elit. Vestibulum consequat quis eros vitae auctor. Integer mauris lacus, sollicitudin vitae imperdiet vitae, pharetra nec purus. Aliquet ut justo quis, efficitur congue lectus. Phasellus scelerisque nisl dolor.</p>
+
+      <h4>Headline 4</h4>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer a pharetra elit. Vestibulum consequat quis eros vitae auctor. Integer mauris lacus, sollicitudin vitae imperdiet vitae, pharetra nec purus. Aliquet ut justo quis, efficitur congue lectus. Phasellus scelerisque nisl dolor.</p>
+
+      <h2>Headline 2 Lorem ipsum dolor sit amet</h2>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer a pharetra elit. Vestibulum consequat quis eros vitae auctor. Integer mauris lacus, sollicitudin vitae imperdiet vitae, pharetra nec purus. Aliquet ut justo quis, efficitur congue lectus. Phasellus scelerisque nisl dolor. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.</p>
+
+      <figure>
+        {{ 'lifestyle-2' | placeholder_svg_tag: 'w-full h-auto' }}
+        <figcaption>Image Caption</figcaption>
+      </figure>
+
+      <h3>Headline 3 Lorem ipsum dolor sit amet</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Heading</th>
+            <th>Heading</th>
+            <th>Heading</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Donec eget tempus leo</td>
+            <td>Donec eget tempus leo</td>
+            <td>Donec eget tempus leo</td>
+          </tr>
+          <tr>
+            <td>Lore Ipsum</td>
+            <td>Lore Ipsum</td>
+            <td>Lore Ipsum</td>
+          </tr>
+          <tr>
+            <td>Consectetur adipiscing</td>
+            <td>Consectetur adipiscing</td>
+            <td>Consectetur adipiscing</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer a pharetra elit. Vestibulum consequat quis eros vitae auctor. Integer mauris lacus, sollicitudin vitae imperdiet vitae, pharetra nec purus. Aliquet ut justo quis, efficitur congue lectus. Phasellus scelerisque nisl dolor.</p>
+    </rte-content>
+  </section>
+
+  {%- comment -%} Components {%- endcomment -%}
+  <section class="mb-12">
+    <h2 class="fs-display-3 mb-6 pb-2 border-b border-black">Components</h2>
+
+    <div class="mb-8">
+      <h3 class="fs-display-5 mb-4 text-grey-dark">Accordion</h3>
+      <div class="max-w-prose">
+        <accordion-block>
+          <details>
+            <summary>What is your return policy?</summary>
+            <div class="pb-4">
+              <p>We offer a 30-day return policy on all unworn items. Items must be in their original packaging with tags attached.</p>
+            </div>
+          </details>
+        </accordion-block>
+        <accordion-block>
+          <details>
+            <summary>How long does shipping take?</summary>
+            <div class="pb-4">
+              <p>Standard shipping takes 5–7 business days. Expedited shipping is available at checkout for 2–3 business day delivery.</p>
+            </div>
+          </details>
+        </accordion-block>
+        <accordion-block>
+          <details open>
+            <summary>Do you offer bulk ordering?</summary>
+            <div class="pb-4">
+              <p>Yes, we offer bulk discounts for orders of 12 or more units. Contact our sales team for a custom quote.</p>
+            </div>
+          </details>
+        </accordion-block>
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} Media Loader {%- endcomment -%}
+  <section class="mb-12">
+    <div role="heading" aria-level="2" class="fs-display-3 mb-6 pb-2 border-b border-black">Media Loader</div>
+    <p class="fs-body-sm text-grey-medium mb-4">Wraps media and shows a pulsing skeleton until it loads. Reload the page to see the skeleton state.</p>
+
+    {%- capture media_loader_content -%}
+      {%- if demo_product.featured_image -%}
+        {{ demo_product.featured_image | image_url: width: 600 | image_tag: loading: 'lazy', class: 'size-full object-cover' }}
+      {%- else -%}
+        {{ 'product-1' | placeholder_svg_tag: 'size-full object-cover' }}
+      {%- endif -%}
+    {%- endcapture -%}
+    <div class="aspect-[3/2] w-64 rounded-theme overflow-hidden">
+      {% render 'media-loader', content: media_loader_content, show_skeleton: true %}
+    </div>
+  </section>
+
+  {%- comment -%} Horizontal Scroll (custom-scroll) {%- endcomment -%}
+  <section class="mb-12">
+    <div role="heading" aria-level="2" class="fs-display-3 mb-6 pb-2 border-b border-black">Horizontal Scroll</div>
+    <p class="fs-body-sm text-grey-medium mb-4"><code>&lt;custom-scroll&gt;</code> adds click-and-drag horizontal scrolling (mouse only) to any overflowing element. Wrap a <code>[data-custom-scroll-track]</code> child and optional <code>[data-action-scroll-prev]</code> / <code>[data-action-scroll-next]</code> buttons — each button shows only while you can scroll that way. The buttons are positioned absolutely over the track so showing/hiding them doesn't shift the row. Drag the row or use the buttons.</p>
+
+    <custom-scroll class="relative block">
+      <button
+        type="button"
+        data-action-scroll-prev
+        aria-label="Scroll left"
+        class="hidden absolute left-1 top-1/2 -translate-y-1/2 z-10 flex-center size-9 rounded-full border border-grey bg-white text-grey-dark shadow-sm [&>svg]:size-4">
+        {{- 'icon-angle-left.svg' | inline_asset_content -}}
+      </button>
+      <div
+        data-custom-scroll-track
+        class="flex gap-4 overflow-x-auto no-scrollbar py-2 cursor-grab active:cursor-grabbing">
+        {%- for i in (1..12) -%}
+          <div class="flex-center shrink-0 w-40 h-28 bg-grey-light border border-grey rounded-theme fs-display-4">
+            {{ i }}
+          </div>
+        {%- endfor -%}
+      </div>
+      <button
+        type="button"
+        data-action-scroll-next
+        aria-label="Scroll right"
+        class="hidden absolute right-1 top-1/2 -translate-y-1/2 z-10 flex-center size-9 rounded-full border border-grey bg-white text-grey-dark shadow-sm [&>svg]:size-4">
+        {{- 'icon-angle-right.svg' | inline_asset_content -}}
+      </button>
+    </custom-scroll>
+  </section>
+
+  {%- comment -%} Dialogs & Drawers {%- endcomment -%}
+  <section class="mb-12">
+    <div role="heading" aria-level="2" class="fs-display-3 mb-6 pb-2 border-b border-black">Dialogs &amp; Drawers</div>
+    <p class="fs-body-sm text-grey-medium mb-4">Each is a native <code>&lt;dialog&gt;</code> wrapped in <code>&lt;openable-component&gt;</code> (close on backdrop click / Escape / the X button).</p>
+
+    <div class="flex flex-wrap gap-4">
+      <button type="button" class="button" data-styleguide-dialog="styleguide-dialog-r">Right Drawer</button>
+      <button type="button" class="button" data-styleguide-dialog="styleguide-dialog-l">Left Drawer</button>
+      <button type="button" class="button" data-styleguide-dialog="styleguide-dialog-t">Top Drawer</button>
+      <button type="button" class="button" data-styleguide-dialog="styleguide-dialog-b">Bottom Drawer</button>
+      <button type="button" class="button" data-styleguide-dialog="styleguide-dialog-popup">Popup</button>
+    </div>
+
+    {%- assign dialog_variants = 'r-drawer,l-drawer,t-drawer,b-drawer,popup' | split: ',' -%}
+    {%- for variant in dialog_variants -%}
+      {%- assign dialog_key = variant | split: '-' | first -%}
+      <openable-component data-close-on-outside-click data-close-on-escape-key>
+        <dialog id="styleguide-dialog-{{ dialog_key }}" data-openable class="dialog-{{ variant }} bg-white p-8" aria-label="{{ variant }} example">
+          {% render 'dialog-close-button', position: 'absolute' %}
+          <div role="heading" aria-level="2" class="fs-display-4 mb-2">dialog-{{ variant }}</div>
+          <p class="fs-body-md max-w-prose">Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit.</p>
+        </dialog>
+      </openable-component>
+    {%- endfor -%}
+
+    <script>
+      (function () {
+        document.querySelectorAll('[data-styleguide-dialog]').forEach(function (trigger) {
+          trigger.addEventListener('click', function () {
+            var dialog = document.getElementById(this.dataset.styleguideDialog);
+            if (dialog && !dialog.open) dialog.showModal();
+          });
+        });
+      })();
+    </script>
+  </section>
+
+  {%- comment -%} Data Components {%- endcomment -%}
+  <section class="mb-12">
+    <div role="heading" aria-level="2" class="fs-display-3 mb-6 pb-2 border-b border-black">Data Components</div>
+    <p class="fs-body-sm text-grey-medium mb-6">Rendered from a demo product/collection ({{ demo_collection.title | default: 'none found' }}). These appear empty on a store with no products.</p>
+
+    <div class="mb-8">
+      <div role="heading" aria-level="3" class="fs-display-5 mb-1 text-grey-dark">Product Card</div>
+      <code class="fs-body-sm text-grey-medium block mb-4">{% raw %}{% render 'product-card' %}{% endraw %}</code>
+      {%- if demo_product -%}
+        <div class="w-64">
+          {% render 'product-card', product: demo_product, collection_context: demo_collection %}
+        </div>
+      {%- else -%}
+        <p class="fs-body-sm text-grey-medium">No demo product available in this store.</p>
+      {%- endif -%}
+    </div>
+
+    <div class="mb-8">
+      <div role="heading" aria-level="3" class="fs-display-5 mb-1 text-grey-dark">Product Card — Horizontal</div>
+      <code class="fs-body-sm text-grey-medium block mb-4">{% raw %}{% render 'product-card-horizontal' %}{% endraw %}</code>
+      {%- comment -%} The quick-shop button targets #quick-shop-dialog (only on PDP/collection); inert here, card renders fine. {%- endcomment -%}
+      {%- if demo_product -%}
+        <div class="max-w-3xl">
+          {% render 'product-card-horizontal', product: demo_product %}
+        </div>
+      {%- else -%}
+        <p class="fs-body-sm text-grey-medium">No demo product available in this store.</p>
+      {%- endif -%}
+    </div>
+
+    <div class="mb-8">
+      <div role="heading" aria-level="3" class="fs-display-5 mb-4 text-grey-dark">Product Price</div>
+      {%- if demo_product -%}
+        <div class="space-y-3">
+          <div>
+            <span class="fs-body-sm text-grey-medium block mb-1">Product (target: product)</span>
+            {% render 'product-price', target: demo_product %}
+          </div>
+          <div>
+            <span class="fs-body-sm text-grey-medium block mb-1">Variant (target: variant)</span>
+            {% render 'product-price', target: demo_product.selected_or_first_available_variant %}
+          </div>
+        </div>
+      {%- else -%}
+        <p class="fs-body-sm text-grey-medium">No demo product available in this store.</p>
+      {%- endif -%}
+    </div>
+
+    <div class="mb-8">
+      <div role="heading" aria-level="3" class="fs-display-5 mb-1 text-grey-dark">Product Card Swatches</div>
+      <code class="fs-body-sm text-grey-medium block mb-4">{% raw %}{% render 'product-card-swatches' %}{% endraw %}</code>
+      {%- comment -%} The <product-option> fetcher is inert without a parent product-card; visual only. {%- endcomment -%}
+      {%- if demo_product -%}
+        <div class="w-64">
+          {% render 'product-card-swatches', product: demo_product, collection_context: demo_collection %}
+        </div>
+      {%- else -%}
+        <p class="fs-body-sm text-grey-medium">No demo product available in this store.</p>
+      {%- endif -%}
+    </div>
+
+    <div class="mb-8">
+      <div role="heading" aria-level="3" class="fs-display-5 mb-1 text-grey-dark">Article Card</div>
+      <code class="fs-body-sm text-grey-medium block mb-4">{% raw %}{% render 'article-card' %}{% endraw %}</code>
+      {%- if demo_article -%}
+        <div class="w-72">
+          {% render 'article-card', article: demo_article, blog: demo_blog %}
+        </div>
+      {%- else -%}
+        <p class="fs-body-sm text-grey-medium">No demo article available in this store.</p>
+      {%- endif -%}
+    </div>
+
+    <div>
+      <div role="heading" aria-level="3" class="fs-display-5 mb-4 text-grey-dark">Product Carousel</div>
+      {%- if demo_collection.products.size > 0 -%}
+        {% render 'product-carousel', carousel_collection: demo_collection, heading: 'Product Carousel', products_to_show: 8 %}
+      {%- else -%}
+        <p class="fs-body-sm text-grey-medium">No demo collection products available in this store.</p>
+      {%- endif -%}
+    </div>
+  </section>
+
+  {%- comment -%} Localization {%- endcomment -%}
+  <section class="mb-12">
+    <h2 class="fs-display-3 mb-6 pb-2 border-b border-black">Localization</h2>
+
+    <div class="mb-8">
+      <div role="heading" aria-level="3" class="fs-display-5 mb-1 text-grey-dark">Country/region selector</div>
+      <code class="fs-body-sm text-grey-medium block mb-4">{% raw %}{% form 'localization' %}{% endraw %}</code>
+
+      <div style="max-width: 300px;">
+        {% form 'localization', class: 'w-full' %}
+          <div class="mb-md">
+            <label for="styleguide-localization-country" class="fs-display-5 block mb-2xs">
+              Country/region
+            </label>
+
+            <select
+              id="styleguide-localization-country"
+              name="country_code"
+              class="form-input"
+              onchange="this.form.submit()"
+            >
+              {% for country in localization.available_countries %}
+                <option
+                  value="{{ country.iso_code }}"
+                  {% if country.iso_code == localization.country.iso_code %}selected{% endif %}
+                >
+                  {{- country.name }} ({{ country.currency.iso_code }} {{ country.currency.symbol }})
+                </option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <button type="submit" class="button button-lg w-full">Update</button>
+        {% endform %}
+      </div>
+    </div>
+  </section>
+</div>

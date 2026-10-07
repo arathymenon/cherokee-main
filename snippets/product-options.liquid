@@ -1,0 +1,563 @@
+<!-- snippet: product-options -->
+{%- comment -%}
+  Renders product options
+
+  Accepts:
+  - product: {Object}
+  - collection_context: {Object} if product should be rendered as a collection product
+  - product_option: {Object}
+  - picker_type: {String}
+    - radio
+    - radio_mini
+    - select
+  - option_group: {String} To distinguish when the same product-fetcher has multiple variant pickers
+  - prefix_html: {String} Usually used for the legend
+  - suffix_html: {String} HTML to render after the values
+  - limit: {Number} Max number of values to render (0 or blank = no limit)
+  - skip_unavailable: {Boolean} Skip completely unavailable values (useful for product cards)
+  - select_class: {String} Class for the <select> in the 'select' picker (default: form-input)
+  - is_main_product_form: {Boolean} true only for the main PDP form
+
+  Position >= 2 (size/inseam) is only server-preselected on the main PDP
+  form when product.selected_variant is set; <product-fetcher> owns user
+  picks client-side. Caveat: Shopify populates selected_variant not just on
+  ?variant= deep links but also on SAPI option_values renders (it
+  auto-resolves a full variant even from partial values), so SAPI responses
+  come back fully preselected — <product-fetcher> reconciles the swapped DOM
+  against the shopper's real picks and clears unpicked positions.
+{%- endcomment -%}
+
+{%- liquid
+  # Pull the product group collection for the case when the first option is a grouping option
+  assign product_group_collection = null
+  assign product_group_handle = product.metafields.product_group.collection_handle | default: blank
+  if product_option.position == 1 and product_group_handle != blank
+    assign product_group_collection = collections[product_group_handle]
+  endif
+
+  assign option_group = option_group | default: 'default'
+
+  # Variables to hold the name of the partial from the product-option-partials snippet to render
+  assign option_value_normal_partial = null
+  assign option_value_swatch_partial = null
+  case picker_type
+    when 'radio'
+      assign option_value_normal_partial = 'value_radio_normal'
+      assign option_value_swatch_partial = 'value_radio_swatch'
+    when 'radio_mini'
+      assign option_value_normal_partial = 'value_radio_mini_normal'
+      assign option_value_swatch_partial = 'value_radio_mini_swatch'
+    when 'select'
+      assign option_value_normal_partial = 'value_select'
+      assign option_value_swatch_partial = 'value_select'
+  endcase
+
+  assign skip_unavailable = skip_unavailable | default: false
+  assign limit = limit | default: 0 | plus: 0
+  assign _value_count = 0
+  assign _skipped_count = 0
+  assign _total_values = 0
+
+  # Size and inseam line up neatly: size uses a 70px min-column grid. Inseam is
+  # a 3-column grid on mobile, then flex-wrap with a 120px min-width per box at
+  # md and up. Color keeps the wrap-flex layout so its swatches pack tightly.
+  assign _values_wrapper_class = 'flex gap-2 flex-wrap items-center'
+  assign _option_name_lc = product_option.name | downcase
+  assign is_color_option = false
+  if _option_name_lc == 'color'
+    assign is_color_option = true
+  endif
+  assign is_size_option = false
+  if _option_name_lc == 'size'
+    assign is_size_option = true
+    assign _values_wrapper_class = 'grid grid-cols-[repeat(auto-fill,minmax(70px,1fr))] gap-2'
+  elsif _option_name_lc == 'inseam'
+    assign _values_wrapper_class = 'grid grid-cols-3 gap-2 md:flex md:flex-wrap md:items-center md:[&>label]:min-w-[120px]'
+  endif
+
+  # Position 1 (color) is the only server-preselected option: honor a
+  # URL-selected color when present, otherwise fall back to its first value.
+  # Position >= 2 (size/inseam) is never server-selected — the client owns
+  # those picks. Precompute the position-1 URL-selection flag once.
+  assign fresh_load_position_1_has_url_selection = false
+  if product_option.position == 1
+    for _v in product_option.values
+      if _v.selected
+        assign fresh_load_position_1_has_url_selection = true
+        break
+      endif
+    endfor
+  endif
+
+  # Main PDP only: honor the server-selected size/inseam (position >= 2)
+  # so a ?variant= deep link renders fully preselected on a cold load.
+  # NOTE: selected_variant is ALSO populated on SAPI option_values renders
+  # (Shopify auto-resolves a full variant even from partial values), so
+  # swap responses come back with unpicked positions selected. Liquid can't
+  # tell the two cases apart (query params aren't readable here);
+  # <product-fetcher> reconciles the swapped DOM and clears positions the
+  # shopper hasn't actually picked.
+  assign allow_url_preselect_pos2 = false
+  if is_main_product_form and product.selected_variant != blank
+    assign allow_url_preselect_pos2 = true
+  endif
+
+  # Bell badge (size chips) should only appear for sizes that EXIST for the
+  # selected position-1 value (color) but are out of stock. A size with no
+  # variant record at all for that color gets the strike-through only —
+  # there is nothing to be notified about. Build a pipe-delimited "|S|M|"
+  # lookup of size values that have a variant (any stock level) for the
+  # selected position-1 value. Scoping by position 1 mirrors Shopify's
+  # value.available scoping for a position-2 size option.
+  assign size_exists_lookup = null
+  if is_size_option and product_option.position > 1
+    assign _pos1_option = product.options_with_values.first
+    assign _pos1_index = _pos1_option.position | minus: 1
+    assign _size_index = product_option.position | minus: 1
+
+    # Selected position-1 value: URL/SAPI-selected when present, else the
+    # first value — mirrors the position-1 preselect logic above.
+    assign _pos1_selected_name = _pos1_option.values.first.name
+    for _v in _pos1_option.values
+      if _v.selected
+        assign _pos1_selected_name = _v.name
+        break
+      endif
+    endfor
+
+    assign size_exists_lookup = '|'
+    for _variant in product.variants
+      if _variant.options[_pos1_index] == _pos1_selected_name
+        assign _v_size = _variant.options[_size_index]
+        assign _v_marker = '|' | append: _v_size | append: '|'
+        unless size_exists_lookup contains _v_marker
+          assign size_exists_lookup = size_exists_lookup | append: _v_size | append: '|'
+        endunless
+      endif
+    endfor
+  endif
+
+  # Count total values for overflow calculation
+  if limit > 0
+    if product_group_collection
+      assign _total_values = product_group_collection.products.size
+    else
+      assign _total_values = product_option.values.size
+    endif
+  endif
+
+  # Swatch grouping: split position-1 (color) swatches into rows by applicable
+  # swatch_group metaobject entries. A group applies globally when its
+  # assign_to_all_product_styles field is true; otherwise the current product
+  # must be included in its products field. First-match wins when a color
+  # appears in multiple applicable groups.
+  assign use_grouping = false
+  if picker_type == 'radio' and product_option.position == 1
+    assign swatch_groups = shop.metaobjects.swatch_group.values
+    if swatch_groups != blank and swatch_groups.size > 0
+      assign applicable_swatch_group_lookup = '|'
+      for _g in swatch_groups
+        assign group_applies = _g.assign_to_all_product_styles.value
+        unless group_applies
+          assign group_products = _g.products.value | default: _g.products
+          for promo_group_product in group_products
+            if promo_group_product.id == product.id
+              assign group_applies = true
+              break
+            endif
+          endfor
+        endunless
+        if group_applies
+          assign applicable_swatch_group_lookup = applicable_swatch_group_lookup | append: forloop.index0 | append: '|'
+          assign use_grouping = true
+        endif
+      endfor
+    endif
+  endif
+
+  if use_grouping
+    # Build pipe-delimited "|name=idx|" lookup so each color name maps to
+    # the FIRST swatch_group it appears in. Metaobject list-of-reference
+    # fields require .value to unwrap; see theme-styles.liquid for pattern.
+    assign color_group_lookup = '|'
+    for _g in swatch_groups
+      assign _gidx = forloop.index0
+      assign group_marker = '|' | append: _gidx | append: '|'
+      unless applicable_swatch_group_lookup contains group_marker
+        continue
+      endunless
+      assign _color_list = _g.colors.value | default: _g.colors
+      for _c in _color_list
+        assign _cname = _c.label
+        if _cname == blank
+          assign _cname = _c.name
+        endif
+        if _cname == blank
+          assign _cname = _c.title
+        endif
+        if _cname == blank
+          assign _cname = _c.system.handle
+        endif
+        assign _cname_lc = _cname | downcase | strip
+        if _cname_lc == blank
+          continue
+        endif
+        assign _key_marker = '|' | append: _cname_lc | append: '='
+        unless color_group_lookup contains _key_marker
+          assign color_group_lookup = color_group_lookup | append: _cname_lc | append: '=' | append: _gidx | append: '|'
+        endunless
+      endfor
+    endfor
+
+    # Resolve the position-1 preselected value id + display name (URL-selected,
+    # else the first value across all products / values). Computed once so the
+    # bucket snippet can mark exactly one swatch checked regardless of bucket
+    # order, and the legend / group labels can seed the correct initial text.
+    assign preselected_value_id = null
+    assign preselected_value_display_name = ''
+    if fresh_load_position_1_has_url_selection
+      if product_group_collection
+        for _gp in product_group_collection.products
+          for _v in _gp.options_with_values[0].values
+            if _v.selected and _gp.id == product.id
+              assign preselected_value_id = _v.id
+              assign preselected_value_display_name = _v.name
+              break
+            endif
+          endfor
+          if preselected_value_id
+            break
+          endif
+        endfor
+      else
+        for _v in product_option.values
+          if _v.selected
+            assign preselected_value_id = _v.id
+            assign preselected_value_display_name = _v.name
+            break
+          endif
+        endfor
+      endif
+    else
+      if product_group_collection
+        assign _first_p = product_group_collection.products.first
+        if _first_p
+          assign _first_v = _first_p.options_with_values[0].values.first
+          assign preselected_value_id = _first_v.id
+          assign preselected_value_display_name = _first_v.name
+        endif
+      else
+        assign _first_v = product_option.values.first
+        if _first_v
+          assign preselected_value_id = _first_v.id
+          assign preselected_value_display_name = _first_v.name
+        endif
+      endif
+    endif
+
+    # Determine which swatch_group the preselected value belongs to (-1 = none).
+    # Drives initial label content: only the matching label / legend gets seeded.
+    assign preselected_value_group_idx = -1
+    if preselected_value_display_name != blank
+      assign _pname_lc = preselected_value_display_name | downcase | strip
+      assign _p_key = '|' | append: _pname_lc | append: '='
+      if color_group_lookup contains _p_key
+        assign _p_after = color_group_lookup | split: _p_key | last
+        assign preselected_value_group_idx = _p_after | split: '|' | first | plus: 0
+      endif
+    endif
+  endif
+
+  capture value_list_html
+    if use_grouping
+      # Grouped path builds its own per-bucket HTML below; nothing to capture here.
+    elsif product_group_collection
+      # Handle the custom grouping option
+      for group_product in product_group_collection.products
+        if limit > 0 and _value_count >= limit
+          break
+        endif
+        # first option is a grouping option
+        assign product_option = group_product.options_with_values[0]
+        assign group_product_url = group_product.url | within: collection_context
+        for value in product_option.values
+          if skip_unavailable and value.available == false
+            assign _skipped_count = _skipped_count | plus: 1
+            continue
+          endif
+          assign swatch_value = null
+          assign swatch_focal_point = 'initial'
+          if value.swatch
+            if value.swatch.image
+              assign image_url = value.swatch.image | image_url: width: 50
+              assign swatch_value = 'url(' | append: image_url | append: ')'
+              assign swatch_focal_point = value.swatch.image.presentation.focal_point | default: swatch_focal_point
+            elsif value.swatch.color
+              assign swatch_value = 'rgb(' | append: value.swatch.color.rgb | append: ')'
+            endif
+          endif
+
+          # Grouped option is always position 1; preselect unconditionally:
+          # honor the URL-selected color, else default to the very first value.
+          assign is_selected = false
+          if fresh_load_position_1_has_url_selection
+            if group_product.id == product.id and value.selected
+              assign is_selected = true
+            endif
+          elsif forloop.first and forloop.parentloop.first
+            assign is_selected = true
+          endif
+
+          assign value_partial = option_value_normal_partial
+          if swatch_value
+            assign value_partial = option_value_swatch_partial
+          endif
+
+          render 'product-option-partials', name: value_partial, id: value.id, is_available: value.available, is_selected: is_selected, value_name: value.name, value_display_name: value.name, product_url: group_product_url, swatch_value: swatch_value, swatch_focal_point: swatch_focal_point, is_size_option: is_size_option
+          assign _value_count = _value_count | plus: 1
+        endfor
+      endfor
+    else
+      # Handle the normal Shopify option
+      for value in product_option.values
+        if skip_unavailable and value.available == false
+          assign _skipped_count = _skipped_count | plus: 1
+          continue
+        endif
+        if limit > 0 and _value_count >= limit
+          break
+        endif
+        assign value_url = value.product_url
+        if value_url
+          assign value_url = value_url | within: collection_context
+        endif
+        assign swatch_value = null
+        assign swatch_focal_point = 'initial'
+        if value.swatch
+          if value.swatch.image
+            assign image_url = value.swatch.image | image_url: width: 50
+            assign swatch_value = 'url(' | append: image_url | append: ')'
+            assign swatch_focal_point = value.swatch.image.presentation.focal_point | default: swatch_focal_point
+          elsif value.swatch.color
+            assign swatch_value = 'rgb(' | append: value.swatch.color.rgb | append: ')'
+          endif
+        endif
+
+        assign value_partial = option_value_normal_partial
+        if swatch_value
+          assign value_partial = option_value_swatch_partial
+        endif
+
+        # Position 1 (color) is server-preselected. Position >= 2
+        # (size/inseam) is unselected — client owns those — except on the
+        # main PDP form deep-linked via ?variant=, where the chosen
+        # variant's size/inseam are honored on the first render.
+        assign is_selected = false
+        if product_option.position == 1
+          if fresh_load_position_1_has_url_selection
+            assign is_selected = value.selected
+          elsif forloop.first
+            assign is_selected = true
+          endif
+        elsif allow_url_preselect_pos2
+          assign is_selected = value.selected
+        endif
+
+        assign value_exists = true
+        if size_exists_lookup
+          assign _v_key = '|' | append: value.name | append: '|'
+          unless size_exists_lookup contains _v_key
+            assign value_exists = false
+          endunless
+        endif
+
+        render 'product-option-partials', name: value_partial, id: value.id, is_available: value.available, is_selected: is_selected, value_name: value.name, value_display_name: value.name, product_url: value_url, swatch_value: swatch_value, swatch_focal_point: swatch_focal_point, is_size_option: is_size_option, value_exists: value_exists
+        assign _value_count = _value_count | plus: 1
+      endfor
+    endif
+  endcapture
+
+  assign _overflow_count = 0
+  assign _available_total = _total_values | minus: _skipped_count
+  if limit > 0 and _available_total > limit
+    assign _overflow_count = _available_total | minus: limit
+  endif
+-%}
+
+{%- case picker_type -%}
+  {%- when 'radio' -%}
+    {%- # form is needed to avoid conflicts with other radio groups -%}
+    <form>
+      <product-option
+        {% if is_color_option %}data-product-color-option{% endif %}
+        position="{{ product_option.position }}"
+        data-product-fetcher-option-group="{{ option_group }}">
+        <fieldset>
+          {%- if use_grouping -%}
+            {% # Override the inherited prefix_html legend: the top legend only %}
+            {% # carries the selected color name when that color is ungrouped. %}
+            {% # When it's in a named swatch_group, the group's own label owns %}
+            {% # the live value (see #updateLabel in product-option.js). %}
+            {%- assign _top_initial = '' -%}
+            {%- if preselected_value_group_idx == -1 -%}
+              {%- assign _top_initial = preselected_value_display_name -%}
+            {%- endif -%}
+            <div class="flex justify-between gap-3 mb-2">
+              <legend class="">
+                <span>{{ product_option.name | escape }}:</span> <span data-product-option-label>{{- _top_initial | escape -}}</span>
+              </legend>
+            </div>
+
+            {% # Ungrouped values render first (unlabeled, sit under the legend); %}
+            {% # each named group follows with its own live "{label}:" label above. %}
+            {%- capture _ungrouped_html -%}
+              {%- render 'product-options-bucket',
+                product: product,
+                product_option: product_option,
+                collection_context: collection_context,
+                product_group_collection: product_group_collection,
+                target_group_idx: -1,
+                color_group_lookup: color_group_lookup,
+                option_value_normal_partial: option_value_normal_partial,
+                option_value_swatch_partial: option_value_swatch_partial,
+                preselected_value_id: preselected_value_id
+              -%}
+            {%- endcapture -%}
+            {%- assign _ungrouped_stripped = _ungrouped_html | replace: '<!-- snippet: product-options-bucket -->', '' | strip -%}
+            {%- if _ungrouped_stripped != blank -%}
+              <div class="flex gap-2 flex-wrap items-center" data-swatch-group="-1">
+                {{ _ungrouped_html }}
+              </div>
+            {%- endif -%}
+
+            {%- for _g in swatch_groups -%}
+              {%- assign _g_idx = forloop.index0 -%}
+              {%- assign group_marker = '|' | append: _g_idx | append: '|' -%}
+              {%- unless applicable_swatch_group_lookup contains group_marker -%}
+                {%- continue -%}
+              {%- endunless -%}
+              {%- capture _group_row_html -%}
+                {%- render 'product-options-bucket',
+                  product: product,
+                  product_option: product_option,
+                  collection_context: collection_context,
+                  product_group_collection: product_group_collection,
+                  target_group_idx: _g_idx,
+                  color_group_lookup: color_group_lookup,
+                  option_value_normal_partial: option_value_normal_partial,
+                  option_value_swatch_partial: option_value_swatch_partial,
+                  preselected_value_id: preselected_value_id
+                -%}
+              {%- endcapture -%}
+              {%- assign _group_row_stripped = _group_row_html | replace: '<!-- snippet: product-options-bucket -->', '' | strip -%}
+              {%- if _group_row_stripped != blank -%}
+                {%- assign _group_initial = '' -%}
+                {%- if _g_idx == preselected_value_group_idx -%}
+                  {%- assign _group_initial = preselected_value_display_name -%}
+                {%- endif -%}
+                <div class="mt-6">
+                  <div class="mb-2" data-swatch-group-label="{{ _g_idx }}">
+                    <span>{{ _g.label | escape }}:</span> <span data-product-option-label>{{- _group_initial | escape -}}</span>
+                  </div>
+                  <div class="flex gap-2 flex-wrap items-center" data-swatch-group="{{ _g_idx }}">
+                    {{ _group_row_html }}
+                  </div>
+                </div>
+              {%- endif -%}
+            {%- endfor -%}
+          {%- else -%}
+            {{- prefix_html -}}
+            <div class="{{ _values_wrapper_class }}">
+              {{ value_list_html }}
+              {%- if _overflow_count > 0 -%}
+                <span class="text-xs text-grey-dark">+{{ _overflow_count }} colors</span>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+          {{- suffix_html -}}
+        </fieldset>
+      </product-option>
+    </form>
+
+  {%- when 'radio_mini' -%}
+    {%- # form is needed to avoid conflicts with other radio groups -%}
+    <form>
+      <product-option
+        {% if is_color_option %}data-product-color-option{% endif %}
+        position="{{ product_option.position }}"
+        data-product-fetcher-option-group="{{ option_group }}">
+        <fieldset>
+          {{- prefix_html -}}
+          <div class="flex gap-2 flex-wrap items-center">
+            {{ value_list_html }}
+            {%- if _overflow_count > 0 -%}
+              <span class="text-xs text-grey-dark">+{{ _overflow_count }} colors</span>
+            {%- endif -%}
+          </div>
+          {{- suffix_html -}}
+        </fieldset>
+      </product-option>
+    </form>
+
+  {%- when 'select' -%}
+    {%- liquid
+      # Position 1 always has a server-selected option; position >= 2 only
+      # when the main PDP form is deep-linked via ?variant=. Otherwise the
+      # placeholder stays `selected` until the client (<product-fetcher>)
+      # reapplies the user's pick after a swap.
+      assign _has_selection = false
+      if product_option.position == 1 or allow_url_preselect_pos2
+        assign _has_selection = true
+      endif
+      assign _placeholder = product_option.name
+    -%}
+    <product-option
+      {% if is_color_option %}data-product-color-option{% endif %}
+      position="{{ product_option.position }}"
+      data-product-fetcher-option-group="{{ option_group }}">
+      <fieldset>
+        {{- prefix_html -}}
+        <select class="{{ select_class | default: 'form-input' }}">
+          <option
+            value=""
+            disabled
+            hidden
+            {% unless _has_selection %}
+              selected
+            {% endunless %}>
+            {{- _placeholder -}}
+          </option>
+          {%- for value in product_option.values -%}
+            {%- liquid
+              assign is_selected = false
+              if product_option.position == 1
+                if fresh_load_position_1_has_url_selection
+                  assign is_selected = value.selected
+                elsif forloop.first
+                  assign is_selected = true
+                endif
+              elsif allow_url_preselect_pos2
+                assign is_selected = value.selected
+              endif
+            -%}
+            <option
+              value="{{ value.name | escape }}"
+              {% if is_selected %}
+                selected
+              {% endif %}
+              {% unless value.available %}
+                disabled
+              {% endunless %}
+              data-product-option-value-id="{{ value.id }}"
+              data-product-option-display-value="{{ value.name | escape }}">
+              {%- if value.available -%}
+                {{- value.name | escape -}}
+              {%- else -%}
+                {{- 'products.product.value_unavailable' | t: option_value: value -}}
+              {%- endif -%}
+            </option>
+          {%- endfor -%}
+        </select>
+      </fieldset>
+    </product-option>
+{%- endcase -%}

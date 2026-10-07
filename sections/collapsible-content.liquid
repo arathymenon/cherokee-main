@@ -1,0 +1,145 @@
+<!-- section: collapsible-content -->
+{%- assign s = section.settings -%}
+
+<section class="color-{{ s.color_scheme }} py-lg">
+  <div class="container max-w-[1212px] flex flex-col lg:flex-row gap-10">
+
+    {% #  Heading column  %}
+    <div class="lg:w-[47%] shrink-0">
+      {%- if s.heading != blank -%}
+        <h2 class="fs-display-2">{{ s.heading | escape }}</h2>
+      {%- endif -%}
+      {%- if s.text != blank -%}
+        <div class="rte mt-4 text-pretty">{{ s.text }}</div>
+      {%- endif -%}
+      {%- if s.button_text != blank -%}
+        <a class="{{ s.button_style }} mt-4" href="{{ s.button_link }}">
+          {{ s.button_text | escape }}
+        </a>
+      {%- endif -%}
+    </div>
+
+    {% #  Accordion column  %}
+    <div class="lg:flex-1">
+      {%- for block in section.blocks -%}
+        <accordion-block {{ block.shopify_attributes }} class="accordion">
+          <details>
+            <summary>
+              <h3 class="fs-body-md font-body font-medium normal-case text-inherit">{{ block.settings.heading | escape }}</h3>
+            </summary>
+            <div class="rte text-pretty">{{ block.settings.content }}</div>
+          </details>
+        </accordion-block>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Collapsible Content",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Frequently Asked Questions"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text"
+    },
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "select",
+      "id": "button_style",
+      "label": "Button style",
+      "options": [
+        { "value": "button", "label": "Primary" },
+        { "value": "button button-secondary", "label": "Secondary" },
+        { "value": "button button-outline-black", "label": "Outline black" },
+        { "value": "button button-outline-white", "label": "Outline white" }
+      ],
+      "default": "button"
+    }
+  ],
+  "blocks": [
+    {
+      "name": "Item",
+      "type": "item",
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Sample heading"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "content",
+          "label": "Content",
+          "default": "Sample content"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collapsible Content",
+      "category": "Media & Content",
+      "blocks": [
+        {
+          "type": "item",
+          "settings": {
+            "heading": "What sizes do you offer?",
+            "content": "Our uniforms are available in sizes XXS through 5XL, with tall and petite options on select styles."
+          }
+        },
+        {
+          "type": "item",
+          "settings": {
+            "heading": "How do I care for my scrubs?",
+            "content": "Machine wash cold with like colors, tumble dry low, and avoid bleach to keep colors vibrant and fabric performing its best."
+          }
+        },
+        {
+          "type": "item",
+          "settings": {
+            "heading": "What is your return policy?",
+            "content": "Unworn, unwashed items can be returned within 30 days of delivery for a full refund."
+          }
+        },
+        {
+          "type": "item",
+          "settings": {
+            "heading": "Do you offer group or facility discounts?",
+            "content": "Yes — contact our team for volume pricing on orders for hospitals, clinics, and schools."
+          }
+        }
+      ]
+    }
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  }
+}
+{% endschema %}

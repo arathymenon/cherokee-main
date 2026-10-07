@@ -1,0 +1,378 @@
+@layer components {
+  tarot-carousel {
+    pointer-events: all;
+    box-sizing: border-box;
+    user-select: none;
+    touch-action: manipulation;
+
+    --tarot-slide-width: 100%;
+
+    width: 100%;
+    margin: 0 auto;
+    display: block;
+    position: relative;
+  }
+
+  tarot-carousel:focus {
+    outline: none !important;
+  }
+
+  tarot-carousel * {
+    box-sizing: border-box;
+  }
+
+  tarot-viewport {
+    width: 100%;
+    margin: 0 auto;
+    display: block;
+    position: relative;
+    overflow: hidden;
+  }
+
+  tarot-track {
+    will-change: transform, opacity, filter, width;
+    transform-style: preserve-3d;
+    cursor: grab;
+    user-select: none;
+    backface-visibility: hidden;
+    margin: 0;
+    padding: 0;
+    transition-duration: 0s;
+    display: grid;
+    position: relative;
+    top: 0;
+    left: 0;
+  }
+
+  tarot-track.tarot-drag-disabled {
+    cursor: default;
+    user-select: auto;
+  }
+
+  tarot-track::before,
+  tarot-track::after {
+    content: " ";
+    z-index: -1;
+    background: none;
+    width: 100%;
+    height: 100%;
+    display: block;
+    position: absolute;
+    top: 0;
+  }
+
+  tarot-track::before {
+    right: 100%;
+  }
+
+  tarot-track::after {
+    left: 100%;
+  }
+
+  tarot-track > :not(tarot-slide) {
+    visibility: hidden;
+    display: none;
+  }
+
+  tarot-slide {
+    width: var(--tarot-slide-width);
+    user-select: none;
+    backface-visibility: hidden;
+    height: auto;
+    min-height: 0;
+    transform-style: preserve-3d;
+    will-change: transform, opacity, width;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    grid-area: 1 / 1;
+    align-self: stretch;
+    display: block;
+    position: relative;
+    top: 0;
+    left: 0;
+    transition: none !important;
+  }
+
+  tarot-track.tarot-slides-same-height > tarot-slide {
+    align-self: stretch;
+  }
+
+  tarot-slide[state="disabled"] {
+    visibility: hidden;
+    pointer-events: none;
+    opacity: 0;
+  }
+
+  tarot-slide[state="hidden"] {
+    opacity: 0;
+  }
+
+  tarot-slide[state="active"] {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: all;
+  }
+
+  tarot-slide img,
+  tarot-slide video {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  tarot-carousel.tarot-nav-carousel tarot-slide:focus {
+    outline: none;
+  }
+
+  .tarot-visually-hidden {
+    clip: rect(1px, 1px, 1px, 1px);
+    clip-path: inset(0 0 99.9% 99.9%);
+    border: 0;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    position: absolute;
+    overflow: hidden;
+  }
+
+  .w-tarot-slide {
+    width: var(--tarot-slide-width);
+  }
+
+  .max-w-tarot-slide {
+    max-width: var(--tarot-slide-width);
+  }
+
+  .min-w-tarot-slide {
+    min-width: var(--tarot-slide-width);
+  }
+
+  .tarot-button {
+    appearance: none;
+    cursor: pointer;
+    z-index: 1;
+    touch-action: manipulation;
+    filter: opacity(1);
+    user-select: none;
+    border: 1px solid #e5e5e5;
+    padding: 0;
+    line-height: 0;
+    background: #fff;
+    border-radius: 50px;
+    height: 60px;
+    width: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 300ms ease-out, color 300ms ease-out, filter 300ms ease-out;
+  }
+
+  .tarot-button:hover:not([disabled]) {
+    background: #000193;
+    color: #fff;
+  }
+
+  .tarot-button[disabled] {
+    filter: opacity(0.5);
+  }
+
+  .tarot-button svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .tarot-previous {
+    left: 0.75rem;
+  }
+
+  .tarot-next {
+    right: 0.75rem;
+  }
+
+  .tarot-smart-position {
+    z-index: 1;
+    transition: all 70ms ease-out, filter 0.5s;
+    position: absolute;
+    top: 50%;
+  }
+
+  .tarot-smart-position.tarot-previous {
+    transform: translate(-50%, -50%);
+  }
+
+  .tarot-smart-position.tarot-next {
+    transform: translate(50%, -50%);
+  }
+
+  tarot-carousel {
+    --color-pagination-dot: #f2f3f5;
+    --color-pagination-dot-active: #006aff;
+  }
+
+  .tarot-dots-container {
+    justify-content: center;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem;
+    display: flex;
+  }
+
+  .tarot-dots-list {
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+  }
+
+  .tarot-dots-list li {
+    margin: 0;
+    padding: 0;
+  }
+
+  .tarot-dots-button {
+    appearance: none;
+    cursor: pointer;
+    background: var(--color-pagination-dot);
+    border: none;
+    border-radius: 1rem;
+    width: 0.5rem;
+    height: 0.5rem;
+    margin: 0;
+    padding: 0;
+    display: block;
+  }
+
+  .tarot-dots-button[aria-selected="true"] {
+    background: var(--color-pagination-dot-active);
+  }
+
+  :root {
+    --tarot-scrollbar-height: 8px;
+    --tarot-scrollbar-bg: #0000001a;
+    --tarot-scrollbar-thumb-bg: #0000004d;
+    --tarot-scrollbar-thumb-hover-bg: #00000080;
+    --tarot-scrollbar-thumb-active-bg: #000000b3;
+    --tarot-scrollbar-border-radius: 4px;
+    --tarot-scrollbar-transition: all 0.2s ease;
+    --tarot-scrollbar-margin: 12px;
+  }
+
+  .tarot-scrollbar {
+    width: 100%;
+    margin: var(--tarot-scrollbar-margin) 0;
+    opacity: 1;
+    transition: var(--tarot-scrollbar-transition);
+    position: relative;
+  }
+
+  .tarot-scrollbar--dragging .tarot-scrollbar-thumb {
+    background: var(--tarot-scrollbar-thumb-active-bg);
+  }
+
+  .tarot-scrollbar-track {
+    width: 100%;
+    height: var(--tarot-scrollbar-height);
+    background: var(--tarot-scrollbar-bg);
+    border-radius: var(--tarot-scrollbar-border-radius);
+    cursor: pointer;
+    touch-action: pan-y;
+    position: relative;
+    overflow: hidden;
+  }
+
+  @media (pointer: coarse) {
+    .tarot-scrollbar-track {
+      height: max(var(--tarot-scrollbar-height), 44px);
+      padding: calc((44px - var(--tarot-scrollbar-height)) / 2) 0;
+    }
+
+    .tarot-scrollbar-track::before {
+      content: "";
+      height: var(--tarot-scrollbar-height);
+      background: var(--tarot-scrollbar-bg);
+      border-radius: var(--tarot-scrollbar-border-radius);
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      transform: translateY(-50%);
+    }
+  }
+
+  .tarot-scrollbar-thumb {
+    background: var(--tarot-scrollbar-thumb-bg);
+    border-radius: var(--tarot-scrollbar-border-radius);
+    cursor: grab;
+    touch-action: none;
+    z-index: 2;
+    height: 100%;
+    transition: background 0.2s;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  .tarot-scrollbar-ghost {
+    background: var(--tarot-scrollbar-thumb-bg);
+    border-radius: var(--tarot-scrollbar-border-radius);
+    pointer-events: none;
+    z-index: 1;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: -200%;
+  }
+
+  .tarot-scrollbar-ghost--active {
+    pointer-events: auto;
+    cursor: grab;
+    touch-action: none;
+  }
+
+  .tarot-scrollbar-ghost--active:hover {
+    background: var(--tarot-scrollbar-thumb-hover-bg);
+  }
+
+  .tarot-scrollbar--dragging .tarot-scrollbar-ghost--active {
+    cursor: grabbing;
+    background: var(--tarot-scrollbar-thumb-active-bg);
+  }
+
+  .tarot-scrollbar--dragging .tarot-scrollbar-ghost {
+    background: var(--tarot-scrollbar-thumb-active-bg);
+  }
+
+  .tarot-scrollbar-thumb:focus {
+    outline-offset: 2px;
+    background: var(--tarot-scrollbar-thumb-hover-bg);
+    outline: 2px solid;
+  }
+
+  .tarot-scrollbar-thumb:hover {
+    background: var(--tarot-scrollbar-thumb-hover-bg);
+  }
+
+  .tarot-scrollbar-thumb:active,
+  .tarot-scrollbar--dragging .tarot-scrollbar-thumb {
+    cursor: grabbing;
+    background: var(--tarot-scrollbar-thumb-active-bg);
+  }
+
+  @media print {
+    .tarot-scrollbar {
+      display: none !important;
+    }
+  }
+}
+
+/* Hide both nav buttons when the carousel can't scroll either way
+   (Tarot disables both). The buttons are always siblings, so we can
+   check sibling state and ignore any wrapper structure. */
+.tarot-button[disabled]:has(~ .tarot-button[disabled]),
+.tarot-button[disabled] ~ .tarot-button[disabled] {
+  display: none;
+}

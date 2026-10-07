@@ -1,0 +1,104 @@
+<!-- section: button-list -->
+
+{%- liquid
+  assign s = section.settings
+
+  assign buttons_justify = 'justify-center'
+  if s.alignment == 'left'
+    assign buttons_justify = 'justify-start'
+  elsif s.alignment == 'right'
+    assign buttons_justify = 'justify-end'
+  endif
+-%}
+
+<section class="color-{{ s.color_scheme }} {{ s.top_padding }} {{ s.bottom_padding }}">
+  <div class="container">
+    <div class="flex flex-wrap items-center gap-4 {{ buttons_justify }}">
+
+      {% for block in section.blocks %}
+        {%- assign b = block.settings -%}
+        {% if b.button_text != blank and b.button_link != blank %}
+          <a class="{{ b.button_style }}" href="{{ b.button_link }}" {{ block.shopify_attributes }}>
+            {{ b.button_text | escape }}
+          </a>
+        {% endif %}
+      {% endfor %}
+
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Button list",
+  "max_blocks": 6,
+  "settings": [
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme" },
+
+    { "type": "header", "content": "Layout" },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "select",
+      "id": "top_padding",
+      "label": "Top padding",
+      "default": "pt-md",
+      "options": [
+        { "value": "pt-0", "label": "None" },
+        { "value": "pt-sm", "label": "Small" },
+        { "value": "pt-md", "label": "Medium" },
+        { "value": "pt-lg", "label": "Large" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding",
+      "label": "Bottom padding",
+      "default": "pb-md",
+      "options": [
+        { "value": "pb-0", "label": "None" },
+        { "value": "pb-sm", "label": "Small" },
+        { "value": "pb-md", "label": "Medium" },
+        { "value": "pb-lg", "label": "Large" }
+      ]
+    }
+  ],
+  "blocks": [
+    {
+      "type": "button",
+      "name": "Button",
+      "settings": [
+        { "type": "text", "id": "button_text", "label": "Button text", "default": "Shop Now" },
+        { "type": "url", "id": "button_link", "label": "Button link" },
+        {
+          "type": "select",
+          "id": "button_style",
+          "label": "Button style",
+          "options": [
+            { "value": "button", "label": "Primary" },
+            { "value": "button button-secondary", "label": "Secondary" },
+            { "value": "button button-outline-black", "label": "Outline black" },
+            { "value": "button button-outline-white", "label": "Outline white" },
+            { "value": "arrow-button", "label": "Arrow" },
+            { "value": "underline-button", "label": "Underline" },
+            { "value": "text-link", "label": "Text link" }
+          ],
+          "default": "button"
+        }
+      ]
+    }
+  ],
+  "disabled_on": {
+    "groups": ["*"]
+  }
+}
+{% endschema %}

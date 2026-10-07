@@ -1,0 +1,13 @@
+<div class="customer-portal__title">
+  <h1>
+    {%- liquid
+      assign first_name = customer.first_name | strip
+      if first_name and first_name != ''
+        echo 'customer.account.personal_greeting' | t: name: first_name
+      else
+        echo 'customer.account.greeting' | t
+      endif
+    -%}
+  </h1>
+  <a class="customer-portal__manage-subscriptions primary-button" href="/tools/recurring/login/">{{ 'customer.account_navigation.manage_subscriptions' | t }}</a>
+</div>

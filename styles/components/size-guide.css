@@ -1,0 +1,41 @@
+.size-guide table {
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.size-guide-steps ol {
+  counter-reset: step;
+  list-style: none;
+  padding-left: 2.5rem;
+}
+
+.size-guide-steps li {
+  counter-increment: step;
+  position: relative;
+  margin-bottom: 1rem;
+  line-height: 160%;
+
+  strong {
+    font-size: 0.875em;
+    font-weight: 500;
+  }
+}
+
+.size-guide-steps li::before {
+  content: counter(step);
+  position: absolute;
+  left: -2.5rem;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 9999px;
+  background-color: var(--color-optimistic-blue);
+  color: #fff;
+  font-size: 0.5rem;
+  font-weight: 400;
+  line-height: 1;
+}

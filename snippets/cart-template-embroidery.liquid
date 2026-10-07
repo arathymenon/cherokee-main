@@ -1,0 +1,117 @@
+{%- liquid
+  assign set_code = parent.properties['_Set code'] | default: parent.properties._group_id
+  assign lip_keys = 'Line 1,Line 2,Line 3,Thread Color,Font Style' | split: ','
+-%}
+
+{%- capture line_keys_json -%}
+[
+{%- assign first_key = true -%}
+{%- for item in cart.items -%}
+  {%- assign item_set_code = item.properties['_Set code'] | default: item.properties._group_id -%}
+  {%- if item_set_code == set_code -%}
+    {%- unless first_key -%},{%- endunless -%}
+    {{ item.key | json }}
+    {%- assign first_key = false -%}
+  {%- endif -%}
+{%- endfor -%}
+]
+{%- endcapture -%}
+
+<li class="grid grid-cols-[100px_1fr] lg:grid-cols-[120px_1fr] gap-x-4 py-4 border-b border-grey-light border-solid">
+  <embroidery-cart-item class="contents" line-keys="{{ line_keys_json | strip | escape }}">
+    <a
+      href="{{ parent.url }}"
+      class="w-25 lg:w-30 block aspect-product-image bg-grey-light rounded-theme-sm overflow-hidden"
+      tabindex="-1"
+      aria-hidden="true">
+      {%- if parent.image -%}
+        {{
+          parent.image
+          | image_url: width: 240
+          | image_tag: loading: 'lazy', class: 'size-full object-cover', alt: parent.product.title
+        }}
+      {%- endif -%}
+    </a>
+
+    <div class="flex flex-col gap-2 min-w-0">
+      <div class="flex justify-between items-start gap-2">
+        <a href="{{ parent.url }}" class="no-underline fs-body-md font-medium text-black">
+          {%- render 'product-title', product: parent.product -%}
+        </a>
+
+        <a
+          href="{{ parent.url_to_remove }}"
+          class="flex-center shrink-0 size-4 [&_svg]:size-4"
+          data-embroidery-remove
+          role="button"
+          aria-label="{{ 'cart.remove_title' | t: title: parent.product.title }}">
+          {{- 'icon-garbage-can.svg' | inline_asset_content -}}
+        </a>
+      </div>
+
+      <p class="fs-body-xs font-medium uppercase text-brand-blue leading-none">
+        {{- 'products.embroidery.final_sale_badge' | t -}}
+      </p>
+
+      <div class="flex justify-between gap-4 items-start">
+        <div class="fs-body-sm text-grey-dark">
+          {%- render 'cart-line-item-options', line_item: parent -%}
+        </div>
+
+        <div class="fs-body-sm font-medium shrink-0 text-black">
+          {%- render 'cart-line-item-one-price', line_item: parent -%}
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="col-span-2 border-l border-grey pl-4 mt-4 flex flex-col gap-4"
+      role="group"
+      aria-label="{{ 'products.embroidery.heading' | t | escape }}">
+      {%- for item in cart.items -%}
+        {%- assign item_set_code = item.properties['_Set code'] | default: item.properties._group_id -%}
+        {%- if item_set_code == set_code and item.key != parent.key -%}
+          <div class="flex flex-col gap-1">
+            <p
+              class="fs-body-sm font-medium text-black"
+              id="embroidery-cart-{{ item.key | handleize }}">
+              {{ 'products.embroidery.heading' | t }}
+            </p>
+
+            <dl
+              class="fs-body-sm text-grey-dark"
+              aria-labelledby="embroidery-cart-{{ item.key | handleize }}">
+              {%- for option in item.options_with_values -%}
+                <div>
+                  <dt class="inline capitalize">{{ option.name | escape }}:</dt>
+                  <dd class="inline capitalize">{{ option.value | escape }}</dd>
+                </div>
+              {%- endfor -%}
+
+              {%- for key in lip_keys -%}
+                {%- assign value = item.properties[key] -%}
+                {%- if value != blank -%}
+                  <div>
+                    <dt class="inline capitalize">{{ key }}:</dt>
+                    <dd class="inline capitalize">
+                      {{- value | escape -}}
+                    </dd>
+                  </div>
+                {%- endif -%}
+              {%- endfor -%}
+            </dl>
+
+            <p class="fs-body-sm font-medium text-black text-right mt-1">
+              <span class="sr-only">{{ 'products.embroidery.heading' | t }} </span>
+              {{ item.final_price | money }}
+            </p>
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+
+      <div class="bg-grey-light-blue rounded-sm p-2">
+        <p class="fs-body-sm text-black">{{ settings.embroidery_lead_time_cart | escape }}</p>
+      </div>
+    </div>
+  </embroidery-cart-item>
+</li>

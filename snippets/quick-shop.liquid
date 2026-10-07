@@ -1,0 +1,50 @@
+<!-- snippet: quick-shop -->
+<openable-component data-close-on-outside-click>
+  <dialog
+    id="quick-shop-dialog"
+    data-openable
+    data-select-size-text="{{ 'products.product.select_size' | t }}"
+    class="dialog-b-drawer md:dialog-r-drawer w-[45rem] h-full" >
+
+    <div class="flex flex-col h-full px-gutter py-md">
+
+      {% # Panel header %}
+      <div class="flex items-center justify-between pb-sm" >
+        <div 
+          role="heading" 
+          aria-level="3"
+          class="fs-display-3" >
+          Quick Shop
+        </div>
+        {% render 'dialog-close-button' %}
+      </div>
+
+      <html-fetcher section="sapi-quick-shop" use-view-transition>
+
+        {%- # Loading skeleton -%}
+        <div class="hidden" data-html-fetcher-loading-class="!block">
+          <div class="flex flex-col items-start lg:flex-row">
+            <div class="w-full grow-0 shrink-0 lg:w-[32rem] lg:basis-[32rem] top-0 bg-grey-light">
+              <div class="aspect-product-image"></div>
+            </div>
+            <div class="w-full lg:w-auto grow">
+              <div class="px-4 lg:px-8 py-6 md:py-8">
+                <div class="flex-1 space-y-3 py-1">
+                  <div class="h-2 bg-grey-light rounded"></div>
+                  <div class="h-2 bg-grey-light rounded"></div>
+                  <div class="h-2 bg-grey-light rounded"></div>
+                  <div class="h-2 bg-grey-light rounded"></div>
+                  <div class="h-2 bg-grey-light rounded"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {%- # Content area -%}
+        <div data-html-fetcher-area data-html-fetcher-loading-class="hidden"></div>
+
+      </html-fetcher>
+    </div>
+  </dialog>
+</openable-component>

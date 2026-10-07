@@ -1,0 +1,174 @@
+<!-- section: header -->
+<div class="header-overlay" aria-hidden="true"></div>
+
+<header class="bg-white relative h-[50px] lg:h-14 transition-colors  duration-300">
+  <div class="container grid grid-cols-[minmax(80px,1fr)_auto_minmax(80px,1fr)] h-full">
+
+    {%- #  Hamburger  -%}
+    <div class="flex justify-start lg:hidden">
+      <button
+        aria-label="Open menu"
+        type="button"
+        data-action-toggle-mobile-menu
+        class="hamburger hamburger--squeeze h-full
+          flex-center self-center px-2 -ml-2 text-scheme">
+        <span class="hamburger-box"><span class="hamburger-inner"></span></span>
+      </button>
+    </div>
+
+    {%- #  Logo  -%}
+    {%- liquid
+      assign logo_alt_white = shop.name | append: ' logomark in white'
+      assign logo_alt_colored = shop.name | append: ' logomark in blue'
+      assign logo_home_link = shop.name | prepend: 'Go to ' | append: ' homepage'
+    -%}
+    <div class="flex items-center overflow-hidden">
+      {%- capture logo_content -%}
+        {%- if settings.logo_white != blank -%}
+          {{-
+            settings.logo_white
+            | image_url: width: 300
+            | image_tag: alt: logo_alt_white,
+            class: 'absolute top-0 left-0 h-full object-center lg:object-left object-contain opacity-0 transition-opacity  duration-300',
+            data-logo: 'white'
+          -}}
+        {%- endif -%}
+        {%- if settings.logo_colored != blank -%}
+          {{-
+            settings.logo_colored
+            | image_url: width: 300
+            | image_tag: alt: logo_alt_colored,
+            class: 'relative h-full object-center lg:object-left object-contain opacity-100 transition-opacity  duration-300',
+            data-logo: 'colored'
+          -}}
+        {%- else -%}
+          <span class="fs-display-4">{{- shop.name | escape -}}</span>
+        {%- endif -%}
+      {%- endcapture -%}
+      {%- if request.page_type == 'index' -%}
+        <h1 class="relative block h-[18px] w-auto lg:h-[24px]">{{ logo_content }}</h1>
+      {%- else -%}
+        <a href="{{ routes.root_url }}"
+          aria-label="{{ logo_home_link | escape }}"
+          class="relative block h-[18px] w-auto lg:h-[24px]">{{ logo_content }}</a>
+      {%- endif -%}
+    </div>
+
+    {%- #  Desktop Menu — unmounted on viewports < lg to drop mega-menu DOM -%}
+    <breakpoint-content match="(min-width: 1024px)" class="contents">
+      <nav class="h-full hidden lg:block" aria-label="Main navigation">
+        <ul class="flex h-full justify-center text-scheme">
+          {% liquid
+            for block in section.blocks
+              case block.type
+                when 'dropdown_menu'
+                  render 'block-header-dropdown', block: block
+                when 'mega_menu'
+                  render 'block-header-nav-megamenu', block: block
+                when 'nav_link'
+                  render 'block-header-nav-link', block: block
+              endcase
+            endfor
+          %}
+        </ul>
+      </nav>
+    </breakpoint-content>
+
+    {%- #  Utility nav  -%}
+    <div class="flex justify-end items-center gap-2">
+      {% render 'header-utility-nav' %}
+    </div>
+
+  </div>
+</header>
+
+{%- # Mobile drawer — unmounted on lg+ -%}
+<breakpoint-content match="(max-width: 1023px)">
+  {% render 'mobile-menu', blocks: section.blocks %}
+</breakpoint-content>
+
+<header-manager></header-manager>
+
+
+{% schema %}
+{
+  "name": "Header",
+  "settings": [],
+  "class": "header-section sticky top-0 z-100",
+  "blocks": [
+    {
+      "type": "dropdown_menu",
+      "name": "Dropdown menu",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "info": "Optional. Defaults to the menu's name."
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "Title link",
+          "info": "Optional. Makes the root title a clickable link."
+        },
+        {
+          "type": "link_list",
+          "id": "menu",
+          "label": "Menu"
+        }
+      ]
+    },
+    {
+      "type": "mega_menu",
+      "name": "Mega menu",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "info": "Optional. Defaults to the menu's name."
+        },
+        {
+          "type": "link_list",
+          "id": "menu",
+          "label": "Menu",
+          "info": "Top-level link names drive column rendering: 'Highlights' → flat list, 'Shop By Color' → color chips, anything else → standard column."
+        },
+        { "type": "header", "content": "Promo image (right column)" },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "url",
+          "id": "image_url",
+          "label": "Image link"
+        },
+        {
+          "type": "text",
+          "id": "image_text",
+          "label": "Link text"
+        }
+      ]
+    },
+    {
+      "type": "nav_link",
+      "name": "Nav link",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Label"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "Link"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

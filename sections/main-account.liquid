@@ -1,0 +1,33 @@
+<!-- section: main-account -->
+
+
+<div class="customer-dashboard">
+  {%- render 'customer-portal-title' -%}
+  
+  <div class="customer-portal__page-heading">
+    <h1 class="customer-portal__page-title">
+      {{- 'customer.account.info' | t -}}
+    </h1>
+  </div>
+  
+  {%- render 'customer-info' -%}
+  {%- render 'customer-address-review' -%}
+  {%- render 'customer-order-history' -%}
+
+
+  <div class="customer-dashboard__account-info-heading">
+    <div class="customer-portal__page-heading">
+      <div class="customer-portal__page-title">
+        {{- 'customer.account.info' | t -}}
+      </div>
+    </div>
+  </div>
+
+</div>
+
+{% schema %}
+{
+  "name": "Main Account",
+  "settings": []
+}
+{% endschema %}

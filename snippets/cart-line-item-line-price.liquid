@@ -1,0 +1,31 @@
+<!-- snippet: cart-line-item-line-price -->
+{%- comment -%}
+  Renders the line total price for a cart line item. When discounted, shows
+  the regular line price struck-through above the final line price.
+
+  Accepts:
+  - line_item: {Object}
+{%- endcomment -%}
+
+{%- if line_item.original_line_price != line_item.final_line_price -%}
+  <dl>
+    <dt class="sr-only">
+      {{ 'products.product.price.regular_price' | t }}
+    </dt>
+    <dd>
+      <s class="line-through text-grey-dark">
+        {{ line_item.original_line_price | money }}
+      </s>
+    </dd>
+    <dt class="sr-only">
+      {{ 'products.product.price.sale_price' | t }}
+    </dt>
+    <dd>
+      {{ line_item.final_line_price | money }}
+    </dd>
+  </dl>
+{%- else -%}
+  <span>
+    {{ line_item.original_line_price | money }}
+  </span>
+{%- endif -%}

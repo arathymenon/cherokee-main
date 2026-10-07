@@ -1,0 +1,135 @@
+<!-- snippet: product-badges -->
+
+{% doc %}
+  Renders product badge list: sold out, sale, final sale, clearance, merch flags,
+  and low stock. Caller handles all positioning.
+
+  Sale (variant-level, `meta.sale`) and Final Sale (variant-level,
+  `meta.finalSale`) are evaluated independently — a variant that qualifies for
+  both shows both badges. Neither suppresses the other.
+
+  `badge_level` affects only the low-stock calculation: "product" sums all
+  variants (cards); "variant" uses the selected variant's inventory (PDP).
+
+  Sold out (product-level), clearance (variant-level), and merch flags
+  (product-level) are otherwise unaffected.
+
+  @param {object} product - Shopify product object (required)
+  @param {object} [variant] - Selected variant (defaults to selected_or_first_available_variant)
+  @param {string} [badge_level] - "product" (default) or "variant". Controls the
+    low-stock calculation: "product" sums inventory across all variants (use on
+    product cards); "variant" uses only the selected variant's inventory (use on PDP).
+    When "variant", the badge wrapper is also tagged
+    data-product-fetcher-area="badges" so <product-fetcher> swaps it on every
+    variant change (independent of the gallery, which only swaps on color change).
+
+  @example
+  {% # Product card — product-level low stock (default) %}
+  <div class="absolute top-1 left-1 z-1">
+    {% render 'product-badges', product: product, variant: variant %}
+  </div>
+
+  {% # PDP gallery — variant-level low stock %}
+  <div class="absolute top-4 left-4 z-2">
+    {% render 'product-badges', product: product, variant: variant, badge_level: 'variant' %}
+  </div>
+{% enddoc %}
+
+{%- liquid
+  unless variant
+    assign variant = product.selected_or_first_available_variant
+  endunless
+
+  unless badge_level
+    assign badge_level = 'product'
+  endunless
+
+  # Sold Out
+  assign show_sold_out = false
+  if product.available == false
+    assign show_sold_out = true
+  endif
+
+  # Sale (variant-level, metafield-driven)
+  assign show_sale = false
+  if product.available and variant.metafields.meta.sale.value == true
+    assign show_sale = true
+  endif
+
+  # Final Sale (variant-level)
+  assign show_final_sale = false
+  if product.available and variant.metafields.meta.finalSale.value == true
+    assign show_final_sale = true
+  endif
+
+  # Clearance (variant-level)
+  assign show_clearance = false
+  if variant.metafields.meta.clearance.value == true
+    assign show_clearance = true
+  endif
+
+  # Merch flags (product-level, from metaobject list)
+  assign merch_badges = product.metafields.meta.badges.value
+
+  # Low Stock — product-level sums all variants (product cards);
+  # variant-level uses only the selected variant (PDP). See badge_level param.
+  assign show_low_stock = false
+  assign stock_threshold = shop.metafields.inventory.stock_threshold.value | default: 0
+  if show_sold_out == false and stock_threshold > 0 and product.available
+    if badge_level == 'variant'
+      assign available_inventory = variant.inventory_quantity
+    else
+      assign available_inventory = 0
+      for v in product.variants
+        assign available_inventory = available_inventory | plus: v.inventory_quantity
+      endfor
+    endif
+    if available_inventory > 0 and available_inventory < stock_threshold
+      assign show_low_stock = true
+    endif
+  endif
+
+-%}
+<div
+  {% if badge_level == 'variant' %}data-product-fetcher-area="badges"{% endif %}
+  class="flex flex-wrap gap-1 lg:gap-2">
+
+  {%- if show_sold_out -%}
+    <span class="badge badge-sold-out inline-block py-1 px-2 rounded-[2px] text-nowrap">
+      {{- 'products.product.badges.sold_out' | t -}}
+    </span>
+  {%- endif -%}
+
+  {%- if show_sale -%}
+    <span class="badge badge-sale inline-block py-1 px-2 rounded-[2px] text-nowrap">
+      {{- 'products.product.badges.sale' | t -}}
+    </span>
+  {%- endif -%}
+
+  {%- if show_final_sale -%}
+    <span class="badge badge-final-sale inline-block py-1 px-2 rounded-[2px] text-nowrap">
+      {{- 'products.product.badges.final_sale' | t -}}
+    </span>
+  {%- endif -%}
+
+  {%- if show_clearance -%}
+    <span class="badge badge-clearance inline-block py-1 px-2 rounded-[2px] text-nowrap">
+      {{- 'products.product.badges.clearance' | t -}}
+    </span>
+  {%- endif -%}
+
+  {%- if merch_badges != blank -%}
+    {%- for badge in merch_badges -%}
+      <span class="badge badge-{{ badge.text.value | handleize }} inline-block py-1 px-2 rounded-[2px] text-nowrap">
+        {{- badge.text.value -}}
+      </span>
+    {%- endfor -%}
+  {%- endif -%}
+
+  {%- if show_low_stock -%}
+    <span class="badge badge-low-stock inline-block py-1 px-2 rounded-[2px] text-nowrap">
+      {{- 'products.product.badges.low_stock' | t -}}
+    </span>
+  {%- endif -%}
+
+</div>

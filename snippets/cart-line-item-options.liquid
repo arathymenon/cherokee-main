@@ -1,0 +1,19 @@
+<!-- snippet: cart-line-item-options -->
+{%- comment -%}
+  Renders the variant option name/value pairs (e.g. Size: M, Color: Navy),
+  each on its own line. Outputs nothing when the product only has the default variant.
+
+  Accepts:
+  - line_item: {Object}
+{%- endcomment -%}
+
+{%- if line_item.product.has_only_default_variant == false -%}
+  <dl class="fs-body-sm text-grey-dark">
+    {%- for option in line_item.options_with_values -%}
+      <div>
+        <dt class="inline">{{ option.name | escape }}:</dt>
+        <dd class="inline">{{ option.value | escape }}</dd>
+      </div>
+    {%- endfor -%}
+  </dl>
+{%- endif -%}

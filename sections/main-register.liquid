@@ -1,0 +1,164 @@
+<!-- section: main-register -->
+
+{%- liquid
+  assign image = settings.account_image
+-%}
+
+<section class="account-section">
+  <div class="account-section__container-image">
+    {%- if image != blank -%}
+      <media-loader>
+        {{
+          image
+          | image_url: width: image.width
+          | image_tag: class: 'account-section__image', sizes: '(min-width: 540px) 100vw, 50vw'
+        }}
+      </media-loader>
+    {%- endif -%}
+  </div>
+  <div class="account-section__container-content">
+    <div class="account-section__content-create">
+      <h1 class="account-section__title">
+        {{- 'customer.register.title' | t -}}
+      </h1>
+
+      <smart-form>
+        {%- form 'create_customer', novalidate: 'novalidate', class: 'account-section__form' -%}
+          {%- if form.errors -%}
+            {%- assign form_errors = 'form-element--error' -%}
+            <div class="account-section__error">
+              {{- 'icon-error-account.svg' | inline_asset_content -}}
+              <div class="account-section__error-content">
+                {% for error in form.errors %}
+                  <div class="account-section__error-text">{{- form.errors.messages[error] -}}</div>
+                {%- endfor -%}
+              </div>
+            </div>
+          {%- endif -%}
+          
+          <div class="account-section__input-container">
+            <label 
+              for="RegisterForm-FirstName"
+              class="form-element {{ form_errors }} account-section__label"
+            >{{ 'customer.register.first_name_label' | t }}</label>
+            <input
+              type="text"
+              name="customer[first_name]"
+              id="RegisterForm-FirstName"
+              {% if form.first_name %}
+                value="{{ form.first_name }}"
+              {% endif %}
+              autocomplete="given-name"
+              placeholder="{{ 'customer.register.first_name_placeholder' | t }}"
+              aria-required="false"
+              class="form-element {{ form_errors }} account-section__input"
+            >
+          </div>
+
+          
+          <div class="account-section__input-container">
+            <label 
+              class="form-element {{ form_errors }} account-section__label"
+              for="RegisterForm-LastName">
+              {{ 'customer.register.last_name_label' | t }}
+            </label>
+            <input
+                type="text"
+                name="customer[last_name]"
+                id="RegisterForm-LastName"
+                {% if form.last_name %}
+                  value="{{ form.last_name }}"
+                {% endif %}
+                autocomplete="family-name"
+                placeholder="{{ 'customer.register.last_name_placeholder' | t }}"
+                aria-required="false"
+                class="form-element {{ form_errors }} account-section__input"
+              >
+          </div>
+          
+          <div class="account-section__input-container">
+            <label 
+              class="form-element {{ form_errors }} account-section__label"
+              for="RegisterForm-email">
+              {{ 'customer.register.email_label' | t }}
+            </label>
+            <input
+              type="email"
+              name="customer[email]"
+              id="RegisterForm-email"
+              {% if form.email %}
+                value="{{ form.email }}"
+              {% endif %}
+              spellcheck="false"
+              autocapitalize="off"
+              autocomplete="email"
+              aria-required="true"
+              {% if form.errors contains 'email' %}
+                aria-invalid="true"
+                aria-describedby="RegisterForm-email-error"
+              {% endif %}
+              placeholder="{{ 'customer.register.email_placeholder' | t }}"
+              class="form-element {{ form_errors }} account-section__input"
+              required
+            >
+          </div>
+
+          <div class="account-section__input-container">
+            <label 
+              class="form-element {{ form_errors }} account-section__label"
+              for="RegisterForm-password">{{ 'customer.register.password_label' | t }}</label>
+            <input
+              type="password"
+              name="customer[password]"
+              id="RegisterForm-password"
+              aria-required="true"
+              {% if form.errors contains 'password' %}
+                aria-invalid="true"
+                aria-describedby="RegisterForm-password-error"
+              {% endif %}
+              placeholder="{{ 'customer.register.password_placeholder' | t }}"
+              class="form-element {{ form_errors }} account-section__input"
+              required
+            >
+            <small class="form-element">{{ 'customer.register.password_info' | t }}</small>
+          </div>
+          
+          <div class="account-section__input-container account-section__input-container--flex form-element--bool">
+            <input
+              type="checkbox" 
+              name="customer[accepts_marketing]" 
+              value="true" 
+              id="RegisterForm-newsletter"
+              class="form-element"
+            />
+            <label 
+              for="RegisterForm-newsletter"
+            >
+              {{ 'customer.register.newsletter_label' | t }}
+            </label>
+          </div>
+          
+          <button
+            type="submit"
+            class="primary-button primary-button--dark primary-button--block account-section__button account-section__button--top-margin"
+          >
+            {{ 'customer.register.submit' | t }}
+          </button>
+        {%- endform -%}
+      </smart-form>
+      <div class="account-section__create">
+        {{- 'customer.register.login_text' | t }}
+        <a href="{{- routes.account_login_url -}}" class="form-element secondary-button">
+          {{- 'customer.register.login_link_text' | t -}}
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Account Section",
+  "settings": []
+}
+{% endschema %}

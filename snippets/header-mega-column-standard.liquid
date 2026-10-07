@@ -1,0 +1,29 @@
+{%- comment -%}
+  Renders a standard mega-menu column with a header and sub-links.
+
+  Accepts:
+    - top_link: {Object} the top-level link; .title is rendered as header,
+      .links are rendered as sub-items
+{%- endcomment -%}
+
+<div class="flex flex-col gap-3 min-w-[160px]">
+  <div class="fs-body font-medium">{{ top_link.title | escape }}</div>
+  {%- if top_link.links.size > 0 -%}
+    <ul class="flex flex-col gap-2">
+      {%- for link in top_link.links -%}
+        {%- assign label_text = link.object.metafields.meta.badges.value.text -%}
+        {%- assign link_key = link.title | downcase | strip -%}
+        {%- assign accent_class = '' -%}
+        {%- if link_key == 'sale' or link_key == 'clearance' -%}
+          {%- assign accent_class = 'text-[#B21C02]' -%}
+        {%- endif -%}
+        <li>
+          <a class="group fs-body-sm no-underline inline-flex items-center gap-1 {{ accent_class }}" href="{{ link.url }}">
+            <span class="border-b border-transparent transition-colors group-hover:border-current">{{- link.title | escape -}}</span>
+            {%- render 'menu-item-label', text: label_text -%}
+          </a>
+        </li>
+      {%- endfor -%}
+    </ul>
+  {%- endif -%}
+</div>

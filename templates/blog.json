@@ -1,0 +1,59 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "hero_banner_rTgd8E": {
+      "type": "hero-banner",
+      "name": "Hero Banner",
+      "settings": {
+        "color_scheme": "scheme-ed7cfcf6-92f5-4ca1-a444-303e46eb99fc",
+        "transparent_header": false,
+        "width": "full-width",
+        "add_padding": false,
+        "section_height": 30,
+        "horizontal_position": "justify-center",
+        "vertical_position": "items-center",
+        "text_alignment": "text-center",
+        "image": "shopify://shop_images/ww-core-stretch-women-3x2-20260603_5f3c76dc-e56e-490d-8cc4-38592a6ce149.jpg",
+        "overlay_color": "#000000",
+        "overlay_opacity": 0,
+        "eyebrow": "",
+        "heading": "{{ blog.title }}",
+        "use_h1": true,
+        "heading_tag": "1",
+        "content_image_max_height": 80,
+        "richtext": "",
+        "fine_print": "",
+        "button_1_text": "",
+        "button_1_link": "",
+        "button_1_style": "button",
+        "button_2_text": "",
+        "button_2_link": "",
+        "button_2_style": "button button-outline-white"
+      }
+    },
+    "main": {
+      "type": "main-blog",
+      "name": "Blog feed",
+      "settings": {
+        "color_scheme": "scheme-aed956a8-0590-4fa9-8aea-ec51184aeac3",
+        "articles_per_page": 12,
+        "show_title": false,
+        "show_image": true,
+        "show_date": true,
+        "show_author": false
+      }
+    }
+  },
+  "order": [
+    "hero_banner_rTgd8E",
+    "main"
+  ]
+}
