@@ -2,8 +2,8 @@
   assign embroidery_config = product.metafields.embroidery.config.value
   assign monogram_product = null
 
-  if embroidery_config != blank and embroidery_config.monogram_control.value != blank
-    assign monogram_product = embroidery_config.monogram_control.value
+  if embroidery_config != blank and embroidery_config.monogram_control_product.value != blank
+    assign monogram_product = embroidery_config.monogram_control_product.value
   endif
 -%}
 
