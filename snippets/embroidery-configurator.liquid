@@ -1,10 +1,24 @@
 {%- # --- Gate --------------------------------------------------------------- -%}
+<div> {{product.metafields.custom.embroiderable}} </div>
+{% if product.metafields.embroidery.config.value != blank %}
+  <div>Config exists: true</div>
+{% else %}
+  <div>Config exists: false</div>
+{% endif %}
+<div> Monogram : {{product.metafields.embroidery.config.value.monogram_control_product.value }}</div>
+<div> Thread color : {{product.metafields.embroidery.config.value.thread_colors_}}</div>
+<div> Fonts : {{product.metafields.embroidery.config.value.fonts_ }}</div>
+{% if embroidery_configs.monogram_control_product %}
+  <div>Monogram Config exists: true</div>
+{% else %}
+  <div>Monogram Config exists: false</div>
+{% endif %}
 {%- liquid
   assign embroidery_config = product.metafields.embroidery.config.value
-  assign monogram_product = embroidery_config.monogram_control.value
+  assign monogram_product = product.metafields.embroidery.config.value.monogram_control_product.value
   assign is_embroidery_enabled = false
 
-  if product.metafields.embroidery.status.value == true and embroidery_config != blank and monogram_product != blank
+  if product.metafields.custom.embroiderable == true and embroidery_config != blank and monogram_product != blank
     assign is_embroidery_enabled = true
   endif
 -%}
@@ -16,8 +30,8 @@
 
     assign positions = monogram_product.options_with_values.first.values
     assign line_option = monogram_product.options_with_values[1]
-    assign fonts = embroidery_config.fonts.value
-    assign thread_colors = embroidery_config.thread_colors.value
+    assign fonts =  product.metafields.embroidery.config.value.fonts_.value
+    assign thread_colors = product.metafields.embroidery.config.value.thread_colors_.value
     assign starting_price = monogram_product.price_min | money
     assign monogram_icon = monogram_product.featured_image
 
