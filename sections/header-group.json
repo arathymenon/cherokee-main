@@ -63,8 +63,18 @@
     "header": {
       "type": "header",
       "blocks": {
+        "mega_menu_7U8taK": {
+          "type": "mega_menu",
+          "settings": {
+            "title": "",
+            "menu": "cherokee-menu",
+            "image_url": "",
+            "image_text": ""
+          }
+        },
         "mega_menu_QGidDe": {
           "type": "mega_menu",
+          "disabled": true,
           "settings": {
             "title": "Women",
             "menu": "",
@@ -74,6 +84,7 @@
         },
         "mega_menu_844UQU": {
           "type": "mega_menu",
+          "disabled": true,
           "settings": {
             "title": "",
             "menu": "",
@@ -83,6 +94,7 @@
         },
         "mega_menu_6nnwML": {
           "type": "mega_menu",
+          "disabled": true,
           "settings": {
             "title": "Men",
             "menu": "cherokee-menu",
@@ -133,6 +145,7 @@
         },
         "nav_link_htEWm6": {
           "type": "nav_link",
+          "disabled": true,
           "settings": {
             "title": "Store Locator",
             "url": "shopify://pages/store-locator"
@@ -140,6 +153,7 @@
         }
       },
       "block_order": [
+        "mega_menu_7U8taK",
         "mega_menu_QGidDe",
         "mega_menu_844UQU",
         "mega_menu_6nnwML",
