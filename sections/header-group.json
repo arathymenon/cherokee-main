@@ -63,9 +63,17 @@
     "header": {
       "type": "header",
       "blocks": {
+        "mega_menu_QGidDe": {
+          "type": "mega_menu",
+          "settings": {
+            "title": "Women",
+            "menu": "",
+            "image_url": "",
+            "image_text": ""
+          }
+        },
         "mega_menu_844UQU": {
           "type": "mega_menu",
-          "disabled": true,
           "settings": {
             "title": "",
             "menu": "",
@@ -132,6 +140,7 @@
         }
       },
       "block_order": [
+        "mega_menu_QGidDe",
         "mega_menu_844UQU",
         "mega_menu_6nnwML",
         "nav_link_Qt8nmy",
