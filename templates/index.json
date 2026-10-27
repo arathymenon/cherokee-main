@@ -21,14 +21,12 @@
         "horizontal_position": "justify-center",
         "vertical_position": "items-center",
         "text_alignment": "text-center",
-        "image": "shopify://shop_images/mc-hp-hero-sale-20260904.webp",
         "overlay_color": "#000000",
         "overlay_opacity": 0,
         "eyebrow": "",
         "heading": "",
         "use_h1": false,
         "heading_tag": "1",
-        "content_image": "shopify://shop_images/end-of-summer-sale.avif",
         "content_image_max_height": 110,
         "richtext": "",
         "fine_print": "",
@@ -78,7 +76,7 @@
           "settings": {
             "collection": "scrub-tops",
             "custom_title": "Scrub Tops",
-            "image": "shopify://shop_images/mc-cat-tops-07102026.webp"
+            "image": "shopify://shop_images/01_pe-702----olv_650.jpg"
           }
         },
         "collection_BiKkVJ": {
@@ -86,7 +84,7 @@
           "settings": {
             "collection": "scrub-pants",
             "custom_title": "Scrub Pants",
-            "image": "shopify://shop_images/mc-cat-pants-07102026.webp"
+            "image": "shopify://shop_images/02_pe-102----pxp_650.jpg"
           }
         },
         "collection_tRKdyD": {
@@ -94,7 +92,7 @@
           "settings": {
             "collection": "scrub-sets",
             "custom_title": "Scrub Sets",
-            "image": "shopify://shop_images/mc-cat-sets-07102026.webp"
+            "image": "shopify://shop_images/02_pe-702----mtc_650.jpg"
           }
         },
         "collection_4Ntg4C": {
@@ -102,7 +100,7 @@
           "settings": {
             "collection": "scrub-jackets",
             "custom_title": "Scrub Jackets",
-            "image": "shopify://shop_images/mc-cat-jackets-07102026.webp"
+            "image": "shopify://shop_images/4_pe-302----crf_650_0ffd3f56-05e6-44b2-8328-2936f5a94aab.jpg"
           }
         }
       },
@@ -250,7 +248,6 @@
         "slide_diKcMJ": {
           "type": "slide",
           "settings": {
-            "image": "shopify://shop_images/mc-amp-MC702-MC102-MC500-look-3x4.webp",
             "product_1": "womens-v-neck-scrub-top-pe702",
             "product_1_color_label": "Pink Power",
             "product_2": "amp-by-med-couture-womens-4-pocket-zip-front-vest-pe500",
@@ -262,7 +259,6 @@
         "slide_N7AQjg": {
           "type": "slide",
           "settings": {
-            "image": "shopify://shop_images/mc-amp_MC703_MC150_MC302-look-3x4.webp",
             "product_1": "amp-by-med-couture-womens-convertible-windbreaker-jacket-pe302cl",
             "product_1_color_label": "olive",
             "product_2": "womens-round-neck-tuckable-scrub-top-pe703",
