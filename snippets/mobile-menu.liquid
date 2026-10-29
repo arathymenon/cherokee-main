@@ -161,7 +161,7 @@
                             <ul class="grid grid-cols-2 gap-4">
                               {%- for link in top_link.links -%}
                                 {%- liquid
-                                  assign cw = link.object.metafields.custom.colorway.value
+                                  assign cw = link.object.metafields.colorway.value
                                   unless cw
                                     for item in link.object.metafields.custom.colorway_list.value limit: 1
                                       assign cw = item
