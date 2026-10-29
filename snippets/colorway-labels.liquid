@@ -16,7 +16,7 @@
 
 {%- liquid
   assign _labels = ''
-  for item in collection.metafields.custom.colorway_list.value
+  for item in collection.metafields.custom_colorway_list.value
     assign _label = item.label | strip
     if _label != blank
       assign _label = _label | downcase
