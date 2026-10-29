@@ -17,7 +17,7 @@
         {%- liquid
           assign cw = link.object.metafields.colorway.value
           unless cw
-            for item in link.object.metafields.custom.colorway_list.value limit: 1
+            for item in link.object.metafields.custom_colorway_list.value limit: 1
               assign cw = item
             endfor
           endunless
