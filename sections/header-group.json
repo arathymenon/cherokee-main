@@ -75,10 +75,9 @@
         },
         "mega_menu_844UQU": {
           "type": "mega_menu",
-          "disabled": true,
           "settings": {
             "title": "",
-            "menu": "",
+            "menu": "cherokee-menu",
             "image_url": "shopify://collections/womens-new-arrivals",
             "image_text": ""
           }
