@@ -63,17 +63,8 @@
     "header": {
       "type": "header",
       "blocks": {
-        "dropdown_menu_RmYLzh": {
-          "type": "dropdown_menu",
-          "settings": {
-            "title": "",
-            "url": "",
-            "menu": "cherokee-menu"
-          }
-        },
         "mega_menu_7U8taK": {
           "type": "mega_menu",
-          "disabled": true,
           "settings": {
             "title": "",
             "menu": "cherokee-menu",
@@ -162,7 +153,6 @@
         }
       },
       "block_order": [
-        "dropdown_menu_RmYLzh",
         "mega_menu_7U8taK",
         "mega_menu_QGidDe",
         "mega_menu_844UQU",

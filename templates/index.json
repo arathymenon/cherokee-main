@@ -126,6 +126,14 @@
     "shop_by_color_zHxgHy": {
       "type": "shop-by-color",
       "blocks": {
+        "collection_xAk6RJ": {
+          "type": "collection",
+          "settings": {
+            "collection": "",
+            "label_override": "",
+            "color_override": ""
+          }
+        },
         "collection_aqMeFf": {
           "type": "collection",
           "settings": {
@@ -216,6 +224,7 @@
         }
       },
       "block_order": [
+        "collection_xAk6RJ",
         "collection_aqMeFf",
         "collection_k48ad4",
         "collection_JfhNQD",
