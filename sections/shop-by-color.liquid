@@ -48,7 +48,7 @@
                 assign col = block.settings.collection
                 assign cw = col.metafields.colorway.value
                 unless cw
-                  for item in col.metafields.custom.colorway_list.value limit: 1
+                  for item in col.metafields.custom_colorway_list.value limit: 1
                     assign cw = item
                   endfor
                 endunless
@@ -235,7 +235,7 @@
           "type": "collection",
           "id": "collection",
           "label": "Collection",
-          "info": "Collection should have a custom.colorway_list (metaobjects with label, color). The list drives which product colors are shown/preselected; its first item drives the chip. Set custom.colorway to override the chip label/color (e.g. a generic 'Green' swatch)."
+          "info": "Collection should have a custom_colorway_list (metaobjects with label, color). The list drives which product colors are shown/preselected; its first item drives the chip. Set custom.colorway to override the chip label/color (e.g. a generic 'Green' swatch)."
         },
         {
           "type": "text",
