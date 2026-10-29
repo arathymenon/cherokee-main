@@ -135,6 +135,14 @@
             "color_override": ""
           }
         },
+        "collection_VDdnkQ": {
+          "type": "collection",
+          "settings": {
+            "collection": "pink-scrubs",
+            "label_override": "",
+            "color_override": ""
+          }
+        },
         "collection_aqMeFf": {
           "type": "collection",
           "settings": {
@@ -226,6 +234,7 @@
       },
       "block_order": [
         "collection_xAk6RJ",
+        "collection_VDdnkQ",
         "collection_aqMeFf",
         "collection_k48ad4",
         "collection_JfhNQD",
