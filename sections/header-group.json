@@ -65,16 +65,16 @@
       "blocks": {
         "mega_menu_QGidDe": {
           "type": "mega_menu",
-          "disabled": true,
           "settings": {
             "title": "Women",
-            "menu": "",
+            "menu": "cherokee-menu",
             "image_url": "",
             "image_text": ""
           }
         },
         "mega_menu_844UQU": {
           "type": "mega_menu",
+          "disabled": true,
           "settings": {
             "title": "",
             "menu": "cherokee-menu",
@@ -84,7 +84,6 @@
         },
         "mega_menu_6nnwML": {
           "type": "mega_menu",
-          "disabled": true,
           "settings": {
             "title": "Men",
             "menu": "cherokee-menu",
@@ -94,6 +93,7 @@
         },
         "nav_link_Qt8nmy": {
           "type": "nav_link",
+          "disabled": true,
           "settings": {
             "title": "Sale",
             "url": "shopify://collections/sale"
@@ -109,6 +109,7 @@
         },
         "nav_link_TPqKTW": {
           "type": "nav_link",
+          "disabled": true,
           "settings": {
             "title": "Blog",
             "url": "shopify://blogs/scrub-hub"
