@@ -46,7 +46,7 @@
             {% for block in section.blocks %}
               {%- liquid
                 assign col = block.settings.collection
-                assign cw = col.metafields.custom.colorway.value
+                assign cw = col.metafields.colorway.value
                 unless cw
                   for item in col.metafields.custom.colorway_list.value limit: 1
                     assign cw = item
